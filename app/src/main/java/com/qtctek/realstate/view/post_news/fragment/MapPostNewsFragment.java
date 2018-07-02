@@ -57,7 +57,6 @@ public class MapPostNewsFragment extends Fragment implements OnMapReadyCallback,
 
     private View mView;
 
-    private final String mTag = NewPostActivity.class.getSimpleName();
     private final long mUpdateInterval = 5000;
     private final long mFastestInterval = 5000;
     public static ArrayList<PostSale> ARR_POST = new ArrayList<>();
@@ -331,7 +330,10 @@ public class MapPostNewsFragment extends Fragment implements OnMapReadyCallback,
     @Override
     public void handlePostListError(String error) {
         Toast.makeText(getContext(), "Có vấn đề trong việc tải dữ liệu. Xin vui lòng thử lại sau!!!", Toast.LENGTH_SHORT).show();
+
         ARR_POST.clear();
+        ListPostNewsFragment.POST_ADAPTER.notifyDataSetChanged();
+
         ListPostNewsFragment.TXV_INFORMATION.setVisibility(View.VISIBLE);
         ListPostNewsFragment.TXV_INFORMATION.setText(getActivity().getResources().getText(R.string.load_data_error));
 
