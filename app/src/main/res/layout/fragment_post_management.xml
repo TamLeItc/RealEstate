@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/colorMainBackground">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_30dp"
+        android:id="@+id/txv_title"
+        android:background="@color/colorMainLight"
+        android:layout_marginBottom="@dimen/_5dp"
+        android:text="@string/post_management"
+        android:textSize="@dimen/_11sp"
+        android:gravity="center"
+        android:textStyle="bold"
+        android:textColor="@color/colorGrayDark"/>
+
+    <TextView
+        android:layout_below="@id/txv_title"
+        android:id="@+id/txv_quality_post"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/_5dp"
+        android:text="Tổng số: 0"
+        android:textColor="@color/colorGrayDark"
+        android:textSize="@dimen/_10sp"
+        android:layout_marginLeft="@dimen/_8dp"
+        android:layout_marginRight="@dimen/_8dp"/>
+
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txv_quality_post"
+        android:id="@+id/chk_unapproved_post"
+        android:text="@string/just_unapproved_post"/>
+
+    <ListView
+
+        android:layout_marginTop="@dimen/_5dp"
+        android:layout_below="@+id/chk_unapproved_post"
+        android:id="@+id/lsv_posts"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbars="none"
+        android:layout_marginLeft="@dimen/_8dp"
+        android:layout_marginRight="@dimen/_8dp"/>
+
+    <Button
+        android:id="@+id/btn_more_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="@dimen/_5dp"
+        android:paddingRight="@dimen/_5dp"
+        android:visibility="gone"
+        android:layout_gravity=""
+        android:background="@color/colorBtnMoreView"
+        android:text="@string/more_view"
+        android:textColor="@color/colorGrayDark"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"/>
+
+
+</RelativeLayout>
+
+
+

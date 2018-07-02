@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/colorMainBackground"
+    android:padding="@dimen/_8dp">
+
+    <TextView
+        android:id="@+id/txv_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="@dimen/_10dp"
+        android:text="@string/location_house"
+        android:textColor="@color/colorMain"
+        android:textSize="@dimen/_13sp" />
+
+    <fragment
+        android:layout_width="match_parent"
+        android:layout_height="400dp"
+        android:id="@+id/frg_map"
+        android:name="com.google.android.gms.maps.SupportMapFragment"/>
+
+    <LinearLayout
+        android:layout_marginTop="@dimen/_20dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="2">
+
+        <Button
+            android:layout_marginRight="@dimen/_15dp"
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/custom_btn_create_account"
+            android:text="@string/next_to"
+            android:id="@+id/btn_next_to"
+            android:textSize="@dimen/_10sp"/>
+
+        <Button
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/custom_btn_create_account"
+            android:text="@string/save_and_continue"
+            android:id="@+id/btn_save_continue"
+            android:textSize="@dimen/_10sp"
+            android:layout_marginLeft="@dimen/_15dp"/>
+
+
+
+    </LinearLayout>
+
+</LinearLayout>

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="@dimen/_16dp"
+    android:background="@color/colorMainBackground">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/page_for_user_system"
+        android:textSize="@dimen/_15dp"
+        android:textStyle="bold"
+        android:textColor="@color/colorMain"/>
+
+    <Button
+        android:id="@+id/btn_post_management"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_20dp"
+        android:text="@string/post_management"
+        android:background="@drawable/custom_btn_user_control"
+        android:textColor="@color/colorWhite"/>
+
+    <Button
+        android:id="@+id/btn_user_management"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_20dp"
+        android:text="@string/user_management"
+        android:background="@drawable/custom_btn_user_control"
+        android:textColor="@color/colorWhite"/>
+
+    <Button
+        android:id="@+id/btn_logout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_20dp"
+        android:text="@string/log_out"
+        android:background="@drawable/custom_btn_user_control"
+        android:textColor="@color/colorWhite"/>
+
+</LinearLayout>

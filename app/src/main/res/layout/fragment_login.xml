@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="@dimen/_16dp"
+    android:background="@color/colorMainBackground">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/imv_logo"
+        android:src="@drawable/logo_qtc"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/_40dp"
+        android:layout_marginBottom="@dimen/_40dp"/>
+
+    <TextView
+        android:layout_below="@id/imv_logo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/email_address"
+        android:textSize="@dimen/_10sp"
+        android:layout_marginTop="@dimen/_10dp"
+        android:id="@+id/txv_email_address"/>
+
+    <EditText
+        android:paddingLeft="@dimen/_5dp"
+        android:textSize="@dimen/_10sp"
+        android:id="@+id/edt_email_address"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_40dp"
+        android:background="@drawable/custom_edt_create_account"
+        android:layout_marginBottom="@dimen/_20dp"
+        android:inputType="textEmailAddress"
+        android:layout_below="@+id/txv_email_address"/>
+
+    <TextView
+        android:layout_below="@+id/edt_email_address"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/password"
+        android:textSize="@dimen/_10sp"
+        android:layout_marginTop="@dimen/_5dp"
+        android:id="@+id/txv_password"/>
+
+    <EditText
+        android:layout_below="@+id/txv_password"
+        android:paddingLeft="@dimen/_5dp"
+        android:textSize="@dimen/_10sp"
+        android:id="@+id/edt_password"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_40dp"
+        android:background="@drawable/custom_edt_create_account"
+        android:layout_marginBottom="@dimen/_20dp"
+        android:inputType="textPassword"/>
+
+    <Button
+        android:layout_below="@+id/edt_password"
+        android:id="@+id/btn_login"
+        android:layout_marginTop="@dimen/_20dp"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_50dp"
+        android:background="@drawable/custom_btn_create_account"
+        android:text="@string/login"
+        android:textSize="@dimen/_9sp"
+        android:textColor="@color/colorGrayDark" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/txv_forgot_password"
+        android:layout_below="@+id/btn_login"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/_5dp"
+        android:text="@string/forgot_password"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/txv_register_user"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:text="@string/register_user"/>
+
+</RelativeLayout>

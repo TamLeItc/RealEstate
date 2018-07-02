@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="none">
+
+        <item android:id="@+id/nav_post_management"
+            android:icon="@drawable/icon_post_management"
+            android:title="@string/post_management"/>
+
+        <item android:id="@+id/nav_user_management"
+            android:icon="@drawable/icon_user_management"
+            android:title="@string/user_management"/>
+
+        <item android:id="@+id/nav_posted_post"
+            android:title="@string/posted_post"
+            android:icon="@drawable/icon_post"/>
+
+        <item
+            android:id="@+id/nav_saved_post"
+            android:icon="@drawable/icon_house"
+            android:title="@string/saved_post" />
+        <item
+            android:id="@+id/nav_account_manage"
+            android:icon="@drawable/icon_profile_2"
+            android:title="@string/account_manage" />
+
+        <item android:id="@+id/nav_login"
+            android:icon="@drawable/icon_login"
+            android:title="@string/login"/>
+
+        <item
+            android:id="@+id/nav_logout"
+            android:icon="@drawable/icon_logout"
+            android:title="@string/logout"/>
+
+    </group>
+
+    <item android:title="@string/about_us">
+        <menu>
+            <item
+                android:id="@+id/nav_introduction"
+                android:icon="@drawable/icon_about_us"
+                android:title="@string/introduction" />
+            <item
+                android:id="@+id/nav_feedback"
+                android:icon="@drawable/icon_feedback"
+                android:title="@string/feedback" />
+        </menu>
+    </item>
+
+</menu>

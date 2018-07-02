@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/imv_product_avartar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_220dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/icon_product"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_100dp"
+        android:layout_gravity="bottom"
+        android:background="@drawable/custom_for_item_post">
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_100dp"
+            android:layout_toRightOf="@id/imv_product_avartar"
+            android:paddingLeft="@dimen/_20dp"
+            android:paddingRight="@dimen/_20dp"
+            android:paddingTop="@dimen/_3dp">
+
+            <TextView
+                android:id="@+id/txv_price"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="2,2 tỷ"
+                android:textColor="@color/colorWhite"
+                android:textSize="@dimen/_15sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_marginTop="@dimen/_2dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/txv_address"
+                android:text="192/29 đường S1, phường Tây thạnh"
+                android:textSize="@dimen/_9sp"
+                android:layout_below="@+id/txv_price"
+                android:maxLines="2"
+                android:textColor="@color/colorWhite"
+                android:ellipsize="end"/>
+
+            <TextView
+                android:textStyle="bold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/txv_district_province_city"
+                android:text="Bình Thạnh, TP Hồ Chí Minh"
+                android:textSize="@dimen/_9sp"
+                android:textColor="@color/colorWhite"
+                android:layout_below="@+id/txv_address"
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:layout_marginBottom="@dimen/_2dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/txv_rooms_area"
+                android:text="99 phòng ngủ, 99 phòng tắm"
+                android:textSize="@dimen/_9sp"
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:textColor="@color/colorWhite"
+                android:layout_below="@+id/txv_district_province_city"/>
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+
+</FrameLayout>

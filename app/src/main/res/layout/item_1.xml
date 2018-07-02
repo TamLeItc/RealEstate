@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorMainBackground"
+    android:orientation="vertical"
+    android:paddingRight="@dimen/_16dp"
+    android:paddingLeft="@dimen/_16dp"
+    android:paddingTop="@dimen/_10dp">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="City"
+        android:id="@+id/txv_item"
+        android:textSize="@dimen/_10sp"
+        android:textColor="@color/colorGrayDark"/>
+
+    <ImageView
+        android:id="@+id/imv_selected"
+        android:visibility="gone"
+        android:layout_alignParentRight="true"
+        android:layout_width="@dimen/_25dp"
+        android:layout_height="@dimen/_25dp"
+        android:src="@drawable/icon_select"/>
+
+    
+    <View
+        android:layout_below="@+id/txv_item"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_1dp"
+        android:background="@color/colorGray"
+        android:layout_marginTop="@dimen/_10dp"
+        android:layout_marginBottom="@dimen/_10dp"/>
+
+</RelativeLayout>

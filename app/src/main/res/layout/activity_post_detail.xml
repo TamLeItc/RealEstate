@@ -1,0 +1,426 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/colorMainBackground">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_40dp"
+        android:background="@color/colorToolbar"
+        app:popupTheme="@style/AppTheme.PopupOverlay"
+        app:contentInsetStart="@dimen/_8dp">
+
+        <Button
+            android:id="@+id/btn_back"
+            android:layout_width="@dimen/_30dp"
+            android:layout_height="25dp"
+            android:background="@drawable/icon_back" />
+
+
+    </android.support.v7.widget.Toolbar>
+
+
+    <ScrollView
+        android:scrollbars="none"
+        android:paddingLeft="@dimen/_8dp"
+        android:paddingRight="@dimen/_8dp"
+        android:layout_above="@+id/ll_bottom"
+        android:layout_below="@+id/toolbar"
+        android:id="@+id/scroll_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_40dp"
+                android:layout_weight="2"
+                android:background="@color/colorMainBackground">
+
+                <Button
+                    android:id="@+id/btn_image_view"
+                    android:layout_weight="1"
+                    android:background="@color/colorMainBackground"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/image_view"
+                    android:textSize="@dimen/_8sp"/>
+
+                <Button
+                    android:textSize="@dimen/_8sp"
+                    android:id="@+id/btn_map_view"
+                    android:layout_weight="1"
+                    android:background="@color/colorMainBackground"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/map_view"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="@color/colorWhite">
+
+                <FrameLayout
+
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_250dp">
+
+                    <fragment
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_250dp"
+                        android:id="@+id/frg_map"
+                        android:name="com.google.android.gms.maps.SupportMapFragment"/>
+
+                    <android.support.v7.widget.RecyclerView
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_250dp"
+                        android:id="@+id/recycler_images" />
+
+                </FrameLayout>
+
+                <TextView
+                    android:layout_marginTop="@dimen/_10dp"
+                    android:layout_marginLeft="@dimen/_8dp"
+                    android:layout_marginRight="@dimen/_8dp"
+                    android:id="@+id/txv_address"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="192/29 đường S1, Phường Tây Thạnh"
+                    android:textSize="@dimen/_9sp"
+                    android:maxLines="1"
+                    android:textColor="@color/colorGrayDark"
+                    android:ellipsize="end"/>
+
+                <TextView
+                    android:layout_marginBottom="@dimen/_10dp"
+                    android:layout_marginLeft="@dimen/_8dp"
+                    android:layout_marginRight="@dimen/_8dp"
+                    android:id="@+id/txv_district_province_city"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Tân Phú, Hồ Chí Minh"
+                    android:textSize="@dimen/_10sp"
+                    android:maxLines="1"
+                    android:ellipsize="end"/>
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="@color/colorWhite"
+                android:padding="@dimen/_10dp"
+                android:layout_marginTop="@dimen/_10dp">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/txv_price"
+                        android:text="50 triệu"
+                        android:textSize="@dimen/_13sp"
+                        android:textStyle="bold"
+                        android:layout_marginBottom="@dimen/_5dp"
+                        android:textColor="@color/colorRedLight"/>
+
+                    <TextView
+                        android:layout_alignParentRight="true"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/txv_area"
+                        android:text="12 m²"
+                        android:textSize="@dimen/_12sp"
+                        android:layout_marginBottom="@dimen/_5dp" />
+
+                </RelativeLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/txv_rooms"
+                    android:text="99 phỏng ngủ, 99 phòng tắm"
+                    android:textSize="@dimen/_10sp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/post_date"
+                        android:textSize="@dimen/_10sp"/>
+
+                    <TextView
+                        android:layout_marginLeft="@dimen/_5dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/txv_post_date"
+                        android:text=" 999 ngày"
+                        android:textSize="@dimen/_10sp"/>
+
+
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="@color/colorWhite"
+                android:layout_marginTop="@dimen/_20dp"
+                android:padding="@dimen/_10dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/product_description"
+                    android:textSize="@dimen/_11sp"
+                    android:textColor="@color/colorMain"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/txv_description"
+                    android:textSize="@dimen/_9sp"
+                    android:text="- Bán nhà phố liền kề gần trục đường lớn Quốc Lộ 1A, tiện đi Bình Dương về Gò Vấp, thuộc khu dân cư đông đúc tại trung tâm phường An Phú Đông, Q. 12.
+                - Nhà 1 trệt 2 lầu, mới đẹp, đang hoàn thiện.
+                - Nhà thiết kế hiện đại 1 trệt 2 lầu, 1 phòng khách, 1 phòng bếp, 2 phòng ngủ, 2 toilet (có sân rộng rãi).
+                - DT: 3x13m, DT xây dựng: 3x8m (đường trước nhà 4m xe hơi vào tận nhà).
+                - Tiện ích đồng bộ cả khu: Đồng hồ điện nước đầy đủ - Điện, nước máy thành phố, giá nhà nước.
+                - Vị trí đẹp, nằm sau lưng trường Đại Học Nguyễn Tất Thành, gần UBND Phường An Phú Đông, ra Quốc lộ 1A chỉ 1km, cách chợ Vườn Lài chỉ 5 phút,
+                - Giá chỉ 1 tỷ 400.
+                - Có số nhà quận cấp, dễ dàng chuyển khẩu về thành phố.
+                - Mua bán công chứng vi bằng.
+                LH: 01698.273.273.
+                0974.330.339."/>
+
+            </LinearLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@color/colorWhite"
+                android:padding="@dimen/_10dp">
+
+                <TextView
+                    android:layout_marginBottom="@dimen/_5dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/contact_information"
+                    android:textSize="@dimen/_11sp"
+                    android:textColor="@color/colorMain"
+                    android:id="@+id/txv_contact_information"/>
+
+                <ImageView
+                    android:layout_width="@dimen/_20dp"
+                    android:layout_height="@dimen/_20dp"
+                    android:src="@drawable/icon_profile"
+                    android:id="@+id/imv_profile"
+                    android:layout_below="@+id/txv_contact_information"
+                    />
+
+                <TextView
+                    android:maxLines="1"
+                    android:ellipsize="end"
+                    android:layout_marginLeft="@dimen/_10dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/txv_contact_name"
+                    android:text="Lê Văn Tâm"
+                    android:layout_below="@+id/txv_contact_information"
+                    android:textSize="@dimen/_10sp"
+                    android:layout_toRightOf="@+id/imv_number_phone"/>
+
+                <ImageView
+                    android:layout_width="@dimen/_20dp"
+                    android:layout_height="@dimen/_20dp"
+                    android:src="@drawable/icon_phone"
+                    android:id="@+id/imv_number_phone"
+                    android:layout_below="@+id/txv_contact_name"
+                    android:layout_marginTop="@dimen/_5dp"/>
+
+                <TextView
+                    android:maxLines="1"
+                    android:ellipsize="end"
+                    android:layout_marginLeft="@dimen/_10dp"
+                    android:layout_marginTop="@dimen/_5dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/txv_contact_number_phone"
+                    android:text="0969396459"
+                    android:layout_below="@+id/txv_contact_name"
+                    android:textSize="@dimen/_10sp"
+                    android:layout_toRightOf="@+id/imv_number_phone" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@color/colorWhite"
+                android:padding="@dimen/_10dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/product_feature"
+                    android:textSize="@dimen/_11sp"
+                    android:textColor="@color/colorMain"
+                    android:id="@+id/title"/>
+
+                <TextView
+                    android:layout_below="@+id/title"
+                    android:textSize="@dimen/_10sp"
+                    android:id="@+id/txv_name_category_product"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/category_product"
+                    android:layout_marginTop="@dimen/_5dp"/>
+
+                <TextView
+                    android:layout_below="@+id/title"
+                    android:textSize="@dimen/_10sp"
+                    android:id="@+id/txv_category_product"
+                    android:layout_toRightOf="@id/txv_name_floors"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_5dp"/>
+
+                <TextView
+                    android:layout_below="@+id/txv_category_product"
+                    android:textSize="@dimen/_10sp"
+                    android:id="@+id/txv_name_floors"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/floors"
+                    android:layout_marginTop="@dimen/_5dp"/>
+
+                <TextView
+                    android:layout_below="@+id/txv_category_product"
+                    android:textSize="@dimen/_10sp"
+                    android:id="@+id/txv_floors"
+                    android:layout_toRightOf="@id/txv_name_floors"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_5dp"/>
+
+                <TextView
+                    android:layout_below="@+id/txv_name_floors"
+                    android:textSize="@dimen/_10sp"
+                    android:id="@+id/txv_name_legal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/legal"
+                    android:layout_marginTop="@dimen/_5dp"/>
+
+                <TextView
+                    android:maxLines="1"
+                    android:ellipsize="end"
+                    android:layout_below="@+id/txv_name_floors"
+                    android:textSize="@dimen/_10sp"
+                    android:id="@+id/txv_legal"
+                    android:layout_toRightOf="@id/txv_name_floors"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_5dp"/>
+
+                <TextView
+                    android:layout_below="@+id/txv_legal"
+                    android:textSize="@dimen/_10sp"
+                    android:id="@+id/txv_name_utility"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/utility"
+                    android:layout_marginTop="@dimen/_5dp"/>
+
+                <TextView
+                    android:layout_below="@+id/txv_legal"
+                    android:textSize="@dimen/_10sp"
+                    android:id="@+id/txv_utility"
+                    android:layout_toRightOf="@id/txv_name_floors"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_5dp"/>
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+    <LinearLayout
+        android:id="@+id/ll_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_40dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/colorWhite"
+        android:weightSum="3">
+
+        <LinearLayout
+            android:id="@+id/ll_profile"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/_40dp"
+            android:gravity="center"
+            android:layout_weight="1">
+
+            <ImageView
+                android:layout_width="@dimen/_30dp"
+                android:layout_height="@dimen/_30dp"
+                android:src="@drawable/icon_profile"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_save_post"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/_40dp"
+            android:gravity="center"
+            android:layout_weight="1">
+
+            <ImageView
+                android:layout_width="@dimen/_30dp"
+                android:layout_height="@dimen/_30dp"
+                android:src="@drawable/icon_save"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_call"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/_40dp"
+            android:gravity="center"
+            android:layout_weight="1">
+
+            <ImageView
+                android:layout_width="@dimen/_30dp"
+                android:layout_height="@dimen/_30dp"
+                android:src="@drawable/icon_phone"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+</RelativeLayout>

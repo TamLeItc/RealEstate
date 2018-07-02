@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/colorMainBackground"
+    android:padding="@dimen/_16dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingLeft="@dimen/_25dp"
+        android:paddingRight="@dimen/_25dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/get_password"
+            android:textSize="@dimen/_12sp"
+            android:textColor="@color/colorMain"
+            android:layout_gravity="center_horizontal" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/_10sp"
+            android:text="@string/confirm_email_description"
+            android:gravity="center_horizontal"
+            android:layout_marginTop="@dimen/_10dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/confirm_code"
+            android:textSize="@dimen/_10sp"
+            android:layout_marginTop="@dimen/_20dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="@dimen/_10dp"/>
+
+        <EditText
+            android:gravity="center"
+            android:paddingLeft="@dimen/_5dp"
+            android:paddingRight="@dimen/_5dp"
+            android:textSize="@dimen/_10sp"
+            android:id="@+id/edt_confirm_code"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_40dp"
+            android:background="@drawable/custom_edt_create_account"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/txv_resend_code"
+            android:layout_gravity="center"
+            android:layout_marginTop="5dp"
+            android:text="@string/resend_code"/>
+
+        <LinearLayout
+            android:layout_marginTop="@dimen/_30dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="2">
+
+            <Button
+                android:id="@+id/btn_cancel"
+                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_50dp"
+                android:background="@drawable/custom_btn_create_account"
+                android:text="@string/cancel"
+                android:textSize="@dimen/_9sp"
+                android:textColor="@color/colorGrayDark"
+                android:layout_marginRight="@dimen/_10dp"
+                android:paddingLeft="@dimen/_5dp"
+                android:paddingRight="@dimen/_5dp"/>
+
+            <Button
+                android:id="@+id/btn_confirm"
+                android:layout_weight="1"
+                android:layout_marginLeft="@dimen/_10dp"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_50dp"
+                android:background="@drawable/custom_btn_create_account"
+                android:text="@string/confirm"
+                android:textSize="@dimen/_9sp"
+                android:textColor="@color/colorGrayDark"
+                android:paddingLeft="@dimen/_5dp"
+                android:paddingRight="@dimen/_5dp"
+                android:layout_marginBottom="@dimen/_1dp"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

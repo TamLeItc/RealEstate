@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/colorMainBackground">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="5"
+        android:background="@color/colorMain">
+
+        <TextView
+            android:layout_weight="4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/_10dp"
+            android:id="@+id/txv_title"
+            android:text="@string/please_select"
+            android:background="@color/colorMain"
+            android:textSize="@dimen/_12sp"
+            android:textColor="@color/colorWhite"
+            android:gravity="center"/>
+
+        <Button
+            android:layout_gravity="center_vertical"
+            android:background="@drawable/icon_cancel"
+            android:layout_weight="2"
+            android:layout_width="@dimen/_50dp"
+            android:layout_height="@dimen/_30dp"
+            android:id="@+id/btn_cancel"/>
+
+    </LinearLayout>
+
+    <ListView
+        android:scrollbars="none"
+        android:padding="@dimen/_8dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_10dp"
+        android:id="@+id/lsv_item" />
+
+</LinearLayout>

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/_8dp"
+    android:background="@color/colorMainBackground"
+    android:id="@+id/rl_item_user">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/txv_name"
+        android:text="Tên:Lê Văn Tâm"
+        android:textSize="@dimen/_10sp"
+        android:maxLines="1"
+        android:ellipsize="end"
+        android:textColor="@color/colorGrayDark"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/txv_role"
+        android:layout_alignParentRight="true"
+        android:text="Admin"
+        android:textColor="@color/colorAdmin"
+        android:textSize="@dimen/_10sp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txv_name"
+        android:layout_toLeftOf="@+id/txv_quality_post"
+        android:text="Số bài đăng: "
+        android:textColor="@color/colorGrayDark"
+        android:textSize="@dimen/_9sp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/txv_quality_post"
+        android:layout_below="@id/txv_name"
+        android:layout_alignParentRight="true"
+        android:text="12"
+        android:textColor="@color/colorGrayDark"
+        android:textSize="@dimen/_9sp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/txv_phone_number"
+        android:text="SDT: 0969396459"
+        android:layout_below="@+id/txv_name"
+        android:maxLines="1"
+        android:ellipsize="end"
+        android:textSize="@dimen/_10sp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Email: itcdeveloper14@gmail.com"
+        android:layout_below="@+id/txv_phone_number"
+        android:id="@+id/txv_email_address"
+        android:maxLines="1"
+        android:ellipsize="end"
+        android:textSize="@dimen/_10sp"/>
+
+</RelativeLayout>

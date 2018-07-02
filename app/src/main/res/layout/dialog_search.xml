@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorMainBackground"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="5"
+        android:background="@color/colorMain"
+        android:layout_marginBottom="@dimen/_5dp">
+
+        <TextView
+            android:layout_weight="4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/_11dp"
+            android:id="@+id/txv_title"
+            android:text="@string/search"
+            android:background="@color/colorMain"
+            android:textSize="@dimen/_12sp"
+            android:textColor="@color/colorWhite"/>
+
+        <Button
+            android:layout_gravity="center_vertical"
+            android:background="@drawable/icon_cancel"
+            android:layout_weight="2"
+            android:layout_width="@dimen/_50dp"
+            android:layout_height="@dimen/_30dp"
+            android:id="@+id/btn_cancel"/>
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:padding="@dimen/_11dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:textColor="@color/colorGrayDark"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/txv_name_provinceCity"
+            android:text="@string/province_city"
+            android:textSize="@dimen/_11sp"/>
+
+        <TextView
+            android:textColor="@color/colorGrayDark"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/txv_province_city"
+            android:text="Hồ Chí Minh"
+            android:textSize="@dimen/_11sp"
+            android:layout_alignParentEnd="true"/>
+
+        <View
+            android:layout_below="@+id/txv_province_city"
+            android:layout_marginTop="@dimen/_15dp"
+            android:layout_marginBottom="@dimen/_15dp"
+            android:background="@color/colorGray"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_1dp"
+            android:id="@+id/view_1"/>
+
+        <TextView
+            android:textColor="@color/colorGrayDark"
+            android:layout_below="@id/view_1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/txv_name_district"
+            android:text="@string/district"
+            android:textSize="@dimen/_11sp"/>
+
+        <TextView
+            android:textColor="@color/colorGrayDark"
+            android:layout_below="@id/view_1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/txv_district"
+            android:text="Tất cả"
+            android:textSize="@dimen/_11sp"
+            android:layout_toLeftOf="@+id/btn_reset_district"/>
+
+        <Button
+            android:layout_marginBottom="@dimen/_5dp"
+            android:textColor="@color/colorGrayDark"
+            android:layout_marginLeft="@dimen/_5dp"
+            android:id="@+id/btn_reset_district"
+            android:layout_below="@id/view_1"
+            android:layout_width="@dimen/_20dp"
+            android:text=">"
+            android:layout_height="@dimen/_20dp"
+            android:background="@color/colorMainBackground"
+            android:layout_alignParentRight="true" />
+
+        <View
+            android:layout_below="@+id/txv_district"
+            android:layout_marginTop="@dimen/_15dp"
+            android:layout_marginBottom="@dimen/_15dp"
+            android:background="@color/colorGray"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_1dp"
+            android:id="@+id/view_2"/>
+
+        <TextView
+            android:textColor="@color/colorGrayDark"
+            android:textSize="@dimen/_11sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/txv_name_price"
+            android:layout_below="@id/view_2"
+            android:text="@string/price_2"/>
+
+        <TextView
+            android:textColor="@color/colorGrayDark"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/txv_price"
+            android:layout_below="@id/view_2"
+            android:layout_alignParentEnd="true"
+            android:text="0 - 1100.000 tỷ đồng"/>
+
+        <TextView
+            android:textSize="@dimen/_11sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/txv_from"
+            android:layout_toRightOf="@id/txv_name_price"
+            android:layout_marginStart="@dimen/_15dp"
+            android:layout_below="@id/txv_name_price"
+            android:text="@string/from"
+            android:layout_marginTop="@dimen/_15dp"/>
+
+        <EditText
+            android:paddingLeft="@dimen/_5dp"
+            android:paddingTop="@dimen/_2dp"
+            android:paddingBottom="@dimen/_2dp"
+            android:inputType="number"
+            android:textColor="@color/colorGrayDark"
+            android:id="@+id/edt_min_price"
+            android:textSize="@dimen/_12sp"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_40dp"
+            android:background="@color/colorEdtCreateAccount"
+            android:layout_below="@id/txv_name_price"
+            android:layout_toRightOf="@id/txv_from"
+            android:layout_marginLeft="@dimen/_15dp"
+            android:layout_marginTop="@dimen/_5dp"/>
+
+        <TextView
+            android:layout_marginTop="@dimen/_38dp"
+            android:textSize="@dimen/_11sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/txv_to"
+            android:layout_toRightOf="@id/txv_name_price"
+            android:layout_marginLeft="@dimen/_15dp"
+            android:layout_below="@id/txv_from"
+            android:text="@string/to"/>
+
+        <EditText
+            android:inputType="number"
+            android:paddingLeft="@dimen/_5dp"
+            android:paddingTop="@dimen/_2dp"
+            android:paddingBottom="@dimen/_2dp"
+            android:textColor="@color/colorGrayDark"
+            android:layout_marginTop="@dimen/_30dp"
+            android:id="@+id/edt_max_price"
+            android:textSize="@dimen/_12sp"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_40dp"
+            android:background="@color/colorEdtCreateAccount"
+            android:layout_below="@id/txv_from"
+            android:layout_toRightOf="@id/txv_from"
+            android:layout_marginLeft="@dimen/_15dp"/>
+
+        <View
+            android:layout_below="@+id/edt_max_price"
+            android:layout_marginTop="@dimen/_15dp"
+            android:layout_marginBottom="@dimen/_15dp"
+            android:background="@color/colorGray"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_1dp"
+            android:id="@+id/view_3"/>
+
+        <TextView
+            android:textColor="@color/colorGrayDark"
+            android:textSize="@dimen/_11sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/txv_name_category_product"
+            android:layout_below="@id/view_3"
+            android:text="@string/category_product" />
+
+        <TextView
+            android:textColor="@color/colorGrayDark"
+            android:layout_toLeftOf="@+id/btn_reset_category_product"
+            android:textSize="@dimen/_11sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/txv_category_product"
+            android:layout_below="@id/view_3"
+            android:text="Tất cả" />
+
+        <Button
+            android:layout_marginBottom="@dimen/_5dp"
+            android:textColor="@color/colorGrayDark"
+            android:layout_marginLeft="@dimen/_5dp"
+            android:id="@+id/btn_reset_category_product"
+            android:layout_below="@id/view_3"
+            android:layout_width="@dimen/_20dp"
+            android:text=">"
+            android:layout_height="@dimen/_20dp"
+            android:background="@color/colorMainBackground"
+            android:layout_alignParentRight="true"/>
+
+        <Button
+            android:paddingLeft="@dimen/_20dp"
+            android:paddingRight="@dimen/_20dp"
+            android:id="@+id/btn_search"
+            android:textSize="@dimen/_10sp"
+            android:textColor="@color/colorGrayDark"
+            android:text="@string/search"
+            android:background="@drawable/custom_btn_create_account"
+            android:layout_marginTop="@dimen/_30dp"
+            android:layout_below="@id/txv_category_product"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            />
+
+    </RelativeLayout>
+
+
+
+</LinearLayout>

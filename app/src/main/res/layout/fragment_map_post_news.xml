@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorMainBackground">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/frg_map"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            class="com.google.android.gms.maps.SupportMapFragment"
+            android:name="com.qtctek.realstate.view.post_news.fragment.MapPostNewsFragment"/>
+
+        <FrameLayout
+            android:padding="@dimen/_8dp"
+            android:id="@+id/fl_post"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"/>
+
+        <TextView
+            android:textSize="@dimen/_8sp"
+            android:id="@+id/txv_information"
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/no_data_here"
+            android:gravity="center"
+            android:textColor="@color/colorGrayDark"/>
+
+    </FrameLayout>
+
+
+
+</LinearLayout>

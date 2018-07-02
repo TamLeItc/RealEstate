@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.qtctek.realstate">
+
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.CALL_PHONE"/>
+
+    <!--android:largeHeap="true"-->
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+
+        <uses-library android:name="com.google.android.maps" />
+
+        <activity
+            android:name=".view.post_news.activity.MainActivity"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme.NoActionBar">
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+        </activity>
+        <activity android:name=".view.user_action.activity.UserActionActivity">
+
+        </activity>
+        <activity android:name=".view.user_control.activity.UserControlActivity">
+
+        </activity>
+        <activity android:name=".view.new_post.activity.NewPostActivity">
+
+        </activity>
+
+        <activity android:name=".view.post_detail.activity.PostDetailActivity">
+
+        </activity>
+
+        <activity android:name=".view.post_news.dialog.PostDialog"
+            android:theme="@style/Theme.Dialog"
+            android:excludeFromRecents="true"/>
+
+        <activity android:name=".view.post_news.dialog.SearchDialog"
+            android:theme="@style/Theme.Dialog">
+        </activity>
+
+
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/google_api_key"/>
+
+
+    </application>
+
+</manifest>

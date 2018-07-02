@@ -1,0 +1,337 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView android:layout_width="match_parent"
+    android:layout_height="match_parent"
+
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="@color/colorMainBackground">
+
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="@dimen/_16dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/house_information"
+            android:layout_gravity="center"
+            android:textSize="@dimen/_13sp"
+            android:textColor="@color/colorMain"
+            android:layout_marginBottom="@dimen/_10dp"
+            android:id="@+id/txv_title"/>
+        
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" 
+            android:text="@string/normal_information"
+            android:textSize="@dimen/_10sp"
+            android:textColor="@color/colorGrayDark"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/category_product"
+            android:textSize="@dimen/_9sp"
+            android:layout_marginTop="@dimen/_5dp"/>
+
+        <TextView
+            android:paddingTop="@dimen/_5dp"
+            android:paddingLeft="@dimen/_5dp"
+            android:id="@+id/txv_type_product"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_30dp"
+            android:textSize="@dimen/_9sp"
+            android:background="@drawable/custom_edt_create_account"
+            android:inputType="none"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/province_city"
+            android:textSize="@dimen/_9sp"
+            android:layout_marginTop="@dimen/_5dp"/>
+
+        <TextView
+            android:paddingTop="@dimen/_5dp"
+            android:paddingLeft="@dimen/_5dp"
+            android:id="@+id/txv_province_city"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_30dp"
+            android:textSize="@dimen/_9sp"
+            android:background="@drawable/custom_edt_create_account" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/district"
+            android:textSize="@dimen/_9sp"
+            android:layout_marginTop="@dimen/_5dp"/>
+
+        <TextView
+            android:paddingTop="@dimen/_5dp"
+            android:paddingLeft="@dimen/_5dp"
+            android:id="@+id/txv_district"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_30dp"
+            android:textSize="@dimen/_9sp"
+            android:background="@drawable/custom_edt_create_account" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/address"
+            android:textSize="@dimen/_10sp"
+            android:layout_marginTop="@dimen/_5dp"/>
+
+        <EditText
+            android:paddingLeft="@dimen/_5dp"
+            android:id="@+id/edt_address"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_30dp"
+            android:textSize="@dimen/_9sp"
+            android:background="@drawable/custom_edt_create_account" />
+
+
+
+
+
+        <LinearLayout
+            android:layout_marginTop="@dimen/_10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_weight="2">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:layout_marginRight="@dimen/_10dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/price"
+                    android:textSize="@dimen/_9sp"
+                    android:layout_marginTop="@dimen/_5dp"/>
+
+                <EditText
+                    android:paddingStart="@dimen/_5dp"
+                    android:paddingRight="@dimen/_5dp"
+                    android:id="@+id/edt_price"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_30dp"
+                    android:textSize="@dimen/_9sp"
+                    android:background="@drawable/custom_edt_create_account"
+                    android:hint="@string/only_number"
+                    android:inputType="number"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:layout_marginLeft="@dimen/_10dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/area"
+                    android:textSize="@dimen/_9sp"
+                    android:layout_marginTop="@dimen/_5dp"/>
+
+                <EditText
+                    android:paddingStart="@dimen/_5dp"
+                    android:paddingRight="@dimen/_5dp"
+                    android:id="@+id/edt_area"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_30dp"
+                    android:textSize="@dimen/_9sp"
+                    android:background="@drawable/custom_edt_create_account"
+                    android:hint="@string/only_number"
+                    android:inputType="numberDecimal"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_weight="2">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:layout_marginRight="@dimen/_10dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/quality_bedrooms"
+                    android:textSize="@dimen/_10sp"
+                    android:layout_marginTop="@dimen/_5dp"/>
+
+                <EditText
+                    android:paddingLeft="@dimen/_5dp"
+                    android:paddingRight="@dimen/_5dp"
+                    android:id="@+id/edt_bedrooms"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_30dp"
+                    android:textSize="@dimen/_9sp"
+                    android:background="@drawable/custom_edt_create_account"
+                    android:hint="@string/only_number"
+                    android:inputType="number"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:layout_marginLeft="@dimen/_10dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/quality_bathrooms"
+                    android:textSize="@dimen/_9sp"
+                    android:layout_marginTop="@dimen/_5dp"/>
+
+                <EditText
+                    android:paddingLeft="@dimen/_5dp"
+                    android:paddingRight="@dimen/_5dp"
+                    android:id="@+id/edt_bathrooms"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_30dp"
+                    android:textSize="@dimen/_9sp"
+                    android:background="@drawable/custom_edt_create_account"
+                    android:hint="@string/only_number"
+                    android:inputType="number"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_1dp"
+            android:background="@color/colorGray"
+            android:layout_marginTop="@dimen/_10dp"
+            android:layout_marginBottom="@dimen/_5dp"/>
+
+        <Button
+            android:textColor="@color/colorGrayDark"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/save"
+            android:textSize="@dimen/_8sp"
+            android:layout_weight="1"
+            android:id="@+id/btn_save_normal_information"
+            android:layout_gravity="right"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/more_information"
+            android:layout_gravity="left"
+            android:textColor="@color/colorGrayDark"
+            android:textSize="@dimen/_10sp"
+            android:layout_marginBottom="@dimen/_10dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/floors"
+            android:textSize="@dimen/_9sp"
+            android:layout_marginTop="@dimen/_5dp"/>
+
+        <EditText
+            android:paddingLeft="@dimen/_5dp"
+            android:id="@+id/edt_floors"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_30dp"
+            android:textSize="@dimen/_9sp"
+            android:background="@drawable/custom_edt_create_account"
+            android:hint="@string/only_number"
+            android:inputType="number"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/legal"
+            android:textSize="@dimen/_11sp"
+            android:layout_marginTop="@dimen/_5dp"/>
+
+        <EditText
+            android:hint="@string/max_20_character"
+            android:paddingLeft="@dimen/_5dp"
+            android:id="@+id/edt_legal"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_30dp"
+            android:textSize="@dimen/_9sp"
+            android:background="@drawable/custom_edt_create_account" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/utility"
+            android:textSize="@dimen/_11sp"
+            android:layout_marginTop="@dimen/_5dp"/>
+
+        <EditText
+            android:padding="@dimen/_5dp"
+            android:id="@+id/edt_utility"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_65dp"
+            android:textSize="@dimen/_9sp"
+            android:background="@drawable/custom_edt_create_account"
+            android:inputType="textMultiLine"
+            android:gravity="top|left"
+            android:scrollbars="vertical"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_1dp"
+            android:background="@color/colorGray"
+            android:layout_marginTop="@dimen/_10dp"
+            android:layout_marginBottom="@dimen/_5dp"/>
+
+        <Button
+            android:textColor="@color/colorGrayDark"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/save"
+            android:textSize="@dimen/_8sp"
+            android:layout_weight="1"
+            android:id="@+id/btn_save_more_information"
+            android:layout_gravity="right"/>
+
+        <Button
+            android:textColor="@color/colorGrayDark"
+            android:layout_weight="1"
+            android:layout_marginTop="@dimen/_20dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/custom_btn_create_account"
+            android:text="@string/next_to"
+            android:id="@+id/btn_next_to"
+            android:textSize="@dimen/_10sp"/>
+
+    </LinearLayout>
+
+</ScrollView>
+
