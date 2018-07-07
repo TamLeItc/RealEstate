@@ -1,6 +1,7 @@
 package com.qtctek.realstate.presenter.user_action.register;
 
 import com.qtctek.realstate.dto.User;
+import com.qtctek.realstate.dto.User_Object;
 import com.qtctek.realstate.model.user_action.ModelRegister;
 import com.qtctek.realstate.view.user_action.register.ViewHandleRegister;
 
@@ -15,9 +16,9 @@ public class PresenterRegister implements PresenterImpHandleRegister {
         mModelRegister = new ModelRegister(this);
     }
 
-    public void handleCheckEmail(String email){
+    public void handleCheckEmail(String email, String username){
 
-        this.mModelRegister.requireCheckEmail(email);
+        this.mModelRegister.requireCheckEmail(email, username);
     }
 
     public void handleRegister(User user){
@@ -34,12 +35,12 @@ public class PresenterRegister implements PresenterImpHandleRegister {
     }
 
     @Override
-    public void onCheckExistEmail(boolean isExisted) {
-        this.mViewHandleRegister.onCheckExistEmail(isExisted);
+    public void onCheckExistEmail(String message) {
+        this.mViewHandleRegister.onCheckExistEmail(message);
     }
 
     @Override
-    public void onConnectServerError() {
-        this.mViewHandleRegister.onConnectServerError();
+    public void onConnectServerError(String s) {
+        this.mViewHandleRegister.onConnectServerError(s);
     }
 }

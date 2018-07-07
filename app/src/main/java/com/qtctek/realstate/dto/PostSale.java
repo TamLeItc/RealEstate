@@ -3,8 +3,8 @@ package com.qtctek.realstate.dto;
 public class PostSale {
 
     private int mId;
-    private User mUser;
-    private Product mProduct;
+    private User_Object mUser;
+    private Product1 mProduct;
     private String mContactName = "";
     private String mContactNumberPhone = "";
     private String mStatus = "Tạm lưu";
@@ -12,8 +12,8 @@ public class PostSale {
 
 
     public PostSale() {
-        this.mUser = new User();
-        this.mProduct = new Product();
+        this.mUser = new User_Object();
+        this.mProduct = new Product1();
     }
 
     public int getId() {
@@ -24,19 +24,19 @@ public class PostSale {
         this.mId = mId;
     }
 
-    public User getUser() {
+    public User_Object getUser() {
         return mUser;
     }
 
-    public void setUser(User mUser) {
+    public void setUser(User_Object mUser) {
         this.mUser = mUser;
     }
 
-    public Product getProduct() {
+    public Product1 getProduct() {
         return mProduct;
     }
 
-    public void setProduct(Product mProduct) {
+    public void setProduct(Product1 mProduct) {
         this.mProduct = mProduct;
     }
 

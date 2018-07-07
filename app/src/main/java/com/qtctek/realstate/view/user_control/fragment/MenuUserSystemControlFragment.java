@@ -44,7 +44,7 @@ public class MenuUserSystemControlFragment extends Fragment implements View.OnCl
         this.mBtnLogout = mView.findViewById(R.id.btn_logout);
 
         //Moderator can't view manager user of app
-        if(MainActivity.ROLE_USER.equals("3")){
+        if(MainActivity.USER.getLevel() == 2){
             this.mBtnUserManagement.setVisibility(View.GONE);
         }
 
@@ -56,7 +56,7 @@ public class MenuUserSystemControlFragment extends Fragment implements View.OnCl
 
     @Override
     public void onClick(View v) {
-        if(MainActivity.ROLE_USER.equals("1")){
+        if(MainActivity.USER.getLevel() == 1){
             switch (v.getId()){
                 case R.id.btn_post_management:
                     ViewPager viewPager = getActivity().findViewById(R.id.view_pager);
@@ -73,7 +73,7 @@ public class MenuUserSystemControlFragment extends Fragment implements View.OnCl
                     break;
             }
         }
-        else if(MainActivity.ROLE_USER.equals("3")){
+        else if(MainActivity.USER.getLevel() == 2){
             switch (v.getId()){
                 case R.id.btn_post_management:
                     ViewPager viewPager = getActivity().findViewById(R.id.view_pager);

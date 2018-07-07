@@ -16,7 +16,7 @@ import okhttp3.Response;
 
 public class ModelForgotPassword {
 
-    String mUrl = MainActivity.HOST + "/real_estate/reset_password.php";
+    String mUrl = MainActivity.WEB_SERVER + "reset_password.php";
 
     private PresenterForgotPassword mPresenterForgotPassword;
 

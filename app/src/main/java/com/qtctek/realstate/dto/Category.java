@@ -1,6 +1,6 @@
 package com.qtctek.realstate.dto;
 
-public class CategoriesProduct {
+public class Category {
 
     private int mId;
     private String mName;

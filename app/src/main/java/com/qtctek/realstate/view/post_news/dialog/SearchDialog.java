@@ -18,9 +18,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.qtctek.realstate.R;
-import com.qtctek.realstate.dto.CategoriesProduct;
-import com.qtctek.realstate.dto.District;
-import com.qtctek.realstate.dto.ProvinceCity;
+import com.qtctek.realstate.dto.Category;
+import com.qtctek.realstate.dto.Place;
 import com.qtctek.realstate.presenter.new_post.GetData.PresenterGetData;
 import com.qtctek.realstate.view.new_post.interfaces.ViewHandleModelGetData;
 import com.qtctek.realstate.view.post_news.adapter.CategoriesProductAdapter;
@@ -36,7 +35,7 @@ public class SearchDialog extends Activity implements View.OnClickListener, View
     private TextView mTxvPrice;
     private EditText mEdtMinPrice;
     private EditText mEdtMaxPrice;
-    private TextView mTxvCategoryProduct;
+    private TextView mTxvType;
     private Button mBtnCancel;
     private Button mBtnSearch;
     private Button mBtnResetDistrict;
@@ -68,7 +67,7 @@ public class SearchDialog extends Activity implements View.OnClickListener, View
         this.mEdtMaxPrice = findViewById(R.id.edt_max_price);
         this.mBtnCancel = findViewById(R.id.btn_cancel);
         this.mBtnSearch = findViewById(R.id.btn_search);
-        this.mTxvCategoryProduct = findViewById(R.id.txv_category_product);
+        this.mTxvType = findViewById(R.id.txv_type);
         this.mBtnResetCategoryProduct = findViewById(R.id.btn_reset_category_product);
         this.mBtnResetDistrict = findViewById(R.id.btn_reset_district);
 
@@ -78,7 +77,7 @@ public class SearchDialog extends Activity implements View.OnClickListener, View
         this.mBtnResetCategoryProduct.setOnClickListener(this);
         this.mTxvProvinceCity.setOnClickListener(this);
         this.mTxvDistrict.setOnClickListener(this);
-        this.mTxvCategoryProduct.setOnClickListener(this);
+        this.mTxvType.setOnClickListener(this);
         this.mEdtMinPrice.setOnKeyListener(this);
         this.mEdtMaxPrice.setOnKeyListener(this);
     }
@@ -137,7 +136,7 @@ public class SearchDialog extends Activity implements View.OnClickListener, View
 
         handleDisplayPrice(longMinPrice, longMaxPrice);
 
-        this.mTxvCategoryProduct.setText(categoryProduct);
+        this.mTxvType.setText(categoryProduct);
         this.mTxvProvinceCity.setText(provinceCity);
         this.mTxvDistrict.setText(district);
         this.mEdtMinPrice.setText(stringBuilderMinPrice.toString());
@@ -151,7 +150,7 @@ public class SearchDialog extends Activity implements View.OnClickListener, View
         intent.putExtra("lat", latlng[0].trim());
         intent.putExtra("lng", latlng[1].trim());
 
-        String categoryProduct = this.mTxvCategoryProduct.getText().toString().trim();
+        String categoryProduct = this.mTxvType.getText().toString().trim();
         String provinceCity = this.mTxvProvinceCity.getText().toString().trim();
         String district = this.mTxvDistrict.getText().toString().trim();
         if(categoryProduct.equals("Tất cả")){
@@ -200,16 +199,16 @@ public class SearchDialog extends Activity implements View.OnClickListener, View
                 handleSearch();
                 break;
             case R.id.btn_reset_category_product:
-                this.mTxvCategoryProduct.setText("Tất cả");
+                this.mTxvType.setText("Tất cả");
                 this.mBtnResetCategoryProduct.setText(">");
                 break;
             case R.id.btn_reset_district:
                 this.mTxvDistrict.setText("Tất cả");
                 mBtnResetDistrict.setText(">");
                 break;
-            case R.id.txv_category_product:
+            case R.id.txv_type:
                 this.mLoadingDialog.show();
-                new PresenterGetData(this).handleGetCategoriesProduct();
+                new PresenterGetData(this).handleGetCategoriesProduct("", "");
                 break;
             case R.id.txv_province_city:
                 this.mLoadingDialog.show();
@@ -288,7 +287,7 @@ public class SearchDialog extends Activity implements View.OnClickListener, View
     }
 
     @Override
-    public void onGetProvinceCity(boolean status, final ArrayList<ProvinceCity> mArr) {
+    public void onGetProvinceCity(boolean status, final ArrayList<Place> mArr) {
         ProvinceCityAdapter provinceCityAdapter = new ProvinceCityAdapter(this, mArr);
 
         mDialog = new Dialog(this);
@@ -309,7 +308,7 @@ public class SearchDialog extends Activity implements View.OnClickListener, View
         lsv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                ProvinceCity provinceCity = mArr.get(position);
+                Place provinceCity = mArr.get(position);
                 mTxvProvinceCity.setText(provinceCity.getName());
                 mProvinceCityId = provinceCity.getId();
 
@@ -325,7 +324,7 @@ public class SearchDialog extends Activity implements View.OnClickListener, View
     }
 
     @Override
-    public void onGetDistrict(boolean status, final ArrayList<District> mArr) {
+    public void onGetDistrict(boolean status, final ArrayList<Place> mArr) {
 
         DistrictAdapter district = new DistrictAdapter(this, mArr);
 
@@ -361,7 +360,7 @@ public class SearchDialog extends Activity implements View.OnClickListener, View
     }
 
     @Override
-    public void onGetCategoriesProduct(boolean status, final ArrayList<CategoriesProduct> mArr) {
+    public void onGetCategoriesProduct(boolean status, final ArrayList<Category> mArr) {
 
         CategoriesProductAdapter categoriesProductAdapter = new CategoriesProductAdapter(this, mArr);
 
@@ -382,7 +381,7 @@ public class SearchDialog extends Activity implements View.OnClickListener, View
         lsv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                mTxvCategoryProduct.setText(mArr.get(position).getName());
+                mTxvType.setText(mArr.get(position).getName());
 
                 mBtnResetCategoryProduct.setText("X");
                 mDialog.dismiss();

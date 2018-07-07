@@ -34,8 +34,8 @@ public class ModelGetData {
         new GetDistrict(provinceCityId).execute(mUrlDistrict);
     }
 
-    public void requireGetCategoriesProduct(){
-        new GetCategoriesProduct().execute(mUrlCategoriesProduct);
+    public void requireGetCategoriesProduct(String table, String columnName){
+        new GetCategoriesProduct(table, columnName).execute(mUrlCategoriesProduct);
     }
 
     class GetProvinceCity extends AsyncTask<String, Void, String>{
@@ -138,19 +138,27 @@ public class ModelGetData {
 
         OkHttpClient okHttpClient;
 
-        public GetCategoriesProduct(){
+        private String table;
+        private String columnName;
+
+        public GetCategoriesProduct(String table, String columnName){
             okHttpClient = new OkHttpClient.Builder()
                     .connectTimeout(15, TimeUnit.SECONDS)
                     .writeTimeout(10, TimeUnit.SECONDS)
                     .readTimeout(10, TimeUnit.SECONDS)
                     .build();
+            this.table = table;
+            this.columnName = columnName;
         }
 
         @Override
         protected String doInBackground(String... strings) {
 
+            String url = mUrlCategoriesProduct + "?table=" + table + "&column_name=" + columnName;
+
             Request request = new Request.Builder()
-                    .url(strings[0])
+                    .url(url)
+                    .get()
                     .build();
 
             try {

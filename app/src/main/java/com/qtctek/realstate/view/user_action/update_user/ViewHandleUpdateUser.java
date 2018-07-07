@@ -1,6 +1,6 @@
 package com.qtctek.realstate.view.user_action.update_user;
 
-import com.qtctek.realstate.dto.User;
+import com.qtctek.realstate.dto.User_Object;
 
 public interface ViewHandleUpdateUser {
 
@@ -8,8 +8,5 @@ public interface ViewHandleUpdateUser {
 
     void onUpdateUserError(String error);
 
-    void onHandleInformationUserSuccessful(User user);
-
-    void onHandleInformationUserError(String error);
 
 }

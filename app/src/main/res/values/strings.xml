@@ -18,6 +18,7 @@
     <string name="register_account">Đăng kí tài khoản</string>
     <string name="full_name">Họ và tên</string>
     <string name="email_address">Địa chỉ email</string>
+    <string name="email_address_username">Địa chỉ email/Tên đăng nhập</string>
     <string name="phone_number">Số điện thoại</string>
     <string name="password">Mật khẩu (Ít nhất 6 kí tự)</string>
     <string name="confirm_password">Xác nhận mật khẩu</string>
@@ -38,6 +39,8 @@
     <string name="contact_number_phone">Số điện thoại liên hệ</string>
     <string name="please_select">Vui lòng chọn</string>
     <string name="normal_information">Thông tin cơ bản</string>
+    <string name="address_information">Thông tin địa chỉ</string>
+    <string name="detail_information">Thông tin chi tiết</string>
     <string name="province_city">Tỉnh/Thành phố</string>
     <string name="district">Quận/Huyện</string>
     <string name="address">Địa chỉ</string>
@@ -95,7 +98,7 @@
     <string name="view_detail">Xem chi tiết</string>
     <string name="image_view">Hình ảnh</string>
     <string name="map_view">Bản đồ</string>
-    <string name="category_product">Loại nhà</string>
+    <string name="type_product">Loại nhà</string>
     <string name="area">Diện tích (m²)</string>
     <string name="save">Lưu</string>
     <string name="un_save">Bỏ lưu</string>
@@ -107,9 +110,19 @@
     <string name="please_zoom">Vui lòng zoom lớn bản đồ để xem nhà được bán!</string>
     <string name="load_data_error">Lỗi tải dữ liệu!</string>
     <string name="post">Đăng bài</string>
-    <string name="utility">Tiện ích</string>
+    <string name="amenities">Tiện ích</string>
     <string name="disable_user">Khóa tài khoản</string>
     <string name="enable_user">Bỏ khóa tài khoản</string>
+    <string name="sex">Giới tính</string>
+    <string name="male">Nam</string>
+    <string name="female">Nữ</string>
+    <string name="birthday">Ngày sinh</string>
+    <string name="username">Tên đăng nhập</string>
+    <string name="other">Khác</string>
+    <string name="architecture">Kiểu nhà</string>
+    <string name="title">Tiêu đề</string>
+    <string name="rent_house">Nhà thuê</string>
+    <string name="house_for_sale">Nhà bán</string>
 
     <string name="google_api_key">AIzaSyAowoC2lTSVNGAJZkimZBlPuxPy0so5a_A</string>
 

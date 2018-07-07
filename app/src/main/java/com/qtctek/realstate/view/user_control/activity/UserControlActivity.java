@@ -3,12 +3,15 @@ package com.qtctek.realstate.view.user_control.activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.DrawableRes;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -59,7 +62,7 @@ public class UserControlActivity extends AppCompatActivity{
 
     //To know what screen to display after the user log on
     private void handleStart(){
-        if(MainActivity.ROLE_USER.equals("2")){ //người dùng
+        if(MainActivity.USER.getLevel() == 3){ //người dùng
             FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
             fragmentTransaction.replace(R.id.fl_user_control, new UserNormalControlFragment());
             fragmentTransaction.commit();
@@ -76,8 +79,10 @@ public class UserControlActivity extends AppCompatActivity{
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.user_control_menu, menu);
 
+
+
         MenuItem menuItem = menu.findItem(R.id.control_new_post);
-        if(MainActivity.ROLE_USER.equals("2")){
+        if(MainActivity.USER.getLevel() == 3){
             menuItem.setVisible(true);
         }
         else{
@@ -119,8 +124,8 @@ public class UserControlActivity extends AppCompatActivity{
                 .setPositiveButton("Xác nhận", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        MainActivity.ROLE_USER = "";
-                        MainActivity.EMAIL_USER = "";
+                        MainActivity.LEVEL = "";
+                        MainActivity.USERr = "";
                         Intent intent = new Intent(UserControlActivity.this, UserActionActivity.class);
                         startActivity(intent);
                         finish();

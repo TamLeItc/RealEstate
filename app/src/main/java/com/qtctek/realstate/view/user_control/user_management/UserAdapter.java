@@ -1,6 +1,7 @@
 package com.qtctek.realstate.view.user_control.user_management;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,7 @@ import android.widget.TextView;
 
 import com.qtctek.realstate.R;
 import com.qtctek.realstate.dto.User;
+import com.qtctek.realstate.dto.User_Object;
 
 import java.util.ArrayList;
 
@@ -50,7 +52,6 @@ public class UserAdapter extends BaseAdapter {
             viewHolder.txvEmail = convertView.findViewById(R.id.txv_email_address);
             viewHolder.txvNumberPhone = convertView.findViewById(R.id.txv_phone_number);
             viewHolder.txvRole = convertView.findViewById(R.id.txv_role);
-            viewHolder.txvQualityPost = convertView.findViewById(R.id.txv_quality_post);
             viewHolder.rlItemUser = convertView.findViewById(R.id.rl_item_user);
 
             convertView.setTag(viewHolder);
@@ -60,24 +61,25 @@ public class UserAdapter extends BaseAdapter {
         }
 
         User user = this.mArrLisUser.get(position);
-        viewHolder.txvName.setText("Tên: " + user.getName());
-        viewHolder.txvNumberPhone.setText("SDT: " + user.getPhoneNumber());
+        if(user == null){
+            return null;
+        }
+        viewHolder.txvName.setText("Tên: " + user.getFullName());
+        viewHolder.txvNumberPhone.setText("SDT: " + user.getPhone());
         viewHolder.txvEmail.setText("Email: " + user.getEmail());
-        viewHolder.txvQualityPost.setText(user.getQualityPostSale() + "");
-        viewHolder.txvRole.setText(user.getRole());
+        viewHolder.txvRole.setText(user.getType());
 
-
-        if(user.getRole().equals("Admin")){
+        if(user.getLevel() == 1){
             viewHolder.txvRole.setTextColor(mContext.getResources().getColor(R.color.colorAdmin));
         }
-        else if(user.getRole().equals("Người dùng")){
+        else if(user.getLevel() == 3){
             viewHolder.txvRole.setTextColor(mContext.getResources().getColor(R.color.colorMonitor));
         }
-        else if(user.getRole().equals("Kiểm duyệt")){
+        else if(user.getLevel() == 2){
             viewHolder.txvRole.setTextColor(mContext.getResources().getColor(R.color.colorUser));
         }
 
-        if(mArrLisUser.get(position).getStatus().equals("disable")){
+        if(mArrLisUser.get(position).getStatus().equals("no")){
             viewHolder.rlItemUser.setBackgroundColor(this.mContext.getResources().getColor(R.color.colorPostNotActive));
         }
         else{
@@ -89,7 +91,7 @@ public class UserAdapter extends BaseAdapter {
     }
 
     class ViewHolder{
-        TextView txvName, txvNumberPhone, txvEmail, txvRole, txvQualityPost;
+        TextView txvName, txvNumberPhone, txvEmail, txvRole;
         RelativeLayout rlItemUser;
     }
 

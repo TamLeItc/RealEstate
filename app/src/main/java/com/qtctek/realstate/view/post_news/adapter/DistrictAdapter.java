@@ -8,16 +8,16 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.qtctek.realstate.R;
-import com.qtctek.realstate.dto.District;
+import com.qtctek.realstate.dto.Place;
 
 import java.util.ArrayList;
 
 public class DistrictAdapter extends BaseAdapter {
 
     private Context mContext;
-    private ArrayList<District> mArr;
+    private ArrayList<Place> mArr;
 
-    public DistrictAdapter(Context mContext, ArrayList<District> mArr) {
+    public DistrictAdapter(Context mContext, ArrayList<Place> mArr) {
         this.mContext = mContext;
         this.mArr = mArr;
     }

@@ -3,6 +3,7 @@ package com.qtctek.realstate.model.user_action;
 import android.os.AsyncTask;
 
 import com.qtctek.realstate.dto.User;
+import com.qtctek.realstate.dto.User_Object;
 import com.qtctek.realstate.presenter.user_action.update_user.PresenterImpHandleUpdateUser;
 import com.qtctek.realstate.view.post_news.activity.MainActivity;
 
@@ -19,14 +20,15 @@ public class ModelUpdateUser {
 
     private PresenterImpHandleUpdateUser mPresenterImpHandleUpdateUser;
 
-    private String mUrl = MainActivity.HOST + "/real_estate/udpate_user.php";
+    private String mUrlUpdateUser = MainActivity.WEB_SERVER + "udpate_user.php";
+    private String mUrlGetInformationUser = MainActivity.WEB_SERVER + "get_information_user.php";
 
     public ModelUpdateUser(PresenterImpHandleUpdateUser presenterImpHandleUpdateUser){
         this.mPresenterImpHandleUpdateUser = presenterImpHandleUpdateUser;
     }
 
     public void requireUpdateUser(User user){
-        new UpdateUser(user).execute(mUrl);
+        new UpdateUser(user).execute(mUrlUpdateUser);
     }
 
     class UpdateUser extends AsyncTask<String, Void, String>{
@@ -48,10 +50,14 @@ public class ModelUpdateUser {
         protected String doInBackground(String... strings) {
 
             RequestBody requestBody = new MultipartBody.Builder()
-                    .addFormDataPart("name", user.getName())
+                    .addFormDataPart("name", user.getFullName())
+                    .addFormDataPart("sex", user.getSex())
+                    .addFormDataPart("birthday", user.getBirthDay())
+                    .addFormDataPart("phone", user.getPhone())
                     .addFormDataPart("email", user.getEmail())
+                    .addFormDataPart("address", user.getAddress())
+                    .addFormDataPart("username", user.getUsername())
                     .addFormDataPart("password", user.getPassword())
-                    .addFormDataPart("phone_number", user.getPhoneNumber())
                     .setType(MultipartBody.FORM)
                     .build();
 

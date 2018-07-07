@@ -6,15 +6,11 @@ public interface PresenterImpHandleModelNewPost {
 
     void onUploadImages(boolean status);
 
-    void onUpdateNormalInformation(boolean status);
-
-    void onUpdateMoreInformation(boolean status);
+    void onUpdateProductInformation(boolean status);
 
     void onUpdateDescriptionInformation(boolean status);
 
     void onUpdateMapInformation(boolean status);
-
-    void onUpdateContactInformation(boolean status);
 
     void onDeleteFile(boolean status);
 

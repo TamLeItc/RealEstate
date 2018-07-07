@@ -1,8 +1,11 @@
 package com.qtctek.realstate.model.user_action;
 
 import android.os.AsyncTask;
+import android.util.Log;
+import android.widget.Toast;
 
 import com.qtctek.realstate.dto.User;
+import com.qtctek.realstate.dto.User_Object;
 import com.qtctek.realstate.presenter.user_action.register.PresenterImpHandleRegister;
 import com.qtctek.realstate.view.post_news.activity.MainActivity;
 
@@ -17,7 +20,7 @@ import okhttp3.Response;
 
 public class ModelRegister {
 
-    String mUrl = MainActivity.HOST + "/real_estate/user_register.php";
+    String mUrl = MainActivity.WEB_SERVER + "user_register.php";
 
     private PresenterImpHandleRegister mPresenterImpHandleRegister;
 
@@ -25,8 +28,8 @@ public class ModelRegister {
         this.mPresenterImpHandleRegister = presenterImpHandleRegister;
     }
 
-    public void requireCheckEmail(String email){
-        new CheckEmail(email).execute(mUrl);
+    public void requireCheckEmail(String email, String username){
+        new CheckEmail(email, username, "check_user").execute(mUrl);
     }
 
     public void requireInsertUser(User user){
@@ -37,15 +40,17 @@ public class ModelRegister {
 
         OkHttpClient okHttpClient;
 
-        String email, option;
+        String email, username, option;
 
-        public CheckEmail(String email){
+        public CheckEmail(String email, String username, String option){
             okHttpClient = new OkHttpClient.Builder()
                     .connectTimeout(15, TimeUnit.SECONDS)
                     .readTimeout(10, TimeUnit.SECONDS)
                     .writeTimeout(10, TimeUnit.SECONDS)
                     .build();
             this.email = email;
+            this.option = option;
+            this.username = username;
         }
 
         @Override
@@ -53,7 +58,8 @@ public class ModelRegister {
 
             RequestBody requestBody = new MultipartBody.Builder()
                     .addFormDataPart("email", email)
-                    .addFormDataPart("option", "check_email")
+                    .addFormDataPart("username", username)
+                    .addFormDataPart("option", option)
                     .setType(MultipartBody.FORM)
                     .build();
 
@@ -64,23 +70,20 @@ public class ModelRegister {
 
             try {
                 Response response = okHttpClient.newCall(request).execute();
-                return  response.body().string();
+                return response.body().string();
             } catch (IOException e) {
                 e.printStackTrace();
+                return  e.toString();
             }
-            return "error";
         }
 
         @Override
         protected void onPostExecute(String s) {
-            if(s.equals("existed")){
-                mPresenterImpHandleRegister.onCheckExistEmail(true);
-            }
-            else if(s.equals("not_exist")){
-                mPresenterImpHandleRegister.onCheckExistEmail(false);
+            if(s.equals("not_exist") || s.equals("email_existed") || s.equals("username_existed")){
+                mPresenterImpHandleRegister.onCheckExistEmail(s);
             }
             else{
-                mPresenterImpHandleRegister.onConnectServerError();
+                mPresenterImpHandleRegister.onConnectServerError(s);
             }
 
             super.onPostExecute(s);
@@ -108,12 +111,15 @@ public class ModelRegister {
 
         @Override
         protected String doInBackground(String... strings) {
-
             RequestBody requestBody = new MultipartBody.Builder()
-                    .addFormDataPart("name", user.getName())
+                    .addFormDataPart("name", user.getFullName())
+                    .addFormDataPart("sex", user.getSex())
+                    .addFormDataPart("birthday", user.getBirthDay())
+                    .addFormDataPart("phone", user.getPhone())
                     .addFormDataPart("email", user.getEmail())
+                    .addFormDataPart("address", user.getAddress())
+                    .addFormDataPart("username", user.getUsername())
                     .addFormDataPart("password", user.getPassword())
-                    .addFormDataPart("phone_number", user.getPhoneNumber())
                     .addFormDataPart("option", option)
                     .setType(MultipartBody.FORM)
                     .build();
@@ -127,9 +133,8 @@ public class ModelRegister {
                 Response response = okHttpClient.newCall(request).execute();
                 return  response.body().string();
             } catch (IOException e) {
-                e.printStackTrace();
+                return e.toString();
             }
-            return "error";
         }
 
         @Override

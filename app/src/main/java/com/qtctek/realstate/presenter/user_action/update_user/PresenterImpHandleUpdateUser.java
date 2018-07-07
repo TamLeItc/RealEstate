@@ -6,8 +6,4 @@ public interface PresenterImpHandleUpdateUser {
 
     void onUpdateUserError(String error);
 
-    void onGetInformationUserSuccessful(String data);
-
-    void onGetInformationUserError(String error);
-
 }

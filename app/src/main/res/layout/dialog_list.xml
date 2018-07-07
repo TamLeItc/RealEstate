@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:weightSum="5"
-        android:background="@color/colorMain">
+        android:background="@color/colorPrimary">
 
         <TextView
             android:layout_weight="4"
@@ -20,7 +20,7 @@
             android:padding="@dimen/_10dp"
             android:id="@+id/txv_title"
             android:text="@string/please_select"
-            android:background="@color/colorMain"
+            android:background="@color/colorPrimary"
             android:textSize="@dimen/_12sp"
             android:textColor="@color/colorWhite"
             android:gravity="center"/>

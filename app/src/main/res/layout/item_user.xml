@@ -28,25 +28,6 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/txv_name"
-        android:layout_toLeftOf="@+id/txv_quality_post"
-        android:text="Số bài đăng: "
-        android:textColor="@color/colorGrayDark"
-        android:textSize="@dimen/_9sp"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/txv_quality_post"
-        android:layout_below="@id/txv_name"
-        android:layout_alignParentRight="true"
-        android:text="12"
-        android:textColor="@color/colorGrayDark"
-        android:textSize="@dimen/_9sp"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:id="@+id/txv_phone_number"
         android:text="SDT: 0969396459"
         android:layout_below="@+id/txv_name"

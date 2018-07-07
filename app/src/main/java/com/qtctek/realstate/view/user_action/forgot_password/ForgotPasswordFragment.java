@@ -76,7 +76,7 @@ public class ForgotPasswordFragment extends Fragment implements View.OnClickList
         }
         else{
             mLoadingDialog.show();
-            this.mPresenterRegister.handleCheckEmail(this.mEdtEmail.getText().toString().trim());
+            this.mPresenterRegister.handleCheckEmail(this.mEdtEmail.getText().toString().trim(), "");
         }
     }
 
@@ -102,9 +102,9 @@ public class ForgotPasswordFragment extends Fragment implements View.OnClickList
     }
 
     @Override
-    public void onCheckExistEmail(boolean isExisted) {
-
-        if(isExisted){
+    public void onCheckExistEmail(String message) {
+        mLoadingDialog.dismiss();
+        if(message.equals("email_existed")){
             String mNewPassword = RandomString.getSaltString();
             if(sendConfirmCodeToGMail(mNewPassword)){
                 mPresenterForgotPassword.handleResetPassword(this.mEdtEmail.getText().toString().trim(),
@@ -141,7 +141,7 @@ public class ForgotPasswordFragment extends Fragment implements View.OnClickList
     }
 
     @Override
-    public void onConnectServerError() {
+    public void onConnectServerError(String s) {
         this.mLoadingDialog.dismiss();
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
                 .setTitle("Quên mật khẩu")

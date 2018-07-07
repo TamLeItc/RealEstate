@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="@dimen/_8dp">
+
+    <DatePicker
+        android:layout_gravity="center"
+        android:id="@+id/dpk_birthday"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@id/txv_sex"
+        android:layout_below="@+id/txv_name_birthday" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/btn_confirm"
+        android:text="@string/confirm"
+        android:background="@drawable/custom_btn_create_account"
+        android:paddingLeft="@dimen/_15dp"
+        android:paddingRight="@dimen/_15dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="@dimen/_12dp"/>
+
+</LinearLayout>

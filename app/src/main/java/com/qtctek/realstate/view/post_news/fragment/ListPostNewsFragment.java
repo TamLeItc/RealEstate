@@ -12,10 +12,15 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.qtctek.realstate.R;
+import com.qtctek.realstate.presenter.user_control.saved_post.PresenterSavedPost;
 import com.qtctek.realstate.view.post_news.adapter.PostAdapter;
 import com.qtctek.realstate.view.post_detail.activity.PostDetailActivity;
+import com.qtctek.realstate.view.user_control.saved_post.ViewGetDataLocal;
 
-public class ListPostNewsFragment extends Fragment implements AdapterView.OnItemClickListener {
+import java.util.HashMap;
+
+public class ListPostNewsFragment extends Fragment implements AdapterView.OnItemClickListener,
+        ViewGetDataLocal {
 
     private View mView;
 
@@ -24,6 +29,8 @@ public class ListPostNewsFragment extends Fragment implements AdapterView.OnItem
     public static TextView TXV_INFORMATION;
 
     public static PostAdapter POST_ADAPTER;
+
+    public static HashMap<String, String> LIST_SAVED_PRODUCT_ID;
 
     @Nullable
     @Override
@@ -39,13 +46,16 @@ public class ListPostNewsFragment extends Fragment implements AdapterView.OnItem
     private void initViews(){
         this.mLsvListProduct = mView.findViewById(R.id.lsv_list_product);
         TXV_INFORMATION = mView.findViewById(R.id.txv_information);
+
+        this.mLsvListProduct.setOnItemClickListener(this);
     }
 
     private void handleStart(){
         POST_ADAPTER = new PostAdapter(getContext(), MapPostNewsFragment.ARR_POST);
         this.mLsvListProduct.setAdapter(POST_ADAPTER);
 
-        this.mLsvListProduct.setOnItemClickListener(this);
+        LIST_SAVED_PRODUCT_ID = new HashMap<>();
+        new PresenterSavedPost(this).handleGetDataProductIds(getContext());
     }
 
     @Override
@@ -53,5 +63,15 @@ public class ListPostNewsFragment extends Fragment implements AdapterView.OnItem
         Intent intent = new Intent(getActivity(), PostDetailActivity.class);
         intent.putExtra("post_id", MapPostNewsFragment.ARR_POST.get(position).getId());
         startActivity(intent);
+    }
+
+    @Override
+    public void onHandleDataProductIdsSuccessful(HashMap<String, String> list) {
+        LIST_SAVED_PRODUCT_ID.putAll(list);
+    }
+
+    @Override
+    public void onHandleDataProductIdsError(String error) {
+
     }
 }

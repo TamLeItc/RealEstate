@@ -3,7 +3,6 @@ package com.qtctek.realstate.view.post_news.fragment;
 import android.Manifest;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
@@ -13,6 +12,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
@@ -43,9 +43,7 @@ import com.qtctek.realstate.R;
 import com.qtctek.realstate.dto.PostSale;
 import com.qtctek.realstate.presenter.post_news.PresenterPostNews;
 import com.qtctek.realstate.view.post_news.interfaces.ViewHandlePostNews;
-import com.qtctek.realstate.view.post_news.dialog.PostDialog;
 import com.qtctek.realstate.view.post_news.interfaces.OnEventFromActivity;
-import com.qtctek.realstate.view.new_post.activity.NewPostActivity;
 
 import java.util.ArrayList;
 
@@ -59,10 +57,10 @@ public class MapPostNewsFragment extends Fragment implements OnMapReadyCallback,
 
     private final long mUpdateInterval = 5000;
     private final long mFastestInterval = 5000;
+
     public static ArrayList<PostSale> ARR_POST = new ArrayList<>();
     public static OnEventFromActivity ON_RESULT_FROM_ACTIVITY;
-
-    private int mPosition;
+    public static int POSITION;
 
     private GoogleApiClient mGoogleApiClient;
     private LocationRequest mLocationRequest;
@@ -79,6 +77,8 @@ public class MapPostNewsFragment extends Fragment implements OnMapReadyCallback,
     private PresenterPostNews mPresenterPostNews = new PresenterPostNews(this);
 
     private ArrayList<Marker> mArrMarket = new ArrayList<>();
+    private Marker mLastMarkerClicked = null;
+    private PostSale mLastPostSaleClicked = null;
 
     private int mMinZoom = 13;
     private String mMinPrice = "0";
@@ -198,7 +198,6 @@ public class MapPostNewsFragment extends Fragment implements OnMapReadyCallback,
 
     //Thiết lập việc cập nhật vị trí tự động
     protected void startLocationUpdates() {
-
         //Kiểm tra xem có quyền cập quyền truy cập vị trí hiện tại hay không
         if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(getContext(),
@@ -287,7 +286,6 @@ public class MapPostNewsFragment extends Fragment implements OnMapReadyCallback,
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-
         mMap = googleMap;
 
         mMap.setOnMarkerClickListener(this);
@@ -303,16 +301,15 @@ public class MapPostNewsFragment extends Fragment implements OnMapReadyCallback,
                 LatLng position = new LatLng(10.811376, 106.619471);
                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(position, 16));
             }
-
             return;
         }
-
 
         mMap.setMyLocationEnabled(true);
     }
 
     @Override
     public void handlePostListSuccessful(ArrayList<PostSale> arrPost) {
+        ARR_POST.clear();
         if(arrPost.size() > 0){
             ListPostNewsFragment.TXV_INFORMATION.setVisibility(View.GONE);
             this.mTxvInformation.setVisibility(View.GONE);
@@ -324,14 +321,16 @@ public class MapPostNewsFragment extends Fragment implements OnMapReadyCallback,
             this.mTxvInformation.setVisibility(View.VISIBLE);
             this.mTxvInformation.setText(getActivity().getResources().getText(R.string.no_data_here));
         }
+
         handlePostList(arrPost);
+        createMarkerClicked(this.mLastMarkerClicked, this.mLastPostSaleClicked);
     }
 
     @Override
     public void handlePostListError(String error) {
+        ARR_POST.clear();
         Toast.makeText(getContext(), "Có vấn đề trong việc tải dữ liệu. Xin vui lòng thử lại sau!!!", Toast.LENGTH_SHORT).show();
 
-        ARR_POST.clear();
         ListPostNewsFragment.POST_ADAPTER.notifyDataSetChanged();
 
         ListPostNewsFragment.TXV_INFORMATION.setVisibility(View.VISIBLE);
@@ -348,6 +347,7 @@ public class MapPostNewsFragment extends Fragment implements OnMapReadyCallback,
             marker.remove();
         }
 
+
         this.ARR_POST.addAll(arrPost);
         ListPostNewsFragment.POST_ADAPTER.notifyDataSetChanged();
 
@@ -359,24 +359,30 @@ public class MapPostNewsFragment extends Fragment implements OnMapReadyCallback,
             LatLng latLng = new LatLng(Double.parseDouble(postSale.getProduct().getLatitude()),
                     Double.parseDouble(postSale.getProduct().getLongitude()));
 
+
+
             String strShortPrice = getStringShortPrice(postSale.getProduct().getPrice());
-
-            IconGenerator iconFactory = new IconGenerator(getContext());
-            iconFactory.setColor(getResources().getColor(R.color.colorMain));
-            iconFactory.setTextAppearance(R.style.iconGenText);
-            iconFactory.setContentPadding(3, 1, 3, 1);
-
-            Marker marker = mMap.addMarker(new MarkerOptions()
-                    .position(latLng)
-                    .snippet(i + "")
-                    .icon(BitmapDescriptorFactory.fromBitmap(iconFactory.makeIcon(strShortPrice)))
-                    .anchor(iconFactory.getAnchorU(), iconFactory.getAnchorV()));
-
-            this.mArrMarket.add(marker);
+            this.mArrMarket.add(createMarker(latLng, i, R.color.colorMain, strShortPrice));
         }
     }
 
-     private String getStringShortPrice(Long price){
+
+    private Marker createMarker(LatLng latLng, int positionInArr, int color, String message){
+
+        IconGenerator iconFactory = new IconGenerator(getContext());
+        iconFactory.setColor(getResources().getColor(color));
+        iconFactory.setTextAppearance(R.style.iconGenText);
+        iconFactory.setContentPadding(3, 1, 3, 1);
+
+        Marker marker = mMap.addMarker(new MarkerOptions()
+                .position(latLng)
+                .snippet(positionInArr + "")
+                .icon(BitmapDescriptorFactory.fromBitmap(iconFactory.makeIcon(message)))
+                .anchor(iconFactory.getAnchorU(), iconFactory.getAnchorV()));
+        return  marker;
+    }
+
+    private String getStringShortPrice(Long price){
         float fPrice;
         if(price > 1000000000){
             fPrice = (float)price / 1000000000;
@@ -408,27 +414,55 @@ public class MapPostNewsFragment extends Fragment implements OnMapReadyCallback,
                 farLeft, nearLeft);
     }
 
-    private void createDialogPost(Marker marker){
-
-        mPosition = Integer.parseInt(marker.getSnippet());
-        Intent intent = new Intent(getActivity(), PostDialog.class);
-        intent.putExtra("position", mPosition);
-        startActivity(intent);
-
-    }
-
     @Override
     public boolean onMarkerClick(Marker marker) {
-        createDialogPost(marker);
 
-        return false;
+        POSITION = Integer.parseInt(marker.getSnippet());
+
+        FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
+        PostFragment postFragment = new PostFragment();
+        fragmentTransaction.replace(R.id.fl_item_post, postFragment);
+        fragmentTransaction.commit();
+
+        try{
+            createMarkerClicked(marker, ARR_POST.get(POSITION));
+        }
+        catch (java.lang.IndexOutOfBoundsException e){
+            Toast.makeText(getContext(), "Có lỗi xảy ra trong quá trình xử lí", Toast.LENGTH_SHORT).show();
+        }
+
+        return true;
+    }
+
+    private void createMarkerClicked(Marker marker, PostSale postSale){
+        try{
+            LatLng latLng = this.mLastMarkerClicked.getPosition();
+            int positionInArr = Integer.parseInt(this.mLastMarkerClicked.getSnippet());
+            String strShortPrice = getStringShortPrice(mLastPostSaleClicked.getProduct().getPrice());
+            this.mLastMarkerClicked.remove();
+            this.mArrMarket.add(createMarker(latLng, positionInArr, R.color.colorMain, strShortPrice));
+
+            this.mLastMarkerClicked = marker;
+            this.mLastPostSaleClicked = postSale;
+        }
+        catch (java.lang.NullPointerException e){
+            this.mLastMarkerClicked = marker;
+            this.mLastPostSaleClicked = postSale;
+        }
+
+        try {
+            LatLng latLng = this.mLastMarkerClicked.getPosition();
+            int positionInArr = Integer.parseInt(this.mLastMarkerClicked.getSnippet());
+            String strShortPrice = getStringShortPrice(mLastPostSaleClicked.getProduct().getPrice());
+            this.mLastMarkerClicked.remove();
+            this.mArrMarket.add(createMarker(latLng, positionInArr, R.color.colorMain2, strShortPrice));
+        }
+        catch (java.lang.NullPointerException e){}
     }
 
 
     @Override
     public void onCameraIdle() {
-        this.ARR_POST.clear();
-
         if(mMap.getCameraPosition().zoom >= mMinZoom){
             handleGetData();
             String text = "Đang tải...";
@@ -438,9 +472,6 @@ public class MapPostNewsFragment extends Fragment implements OnMapReadyCallback,
         else{
             this.mTxvInformation.setVisibility(View.VISIBLE);
             this.mTxvInformation.setText(getActivity().getResources().getText(R.string.please_zoom));
-            for(int i = 0; i < this.mArrMarket.size(); i++){
-                this.mArrMarket.get(i).remove();
-            }
         }
     }
 

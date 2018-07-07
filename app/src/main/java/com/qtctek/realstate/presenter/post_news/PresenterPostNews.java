@@ -2,7 +2,7 @@ package com.qtctek.realstate.presenter.post_news;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.qtctek.realstate.dto.PostSale;
-import com.qtctek.realstate.dto.Product;
+import com.qtctek.realstate.dto.Product1;
 import com.qtctek.realstate.model.post_news.ModelPostNews;
 import com.qtctek.realstate.view.post_news.interfaces.ViewHandlePostNews;
 
@@ -41,7 +41,7 @@ public class PresenterPostNews implements PresenterImpHandlePostNews {
             postSale.setId(jsonObject.getInt("id"));
             postSale.setPostDate(jsonObject.getString("post_date"));
 
-            Product product = new Product();
+            Product1 product = new Product1();
             product.setId(postSale.getId());
             product.setPrice(jsonObject.getLong("price"));
             product.setLatitude(jsonObject.getString("latitude"));

@@ -2,11 +2,16 @@ package com.qtctek.realstate.presenter.user_control.saved_post;
 
 public interface PresenterImpIHandleSavedPost {
 
-    void onGetSavedPostListSuccessful(String data);
+    void onGetDataProductIdsSuccessful(String data);
 
-    void onHandleSavedPostListError(String error);
+    void onGetDataProductIdsError(String error);
 
-    void onExecuteUnSavePostSuccessful();
-    void onExecuteUnSavePostError(String e);
+    void onUpdateProductIdListSuccessful();
+
+    void onUpdateProductIdListError(String e);
+
+    void onGetSavedProductListSuccessful(String data);
+
+    void onGetSavedProductListError(String error);
 
 }

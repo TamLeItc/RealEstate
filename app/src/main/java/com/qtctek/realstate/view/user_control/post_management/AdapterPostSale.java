@@ -7,11 +7,15 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.qtctek.realstate.R;
 import com.qtctek.realstate.dto.PostSale;
+import com.qtctek.realstate.dto.Product;
 import com.qtctek.realstate.view.post_news.activity.MainActivity;
+import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 import java.text.ParseException;
@@ -21,23 +25,23 @@ import java.util.Date;
 
 public class AdapterPostSale extends BaseAdapter {
 
-    private ArrayList<PostSale> mArrListPostSale;
+    private ArrayList<Product> mArrProduct;
     private Context mContext;
 
 
-    public AdapterPostSale(ArrayList<PostSale> mArrListPostSale, Context mContext) {
-        this.mArrListPostSale = mArrListPostSale;
+    public AdapterPostSale(ArrayList<Product> mArrProduct, Context mContext) {
+        this.mArrProduct = mArrProduct;
         this.mContext = mContext;
     }
 
     @Override
     public int getCount() {
-        return this.mArrListPostSale.size();
+        return this.mArrProduct.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return this.mArrListPostSale.get(position);
+        return this.mArrProduct.get(position);
     }
 
     @Override
@@ -53,7 +57,7 @@ public class AdapterPostSale extends BaseAdapter {
             convertView = LayoutInflater.from(mContext).inflate(R.layout.item_post_for_admin, parent, false);
 
             viewHolder = new ViewHolder();
-            viewHolder.llItem = convertView.findViewById(R.id.ll_item);
+            viewHolder.rlItem = convertView.findViewById(R.id.rl_item);
             viewHolder.imvProductAvartar = convertView.findViewById(R.id.imv_product_avartar);
             viewHolder.txvPrice = convertView.findViewById(R.id.txv_price);
             viewHolder.txvArea = convertView.findViewById(R.id.txv_area);
@@ -62,6 +66,7 @@ public class AdapterPostSale extends BaseAdapter {
             viewHolder.txvPhoneNumberPoster = convertView.findViewById(R.id.txv_phone_number_poster);
             viewHolder.txvEmailPoster = convertView.findViewById(R.id.txv_email_poster);
             viewHolder.txvPostDate = convertView.findViewById(R.id.txv_post_date);
+            viewHolder.progressBar = convertView.findViewById(R.id.progress_bar);
 
             convertView.setTag(viewHolder);
 
@@ -70,35 +75,50 @@ public class AdapterPostSale extends BaseAdapter {
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
-        PostSale postSale = this.mArrListPostSale.get(position);
+        Product product = this.mArrProduct.get(position);
+        if(product == null){
+            return null;
+        }
 
-        viewHolder.txvArea.setText(postSale.getProduct().getArea() + " m²");
-        viewHolder.txvDistrictProvinceCity.setText(postSale.getProduct().getDistrict() + ", "
-                + postSale.getProduct().getProvinceCity());
-        viewHolder.txvNamePoster.setText("Người đăng: " + postSale.getUser().getName());
-        viewHolder.txvPhoneNumberPoster.setText("SDT:" + postSale.getUser().getPhoneNumber());
-        viewHolder.txvEmailPoster.setText("Email: " + postSale.getUser().getEmail());
+        viewHolder.txvArea.setText(product.getArea() + " m²");
+        viewHolder.txvDistrictProvinceCity.setText(product.getDistrict() + ", "
+                + product.getCity());
+        viewHolder.txvNamePoster.setText("Người đăng: " + product.getUserFullName());
+        viewHolder.txvPhoneNumberPoster.setText("SDT:" + product.getUserPhone());
+        viewHolder.txvEmailPoster.setText("Email: " + product.getUserPhone());
 
-        viewHolder.txvPostDate.setText("Ngày đăng: " + formatDate(postSale.getPostDate()));
+        viewHolder.txvPostDate.setText("Ngày đăng: " + formatDate(product.getDateUpload()));
 
-        String urlImage = MainActivity.HOST + "/real_estate/images/" +postSale.getId() + "_avartar.jpg";
-        Picasso.with(mContext).load(urlImage).into(viewHolder.imvProductAvartar);
+        String urlImage = MainActivity.WEB_SERVER + "images/" + product.getThumbnail();
+        final ViewHolder finalViewHolder = viewHolder;
+        Picasso.with(mContext).load(urlImage).into(viewHolder.imvProductAvartar, new Callback() {
+            @Override
+            public void onSuccess() {
+                finalViewHolder.progressBar.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onError() {
+                finalViewHolder.progressBar.setVisibility(View.GONE);
+                finalViewHolder.imvProductAvartar.setBackgroundResource(R.drawable.icon_product);
+            }
+        });
 
         String strPrice = "Thương lượng";
-        if(postSale.getProduct().getPrice() > 1000000000){
-            float price = (float)postSale.getProduct().getPrice() / 1000000000;
+        if(product.getPrice() > 1000000000){
+            float price = (float)product.getPrice() / 1000000000;
 
             strPrice  = Math.round( price * 100.0)/ 100.0 + " tỉ";
             viewHolder.txvPrice.setText(strPrice);
         }
-        else if(postSale.getProduct().getPrice() > 1000000){
-            float price = (float)postSale.getProduct().getPrice() / 1000000;
+        else if(product.getPrice() > 1000000){
+            float price = (float)product.getPrice() / 1000000;
 
             strPrice  = Math.round( price * 100.0)/ 100.0 + " triệu";
             viewHolder.txvPrice.setText(strPrice);
         }
-        else if(postSale.getProduct().getPrice() > 1000){
-            float price = (float)postSale.getProduct().getPrice() / 1000;
+        else if(product.getPrice() > 1000){
+            float price = (float)product.getPrice() / 1000;
 
             strPrice  = Math.round( price * 100.0)/ 100.0 + "K";
             viewHolder.txvPrice.setText(strPrice);
@@ -107,11 +127,14 @@ public class AdapterPostSale extends BaseAdapter {
             viewHolder.txvPrice.setText(strPrice);
         }
 
-        if(postSale.getStatus().equals("Chưa duyệt")){
-            viewHolder.llItem.setBackgroundColor(this.mContext.getResources().getColor(R.color.colorPostNotActive));
+        if(product.getStatus().equals("2")){
+            viewHolder.rlItem.setBackgroundColor(this.mContext.getResources().getColor(R.color.colorPostNotActive));
         }
-        else if(postSale.getStatus().equals("Đã đăng")){
-            viewHolder.llItem.setBackgroundColor(this.mContext.getResources().getColor(R.color.colorPostActive));
+        else if(product.getStatus().equals("3")){
+            viewHolder.rlItem.setBackgroundColor(this.mContext.getResources().getColor(R.color.colorPostActive));
+        }
+        else{
+            viewHolder.rlItem.setBackgroundColor(this.mContext.getResources().getColor(R.color.colorMainBackground));
         }
 
         return convertView;
@@ -134,10 +157,11 @@ public class AdapterPostSale extends BaseAdapter {
     }
 
     class ViewHolder{
-        LinearLayout llItem;
+        RelativeLayout rlItem;
         ImageView imvProductAvartar;
         TextView txvPrice, txvArea, txvDistrictProvinceCity, txvPostDate, txvNamePoster,
         txvPhoneNumberPoster, txvEmailPoster;
+        ProgressBar progressBar;
     }
 
 }

@@ -1,6 +1,11 @@
 package com.qtctek.realstate.presenter.user_control.user_management;
 
+import android.util.Log;
+
+import com.google.gson.JsonArray;
+import com.google.gson.annotations.JsonAdapter;
 import com.qtctek.realstate.dto.User;
+import com.qtctek.realstate.dto.User_Object;
 import com.qtctek.realstate.model.user_control.ModelUserManagement;
 import com.qtctek.realstate.view.user_control.user_management.ViewHandleUserManagement;
 
@@ -35,7 +40,7 @@ public class PresenterUserManagement implements PresenterImpHandleUserManagement
     public void onGetUserListSuccessful(String data) {
         try {
             ArrayList <User> arrListUser = handleUserList(data);
-            this.mViewHandleUserManagement.onHandleUserListSuccessful(this.mQualityUser, arrListUser );
+            this.mViewHandleUserManagement.onHandleUserListSuccessful(arrListUser);
         } catch (JSONException e) {
             this.mViewHandleUserManagement.onHandleUserListError(e.toString());
             e.printStackTrace();
@@ -43,29 +48,25 @@ public class PresenterUserManagement implements PresenterImpHandleUserManagement
     }
 
     public ArrayList<User> handleUserList(String data) throws JSONException {
-        ArrayList<User> users = new ArrayList<>();
 
-        JSONObject jsonObjectData = new JSONObject(data);
-        this.mQualityUser = Integer.parseInt(jsonObjectData.getString("quality_user"));
-
-        JSONArray jsonArray = jsonObjectData.getJSONArray("user_list");
+        ArrayList<User> arrListUser = new ArrayList<>();
+        JSONArray jsonArray = new JSONArray(data);
         for(int i = 0; i < jsonArray.length(); i++){
             JSONObject jsonObject = jsonArray.getJSONObject(i);
 
             User user = new User();
-            user.setIdUser(jsonObject.getInt("id"));
-            user.setName(jsonObject.getString("name"));
+            user.setId(jsonObject.getInt("id"));
+            user.setFullName(jsonObject.getString("name"));
             user.setEmail(jsonObject.getString("email"));
-            user.setPhoneNumber(jsonObject.getString("phone_number"));
-            user.setRole(jsonObject.getString("role"));
-            user.setQualityPostSale(jsonObject.getInt("quality_post_sale"));
+            user.setPhone(jsonObject.getString("phone"));
+            user.setType(jsonObject.getString("type"));
+            user.setLevel(jsonObject.getInt("level"));
             user.setStatus(jsonObject.getString("status"));
 
-            users.add(user);
-
+            arrListUser.add(user);
         }
 
-        return users;
+        return arrListUser;
 
     }
 

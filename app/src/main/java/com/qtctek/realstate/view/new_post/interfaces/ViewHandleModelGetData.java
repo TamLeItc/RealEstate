@@ -1,17 +1,16 @@
 package com.qtctek.realstate.view.new_post.interfaces;
 
-import com.qtctek.realstate.dto.CategoriesProduct;
-import com.qtctek.realstate.dto.District;
-import com.qtctek.realstate.dto.ProvinceCity;
+import com.qtctek.realstate.dto.Category;
+import com.qtctek.realstate.dto.Place;
 
 import java.util.ArrayList;
 
 public interface ViewHandleModelGetData {
 
-    void onGetProvinceCity(boolean status, ArrayList<ProvinceCity> mArr);
+    void onGetProvinceCity(boolean status, ArrayList<Place> mArr);
 
-    void onGetDistrict(boolean status, ArrayList<District> mArr);
+    void onGetDistrict(boolean status, ArrayList<Place> mArr);
 
-    void onGetCategoriesProduct(boolean status, ArrayList<CategoriesProduct> mArr);
+    void onGetCategoriesProduct(boolean status, ArrayList<Category> mArr);
 
 }

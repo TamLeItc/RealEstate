@@ -66,7 +66,7 @@ public class DescriptionInformationFragment extends Fragment implements View.OnC
     }
 
     private void handleStart(){
-        this.mEdtDescription.setText(NewPostActivity.POST_SALE.getProduct().getDescription());
+        this.mEdtDescription.setText(NewPostActivity.PRODUCT.getDescription());
 
         int qualityCharacter = this.mEdtDescription.getText().toString().trim().length();
 
@@ -82,10 +82,11 @@ public class DescriptionInformationFragment extends Fragment implements View.OnC
             return;
         }
 
-        NewPostActivity.POST_SALE.getProduct().setDescription(this.mEdtDescription.getText().toString().trim());
+        NewPostActivity.PRODUCT.setDescription(this.mEdtDescription.getText().toString().trim());
 
         mLoadingDialog.show();
-        new PresenterNewPost(this).handleUpdateDescriptionInformation(NewPostActivity.POST_SALE.getProduct());
+        new PresenterNewPost(this)
+                .handleUpdateDescriptionInformation(NewPostActivity.PRODUCT.getId(), NewPostActivity.PRODUCT.getDescription());
 
     }
 
@@ -135,12 +136,7 @@ public class DescriptionInformationFragment extends Fragment implements View.OnC
     }
 
     @Override
-    public void onUpdateNormalInformation(boolean status) {
-
-    }
-
-    @Override
-    public void onUpdateMoreInformation(boolean status) {
+    public void onUpdateProductInformation(boolean status) {
 
     }
 
@@ -159,11 +155,6 @@ public class DescriptionInformationFragment extends Fragment implements View.OnC
 
     @Override
     public void onUpdateMapInformation(boolean status) {
-
-    }
-
-    @Override
-    public void onUpdateContactInformation(boolean status) {
 
     }
 

@@ -23,6 +23,7 @@ import android.widget.Toast;
 
 import com.qtctek.realstate.R;
 import com.qtctek.realstate.dto.PostSale;
+import com.qtctek.realstate.dto.Product;
 import com.qtctek.realstate.presenter.new_post.PresenterNewPost;
 import com.qtctek.realstate.view.new_post.interfaces.ViewHandleModelNewPost;
 import com.qtctek.realstate.presenter.post_detail.PresenterPostDetail;
@@ -44,7 +45,7 @@ public class NewPostActivity extends AppCompatActivity implements ViewHandleMode
 
     private Dialog mLoadingDialog;
 
-    public static PostSale POST_SALE;
+    public static Product PRODUCT;
     private boolean mDoubleBackToExitPressedOnce = false;
 
     private Button mBtnBack;
@@ -87,23 +88,22 @@ public class NewPostActivity extends AppCompatActivity implements ViewHandleMode
 
         Intent intent = getIntent();
 
-        int postId = intent.getIntExtra("post_id", -1);
-        Log.d("ttt", postId + "");
-        if(postId != -1){
+        int productId = intent.getIntExtra("post_id", -1);
+        if(productId != -1){
             IS_UPDATE = true;
         }
         else{
             IS_UPDATE = false;
         }
-        handleStart(postId);
+        handleStart(productId);
     }
 
-    private void handleStart(int postId){
+    private void handleStart(int productId){
         if(!IS_UPDATE){
-            new PresenterNewPost(this).handleInsertBlankPost(MainActivity.EMAIL_USER);
+            new PresenterNewPost(this).handleInsertBlankPost(MainActivity.USER.getEmail());
         }
         else{
-            new PresenterPostDetail(this).handleGetDataProductDetail(postId);
+            new PresenterPostDetail(this).handleGetDataProductDetail(productId);
         }
     }
 
@@ -164,7 +164,7 @@ public class NewPostActivity extends AppCompatActivity implements ViewHandleMode
     }
 
     @Override
-    public void onInsertBlankPost(boolean status, int postId) {
+    public void onInsertBlankPost(boolean status, int productId) {
         mLoadingDialog.dismiss();
         if(!status){
             AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
@@ -181,9 +181,8 @@ public class NewPostActivity extends AppCompatActivity implements ViewHandleMode
             alertDialog.show();
         }
         else{
-            POST_SALE = new PostSale();
-            POST_SALE.setId(postId);
-            POST_SALE.getProduct().setId(postId);
+            PRODUCT = new Product();
+            PRODUCT.setId(productId);
             addControl();
         }
     }
@@ -192,14 +191,8 @@ public class NewPostActivity extends AppCompatActivity implements ViewHandleMode
     public void onUploadImages(boolean status) {
 
     }
-
     @Override
-    public void onUpdateNormalInformation(boolean status) {
-
-    }
-
-    @Override
-    public void onUpdateMoreInformation(boolean status) {
+    public void onUpdateProductInformation(boolean status) {
 
     }
 
@@ -210,12 +203,6 @@ public class NewPostActivity extends AppCompatActivity implements ViewHandleMode
 
     @Override
     public void onUpdateMapInformation(boolean status) {
-
-    }
-
-    @Override
-    public void onUpdateContactInformation(boolean status) {
-
     }
 
     @Override
@@ -234,15 +221,15 @@ public class NewPostActivity extends AppCompatActivity implements ViewHandleMode
     }
 
     @Override
-    public void onHandleDataPostDetailSuccessful(PostSale postSale, ArrayList<String> arrImages) {
+    public void onHandleDataPostDetailSuccessful(Product product, ArrayList<String> arrImages) {
 
         mLoadingDialog.dismiss();
 
-        POST_SALE = postSale;
+
 
         addControl();
 
-        String avartar = postSale.getId() + "_avartar.jpg";
+        String avartar = product.getThumbnail();
         for(int i = 0; i < arrImages.size(); i++){
             if(!avartar.equals(arrImages.get(i))){
                 Uri uri = Uri.parse(arrImages.get(i));
@@ -297,11 +284,6 @@ public class NewPostActivity extends AppCompatActivity implements ViewHandleMode
     private void comebackActivity(){
         Intent intent = new Intent(this, UserControlActivity.class);
         startActivity(intent);
-    }
-
-    @Override
-    public void onSavePost(String value) {
-
     }
 
     @Override

@@ -7,11 +7,13 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.qtctek.realstate.R;
 import com.qtctek.realstate.dto.PostSale;
 import com.qtctek.realstate.view.post_news.activity.MainActivity;
+import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -56,6 +58,7 @@ public class PostAdapter extends BaseAdapter{
             viewHolder.txvRoomsArea = convertView.findViewById(R.id.txv_rooms_area);
             viewHolder.txvAddress = convertView.findViewById(R.id.txv_address);
             viewHolder.txvDistrictProvinceCity = convertView.findViewById(R.id.txv_district_province_city);
+            viewHolder.progressbar = convertView.findViewById(R.id.progress_bar);
 
             convertView.setTag(viewHolder);
         }
@@ -75,7 +78,18 @@ public class PostAdapter extends BaseAdapter{
         viewHolder.txvDistrictProvinceCity.setText(districtProvinceCity);
 
         String urlImage = MainActivity.HOST + "/real_estate/images/" +postSale.getId() + "_avartar.jpg";
-        Picasso.with(mContext).load(urlImage).into(viewHolder.imvProductAvartar);
+        final ViewHolder finalViewHolder = viewHolder;
+        Picasso.with(mContext).load(urlImage).into(viewHolder.imvProductAvartar, new Callback() {
+            @Override
+            public void onSuccess() {
+                finalViewHolder.progressbar.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onError() {
+                finalViewHolder.progressbar.setVisibility(View.GONE);
+            }
+        });
 
         String strPrice = "Thương lượng";
         if(postSale.getProduct().getPrice() > 1000000000){
@@ -107,6 +121,7 @@ public class PostAdapter extends BaseAdapter{
         LinearLayout llItem;
         ImageView imvProductAvartar;
         TextView txvPrice, txvRoomsArea, txvAddress, txvDistrictProvinceCity;
+        ProgressBar progressbar;
     }
 
 }

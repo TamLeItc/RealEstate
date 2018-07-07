@@ -6,6 +6,4 @@ public interface PresenterImpHandlePostDetail {
 
     void onGetDataPostDetailError(String error);
 
-    void onInsertDataSavePost(String value);
-
 }

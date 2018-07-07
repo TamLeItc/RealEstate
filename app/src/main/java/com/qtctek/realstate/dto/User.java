@@ -1,39 +1,89 @@
 package com.qtctek.realstate.dto;
 
-public class User{
+public class User {
 
-    private int mIdUser;
-    private String mName;
+    private int mId;
+    private String mFullName;
+    private String mSex;
+    private String mBirthDay;
+    private String mPhone;
     private String mEmail;
+    private String mAddress;
+    private String mUsername;
     private String mPassword;
-    private String mPhoneNumber;
-    private String mRole;
-    private int mQualityPostSale;
+    private String mType;
     private String mStatus;
+    private int mLevel;
 
     public User(){}
 
-    public User(String mName, String mEmail, String mPassword, String mPhoneNumber) {
-        this.mName = mName;
+    public User(int mId, String mFullName, String mSex, String mBirthDay, String mPhone, String mEmail, String mAddress, String mUsername, String mPassword, String mType, String mStatus, int mLevel) {
+        this.mId = mId;
+        this.mFullName = mFullName;
+        this.mSex = mSex;
+        this.mBirthDay = mBirthDay;
+        this.mPhone = mPhone;
         this.mEmail = mEmail;
+        this.mAddress = mAddress;
+        this.mUsername = mUsername;
         this.mPassword = mPassword;
-        this.mPhoneNumber = mPhoneNumber;
+        this.mType = mType;
+        this.mStatus = mStatus;
+        this.mLevel = mLevel;
     }
 
-    public int getIdUser() {
-        return mIdUser;
+    public User(String mFullName, String mSex, String mBirthDay, String mPhone, String mEmail, String mAddress, String mUsername, String mPassword) {
+        this.mFullName = mFullName;
+        this.mSex = mSex;
+        this.mBirthDay = mBirthDay;
+        this.mPhone = mPhone;
+        this.mEmail = mEmail;
+        this.mAddress = mAddress;
+        this.mUsername = mUsername;
+        this.mPassword = mPassword;
+        this.mType = mType;
+        this.mStatus = mStatus;
+        this.mLevel = mLevel;
     }
 
-    public void setIdUser(int mIdUser) {
-        this.mIdUser = mIdUser;
+    public int getId() {
+        return mId;
     }
 
-    public String getName() {
-        return mName;
+    public void setId(int mId) {
+        this.mId = mId;
     }
 
-    public void setName(String mName) {
-        this.mName = mName;
+    public String getFullName() {
+        return mFullName;
+    }
+
+    public void setFullName(String mFullName) {
+        this.mFullName = mFullName;
+    }
+
+    public String getSex() {
+        return mSex;
+    }
+
+    public void setSex(String mSex) {
+        this.mSex = mSex;
+    }
+
+    public String getBirthDay() {
+        return mBirthDay;
+    }
+
+    public void setBirthDay(String mBirthDay) {
+        this.mBirthDay = mBirthDay;
+    }
+
+    public String getPhone() {
+        return mPhone;
+    }
+
+    public void setPhone(String mPhone) {
+        this.mPhone = mPhone;
     }
 
     public String getEmail() {
@@ -44,6 +94,22 @@ public class User{
         this.mEmail = mEmail;
     }
 
+    public String getAddress() {
+        return mAddress;
+    }
+
+    public void setAddress(String mAddress) {
+        this.mAddress = mAddress;
+    }
+
+    public String getUsername() {
+        return mUsername;
+    }
+
+    public void setUsername(String mUsername) {
+        this.mUsername = mUsername;
+    }
+
     public String getPassword() {
         return mPassword;
     }
@@ -52,28 +118,12 @@ public class User{
         this.mPassword = mPassword;
     }
 
-    public String getPhoneNumber() {
-        return mPhoneNumber;
+    public String getType() {
+        return mType;
     }
 
-    public void setPhoneNumber(String mPhoneNumber) {
-        this.mPhoneNumber = mPhoneNumber;
-    }
-
-    public String getRole() {
-        return mRole;
-    }
-
-    public void setRole(String mRole) {
-        this.mRole = mRole;
-    }
-
-    public int getQualityPostSale() {
-        return mQualityPostSale;
-    }
-
-    public void setQualityPostSale(int mQualityPostSale) {
-        this.mQualityPostSale = mQualityPostSale;
+    public void setType(String mType) {
+        this.mType = mType;
     }
 
     public String getStatus() {
@@ -82,5 +132,13 @@ public class User{
 
     public void setStatus(String mStatus) {
         this.mStatus = mStatus;
+    }
+
+    public int getLevel() {
+        return mLevel;
+    }
+
+    public void setLevel(int mLevel) {
+        this.mLevel = mLevel;
     }
 }

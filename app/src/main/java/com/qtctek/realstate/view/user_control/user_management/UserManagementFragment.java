@@ -24,26 +24,21 @@ import android.widget.Toast;
 
 import com.qtctek.realstate.R;
 import com.qtctek.realstate.dto.User;
+import com.qtctek.realstate.dto.User_Object;
 import com.qtctek.realstate.presenter.user_control.user_management.PresenterUserManagement;
 import com.qtctek.realstate.view.post_news.activity.MainActivity;
 
 import java.util.ArrayList;
 
-public class UserManagementFragment extends Fragment implements ViewHandleUserManagement,
-        View.OnClickListener, AbsListView.OnScrollListener, AdapterView.OnItemClickListener {
+public class UserManagementFragment extends Fragment implements ViewHandleUserManagement, AbsListView.OnScrollListener, AdapterView.OnItemClickListener {
 
     private View mView;
     private View mItemView;
-
-    private int mQualityUser = 0;
-    private int mPreLast;
 
     private ArrayList<User> mArrUser = new ArrayList<>();
     private UserAdapter mUserAdapter;
 
     private ListView mLsvUsers;
-    private TextView mTxvQualityUser;
-    private Button mBtnMoreView;
 
     private Dialog mLoadingDialog;
 
@@ -69,10 +64,7 @@ public class UserManagementFragment extends Fragment implements ViewHandleUserMa
 
     private void initViews(){
         this.mLsvUsers = mView.findViewById(R.id.lsv_user);
-        this.mTxvQualityUser = mView.findViewById(R.id.txv_quality_user);
-        this.mBtnMoreView = mView.findViewById(R.id.btn_more_view);
 
-        this.mBtnMoreView.setOnClickListener(this);
         this.mLsvUsers.setOnScrollListener(this);
         this.mLsvUsers.setOnItemClickListener(this);
     }
@@ -94,17 +86,12 @@ public class UserManagementFragment extends Fragment implements ViewHandleUserMa
     }
 
     @Override
-    public void onHandleUserListSuccessful(int qualityUser, ArrayList<User> arrayListUser) {
+    public void onHandleUserListSuccessful(ArrayList<User> arrayListUser) {
 
         this.mLoadingDialog.dismiss();
-
         this.mArrUser.addAll(arrayListUser);
         this.mUserAdapter.notifyDataSetChanged();
-        this.mQualityUser = qualityUser;
-        String temp = "Hiển thị " + this.mArrUser.size() + " user. Tổng " + this.mQualityUser + " user";
-        this.mTxvQualityUser.setText(temp);
 
-        this.mBtnMoreView.setVisibility(View.INVISIBLE);
     }
 
     @Override
@@ -146,53 +133,29 @@ public class UserManagementFragment extends Fragment implements ViewHandleUserMa
     @Override
     public void onHandleUpdateStatusUserError(String error) {
         mLoadingDialog.dismiss();
-        Log.d("ttt", error);
         Toast.makeText(getActivity(), "Cập nhật trạng thái user thất bại", Toast.LENGTH_SHORT).show();
     }
 
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()){
-            case R.id.btn_more_view:
-                if(this.mArrUser.size() < this.mQualityUser){
-                    this.mPresenterUserManagement.handleGetUserList(this.mArrUser.size(), 20);
-                }
-                this.mBtnMoreView.setVisibility(View.GONE);
-                break;
-        }
-    }
 
     @Override
     public void onScrollStateChanged(AbsListView view, int scrollState) {
+        if (scrollState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE
+                && (mLsvUsers.getLastVisiblePosition() - mLsvUsers.getHeaderViewsCount() -
+                mLsvUsers.getFooterViewsCount()) >= (mUserAdapter.getCount() - 1)) {
 
+            mLoadingDialog.show();
+            this.mPresenterUserManagement.handleGetUserList(this.mArrUser.size(), 20);
+        }
     }
 
     @Override
     public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-        switch(view.getId())
-        {
-            case R.id.lsv_user:
-
-                final int lastItem = firstVisibleItem + visibleItemCount;
-
-                if(this.mPreLast > lastItem){
-                    this.mBtnMoreView.setVisibility(View.GONE);
-                }
-                else{
-                    if(lastItem == totalItemCount){
-                        if(this.mQualityUser > this.mArrUser.size()){
-                            this.mBtnMoreView.setVisibility(View.VISIBLE);
-                        }
-                    }
-                    this.mPreLast = lastItem;
-                }
-        }
     }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
 
-        if(mArrUser.get(position).getEmail().equals(MainActivity.EMAIL_USER)){
+        if(mArrUser.get(position).getEmail().equals(MainActivity.USER)){
             return;
         }
 
@@ -215,7 +178,7 @@ public class UserManagementFragment extends Fragment implements ViewHandleUserMa
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()){
                     case R.id.control_update_status:
-                        if(mArrUser.get(mPositionClick).getRole().equals("Admin")){
+                        if(mArrUser.get(mPositionClick).getLevel() == 1){
                             AlertDialog.Builder builder = new AlertDialog.Builder(getContext())
                                     .setMessage("Bạn không thể thay đổi trạng thái của một user " +
                                             "có quyền \"Admin\"")
@@ -229,7 +192,7 @@ public class UserManagementFragment extends Fragment implements ViewHandleUserMa
                         }
                         else{
                             mLoadingDialog.show();
-                            mPresenterUserManagement.handleUpdateStatusUser(mArrUser.get(mPositionClick).getIdUser());
+                            mPresenterUserManagement.handleUpdateStatusUser(mArrUser.get(mPositionClick).getId());
                             break;
                         }
                 }

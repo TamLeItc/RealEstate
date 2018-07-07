@@ -1,6 +1,7 @@
 package com.qtctek.realstate.model.user_action;
 
 import android.os.AsyncTask;
+import android.util.Log;
 
 import com.qtctek.realstate.presenter.user_action.login.PresenterImpHandleLogin;
 import com.qtctek.realstate.view.post_news.activity.MainActivity;
@@ -16,38 +17,38 @@ import okhttp3.Response;
 
 public class ModelLogin {
 
-    private String mUrl = MainActivity.HOST + "/real_estate/check_user_login.php";
+    private String mUrl = MainActivity.WEB_SERVER + "user_login.php";
     private PresenterImpHandleLogin mPresenterImpHandleUserManager;
 
     public ModelLogin(PresenterImpHandleLogin mPresenterImpHandleUserManager){
         this.mPresenterImpHandleUserManager = mPresenterImpHandleUserManager;
     }
 
-    public void requireCheckUserLogin(String email, String password){
-        new CheckUserData(email, password).execute(this.mUrl);
+    public void requireCheckUserLogin(String user, String password){
+        new UserLogin(user, password).execute(this.mUrl);
     }
 
-    class CheckUserData extends AsyncTask<String, Void, String>{
+    class UserLogin extends AsyncTask<String, Void, String>{
 
         OkHttpClient okHttpClient;
 
-        String email, password;
+        String user, password;
 
-        public CheckUserData(String userName, String password){
+        public UserLogin(String user, String password){
             okHttpClient = new OkHttpClient.Builder()
                     .connectTimeout(15, TimeUnit.SECONDS)
                     .writeTimeout(10, TimeUnit.SECONDS)
                     .readTimeout(10, TimeUnit.SECONDS)
                     .build();
 
-            this.email = userName;
+            this.user = user;
             this.password = password;
         }
 
         @Override
         protected String doInBackground(String... strings) {
             RequestBody requestBody = new MultipartBody.Builder()
-                    .addFormDataPart("email", email)
+                    .addFormDataPart("user", user)
                     .addFormDataPart("password", password)
                     .setType(MultipartBody.FORM)
                     .build();
@@ -69,7 +70,7 @@ public class ModelLogin {
 
         @Override
         protected void onPostExecute(String s) {
-            if(s.equals("-1") || s.equals("0") ||s.equals("1") || s.equals("2") || s.equals("3")){
+            if(!s.equals("error")){
                 mPresenterImpHandleUserManager.onCheckUserLoginSuccessful(s);
             }
             else{

@@ -23,7 +23,7 @@ public class UserControlAdapter extends FragmentStatePagerAdapter {
 
     private Fragment handleGetItem(int position){
         Fragment frag=null;
-        if(MainActivity.ROLE_USER.equals("1")){
+        if(MainActivity.USER.getLevel() == 1){
             switch (position){
                 case 0:
                     frag = new MenuUserSystemControlFragment();
@@ -36,7 +36,7 @@ public class UserControlAdapter extends FragmentStatePagerAdapter {
                     break;
             }
         }
-        else if(MainActivity.ROLE_USER.equals("2")){
+        else if(MainActivity.USER.getLevel() == 3){
             switch (position) {
                 case 0:
                     frag = new PostedPostFragment();
@@ -46,7 +46,7 @@ public class UserControlAdapter extends FragmentStatePagerAdapter {
                     break;
             }
         }
-        else if(MainActivity.ROLE_USER.equals("3")){
+        else if(MainActivity.USER.getLevel() == 2){
             switch (position) {
                 case 0:
                     frag = new MenuUserSystemControlFragment();
@@ -62,13 +62,13 @@ public class UserControlAdapter extends FragmentStatePagerAdapter {
     @Override
     public int getCount() {
 
-        if(MainActivity.ROLE_USER.equals("1")){
+        if(MainActivity.USER.getLevel() == 1){
             return 3;
         }
-        else if(MainActivity.ROLE_USER.equals("2")){
+        else if(MainActivity.USER.getLevel() == 3){
             return 2;
         }
-        else if(MainActivity.ROLE_USER.equals("3")){
+        else if(MainActivity.USER.getLevel() == 2){
             return 2;
         }
         else{
@@ -83,7 +83,7 @@ public class UserControlAdapter extends FragmentStatePagerAdapter {
 
     private CharSequence handleGetPageTitle(int position){
         String title = "";
-        if(MainActivity.ROLE_USER.equals("1")){
+        if(MainActivity.USER.getLevel() == 1){
             switch (position){
                 case 0:
                     title = "Tùy chọn";
@@ -96,7 +96,7 @@ public class UserControlAdapter extends FragmentStatePagerAdapter {
                     break;
             }
         }
-        else if(MainActivity.ROLE_USER.equals("2")){
+        else if(MainActivity.USER.getLevel() == 3){
             switch (position){
                 case 0:
                     title = "Quản lí tin";
@@ -106,7 +106,7 @@ public class UserControlAdapter extends FragmentStatePagerAdapter {
                     break;
             }
         }
-        else if(MainActivity.ROLE_USER.equals("3")){
+        else if(MainActivity.USER.getLevel() == 2){
             switch (position){
                 case 0:
                     title = "Tùy chọn";

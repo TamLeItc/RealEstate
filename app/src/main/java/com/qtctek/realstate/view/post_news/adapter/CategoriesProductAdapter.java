@@ -8,16 +8,16 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.qtctek.realstate.R;
-import com.qtctek.realstate.dto.CategoriesProduct;
+import com.qtctek.realstate.dto.Category;
 
 import java.util.ArrayList;
 
 public class CategoriesProductAdapter extends BaseAdapter {
 
     private Context mContext;
-    private ArrayList<CategoriesProduct> mArr;
+    private ArrayList<Category> mArr;
 
-    public CategoriesProductAdapter(Context mContext, ArrayList<CategoriesProduct> mArr) {
+    public CategoriesProductAdapter(Context mContext, ArrayList<Category> mArr) {
         this.mContext = mContext;
         this.mArr = mArr;
     }

@@ -1,6 +1,6 @@
 package com.qtctek.realstate.dto;
 
-public class ProvinceCity {
+public class Place {
 
     private int mId;
     private String mName;
@@ -29,4 +29,5 @@ public class ProvinceCity {
     public void setLatlng(String mLatlng) {
         this.mLatlng = mLatlng;
     }
+
 }

@@ -30,6 +30,7 @@ import android.widget.Toast;
 
 import com.qtctek.realstate.R;
 import com.qtctek.realstate.dto.PostSale;
+import com.qtctek.realstate.dto.User;
 import com.qtctek.realstate.view.post_news.adapter.MainAdapter;
 import com.qtctek.realstate.view.post_news.adapter.SortAdapter;
 import com.qtctek.realstate.view.post_news.dialog.SearchDialog;
@@ -47,10 +48,12 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, View.OnTouchListener, View.OnClickListener,
         OnUserLogin{
 
-    public static String HOST = "http://192.168.100.27";
+    public static String HOST = "http://192.168.100.27/";
+    public static String WEB_SERVER = "http://antoniquang.noip.me:5555/real_estate/";
 
-    public static String EMAIL_USER = "";
-    public static String ROLE_USER = "";
+    public static String USERr = "";
+    public static String LEVEL = "";
+    public static User USER = new User();
 
     public static OnUserLogin ON_USER_LOGIN;
 
@@ -89,18 +92,18 @@ public class MainActivity extends AppCompatActivity
     private void getDataFromIntent(){
         Intent intent = getIntent();
         try{
-            EMAIL_USER = intent.getStringExtra("email_user");
-            ROLE_USER = intent.getStringExtra("role");
-            if(EMAIL_USER == null){
-                EMAIL_USER = "";
+            USERr = intent.getStringExtra("email_user");
+            LEVEL = intent.getStringExtra("role");
+            if(USERr == null){
+                USERr = "";
             }
-            if(ROLE_USER == null){
-                ROLE_USER = "";
+            if(LEVEL == null){
+                LEVEL = "";
             }
         }
         catch (Exception e){
-            EMAIL_USER = "";
-            ROLE_USER = "";
+            USERr = "";
+            LEVEL = "";
         }
     }
 
@@ -296,8 +299,8 @@ public class MainActivity extends AppCompatActivity
                     .setPositiveButton("Xác nhận", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            MainActivity.ROLE_USER = "";
-                            MainActivity.EMAIL_USER = "";
+                            MainActivity.LEVEL = "";
+                            MainActivity.USERr = "";
                             Intent intent = new Intent(MainActivity.this, UserActionActivity.class);
                             startActivity(intent);
                         }
@@ -333,7 +336,7 @@ public class MainActivity extends AppCompatActivity
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.ll_profile:
-                if(EMAIL_USER.equals("")){
+                if(USERr.equals("")){
                     Intent intent = new Intent(MainActivity.this, UserActionActivity.class);
                     startActivity(intent);
                 }
@@ -530,6 +533,4 @@ public class MainActivity extends AppCompatActivity
             }
         }
     }
-
-
 }

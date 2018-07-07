@@ -1,6 +1,8 @@
 package com.qtctek.realstate.model.user_control;
 
 import android.os.AsyncTask;
+import android.util.Log;
+import android.widget.Toast;
 
 import com.qtctek.realstate.presenter.user_control.post_management.PresenterImpHandlePostManagement;
 import com.qtctek.realstate.view.post_news.activity.MainActivity;
@@ -16,11 +18,11 @@ import okhttp3.Response;
 
 public class ModelPostManagement {
 
-    String mUrlGetListPost = MainActivity.HOST + "/real_estate/get_post_list_for_admin.php";
+    String mUrlGetListProduct = MainActivity.WEB_SERVER + "get_list_product.php";
 
     String mUrlUpdateAcceptPost = MainActivity.HOST + "/real_estate/update_accept_post.php";
 
-    String mUrlDeletePost = MainActivity.HOST + "/real_estate/delete_post.php";
+    String mUrlDeletePost = MainActivity.HOST + "/real_estate/delete_product.php";
 
     private PresenterImpHandlePostManagement mPresenterImpHandlePostManagement;
 
@@ -28,25 +30,25 @@ public class ModelPostManagement {
         this.mPresenterImpHandlePostManagement = presenterImpHandlePostManagement;
     }
 
-    public void requirePostListForAdmin(int start, int quality, int isNotActive){
-        new GetPostList(start, quality, isNotActive).execute(mUrlGetListPost);
+    public void requirePostListForAdmin(int start, int limit){
+        new GetPostList(start, limit).execute(mUrlGetListProduct);
     }
 
-    public void requireAcceptPost(int postId){
-        new UpdateAcceptPost(postId).execute(mUrlUpdateAcceptPost);
+    public void requireAcceptPost(int productId){
+        new UpdateAcceptPost(productId).execute(mUrlUpdateAcceptPost);
     }
 
-    public void requireDeletePost(int postId){
-        new DeletePost(postId).execute(mUrlDeletePost);
+    public void requireDeletePost(int productId){
+        new DeletePost(productId).execute(mUrlDeletePost);
     }
 
     class GetPostList extends AsyncTask<String, Void, String>{
 
         OkHttpClient okHttpClient;
 
-        int start = 0, quality = 0, post_status = 0;
+        int start = 0, limit = 0;
 
-        public GetPostList(int start, int quality, int status){
+        public GetPostList(int start, int limit){
             okHttpClient = new OkHttpClient.Builder()
                     .connectTimeout(15, TimeUnit.SECONDS)
                     .writeTimeout(10, TimeUnit.SECONDS)
@@ -54,23 +56,16 @@ public class ModelPostManagement {
                     .build();
 
             this.start = start;
-            this.quality = quality;
-            this.post_status = status;
+            this.limit = limit;
         }
 
         @Override
         protected String doInBackground(String... strings) {
 
-            RequestBody requestBody = new MultipartBody.Builder()
-                    .addFormDataPart("start", start + "")
-                    .addFormDataPart("quality", quality + "")
-                    .addFormDataPart("status", post_status + "")
-                    .setType(MultipartBody.FORM)
-                    .build();
-
+            String mUrl = strings[0] + "?email=%" + "&start=" + start + "&limit=" + limit + "&option=";
             Request request = new Request.Builder()
-                    .url(strings[0])
-                    .post(requestBody)
+                    .url(mUrl)
+                    .get()
                     .build();
 
             try {
@@ -100,22 +95,22 @@ public class ModelPostManagement {
     class UpdateAcceptPost extends AsyncTask<String, Void, String>{
 
         OkHttpClient okHttpClient;
-        int postId;
+        int productId;
 
-        public UpdateAcceptPost(int postId){
+        public UpdateAcceptPost(int productId){
             okHttpClient = new OkHttpClient.Builder()
                     .connectTimeout(15, TimeUnit.SECONDS)
                     .writeTimeout(10, TimeUnit.SECONDS)
                     .readTimeout(10, TimeUnit.SECONDS)
                     .build();
 
-            this.postId = postId;
+            this.productId = productId;
         }
 
         @Override
         protected String doInBackground(String... strings) {
             RequestBody requestBody = new MultipartBody.Builder()
-                    .addFormDataPart("post_id", postId + "")
+                    .addFormDataPart("product_id", productId + "")
                     .setType(MultipartBody.FORM)
                     .build();
 
@@ -150,22 +145,22 @@ public class ModelPostManagement {
     class DeletePost extends AsyncTask<String, Void, String>{
 
         OkHttpClient okHttpClient;
-        int postId;
+        int productId;
 
-        public DeletePost(int postId){
+        public DeletePost(int productId){
             okHttpClient = new OkHttpClient.Builder()
                     .connectTimeout(15, TimeUnit.SECONDS)
                     .writeTimeout(10, TimeUnit.SECONDS)
                     .readTimeout(10, TimeUnit.SECONDS)
                     .build();
 
-            this.postId = postId;
+            this.productId = productId;
         }
 
         @Override
         protected String doInBackground(String... strings) {
             RequestBody requestBody = new MultipartBody.Builder()
-                    .addFormDataPart("id_post", postId + "")
+                    .addFormDataPart("product_id", productId + "")
                     .setType(MultipartBody.FORM)
                     .build();
 
@@ -186,6 +181,7 @@ public class ModelPostManagement {
 
         @Override
         protected void onPostExecute(String s) {
+            Log.d("ttt", s);
             if(s.equals("successful")){
                 mPresenterImpHandlePostManagement.onDeletePostSuccessful();
             }

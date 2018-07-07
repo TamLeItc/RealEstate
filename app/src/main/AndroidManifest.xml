@@ -45,7 +45,7 @@
 
         </activity>
 
-        <activity android:name=".view.post_news.dialog.PostDialog"
+        <activity android:name=".view.post_news.fragment.PostFragment"
             android:theme="@style/Theme.Dialog"
             android:excludeFromRecents="true"/>
 

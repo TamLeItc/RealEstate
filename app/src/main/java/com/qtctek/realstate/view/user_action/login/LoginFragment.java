@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.qtctek.realstate.R;
+import com.qtctek.realstate.dto.User;
 import com.qtctek.realstate.presenter.user_action.general.FormatPattern;
 import com.qtctek.realstate.presenter.user_action.general.HashMD5;
 import com.qtctek.realstate.presenter.user_action.login.PresenterLogin;
@@ -43,7 +45,7 @@ public class LoginFragment extends Fragment implements ViewHandleLogin, View.OnC
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         mView = inflater.inflate(R.layout.fragment_login, container, false);
 
-        MainActivity.ON_USER_LOGIN.onUserLoginSuccessful(MainActivity.ROLE_USER);
+        MainActivity.ON_USER_LOGIN.onUserLoginSuccessful(MainActivity.LEVEL);
 
         return mView;
     }
@@ -69,8 +71,8 @@ public class LoginFragment extends Fragment implements ViewHandleLogin, View.OnC
         this.mTxvForgotPassword.setOnClickListener(this);
         this.mTxvRegister.setOnClickListener(this);
 
-        this.mEdtEmail.setText("itcdeveloper11@gmail.com");
-        this.mEdtPassword.setText("123456");
+        this.mEdtEmail.setText("itcdeveloper13@gmail.com");
+        this.mEdtPassword.setText("111111");
     }
 
     private void handleStart(){
@@ -92,10 +94,7 @@ public class LoginFragment extends Fragment implements ViewHandleLogin, View.OnC
         String password = this.mEdtPassword.getText().toString().trim();
 
         if(email.equals("")){
-            Toast.makeText(getActivity(), "Vui lòng nhập email!!!", Toast.LENGTH_SHORT).show();
-            this.mEdtEmail.requestFocus();
-        } else if(!FormatPattern.checkEmail(email)){
-            Toast.makeText(getActivity(), "Email không hợp lệ!!!", Toast.LENGTH_SHORT).show();;
+            Toast.makeText(getActivity(), "Vui lòng nhập email/Tên đăng nhập!!!", Toast.LENGTH_SHORT).show();
             this.mEdtEmail.requestFocus();
         } else if(password.equals("")){
             Toast.makeText(getActivity(), "Vui lòng nhập mật khẩu!!!", Toast.LENGTH_SHORT).show();;
@@ -108,33 +107,32 @@ public class LoginFragment extends Fragment implements ViewHandleLogin, View.OnC
     }
 
     @Override
-    public void onHandleCheckUserLoginSuccessful(String data) {
-
+    public void onHandleCheckUserNotExists() {
         this.mLoadingDialog.dismiss();
+        Toast.makeText(getActivity(), "Email/Tên đăng nhập hoặc mật khẩu không chính xác!!!", Toast.LENGTH_SHORT).show();;
+        this.mEdtPassword.requestFocus();
+        this.mEdtPassword.setText("");
 
-        if(data.equals("0")){
-            Toast.makeText(getActivity(), "Email hoặc mật khẩu không chính xác!!!", Toast.LENGTH_SHORT).show();;
-            this.mEdtPassword.requestFocus();
-            this.mEdtPassword.setText("");
+    }
+
+    @Override
+    public void onHandleCheckUserLoginSuccessful(User user) {
+        this.mLoadingDialog.dismiss();
+        if(user.getStatus().equals("no")){
+            AlertDialog.Builder builder = new AlertDialog.Builder(getContext())
+                    .setMessage("Tài khoản của bạn bị tạm khóa, vui lòng liên hệ cho admin để biết thêm" +
+                            " thông tin")
+                    .setCancelable(false)
+                    .setNegativeButton("Xác nhận", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                        }
+                    });
+            builder.show();
         }
-        else if(data.equals("-1")){
-            AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
-            alertDialog.setMessage("Tài khoản của bạn bị khóa. Vui lòng liên hệ Real Estate để được giải đáp!!!");
-            alertDialog.setCancelable(false);
-            alertDialog.setPositiveButton("Xác nhận", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-
-                }
-            });
-            alertDialog.show();
-        }
-        else {
-
-            MainActivity.EMAIL_USER = this.mEdtEmail.getText().toString();
-            MainActivity.ROLE_USER = data;
-            MainActivity.ON_USER_LOGIN.onUserLoginSuccessful(data);
-
+        else{
+            MainActivity.USER = user;
             Toast.makeText(getActivity(), "Đăng nhập thành công", Toast.LENGTH_SHORT);
             Intent intent = new Intent(getActivity(), UserControlActivity.class);
             startActivity(intent);
@@ -173,5 +171,15 @@ public class LoginFragment extends Fragment implements ViewHandleLogin, View.OnC
                 viewPager1.setCurrentItem(2);
                 break;
         }
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        if(mLoadingDialog != null){
+            mLoadingDialog.dismiss();
+        }
+
+
     }
 }

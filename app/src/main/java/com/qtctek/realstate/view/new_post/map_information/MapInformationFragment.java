@@ -281,8 +281,8 @@ public class MapInformationFragment extends Fragment implements OnMapReadyCallba
 
         mMap = googleMap;
 
-        this.mLat = NewPostActivity.POST_SALE.getProduct().getLatitude();
-        this.mLng = NewPostActivity.POST_SALE.getProduct().getLongitude();
+        this.mLat = NewPostActivity.PRODUCT.getMapLat();
+        this.mLng = NewPostActivity.PRODUCT.getMapLng();
         try{
 
             LatLng latLng = new LatLng(Double.parseDouble(mLat), Double.parseDouble(mLng));
@@ -330,9 +330,13 @@ public class MapInformationFragment extends Fragment implements OnMapReadyCallba
 
     public void handleNext(){
         mLoadingDialog.show();
-        NewPostActivity.POST_SALE.getProduct().setLatitude(this.mLat);
-        NewPostActivity.POST_SALE.getProduct().setLongitude(this.mLng);
-        new PresenterNewPost(this).handleUpdateLocationProduct(NewPostActivity.POST_SALE.getProduct());
+        NewPostActivity.PRODUCT.setMapLat(this.mLat);
+        NewPostActivity.PRODUCT.setMapLng(this.mLng);
+        new PresenterNewPost(this).handleUpdateLocationProduct(
+                NewPostActivity.PRODUCT.getId(),
+                NewPostActivity.PRODUCT.getMapLat(),
+                NewPostActivity.PRODUCT.getMapLng()
+        );
     }
 
     @Override
@@ -366,12 +370,7 @@ public class MapInformationFragment extends Fragment implements OnMapReadyCallba
     }
 
     @Override
-    public void onUpdateNormalInformation(boolean status) {
-
-    }
-
-    @Override
-    public void onUpdateMoreInformation(boolean status) {
+    public void onUpdateProductInformation(boolean status) {
 
     }
 
@@ -391,11 +390,6 @@ public class MapInformationFragment extends Fragment implements OnMapReadyCallba
         else{
             Toast.makeText(getContext(), "Có lỗi xảy ra trong việc lưu dữ liệu", Toast.LENGTH_SHORT).show();
         }
-    }
-
-    @Override
-    public void onUpdateContactInformation(boolean status) {
-
     }
 
     @Override

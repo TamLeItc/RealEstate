@@ -31,6 +31,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.qtctek.realstate.R;
 import com.qtctek.realstate.dto.PostSale;
+import com.qtctek.realstate.dto.Product;
 import com.qtctek.realstate.presenter.post_detail.PresenterPostDetail;
 import com.qtctek.realstate.view.post_detail.interfaces.ViewHandlePostDetail;
 import com.qtctek.realstate.view.post_news.activity.MainActivity;
@@ -52,16 +53,17 @@ public class PostDetailActivity extends AppCompatActivity implements ViewHandleP
     private TextView mTxvPrice;
     private TextView mTxvArea;
     private TextView mTxvRooms;
-    private TextView mTxvPostDate;
+    private TextView mDateUpload;
     private TextView mTxvDescription;
     private TextView mTxvContactName;
     private TextView mTxvContactNumberPhone;
-    private TextView mTxvFloors;
-    private TextView mTxvLegal;
+    private TextView mTxvContactEmail;
     private TextView mTxvAddress;
     private TextView mTxvDistrictProvinceCity;
-    private TextView mTxvUtility;
-    private TextView mCategoryProduct;
+    private TextView mTxvType;
+    private TextView mTxvArchitecture;
+    private TextView mTxvAmenities;
+    private TextView mTxvFormality;
     private Toolbar mToolbar;
     private Button mBtnBack;
     private LinearLayout mLlProfile;
@@ -75,7 +77,7 @@ public class PostDetailActivity extends AppCompatActivity implements ViewHandleP
 
     private PresenterPostDetail mPresenterPostDetail;
 
-    private PostSale mPostSale;
+    private Product mProduct;
 
     private boolean mDoubleBackToExitPressedOnce = false;
 
@@ -116,23 +118,24 @@ public class PostDetailActivity extends AppCompatActivity implements ViewHandleP
         this.mRecyclerViewImages = findViewById(R.id.recycler_images);
         this.mTxvPrice = findViewById(R.id.txv_price);
         this.mTxvArea = findViewById(R.id.txv_area);
-        this.mTxvFloors = findViewById(R.id.txv_floors);
-        this.mTxvLegal = findViewById(R.id.txv_legal);
         this.mTxvRooms = findViewById(R.id.txv_rooms);
-        this.mTxvPostDate = findViewById(R.id.txv_post_date);
+        this.mDateUpload = findViewById(R.id.txv_date_upload);
         this.mTxvDescription = findViewById(R.id.txv_description);
-        this.mCategoryProduct = findViewById(R.id.txv_category_product);
         this.mTxvContactName = findViewById(R.id.txv_contact_name);
         this.mTxvContactNumberPhone = findViewById(R.id.txv_contact_number_phone);
+        this.mTxvContactEmail = findViewById(R.id.txv_contact_email);
         this.mToolbar = findViewById(R.id.toolbar);
         this.mTxvAddress = findViewById(R.id.txv_address);
         this.mTxvDistrictProvinceCity = findViewById(R.id.txv_district_province_city);
+        this.mTxvType = findViewById(R.id.txv_type);
+        this.mTxvArchitecture = findViewById(R.id.txv_architecture);
+        this.mTxvAmenities = findViewById(R.id.txv_amenities);
+        this.mTxvFormality = findViewById(R.id.txv_formality);
         this.mToolbar = findViewById(R.id.toolbar);
         this.mBtnBack = findViewById(R.id.btn_back);
         this.mLlCall = findViewById(R.id.ll_call);
         this.mLlProfile = findViewById(R.id.ll_profile);
         this.mLlSavePost = findViewById(R.id.ll_save_post);
-        this.mTxvUtility = findViewById(R.id.txv_utility);
 
         this.mBtnMapView.setOnClickListener(this);
         this.mBtnImageView.setOnClickListener(this);
@@ -143,7 +146,7 @@ public class PostDetailActivity extends AppCompatActivity implements ViewHandleP
     }
 
     private void handleStart(){
-        if(!MainActivity.ROLE_USER.equals("2")){
+        if(!MainActivity.LEVEL.equals("2")){
             this.mLlSavePost.setVisibility(View.GONE);
 
             LinearLayout llBottom = findViewById(R.id.ll_bottom);
@@ -161,34 +164,37 @@ public class PostDetailActivity extends AppCompatActivity implements ViewHandleP
         getSupportActionBar().setDisplayShowTitleEnabled(false);
     }
 
-    private void handleView(PostSale postSale){
+    private void handleView(){
 
-        this.mTxvPostDate.setText(formatDate(postSale.getPostDate()));
-        this.mTxvDescription.setText(postSale.getProduct().getDescription());
-        this.mTxvContactName.setText(postSale.getContactName());
-        this.mTxvContactNumberPhone.setText(postSale.getContactNumberPhone());
-        this.mTxvAddress.setText(postSale.getProduct().getAddress());
+        this.mDateUpload.setText(formatDate(mProduct.getDateUpload()));
+        this.mTxvDescription.setText(mProduct.getDescription());
+        this.mTxvContactName.setText(mProduct.getUserFullName());
+        this.mTxvContactNumberPhone.setText(mProduct.getUserPhone());
+        this.mTxvContactEmail.setText(mProduct.getUserEmail());
+        this.mTxvAddress.setText(mProduct.getAddress());
 
-        String floor = ": " + postSale.getProduct().getProductDetail().getFloors() + "";
-        this.mTxvFloors.setText(floor);
-        String legal = ": " + postSale.getProduct().getProductDetail().getLegal();
-        this.mTxvLegal.setText(legal);
-        String utility = ": " + postSale.getProduct().getProductDetail().getUtility();
-        this.mTxvUtility.setText(utility);
-        String categoryProduct = ": " + postSale.getProduct().getCategoryProduct();
-        this.mCategoryProduct.setText(categoryProduct);
+        if(mProduct.getFormality().equals("yes")){
+            this.mTxvFormality.setText("Nhà bán");
+        }
+        else{
+            this.mTxvFormality.setText("Nhà thuê");
+        }
 
-        String temp = postSale.getProduct().getDistrict() + ", " + postSale.getProduct().getProvinceCity();
+        this.mTxvArchitecture.setText(": " + mProduct.getArchitecture());
+        this.mTxvType.setText(": " + mProduct.getType());
+        this.mTxvAmenities.setText(": " + mProduct.getAmenities());
+
+        String temp = mProduct.getDistrict() + ", " + mProduct.getCity();
         this.mTxvDistrictProvinceCity.setText(temp);
 
-        String strArea = postSale.getProduct().getArea() + " m²";
+        String strArea = mProduct.getArea() + " m²";
         this.mTxvArea.setText(strArea);
 
-        String strRooms = postSale.getProduct().getBedrooms() + " phòng ngủ, " + postSale.getProduct().getBathrooms() + " phòng tắm.";
+        String strRooms = mProduct.getBedroom() + " phòng ngủ, " + mProduct.getBathroom() + " phòng tắm.";
         this.mTxvRooms.setText(strRooms);
 
         String strPrice = "";
-        float price = (float)postSale.getProduct().getPrice();
+        float price = (float)mProduct.getPrice();
         if(price > 1000000000){
             price  = price / 1000000000;
             strPrice = Math.round( price * 100.0)/ 100.0 + " tỉ";
@@ -203,6 +209,9 @@ public class PostDetailActivity extends AppCompatActivity implements ViewHandleP
         }
         else{
             strPrice = "Thương lượng";
+        }
+        if(mProduct.getFormality().equals("false") && !strPrice.equals("Thương lượng")){
+            strPrice += "/tháng";
         }
         this.mTxvPrice.setText(strPrice);
 
@@ -227,11 +236,12 @@ public class PostDetailActivity extends AppCompatActivity implements ViewHandleP
 
 
     @Override
-    public void onHandleDataPostDetailSuccessful(PostSale postSale, ArrayList<String> arrImages) {
+    public void onHandleDataPostDetailSuccessful(Product product, ArrayList<String> arrImages) {
 
         mLoadingDialog.dismiss();
 
-        handleView(postSale);
+        this.mProduct = product;
+        handleView();
         ImageAdapter imageAdapter = new ImageAdapter(this, arrImages);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
@@ -240,11 +250,9 @@ public class PostDetailActivity extends AppCompatActivity implements ViewHandleP
 
         this.mRecyclerViewImages.setAdapter(imageAdapter);
 
-        this.mPostSale = postSale;
-
         try{
-            LatLng latLng = new LatLng(Double.parseDouble(mPostSale.getProduct().getLatitude()), Double.parseDouble(mPostSale.getProduct().getLongitude()));
-            mMap.addMarker(new MarkerOptions().position(latLng).title(mPostSale.getProduct().getAddress()));
+            LatLng latLng = new LatLng(Double.parseDouble(mProduct.getMapLat()), Double.parseDouble(mProduct.getMapLng()));
+            mMap.addMarker(new MarkerOptions().position(latLng).title(mProduct.getAddress()));
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 16));
         }
         catch (java.lang.NullPointerException e){
@@ -269,19 +277,6 @@ public class PostDetailActivity extends AppCompatActivity implements ViewHandleP
     }
 
     @Override
-    public void onSavePost(String value) {
-        if(value.equals("exist")){
-            Toast.makeText(this, "Bạn đã lưu tin này trước đó", Toast.LENGTH_SHORT).show();
-        }
-        else if(value.equals("successful")){
-            Toast.makeText(this, "Lưu tin thành công", Toast.LENGTH_SHORT).show();
-        }
-        else{
-            Toast.makeText(this, "Lưu tin không thành công. Vui lòng thử lại sau", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    @Override
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.btn_image_view:
@@ -295,26 +290,21 @@ public class PostDetailActivity extends AppCompatActivity implements ViewHandleP
                 finish();
                 break;
             case R.id.ll_profile:
-                if(MainActivity.EMAIL_USER.equals("")){
+                if(MainActivity.USER.equals("")){
                     Intent intent = new Intent(PostDetailActivity.this, UserActionActivity.class);
                     startActivity(intent);
                 }
                 else{
                     Intent intent = new Intent(PostDetailActivity.this, UserControlActivity.class);
-                    intent.putExtra("email_user", MainActivity.EMAIL_USER);
-                    intent.putExtra("role", MainActivity.ROLE_USER);
+                    intent.putExtra("email_user", MainActivity.USERr);
+                    intent.putExtra("role", MainActivity.LEVEL);
                     startActivity(intent);
                 }
 
                 finish();
                 break;
             case R.id.ll_save_post:
-                if(MainActivity.EMAIL_USER.equals("")){
-                    Toast.makeText(this, "Vui lòng đăng nhập để sử dụng chức năng này", Toast.LENGTH_SHORT).show();
-                }
-                else{
-                    mPresenterPostDetail.handleSavePost(mPostSale.getId(), MainActivity.EMAIL_USER);
-                }
+                //to do something
                 break;
             case R.id.ll_call:
                 initPermission();
@@ -328,8 +318,8 @@ public class PostDetailActivity extends AppCompatActivity implements ViewHandleP
         mMap = googleMap;
         mMap.getUiSettings().setScrollGesturesEnabled(false);
         try{
-            LatLng latLng = new LatLng(Double.parseDouble(mPostSale.getProduct().getLatitude()), Double.parseDouble(mPostSale.getProduct().getLongitude()));
-            mMap.addMarker(new MarkerOptions().position(latLng).title(mPostSale.getProduct().getAddress()));
+            LatLng latLng = new LatLng(Double.parseDouble(mProduct.getMapLat()), Double.parseDouble(mProduct.getMapLng()));
+            mMap.addMarker(new MarkerOptions().position(latLng).title(mProduct.getMapLng()));
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 18));
         }
         catch (java.lang.NullPointerException e){

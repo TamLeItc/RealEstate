@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,9 +19,11 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.qtctek.realstate.R;
 import com.qtctek.realstate.dto.PostSale;
+import com.qtctek.realstate.dto.Product;
 import com.qtctek.realstate.presenter.user_control.posted_post.PresenterPostedPost;
 import com.qtctek.realstate.view.post_news.activity.MainActivity;
 import com.qtctek.realstate.view.new_post.activity.NewPostActivity;
@@ -28,24 +31,20 @@ import com.qtctek.realstate.view.post_detail.activity.PostDetailActivity;
 
 import java.util.ArrayList;
 
-public class PostedPostFragment extends Fragment implements ViewHandlePostedPost, View.OnClickListener ,
+public class PostedPostFragment extends Fragment implements ViewHandlePostedPost ,
         AbsListView.OnScrollListener, AdapterView.OnItemClickListener{
 
     private View mView;
 
     private ListView mLsvPostedPost;
-    private Button mBtnMoreView;
-    private TextView mTxvQualityPost;
 
     private Dialog mLoadingDialog;
 
     private AdapterPostSale mAdapterListPost;
-    private ArrayList<PostSale> mArrListPost = new ArrayList<>();
+    private ArrayList<Product> mArrProduct = new ArrayList<>();
 
     private PresenterPostedPost mPresenterPostedPost;
 
-    private int mQualityPost = 0;
-    private int mPreLast = 0;
     private int mPositionClick;
 
     @Nullable
@@ -66,10 +65,7 @@ public class PostedPostFragment extends Fragment implements ViewHandlePostedPost
 
     private void initViews(){
         this.mLsvPostedPost = mView.findViewById(R.id.lsv_posts);
-        this.mBtnMoreView = mView.findViewById(R.id.btn_more_view);
-        this.mTxvQualityPost = mView.findViewById(R.id.txv_quality_post);
 
-        this.mBtnMoreView.setOnClickListener(this);
         this.mLsvPostedPost.setOnScrollListener(this);
         this.mLsvPostedPost.setOnItemClickListener(this);
     }
@@ -79,9 +75,9 @@ public class PostedPostFragment extends Fragment implements ViewHandlePostedPost
         this.mLoadingDialog.show();
 
         this.mPresenterPostedPost = new PresenterPostedPost(this);
-        this.mPresenterPostedPost.handleGetListPostedPost(MainActivity.EMAIL_USER, 0, 20);
+        this.mPresenterPostedPost.handleGetListPostedPost(0, 20, MainActivity.USER.getEmail());
 
-        this.mAdapterListPost = new AdapterPostSale(mArrListPost, getActivity(), R.layout.item_post);
+        this.mAdapterListPost = new AdapterPostSale(mArrProduct, getActivity(), R.layout.item_post);
         this.mLsvPostedPost.setAdapter(this.mAdapterListPost);
 
     }
@@ -101,7 +97,7 @@ public class PostedPostFragment extends Fragment implements ViewHandlePostedPost
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 mLoadingDialog.show();
-                mPresenterPostedPost.handleDeletePost(mArrListPost.get(mPositionClick).getId());
+                mPresenterPostedPost.handleDeletePost(mArrProduct.get(mPositionClick).getId());
             }
         });
         alertDialog.setNegativeButton("Hủy", new DialogInterface.OnClickListener() {
@@ -113,17 +109,12 @@ public class PostedPostFragment extends Fragment implements ViewHandlePostedPost
     }
 
     @Override
-    public void onHandlePostListSuccessful(int qualityPost, ArrayList<PostSale> arrListPost) {
+    public void onHandlePostListSuccessful(ArrayList<Product> arrListPost) {
 
         this.mLoadingDialog.dismiss();
 
-        this.mArrListPost.addAll(arrListPost);
-
-        this.mQualityPost = qualityPost;
-        String temp = "Hiển thị " + this.mArrListPost.size() + " tin. Tổng " + this.mQualityPost + " tin";
-        this.mTxvQualityPost.setText(temp);
-
-        this.mBtnMoreView.setVisibility(View.GONE);
+        this.mArrProduct.addAll(arrListPost);
+        this.mAdapterListPost.notifyDataSetChanged();
     }
 
     @Override
@@ -131,16 +122,7 @@ public class PostedPostFragment extends Fragment implements ViewHandlePostedPost
 
         this.mLoadingDialog.dismiss();
 
-        AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
-        alertDialog.setMessage("Đọc dữ liệu thất bại. Vui lòng thử lại sau");
-        alertDialog.setCancelable(false);
-        alertDialog.setPositiveButton("Xác nhận", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-
-            }
-        });
-        alertDialog.show();
+        Toast.makeText(getActivity(), "Đọc dữ liệu thất bại. Vui lòng thử lại sau", Toast.LENGTH_LONG).show();
     }
 
     @Override
@@ -153,9 +135,8 @@ public class PostedPostFragment extends Fragment implements ViewHandlePostedPost
         alertDialog.setPositiveButton("Xác nhận", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                int quality = mArrListPost.size();
-                mArrListPost.clear();
-                mPresenterPostedPost.handleGetListPostedPost(MainActivity.EMAIL_USER, 0, quality);
+                mArrProduct.remove(mPositionClick);
+                mAdapterListPost.notifyDataSetChanged();
             }
         });
         alertDialog.show();
@@ -179,41 +160,21 @@ public class PostedPostFragment extends Fragment implements ViewHandlePostedPost
         alertDialog.show();
     }
 
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()){
-            case R.id.btn_more_view:
-                if(this.mQualityPost > this.mArrListPost.size()){
-                    this.mPresenterPostedPost.handleGetListPostedPost(MainActivity.EMAIL_USER, this.mArrListPost.size(), 20);
-                }
-                this.mBtnMoreView.setVisibility(View.GONE);
-                break;
-        }
-    }
 
     @Override
     public void onScrollStateChanged(AbsListView view, int scrollState) {
+        if (scrollState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE
+                && (mLsvPostedPost.getLastVisiblePosition() - mLsvPostedPost.getHeaderViewsCount() -
+                mLsvPostedPost.getFooterViewsCount()) >= (mAdapterListPost.getCount() - 1)) {
+
+            this.mLoadingDialog.show();
+            this.mPresenterPostedPost.handleGetListPostedPost(this.mArrProduct.size(), 20, MainActivity.USER.getEmail());
+        }
 
     }
 
     @Override
     public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-        switch (view.getId()){
-            case R.id.lsv_posts:
-                final int lastItem = firstVisibleItem + visibleItemCount;
-
-                if(this.mPreLast > lastItem){
-                    this.mBtnMoreView.setVisibility(View.GONE);
-                }
-                else{
-                    if(lastItem == totalItemCount){
-                        if(this.mQualityPost > this.mArrListPost.size()){
-                            this.mBtnMoreView.setVisibility(View.VISIBLE);
-                        }
-                    }
-                    this.mPreLast = lastItem;
-                }
-        }
     }
 
 
@@ -230,7 +191,7 @@ public class PostedPostFragment extends Fragment implements ViewHandlePostedPost
                 switch (item.getItemId()){
                     case R.id.control_view_detail:
                         Intent intent = new Intent(getActivity(), PostDetailActivity.class);
-                        intent.putExtra("post_id", mArrListPost.get(mPositionClick).getId());
+                        intent.putExtra("post_id", mArrProduct.get(mPositionClick).getId());
                         startActivity(intent);
                         break;
                     case R.id.control_edit_post:
@@ -256,7 +217,7 @@ public class PostedPostFragment extends Fragment implements ViewHandlePostedPost
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         Intent intent1 = new Intent(getActivity(), NewPostActivity.class);
-                        intent1.putExtra("post_id", mArrListPost.get(mPositionClick).getId());
+                        intent1.putExtra("post_id", mArrProduct.get(mPositionClick).getId());
                         startActivity(intent1);
                         getActivity().finish();
                     }

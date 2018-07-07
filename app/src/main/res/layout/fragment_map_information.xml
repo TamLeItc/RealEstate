@@ -47,9 +47,6 @@
             android:id="@+id/btn_save_continue"
             android:textSize="@dimen/_10sp"
             android:layout_marginLeft="@dimen/_15dp"/>
-
-
-
     </LinearLayout>
 
 </LinearLayout>

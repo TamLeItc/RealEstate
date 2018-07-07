@@ -1,12 +1,13 @@
 package com.qtctek.realstate.view.user_control.post_management;
 
 import com.qtctek.realstate.dto.PostSale;
+import com.qtctek.realstate.dto.Product;
 
 import java.util.ArrayList;
 
 public interface ViewHandlePostManagement {
 
-    void onHandlePostListSuccessful(int qualityPost, ArrayList<PostSale> arrListPost);
+    void onHandlePostListSuccessful(ArrayList<Product> arrListProduct);
 
     void onHandlePostListError(String error);
 

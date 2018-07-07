@@ -4,7 +4,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
-import com.qtctek.realstate.view.new_post.contact_information.ContactInformationFragment;
 import com.qtctek.realstate.view.new_post.description_information.DescriptionInformationFragment;
 import com.qtctek.realstate.view.new_post.NewPostSuccess;
 import com.qtctek.realstate.view.new_post.images_information.ImagesInformationFragment;
@@ -34,9 +33,6 @@ public class NewPostAdapter extends FragmentStatePagerAdapter {
                 frg = new MapInformationFragment();
                 break;
             case 4:
-                frg = new ContactInformationFragment();
-                break;
-            case 5:
                 frg = new NewPostSuccess();
                 break;
         }
@@ -45,6 +41,6 @@ public class NewPostAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public int getCount() {
-        return 6;
+        return 5;
     }
 }

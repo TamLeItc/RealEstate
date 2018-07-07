@@ -1,93 +1,130 @@
 package com.qtctek.realstate.presenter.user_control.saved_post;
 
-import com.qtctek.realstate.dto.PostSale;
+import android.content.Context;
+
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.qtctek.realstate.dto.Product;
 import com.qtctek.realstate.model.user_control.ModelSavedPost;
-import com.qtctek.realstate.view.user_control.saved_post.ViewHandelSavedPost;
+import com.qtctek.realstate.view.user_control.saved_post.ViewGetDataLocal;
+import com.qtctek.realstate.view.user_control.saved_post.ViewHandleSavedPost;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class PresenterSavedPost implements PresenterImpIHandleSavedPost {
 
-    private ViewHandelSavedPost mViewHandelSavedPost;
+    private ViewHandleSavedPost mViewHandelSavedPost;
+    private ViewGetDataLocal mLocalHandleSavedPost;
     private ModelSavedPost mModelSavedPost;
 
     private int mQualityPost = 0;
 
-    public PresenterSavedPost(ViewHandelSavedPost viewHandelSavedPost){
+    public PresenterSavedPost(ViewHandleSavedPost viewHandelSavedPost){
         this.mViewHandelSavedPost = viewHandelSavedPost;
-    }
-
-    public void handleGetSavedPostList(String email, int start, int quality){
         this.mModelSavedPost = new ModelSavedPost(this);
-        this.mModelSavedPost.requireSavedPostList(email, start, quality);
     }
 
-    public void handleUnSavePost(int id){
-        this.mModelSavedPost.requireUnSavePost(id);
+    public PresenterSavedPost(ViewGetDataLocal localHandleSavedPost){
+        this.mLocalHandleSavedPost = localHandleSavedPost;
+        this.mModelSavedPost = new ModelSavedPost(this);
     }
 
-    private ArrayList<PostSale> handleSavedPostList(String data) throws JSONException {
-        ArrayList<PostSale> products = new ArrayList<>();
+    public void handleGetDataProductIds(Context context){
+        this.mModelSavedPost.requireDataProductIds(context);
+    }
 
-        JSONObject jsonObjectData = new JSONObject(data);
-        this.mQualityPost = Integer.parseInt(jsonObjectData.getString("quality_post"));
+    public void handleUpdateDataProductIds(HashMap<String, String> listProductId, Context context){
 
-        JSONArray jsonArray = jsonObjectData.getJSONArray("post_list");
-        for(int i = 0; i < jsonArray.length(); i++){
+        Gson gson = new Gson();
+        String data = gson.toJson(listProductId);
 
-            JSONObject jsonObject = jsonArray.getJSONObject(i);
+        this.mModelSavedPost.requireUpdateDataProductIds(data, context);
+    }
 
-            PostSale postSale = new PostSale();
-            postSale.setId(jsonObject.getInt("id"));
-            postSale.setStatus(jsonObject.getString("status"));
-
-            Product product = new Product();
-            product.setArea((float) jsonObject.getDouble("area"));
-            product.setBathrooms(jsonObject.getInt("bathrooms"));
-            product.setBedrooms(jsonObject.getInt("bedrooms"));
-            product.setDistrict(jsonObject.getString("district"));
-            product.setProvinceCity(jsonObject.getString("province_city"));
-            product.setAddress(jsonObject.getString("address"));
-            product.setPrice(jsonObject.getLong("price"));
-            postSale.setProduct(product);
-
-            products.add(postSale);
-
-        }
-        return products;
-
+    public void handleGetSavedProductList(int start, int limit, String listId){
+        this.mModelSavedPost.requireSavedProductList(start, limit, listId);
     }
 
     @Override
-    public void onGetSavedPostListSuccessful(String data) {
+    public void onGetDataProductIdsSuccessful(String data) {
+
+        HashMap<String, String> listProductId = new HashMap<>();
+        Gson gson = new Gson();
+        if(!data.isEmpty()){
+            Type type = new TypeToken<HashMap<String, String>>() {}.getType();
+            listProductId = gson.fromJson(data, type);
+        }
+        this.mLocalHandleSavedPost.onHandleDataProductIdsSuccessful(listProductId);
+    }
+
+    private ArrayList<Product> handleData(String data) throws JSONException {
+
+        ArrayList<Product> arrProduct = new ArrayList<>();
+        JSONArray jsonArray = new JSONArray(data);
+
+        for(int i = 0; i < jsonArray.length(); i++){
+            JSONObject jsonObject = jsonArray.getJSONObject(i);
+
+            Product product = new Product();
+            product.setId(jsonObject.getInt("id"));
+            product.setFormality(jsonObject.getString("formality"));
+            product.setTitle(jsonObject.getString("title"));
+            product.setThumbnail(jsonObject.getString("thumbnail"));
+            product.setPrice(jsonObject.getLong("price"));
+            product.setDateUpload(jsonObject.getString("date_upload"));
+            product.setArea((float) jsonObject.getDouble("area"));
+            product.setBathroom(jsonObject.getInt("bathroom"));
+            product.setBedroom(jsonObject.getInt("bedroom"));
+            product.setStatus(jsonObject.getString("status"));
+            product.setCity(jsonObject.getString("city"));
+            product.setDistrict(jsonObject.getString("district"));
+            product.setUserName(jsonObject.getString("login_username"));
+            product.setUserId(jsonObject.getInt("id_login"));
+            product.setUserFullName(jsonObject.getString("login_fullname"));
+            product.setUserPhone(jsonObject.getString("login_phone"));
+
+            arrProduct.add(product);
+        }
+
+        return arrProduct;
+
+    }
+
+
+    @Override
+    public void onGetDataProductIdsError(String error) {
+        this.mLocalHandleSavedPost.onHandleDataProductIdsError(error);
+    }
+
+    @Override
+    public void onUpdateProductIdListSuccessful() {
+        this.mViewHandelSavedPost.onHandleUpdateProductIdListSuccessful();
+    }
+
+    @Override
+    public void onUpdateProductIdListError(String e) {
+        this.mViewHandelSavedPost.onHandleUpdateProductIdListError(e);
+    }
+
+    @Override
+    public void onGetSavedProductListSuccessful(String data) {
         try {
-
-            ArrayList<PostSale> arrListPost = handleSavedPostList(data);
-            this.mViewHandelSavedPost.onHandleSavedPostListSuccessful(this.mQualityPost, arrListPost);
-
+            ArrayList<Product> mArrListProduct = handleData(data);
+            mViewHandelSavedPost.onHandleSavedProductListSuccessful(mArrListProduct);
         } catch (JSONException e) {
-            this.mViewHandelSavedPost.onHandleSavedPostListError(e.toString());
+            mViewHandelSavedPost.onHandleSavedProductListError(e.toString());
             e.printStackTrace();
         }
     }
 
     @Override
-    public void onHandleSavedPostListError(String error) {
-        this.mViewHandelSavedPost.onHandleSavedPostListError(error);
-    }
-
-    @Override
-    public void onExecuteUnSavePostSuccessful() {
-        this.mViewHandelSavedPost.onHandleUnSavePostSuccessful();
-    }
-
-    @Override
-    public void onExecuteUnSavePostError(String e) {
-        this.mViewHandelSavedPost.onHandleUnSavePostError(e);
+    public void onGetSavedProductListError(String error) {
+        mViewHandelSavedPost.onHandleSavedProductListError(error);
     }
 }

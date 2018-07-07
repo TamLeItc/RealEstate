@@ -1,10 +1,12 @@
 package com.qtctek.realstate.model.new_post;
 
 import android.os.AsyncTask;
+import android.util.Log;
 import android.webkit.MimeTypeMap;
 
 import com.qtctek.realstate.dto.PostSale;
 import com.qtctek.realstate.dto.Product;
+import com.qtctek.realstate.dto.Product1;
 import com.qtctek.realstate.presenter.new_post.PresenterImpHandleModelNewPost;
 import com.qtctek.realstate.view.post_news.activity.MainActivity;
 
@@ -23,13 +25,13 @@ public class ModelNewPost {
 
     private PresenterImpHandleModelNewPost mPresenterImpHandleModelNewPost;
 
-    private String mUrlInsertBlankPost = MainActivity.HOST + "/real_estate/new_post/insert_blank_post.php";
+    private String mUrlInsertBlankPost = MainActivity.WEB_SERVER + "new_post/insert_blank_product.php";
+
+
     private String mUrlPostFile = MainActivity.HOST + "/real_estate/new_post/post_file.php";
-    private String mUrlUPdateNormalInformation = MainActivity.HOST + "/real_estate/new_post/update_normal_information.php";
-    private String mUrlUpdateMoreInformation = MainActivity.HOST + "/real_estate/new_post/update_product_detail.php";
+    private String mUrlUpdateProductInformation = MainActivity.HOST + "/real_estate/new_post/update_normal_information.php";
     private String mUrlUpdateDescriptionInformation = MainActivity.HOST + "/real_estate/new_post/update_description_information.php";
     private String mUrlUpdateLocationProduct = MainActivity.HOST + "/real_estate/new_post/update_location_product.php";
-    private String mUrlUpdateContactInformation = MainActivity.HOST + "/real_estate/new_post/update_contact_information.php";
     private String mDeleteImage = MainActivity.HOST + "/real_estate/new_post/delete_file.php";
     private String mHandlePost = MainActivity.HOST + "/real_estate/new_post/update_handle_post.php";
 
@@ -41,28 +43,20 @@ public class ModelNewPost {
         new InsertBlankPost(email, postDate).execute(mUrlInsertBlankPost);
     }
 
-    public void requireUploadFile(int postId, String filesName, String filePath){
-        new PostFile(postId, filesName, filePath).execute(mUrlPostFile);
+    public void requireUploadFile(int postId, String filesName, String filePath, String option){
+        new PostFile(postId, filesName, filePath, option).execute(mUrlPostFile);
     }
 
-    public void requireUpdateNormalInformation(Product product){
-        new UpdateNormalInformation(product).execute(this.mUrlUPdateNormalInformation);
+    public void requireUpdateProductInformation(Product product){
+        new UpdateProductInformation(product).execute(this.mUrlUpdateProductInformation);
     }
 
-    public void requireUpdateMoreInformation(Product product){
-        new UpdateMoreInformation(product).execute(this.mUrlUpdateMoreInformation);
+    public void requireUpdateDescriptionInformation(int productId, String description){
+        new UpdateDescriptionInformation(productId, description).execute(this.mUrlUpdateDescriptionInformation);
     }
 
-    public void requireUpdateDescriptionInformation(Product product){
-        new UpdateDescriptionInformation(product).execute(this.mUrlUpdateDescriptionInformation);
-    }
-
-    public void requireUpdateLocationProduct(Product product){
-        new UpdateLocationProduct(product).execute(this.mUrlUpdateLocationProduct);
-    }
-
-    public void requireUpdateContactInformation(PostSale postSale){
-        new UpdateContactInformation(postSale).execute(this.mUrlUpdateContactInformation);
+    public void requireUpdateLocationProduct(int productId, String mapLat, String mapLng){
+        new UpdateLocationProduct(productId, mapLat, mapLng).execute(this.mUrlUpdateLocationProduct);
     }
 
     public void requireDeleteFile(String linkImage){
@@ -77,9 +71,9 @@ public class ModelNewPost {
 
         OkHttpClient okHttpClient;
 
-        String email, postDate;
+        String email, uploadDate;
 
-        public InsertBlankPost(String email, String postDate){
+        public InsertBlankPost(String email, String uploadDate){
 
             okHttpClient = new OkHttpClient.Builder()
                     .connectTimeout(15, TimeUnit.SECONDS)
@@ -88,7 +82,7 @@ public class ModelNewPost {
                     .build();
 
             this.email = email;
-            this.postDate = postDate;
+            this.uploadDate = uploadDate;
         }
 
         @Override
@@ -96,7 +90,7 @@ public class ModelNewPost {
 
             RequestBody requestBody = new MultipartBody.Builder()
                     .addFormDataPart("email", email)
-                    .addFormDataPart("post_date", postDate)
+                    .addFormDataPart("date_upload", uploadDate)
                     .setType(MultipartBody.FORM)
                     .build();
 
@@ -118,15 +112,15 @@ public class ModelNewPost {
         @Override
         protected void onPostExecute(String s) {
             if(s.equals("error")){
-                mPresenterImpHandleModelNewPost.onInsertBlankPost(false, 0);
+                mPresenterImpHandleModelNewPost.onInsertBlankPost(false, -1);
             }
             else {
                 try{
-                    int postId = Integer.parseInt(s.trim());
-                    mPresenterImpHandleModelNewPost.onInsertBlankPost(true, postId);
+                    int productId = Integer.parseInt(s.trim());
+                    mPresenterImpHandleModelNewPost.onInsertBlankPost(true, productId);
                 }
                 catch (java.lang.NumberFormatException e){
-                    mPresenterImpHandleModelNewPost.onInsertBlankPost(false, 0);
+                    mPresenterImpHandleModelNewPost.onInsertBlankPost(false, -1);
                 }
             }
 
@@ -134,12 +128,12 @@ public class ModelNewPost {
         }
     }
 
-    class UpdateNormalInformation extends AsyncTask<String, Void, String>{
+    class UpdateProductInformation extends AsyncTask<String, Void, String>{
 
         OkHttpClient okHttpClient;
         Product product;
 
-        public UpdateNormalInformation(Product product){
+        public UpdateProductInformation(Product product){
 
             okHttpClient = new OkHttpClient.Builder()
                     .connectTimeout(15, TimeUnit.SECONDS)
@@ -153,15 +147,7 @@ public class ModelNewPost {
         @Override
         protected String doInBackground(String... strings) {
             RequestBody requestBody = new MultipartBody.Builder()
-                    .addFormDataPart("id", product.getId() + "")
-                    .addFormDataPart("category_product_id", product.getCategoryProductId() + "")
-                    .addFormDataPart("area", product.getArea() + "")
-                    .addFormDataPart("bathrooms", product.getBathrooms() + "")
-                    .addFormDataPart("bedrooms", product.getBedrooms() + "")
-                    .addFormDataPart("district_id", product.getDistrictId() + "")
-                    .addFormDataPart("province_city_id", product.getProvinceCityId() + "")
-                    .addFormDataPart("address", product.getAddress())
-                    .addFormDataPart("price", product.getPrice() + "")
+                    //to do something
                     .setType(MultipartBody.FORM)
                     .build();
 
@@ -182,10 +168,10 @@ public class ModelNewPost {
         @Override
         protected void onPostExecute(String s) {
             if(s.equals("successful")){
-                mPresenterImpHandleModelNewPost.onUpdateNormalInformation(true);
+                mPresenterImpHandleModelNewPost.onUpdateProductInformation(true);
             }
             else{
-                mPresenterImpHandleModelNewPost.onUpdateNormalInformation(false);
+                mPresenterImpHandleModelNewPost.onUpdateProductInformation(false);
             }
 
             super.onPostExecute(s);
@@ -197,10 +183,10 @@ public class ModelNewPost {
         OkHttpClient okHttpClient;
 
         int postId;
-        String fileName;
+        String fileName, option;
         File file;
 
-        public PostFile(int postId, String fileName, String filePath){
+        public PostFile(int postId, String fileName, String filePath, String option){
 
             okHttpClient = new OkHttpClient.Builder()
                     .connectTimeout(15, TimeUnit.SECONDS)
@@ -211,6 +197,7 @@ public class ModelNewPost {
             this.postId = postId;
             this.fileName = fileName;
             this.file = new File(filePath);
+            this.option = option;
         }
 
         @Override
@@ -221,7 +208,8 @@ public class ModelNewPost {
             RequestBody fileBody = RequestBody.create(MediaType.parse("image/jpeg"), file);
             RequestBody requestBody = new MultipartBody.Builder()
                     .addFormDataPart("uploaded_image", fileName, fileBody)
-                    .addFormDataPart("post_id", postId + "")
+                    .addFormDataPart("product_id", postId + "")
+                    .addFormDataPart("option", option)
                     .setType(MultipartBody.FORM)
                     .build();
 
@@ -258,78 +246,28 @@ public class ModelNewPost {
 
     }
 
-    class UpdateMoreInformation extends  AsyncTask<String, Void, String>{
-
-        private Product product;
-        OkHttpClient okHttpClient;
-
-        public UpdateMoreInformation(Product product){
-            okHttpClient = new OkHttpClient.Builder()
-                    .connectTimeout(15, TimeUnit.SECONDS)
-                    .readTimeout(10, TimeUnit.SECONDS)
-                    .writeTimeout(10, TimeUnit.SECONDS)
-                    .build();
-            this.product = product;
-        }
-
-        @Override
-        protected String doInBackground(String... strings) {
-
-            RequestBody requestBody = new MultipartBody.Builder()
-                    .addFormDataPart("id", product.getId() + "")
-                    .addFormDataPart("floors", product.getProductDetail().getFloors() + "")
-                    .addFormDataPart("legal", product.getProductDetail().getLegal())
-                    .addFormDataPart("utility", product.getProductDetail().getUtility())
-                    .setType(MultipartBody.FORM)
-                    .build();
-
-            Request request = new Request.Builder()
-                    .url(strings[0])
-                    .post(requestBody)
-                    .build();
-
-            try {
-                Response response = okHttpClient.newCall(request).execute();
-                return response.body().string();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            return "error";
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            if(s.equals("successful")){
-                mPresenterImpHandleModelNewPost.onUpdateMoreInformation(true);
-            }
-            else{
-                mPresenterImpHandleModelNewPost.onUpdateMoreInformation(false);
-            }
-
-            super.onPostExecute(s);
-        }
-    }
-
     class UpdateDescriptionInformation extends  AsyncTask<String, Void, String>{
 
-        private Product product;
+        private String description;
+        int productId;
         OkHttpClient okHttpClient;
 
-        public UpdateDescriptionInformation(Product product){
+        public UpdateDescriptionInformation(int productId, String description){
             okHttpClient = new OkHttpClient.Builder()
                     .connectTimeout(15, TimeUnit.SECONDS)
                     .readTimeout(10, TimeUnit.SECONDS)
                     .writeTimeout(10, TimeUnit.SECONDS)
                     .build();
-            this.product = product;
+            this.description = description;
+            this.productId = productId;
         }
 
         @Override
         protected String doInBackground(String... strings) {
 
             RequestBody requestBody = new MultipartBody.Builder()
-                    .addFormDataPart("id", product.getId() + "")
-                    .addFormDataPart("description", product.getDescription() + "")
+                    .addFormDataPart("id", productId + "")
+                    .addFormDataPart("description", description + "")
                     .setType(MultipartBody.FORM)
                     .build();
 
@@ -362,25 +300,28 @@ public class ModelNewPost {
 
     class UpdateLocationProduct extends  AsyncTask<String, Void, String>{
 
-        private Product product;
+        int productId;
+        String mapLat, mapLng;
         OkHttpClient okHttpClient;
 
-        public UpdateLocationProduct(Product product){
+        public UpdateLocationProduct(int productId, String mapLat, String mapLng){
             okHttpClient = new OkHttpClient.Builder()
                     .connectTimeout(15, TimeUnit.SECONDS)
                     .readTimeout(10, TimeUnit.SECONDS)
                     .writeTimeout(10, TimeUnit.SECONDS)
                     .build();
-            this.product = product;
+            this.productId = productId;
+            this.mapLat = mapLat;
+            this.mapLng = mapLng;
         }
 
         @Override
         protected String doInBackground(String... strings) {
 
             RequestBody requestBody = new MultipartBody.Builder()
-                    .addFormDataPart("id", product.getId() + "")
-                    .addFormDataPart("latitude", product.getLatitude() + "")
-                    .addFormDataPart("longitude", product.getLongitude())
+                    .addFormDataPart("id", productId + "")
+                    .addFormDataPart("map_lat", mapLat)
+                    .addFormDataPart("map_lng",mapLng)
                     .setType(MultipartBody.FORM)
                     .build();
 
@@ -405,57 +346,6 @@ public class ModelNewPost {
             }
             else{
                 mPresenterImpHandleModelNewPost.onUpdateMapInformation(false);
-            }
-
-            super.onPostExecute(s);
-        }
-    }
-
-    class UpdateContactInformation extends  AsyncTask<String, Void, String>{
-
-        private PostSale postSale;
-        OkHttpClient okHttpClient;
-
-        public UpdateContactInformation(PostSale postSale){
-            okHttpClient = new OkHttpClient.Builder()
-                    .connectTimeout(15, TimeUnit.SECONDS)
-                    .readTimeout(10, TimeUnit.SECONDS)
-                    .writeTimeout(10, TimeUnit.SECONDS)
-                    .build();
-            this.postSale = postSale;
-        }
-
-        @Override
-        protected String doInBackground(String... strings) {
-
-            RequestBody requestBody = new MultipartBody.Builder()
-                    .addFormDataPart("id", postSale.getId() + "")
-                    .addFormDataPart("contact_name", postSale.getContactName() + "")
-                    .addFormDataPart("contact_number_phone", postSale.getContactNumberPhone() + "")
-                    .setType(MultipartBody.FORM)
-                    .build();
-
-            Request request = new Request.Builder()
-                    .url(strings[0])
-                    .post(requestBody)
-                    .build();
-
-            try {
-                Response response = okHttpClient.newCall(request).execute();
-                return response.body().string();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            return "error";
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            if(s.equals("successful")){
-                mPresenterImpHandleModelNewPost.onUpdateContactInformation(true);
-            }
-            else{
-                mPresenterImpHandleModelNewPost.onUpdateContactInformation(false);
             }
 
             super.onPostExecute(s);

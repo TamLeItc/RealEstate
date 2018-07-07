@@ -1,6 +1,7 @@
 package com.qtctek.realstate.model.user_control;
 
 import android.os.AsyncTask;
+import android.util.Log;
 
 import com.qtctek.realstate.presenter.user_control.posted_post.PresenterImpHandlePostedPost;
 import com.qtctek.realstate.view.post_news.activity.MainActivity;
@@ -16,9 +17,9 @@ import okhttp3.Response;
 
 public class ModelPostedPost {
 
-    private String mUrl = MainActivity.HOST + "/real_estate/get_posted_post_list.php";
+    private String mUrl = MainActivity.WEB_SERVER + "get_list_product.php";
 
-    String mUrlDeletePost = MainActivity.HOST + "/real_estate/delete_post.php";
+    String mUrlDeletePost = MainActivity.HOST + "/real_estate/delete_product.php";
 
     private PresenterImpHandlePostedPost mPresenterImpHandleUserControl;
 
@@ -26,12 +27,12 @@ public class ModelPostedPost {
         this.mPresenterImpHandleUserControl = presenterImpHandleUserControl;
     }
 
-    public void requirePostedPostList(String email, int start, int quality){
-        new GetPostedPostList(email, start, quality).execute(mUrl);
+    public void requirePostedPostList(int start, int limit, String email){
+        new GetPostedPostList(email, start, limit).execute(mUrl);
     }
 
-    public void requireDeletePost(int postId){
-        new DeletePost(postId).execute(mUrlDeletePost);
+    public void requireDeletePost(int productId){
+        new DeletePost(productId).execute(mUrlDeletePost);
     }
 
     class GetPostedPostList extends AsyncTask<String, Void, String>{
@@ -39,9 +40,9 @@ public class ModelPostedPost {
         OkHttpClient okHttpClient;
 
         String email = "";
-        int start = 0, quality = 0;
+        int start = 0, limit = 0;
 
-        public GetPostedPostList(String email, int start, int quality){
+        public GetPostedPostList(String email, int start, int limit){
             okHttpClient = new OkHttpClient.Builder()
                     .connectTimeout(15, TimeUnit.SECONDS)
                     .readTimeout(10, TimeUnit.SECONDS)
@@ -50,21 +51,16 @@ public class ModelPostedPost {
 
             this.email = email;
             this.start = start;
-            this.quality = quality;
+            this.limit = limit;
         }
 
         @Override
         protected String doInBackground(String... strings) {
-            RequestBody requestBody = new MultipartBody.Builder()
-                    .addFormDataPart("email", email)
-                    .addFormDataPart("start", start + "")
-                    .addFormDataPart("quality", quality + "")
-                    .setType(MultipartBody.FORM)
-                    .build();
+            String mUrl = strings[0] + "?email=" + email + "&start=" + start + "&limit=" + limit + "&option=";
 
             Request request = new Request.Builder()
-                    .url(strings[0])
-                    .post(requestBody)
+                    .url(mUrl)
+                    .get()
                     .build();
 
 
@@ -94,22 +90,22 @@ public class ModelPostedPost {
     class DeletePost extends AsyncTask<String, Void, String>{
 
         OkHttpClient okHttpClient;
-        int postId;
+        int productId;
 
-        public DeletePost(int postId){
+        public DeletePost(int productId){
             okHttpClient = new OkHttpClient.Builder()
                     .connectTimeout(15, TimeUnit.SECONDS)
                     .writeTimeout(10, TimeUnit.SECONDS)
                     .readTimeout(10, TimeUnit.SECONDS)
                     .build();
 
-            this.postId = postId;
+            this.productId = productId;
         }
 
         @Override
         protected String doInBackground(String... strings) {
             RequestBody requestBody = new MultipartBody.Builder()
-                    .addFormDataPart("id_post", postId + "")
+                    .addFormDataPart("product_id", productId + "")
                     .setType(MultipartBody.FORM)
                     .build();
 

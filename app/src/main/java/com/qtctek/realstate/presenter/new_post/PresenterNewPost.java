@@ -2,6 +2,7 @@ package com.qtctek.realstate.presenter.new_post;
 
 import com.qtctek.realstate.dto.PostSale;
 import com.qtctek.realstate.dto.Product;
+import com.qtctek.realstate.dto.Product1;
 import com.qtctek.realstate.model.new_post.ModelNewPost;
 import com.qtctek.realstate.view.new_post.interfaces.ViewHandleModelNewPost;
 
@@ -23,28 +24,20 @@ public class PresenterNewPost  implements PresenterImpHandleModelNewPost{
 
     }
 
-    public void handlePostImage(int postId, String fileName, String filePath){
-        this.mModelNewPost.requireUploadFile(postId, fileName, filePath);
+    public void handlePostImage(int postId, String fileName, String filePath, String option){
+        this.mModelNewPost.requireUploadFile(postId, fileName, filePath, option);
     }
 
-    public void handleUpdateNormalInformation(Product product){
-        this.mModelNewPost.requireUpdateNormalInformation(product);
+    public void handleUpdateProductInformation(Product product){
+        this.mModelNewPost.requireUpdateProductInformation(product);
     }
 
-    public void handleUpdateMoreInformation(Product product){
-        this.mModelNewPost.requireUpdateMoreInformation(product);
+    public void handleUpdateDescriptionInformation(int productId, String description){
+        this.mModelNewPost.requireUpdateDescriptionInformation(productId, description);
     }
 
-    public void handleUpdateDescriptionInformation(Product product){
-        this.mModelNewPost.requireUpdateDescriptionInformation(product);
-    }
-
-    public void handleUpdateLocationProduct(Product product){
-        this.mModelNewPost.requireUpdateLocationProduct(product);
-    }
-
-    public void handleUpdateContactInformation(PostSale postSale){
-        this.mModelNewPost.requireUpdateContactInformation(postSale);
+    public void handleUpdateLocationProduct(int productId, String mapLat, String mapLng){
+        this.mModelNewPost.requireUpdateLocationProduct(productId, mapLat, mapLng);
     }
 
     public void handleDeleteFile(String linkImage){
@@ -63,8 +56,8 @@ public class PresenterNewPost  implements PresenterImpHandleModelNewPost{
     }
 
     @Override
-    public void onInsertBlankPost(boolean status, int postId) {
-        this.mViewHandleModelNewPost.onInsertBlankPost(status, postId);
+    public void onInsertBlankPost(boolean status, int productId) {
+        this.mViewHandleModelNewPost.onInsertBlankPost(status, productId);
     }
 
     @Override
@@ -73,13 +66,8 @@ public class PresenterNewPost  implements PresenterImpHandleModelNewPost{
     }
 
     @Override
-    public void onUpdateNormalInformation(boolean status) {
-        this.mViewHandleModelNewPost.onUpdateNormalInformation(status);
-    }
-
-    @Override
-    public void onUpdateMoreInformation(boolean status) {
-        this.mViewHandleModelNewPost.onUpdateMoreInformation(status);
+    public void onUpdateProductInformation(boolean status) {
+        this.mViewHandleModelNewPost.onUpdateProductInformation(status);
     }
 
     @Override
@@ -90,11 +78,6 @@ public class PresenterNewPost  implements PresenterImpHandleModelNewPost{
     @Override
     public void onUpdateMapInformation(boolean status) {
         this.mViewHandleModelNewPost.onUpdateMapInformation(status);
-    }
-
-    @Override
-    public void onUpdateContactInformation(boolean status) {
-        this.mViewHandleModelNewPost.onUpdateContactInformation(status);
     }
 
     @Override

@@ -6,8 +6,8 @@ public interface PresenterImpHandleRegister {
 
     void onInsertValueToServerError(String error);
 
-    void onCheckExistEmail(boolean isExisted);
+    void onCheckExistEmail(String message);
 
-    void onConnectServerError();
+    void onConnectServerError(String s);
 
 }

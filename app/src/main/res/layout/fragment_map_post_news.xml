@@ -33,6 +33,13 @@
             android:gravity="center"
             android:textColor="@color/colorGrayDark"/>
 
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:id="@+id/fl_item_post"
+            android:layout_marginBottom="@dimen/_40dp"/>
+
     </FrameLayout>
 
 

@@ -1,19 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+<ScrollView android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorMainBackground">
+    xmlns:android="http://schemas.android.com/apk/res/android" >
 
     <LinearLayout
-        android:layout_below="@+id/toolbar_half"
-        android:layout_width="match_parent"
+        xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/colorMainBackground"
         android:orientation="vertical"
         android:paddingLeft="@dimen/_25dp"
         android:paddingRight="@dimen/_25dp"
-        android:paddingTop="@dimen/_8dp">
+        android:paddingTop="@dimen/_8dp"
+        android:paddingBottom="@dimen/_10dp">
 
         <TextView
+            android:id="@+id/txv_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/register_account"
@@ -29,6 +30,7 @@
             android:layout_marginTop="@dimen/_5dp"/>
 
         <EditText
+            android:singleLine="true"
             android:paddingLeft="@dimen/_5dp"
             android:paddingRight="@dimen/_5dp"
             android:id="@+id/edt_full_name"
@@ -36,6 +38,85 @@
             android:layout_height="@dimen/_35dp"
             android:textSize="@dimen/_10sp"
             android:background="@drawable/custom_edt_create_account" />
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_5dp"
+            android:orientation="horizontal">
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/sex"
+                android:textSize="@dimen/_10sp"
+                android:id="@+id/txv_sex"/>
+
+            <RadioGroup
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:id="@+id/rdg_sex"
+                android:layout_below="@id/txv_sex">
+
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/_10sp"
+                    android:text="@string/male"
+                    android:id="@+id/rdo_male"/>
+
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/_10sp"
+                    android:text="@string/female"
+                    android:id="@+id/rdo_female"
+                    android:checked="true"/>
+
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/_10sp"
+                    android:text="@string/other"
+                    android:id="@+id/rdo_other"
+                    android:checked="true"/>
+
+            </RadioGroup>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/_10sp"
+                android:layout_alignParentEnd="true"
+                android:layout_marginRight="@dimen/_80dp"
+                android:text="@string/birthday"
+                android:id="@+id/txv_name_birthday" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/txv_birthday"
+                android:layout_marginRight="@dimen/_70dp"
+                android:layout_alignParentEnd="true"
+                android:layout_below="@+id/txv_name_birthday"
+                android:text="04/07/2018"
+                android:layout_marginTop="@dimen/_5dp"/>
+
+            <ImageView
+                android:layout_width="@dimen/_30dp"
+                android:layout_height="@dimen/_30dp"
+                android:id="@+id/imv_calendar"
+                android:layout_marginRight="@dimen/_70dp"
+                android:layout_alignParentEnd="true"
+                android:layout_below="@+id/txv_birthday"
+                android:text="04/07/2018"
+                android:layout_marginTop="@dimen/_5dp"
+                android:src="@drawable/icon_calendar"/>
+
+        </RelativeLayout>
 
         <TextView
             android:layout_width="wrap_content"
@@ -45,11 +126,30 @@
             android:layout_marginTop="@dimen/_5dp"/>
 
         <EditText
+            android:singleLine="true"
             android:inputType="textEmailAddress"
             android:paddingLeft="@dimen/_5dp"
             android:paddingRight="@dimen/_5dp"
             android:textSize="@dimen/_10sp"
             android:id="@+id/edt_email_address"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_40dp"
+            android:background="@drawable/custom_edt_create_account"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/username"
+            android:textSize="@dimen/_10sp"
+            android:layout_marginTop="@dimen/_5dp"/>
+
+        <EditText
+            android:singleLine="true"
+            android:inputType="textEmailAddress"
+            android:paddingLeft="@dimen/_5dp"
+            android:paddingRight="@dimen/_5dp"
+            android:textSize="@dimen/_10sp"
+            android:id="@+id/edt_username"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_40dp"
             android:background="@drawable/custom_edt_create_account"/>
@@ -79,6 +179,7 @@
             android:layout_marginTop="@dimen/_5dp"/>
 
         <EditText
+            android:singleLine="true"
             android:inputType="textPassword"
             android:paddingLeft="@dimen/_5dp"
             android:paddingRight="@dimen/_5dp"
@@ -96,9 +197,28 @@
             android:layout_marginTop="@dimen/_5dp"/>
 
         <EditText
+            android:inputType="number"
+            android:singleLine="true"
+            android:ellipsize="end"
             android:paddingLeft="@dimen/_5dp"
             android:textSize="@dimen/_10sp"
             android:id="@+id/edt_phone_number"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_35dp"
+            android:background="@drawable/custom_edt_create_account"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/address"
+            android:textSize="@dimen/_10sp"
+            android:layout_marginTop="@dimen/_5dp"/>
+
+        <EditText
+            android:singleLine="true"
+            android:paddingLeft="@dimen/_5dp"
+            android:textSize="@dimen/_10sp"
+            android:id="@+id/edt_address"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_35dp"
             android:background="@drawable/custom_edt_create_account"/>
@@ -115,4 +235,5 @@
 
     </LinearLayout>
 
-</LinearLayout>
+</ScrollView>
+

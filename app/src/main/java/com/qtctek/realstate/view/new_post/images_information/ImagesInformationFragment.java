@@ -50,10 +50,9 @@ public class ImagesInformationFragment extends Fragment implements ViewHandleMod
     private View mView;
 
     private Button mBtnSelectImage;
-    private Button mBtnSaveImage;
     private Button mBtnSelectAvartar;
-    private Button mBtnSaveAvartar;
     private Button mBtnNext;
+    private Button mBtnSaveContinue;
     private RecyclerView mRecyclerView;
     private Dialog mLoadingDialog;
     private ImageView mImvAvartar;
@@ -88,21 +87,18 @@ public class ImagesInformationFragment extends Fragment implements ViewHandleMod
     private void initViews() {
         this.mBtnSelectImage = mView.findViewById(R.id.btn_select_image);
         this.mBtnSelectAvartar = mView.findViewById(R.id.btn_select_avartar);
-        this.mBtnSaveImage = mView.findViewById(R.id.btn_save_image);
-        this.mBtnSaveAvartar = mView.findViewById(R.id.btn_save_avartar);
         this.mBtnNext = mView.findViewById(R.id.btn_next_to);
+        this.mBtnSaveContinue = mView.findViewById(R.id.btn_save_continue);
         this.mRecyclerView = mView.findViewById(R.id.recycler_view);
         mImvAvartar = mView.findViewById(R.id.imv_avartar);
 
         this.mBtnSelectImage.setOnClickListener(this);
         this.mBtnNext.setOnClickListener(this);
         this.mBtnSelectAvartar.setOnClickListener(this);
-        this.mBtnSaveImage.setOnClickListener(this);
-        this.mBtnSaveAvartar.setOnClickListener(this);
     }
 
     private void handleStart(){
-        String url = MainActivity.HOST + "/real_estate/images/" + NewPostActivity.POST_SALE.getId() + "_avartar.jpg";
+        String url = MainActivity.HOST + "/real_estate/images/" + NewPostActivity.PRODUCT.getId() + "_avartar.jpg";
         Picasso.with(getContext()).load(url).into(mImvAvartar);
     }
 
@@ -157,9 +153,9 @@ public class ImagesInformationFragment extends Fragment implements ViewHandleMod
 
         mPath = getRealPathFromURI(getContext(), mUri);
 
-        String fileName = NewPostActivity.POST_SALE.getId() + "_avartar.jpg";
-        new PresenterNewPost(this).handlePostImage(NewPostActivity.POST_SALE.getId(),
-                fileName, mPath);
+        String fileName = NewPostActivity.PRODUCT.getId() + "_avartar.jpg";
+        new PresenterNewPost(this).handlePostImage(NewPostActivity.PRODUCT.getId(),
+                fileName, mPath, "thumbnail");
     }
 
     private void handleResultImage(Intent data) {
@@ -178,9 +174,9 @@ public class ImagesInformationFragment extends Fragment implements ViewHandleMod
         Uri uri = ARR_URI.get(QUALITY_IMAGE_UPLOADED);
         String path = getRealPathFromURI(getContext(), uri);
 
-        String fileName = NewPostActivity.POST_SALE.getId() + "_" + (FILE_NAME++) + ".jpg";
-        new PresenterNewPost(this).handlePostImage(NewPostActivity.POST_SALE.getId(),
-                fileName, path);
+        String fileName = NewPostActivity.PRODUCT.getId() + "_" + (FILE_NAME++) + ".jpg";
+        new PresenterNewPost(this).handlePostImage(NewPostActivity.PRODUCT.getId(),
+                fileName, path, "image_detail");
     }
 
     @Override
@@ -239,22 +235,22 @@ public class ImagesInformationFragment extends Fragment implements ViewHandleMod
             case R.id.btn_select_avartar:
                 handleSelectAvartar();
                 break;
-            case R.id.btn_save_image:
-                if (QUALITY_IMAGE != 0 && QUALITY_IMAGE > QUALITY_IMAGE_UPLOADED && mIsPickImage) {
-                    mLoadingDialog.show();
-                    mIsHandleUploadAvartar = false;
-                    mIsPickImage = false;
-                    uploadImages();
+            case R.id.btn_save_continue:
+                if(mIsPickImage && !mIsPickAvartar){
+                    if (QUALITY_IMAGE != 0 && QUALITY_IMAGE > QUALITY_IMAGE_UPLOADED && mIsPickImage) {
+                        mLoadingDialog.show();
+                        uploadImages();
+                    }
+                    break;
                 }
-                break;
-            case R.id.btn_save_avartar:
-                if(mIsPickAvartar){
+                else if(mIsPickImage && mIsPickAvartar){
                     mLoadingDialog.show();
-                    mIsHandleUploadAvartar = true;
-                    mIsPickAvartar = false;
                     uploadAvartar();
                 }
-                break;
+                else if(mIsPickImage){
+                    mLoadingDialog.show();
+                    uploadImages();
+                }
             case R.id.btn_next_to:
                 handleNextTo();
                 break;
@@ -308,9 +304,16 @@ public class ImagesInformationFragment extends Fragment implements ViewHandleMod
         if(mIsHandleUploadAvartar){
             mLoadingDialog.dismiss();
             if (!status) {
-                Toast.makeText(getContext(), "Xảy ra lỗi trong việc lưu ảnh chi tiết sản phẩm", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Xảy ra lỗi trong việc lưu ảnh đại điện", Toast.LENGTH_SHORT).show();
             } else {
                 Toast.makeText(getContext(), "Lưu thành công", Toast.LENGTH_SHORT).show();
+
+                if(mIsPickImage){
+                    uploadImages();
+                }
+                mIsHandleUploadAvartar = false;
+                mIsPickAvartar = false;
+
             }
         }
         else{
@@ -321,7 +324,12 @@ public class ImagesInformationFragment extends Fragment implements ViewHandleMod
                     Toast.makeText(getContext(), "Xảy ra lỗi trong việc lưu ảnh chi tiết sản phẩm", Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(getContext(), "Lưu thành công", Toast.LENGTH_SHORT).show();
+
+                    ViewPager viewPager = getActivity().findViewById(R.id.view_pager);
+                    viewPager.setCurrentItem(1);
+
                 }
+                mIsPickImage = false;
             }
             else{
                 uploadImages();
@@ -331,12 +339,7 @@ public class ImagesInformationFragment extends Fragment implements ViewHandleMod
     }
 
     @Override
-    public void onUpdateNormalInformation(boolean status) {
-
-    }
-
-    @Override
-    public void onUpdateMoreInformation(boolean status) {
+    public void onUpdateProductInformation(boolean status) {
 
     }
 
@@ -347,11 +350,6 @@ public class ImagesInformationFragment extends Fragment implements ViewHandleMod
 
     @Override
     public void onUpdateMapInformation(boolean status) {
-
-    }
-
-    @Override
-    public void onUpdateContactInformation(boolean status) {
 
     }
 

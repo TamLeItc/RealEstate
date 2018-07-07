@@ -18,10 +18,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.qtctek.realstate.R;
-import com.qtctek.realstate.dto.CategoriesProduct;
-import com.qtctek.realstate.dto.District;
-import com.qtctek.realstate.dto.Product;
-import com.qtctek.realstate.dto.ProvinceCity;
+import com.qtctek.realstate.dto.Category;
+import com.qtctek.realstate.dto.Place;
 import com.qtctek.realstate.presenter.new_post.GetData.PresenterGetData;
 import com.qtctek.realstate.view.new_post.interfaces.ViewHandleModelGetData;
 import com.qtctek.realstate.presenter.new_post.PresenterNewPost;
@@ -33,12 +31,11 @@ import com.qtctek.realstate.view.new_post.activity.NewPostActivity;
 
 import java.util.ArrayList;
 
-import static com.qtctek.realstate.view.new_post.activity.NewPostActivity.POST_SALE;
-
 public class ProductInformationFragment extends Fragment implements View.OnClickListener, ViewHandleModelGetData,
         ViewHandleModelNewPost, View.OnKeyListener {
 
-    private TextView mTxvTypeOfProduct;
+    private EditText mTxvArchitecture;
+    private EditText mTxvType;
     private TextView mTxvProvinceCity;
     private TextView mTxvDistrict;
     private EditText mEdtAddress;
@@ -46,11 +43,8 @@ public class ProductInformationFragment extends Fragment implements View.OnClick
     private EditText mEdtArea;
     private EditText mEdtBathrooms;
     private EditText mEdtBedrooms;
-    private EditText mEdtFloors;
-    private EditText mEdtLegal;
-    private EditText mEdtUtility;
-    private Button mBtnSaveNormalInformation;
-    private Button mBtnSaveMoreInformation;
+
+    private EditText mTxvAmenities;
     private Button mBtnNextTo;
     private Dialog mDialog;
 
@@ -58,6 +52,8 @@ public class ProductInformationFragment extends Fragment implements View.OnClick
 
     private View mView;
     private Dialog mLoadingDialog;
+
+    private String mCategory;
 
     @Nullable
     @Override
@@ -76,29 +72,24 @@ public class ProductInformationFragment extends Fragment implements View.OnClick
     }
 
     private void initViews(){
-        this.mTxvTypeOfProduct = mView.findViewById(R.id.txv_type_product);
+        this.mTxvArchitecture = mView.findViewById(R.id.txv_architecture);
+        this.mTxvType = mView.findViewById(R.id.txv_type);
         this.mTxvProvinceCity = mView.findViewById(R.id.txv_province_city);
         this.mTxvDistrict = mView.findViewById(R.id.txv_district);
+        this.mTxvAmenities = mView.findViewById(R.id.txv_amenities);
         this.mEdtAddress = mView.findViewById(R.id.edt_address);
         this.mEdtPrices = mView.findViewById(R.id.edt_price);
         this.mEdtBathrooms = mView.findViewById(R.id.edt_bathrooms);
         this.mEdtBedrooms = mView.findViewById(R.id.edt_bedrooms);
         this.mEdtArea = mView.findViewById(R.id.edt_area);
-        this.mEdtFloors = mView.findViewById(R.id.edt_floors);
-        this.mEdtLegal = mView.findViewById(R.id.edt_legal);
-        this.mBtnSaveNormalInformation = mView.findViewById(R.id.btn_save_normal_information);
-        this.mBtnSaveMoreInformation = mView.findViewById(R.id.btn_save_more_information);
         this.mBtnNextTo = mView.findViewById(R.id.btn_next_to);
-        this.mEdtUtility = mView.findViewById(R.id.edt_utility);
 
         this.mBtnNextTo.setOnClickListener(this);
-        this.mBtnSaveNormalInformation.setOnClickListener(this);
-        this.mBtnSaveMoreInformation.setOnClickListener(this);
-        this.mTxvTypeOfProduct.setOnClickListener(this);
+        this.mTxvArchitecture.setOnClickListener(this);
+        this.mTxvType.setOnClickListener(this);
+        this.mTxvAmenities.setOnClickListener(this);
         this.mTxvProvinceCity.setOnClickListener(this);
         this.mTxvDistrict.setOnClickListener(this);
-        this.mEdtLegal.setOnKeyListener(this);
-        this.mEdtUtility.setOnKeyListener(this);
         this.mEdtAddress.setOnKeyListener(this);
     }
 
@@ -110,128 +101,90 @@ public class ProductInformationFragment extends Fragment implements View.OnClick
     }
 
     private void handleStart(){
-        Product product = NewPostActivity.POST_SALE.getProduct();
-        this.mTxvTypeOfProduct.setText(product.getCategoryProduct());
-        this.mTxvProvinceCity.setText(product.getProvinceCity());
-        this.mTxvDistrict.setText(product.getDistrict());
-        this.mEdtAddress.setText(product.getAddress());
-        this.mEdtBathrooms.setText(product.getBathrooms() + "");
-        this.mEdtBedrooms.setText(product.getBedrooms() + "");
-        this.mEdtPrices.setText(product.getPrice() + "");
-        this.mEdtArea.setText(product.getArea() + "");
-
-        this.mEdtFloors.setText(NewPostActivity.POST_SALE.getProduct().getProductDetail().getFloors() + "");
-        this.mEdtLegal.setText(NewPostActivity.POST_SALE.getProduct().getProductDetail().getLegal());
-        this.mEdtUtility.setText(product.getProductDetail().getUtility());
+        this.mTxvArchitecture.setText(NewPostActivity.PRODUCT.getArchitecture());
+        this.mTxvProvinceCity.setText(NewPostActivity.PRODUCT.getCity());
+        this.mTxvDistrict.setText(NewPostActivity.PRODUCT.getDistrict());
+        this.mEdtAddress.setText(NewPostActivity.PRODUCT.getAddress());
+        this.mEdtBathrooms.setText(NewPostActivity.PRODUCT.getBathroom() + "");
+        this.mEdtBedrooms.setText(NewPostActivity.PRODUCT.getBedroom() + "");
+        this.mEdtPrices.setText(NewPostActivity.PRODUCT.getPrice() + "");
+        this.mEdtArea.setText(NewPostActivity.PRODUCT.getArea() + "");
+        this.mTxvAmenities.setText(NewPostActivity.PRODUCT.getAmenities());
+        this.mTxvType.setText(NewPostActivity.PRODUCT.getType());
     }
 
-    private void handleSaveNormalInformation(){
-        if(NewPostActivity.POST_SALE.getProduct().getCategoryProductId() == 0){
-            Toast.makeText(getContext(), "Bạn chưa chọn loại nhà. Không thể lưu!!!", Toast.LENGTH_SHORT).show();
+    private void handleSaveProductInformation(){
+
+        if(this.mEdtBathrooms.getText().toString().trim().equals("")){
+            this.mEdtBathrooms.setText("0");
         }
-        else if(NewPostActivity.POST_SALE.getProduct().getProvinceCityId() == 0){
-            Toast.makeText(getContext(), "Bạn chưa chọn tỉnh/thành phố. Không thể lưu!!!", Toast.LENGTH_SHORT).show();
+        if(this.mEdtBedrooms.getText().toString().trim().equals("")){
+            this.mEdtBedrooms.setText("0");
         }
-        else if(NewPostActivity.POST_SALE.getProduct().getDistrictId() == 0){
-            Toast.makeText(getContext(), "Bạn chưa chọn quận/huyện. Không thể lưu!!!", Toast.LENGTH_SHORT).show();
-        }
-        else{
-
-            if(this.mEdtBathrooms.getText().toString().trim().equals("")){
-                this.mEdtBathrooms.setText("0");
-            }
-            if(this.mEdtBedrooms.getText().toString().trim().equals("")){
-                this.mEdtBedrooms.setText("0");
-            }
-            if(this.mEdtPrices.getText().toString().trim().equals("")){
-                this.mEdtPrices.setText("0");
-            }
-
-            try{
-                POST_SALE.getProduct().setAddress(this.mEdtAddress.getText().toString());
-                POST_SALE.getProduct().setBedrooms(Integer.parseInt(this.mEdtBedrooms.getText().toString().trim()));
-                POST_SALE.getProduct().setBathrooms(Integer.parseInt(this.mEdtBathrooms.getText().toString().trim()));
-                POST_SALE.getProduct().setPrice(Long.parseLong(this.mEdtPrices.getText().toString().trim()));
-                POST_SALE.getProduct().setArea(Float.parseFloat(this.mEdtArea.getText().toString().trim()));
-
-                mLoadingDialog.show();
-                new PresenterNewPost(this).handleUpdateNormalInformation(POST_SALE.getProduct());
-            }
-            catch (Exception e){
-                Toast.makeText(getContext(), "Có lỗi xảy ra trong quá trình lưu dữ liệu. Xin vui" + " lòng thử sau!!!", Toast.LENGTH_SHORT).show();
-            }
-        }
-    }
-
-    private void handleSaveMoreInformation(){
-
-        mLoadingDialog.show();
-
-        if(this.mEdtFloors.getText().toString().trim().equals("")){
-            this.mEdtFloors.setText("0");
+        if(this.mEdtPrices.getText().toString().trim().equals("")){
+            this.mEdtPrices.setText("0");
         }
 
-        NewPostActivity.POST_SALE.getProduct().getProductDetail().setFloors(Integer.parseInt(this.mEdtFloors.getText().toString()));
-        NewPostActivity.POST_SALE.getProduct().getProductDetail().setLegal(this.mEdtLegal.getText().toString().trim());
-        NewPostActivity.POST_SALE.getProduct().getProductDetail().setUtility(this.mEdtUtility.getText().toString().trim());
+        try{
+            NewPostActivity.PRODUCT.setAddress(this.mEdtAddress.getText().toString().trim());
+            NewPostActivity.PRODUCT.setBathroom(Integer.parseInt(this.mEdtBathrooms.getText().toString().trim()));
+            NewPostActivity.PRODUCT.setBedroom(Integer.parseInt(this.mEdtBedrooms.getText().toString().trim()));
+            NewPostActivity.PRODUCT.setPrice(Long.valueOf(this.mEdtPrices.getText().toString().trim()));
+            NewPostActivity.PRODUCT.setArea(Float.parseFloat(this.mEdtArea.getText().toString().trim()));
+            NewPostActivity.PRODUCT.setAmenities(this.mTxvAmenities.getText().toString().trim());
 
-        new PresenterNewPost(this).handleUpdateMoreInformation(NewPostActivity.POST_SALE.getProduct());
+            mLoadingDialog.show();
+            new PresenterNewPost(this).handleUpdateProductInformation(NewPostActivity.PRODUCT);
+
+        }
+        catch (Exception e){
+            Toast.makeText(getContext(), "Dữ liệu không chính xác. Xin vui kiểm tra lại!!!", Toast.LENGTH_SHORT).show();
+        }
 
     }
-
-    private void handleNext(){
-        if(NewPostActivity.POST_SALE.getProduct().getCategoryProductId() == 0){
-            Toast.makeText(getContext(), "Bạn chưa chọn loại nhà. Không thể tiếp tục!!!", Toast.LENGTH_SHORT).show();
-        }
-        else if(NewPostActivity.POST_SALE.getProduct().getProvinceCityId() == 0){
-            Toast.makeText(getContext(), "Bạn chưa chọn tỉnh/thành phố. Không thể tiếp tục!!!", Toast.LENGTH_SHORT).show();
-        }
-        else if(NewPostActivity.POST_SALE.getProduct().getDistrictId() == 0){
-            Toast.makeText(getContext(), "Bạn chưa chọn quận/huyện. Không thể tiếp tục!!!", Toast.LENGTH_SHORT).show();
-        }
-        else{
-            ViewPager viewPager = getActivity().findViewById(R.id.view_pager);
-            viewPager.setCurrentItem(2);
-        }
-    }
-
     @Override
     public void onClick(View v) {
         switch (v.getId()){
-            case R.id.txv_type_product:
+            case R.id.txv_type:
                 mLoadingDialog.show();
-                mPresenterGetData.handleGetCategoriesProduct();
+                mPresenterGetData.handleGetCategoriesProduct("tbl_type", "type");
+                this.mCategory = "type";
+            case R.id.txv_amenities:
+                mLoadingDialog.show();
+                mPresenterGetData.handleGetCategoriesProduct("tbl_amenities", "amenities");
+                this.mCategory = "amenities";
+            case R.id.txv_architecture:
+                mLoadingDialog.show();
+                mPresenterGetData.handleGetCategoriesProduct("tbl_architecture", "architecture");
+                this.mCategory = "architecture";
                 break;
             case R.id.txv_province_city:
                 mLoadingDialog.show();
                 mPresenterGetData.handleGetProvinceCity();
                 break;
             case R.id.txv_district:
-                if(NewPostActivity.POST_SALE.getProduct().getProvinceCityId() == 0){
-                    Toast.makeText(getContext(), "Chọn Tỉnh/Thành phố trước", Toast.LENGTH_SHORT).show();
-                }
-                else{
-                    mLoadingDialog.show();
-                    mPresenterGetData.handleGetDistrict(NewPostActivity.POST_SALE.getProduct().getProvinceCityId());
-                }
+                mLoadingDialog.show();
+                mPresenterGetData.handleGetDistrict(NewPostActivity.PRODUCT.getCityId());
                 break;
             case R.id.btn_next_to:
-                handleNext();
+                ViewPager viewPager = getActivity().findViewById(R.id.view_pager);
+                viewPager.setCurrentItem(2);
                 break;
-            case R.id.btn_save_normal_information:
-                handleSaveNormalInformation();
-                break;
-            case R.id.btn_save_more_information:
-                handleSaveMoreInformation();
+            case R.id.btn_save_continue:
+                handleSaveProductInformation();
                 break;
         }
     }
 
     @Override
-    public void onGetProvinceCity(boolean status, final ArrayList<ProvinceCity> mArr) {
-        ProvinceCityAdapter provinceCityAdapter = new ProvinceCityAdapter( getContext(), mArr);
+    public void onGetProvinceCity(boolean status, final ArrayList<Place> mArr) {
+        PlaceAdapter provinceCityAdapter = new PlaceAdapter( getContext(), mArr);
 
         mDialog.setContentView(R.layout.dialog_list);
+
+        TextView txvTitle = mDialog.findViewById(R.id.txv_title);
+        txvTitle.setText("Chọn tỉnh/thành phố");
+
         ListView lsv = mDialog.findViewById(R.id.lsv_item);
         lsv.setAdapter(provinceCityAdapter);
 
@@ -251,9 +204,9 @@ public class ProductInformationFragment extends Fragment implements View.OnClick
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 mTxvProvinceCity.setText(mArr.get(position).getName());
                 mDialog.dismiss();
-                NewPostActivity.POST_SALE.getProduct().setProvinceCityId(mArr.get(position).getId());
+                NewPostActivity.PRODUCT.setCityId(mArr.get(position).getId());
                 mTxvDistrict.setText("");
-                NewPostActivity.POST_SALE.getProduct().setDistrictId(0);
+                NewPostActivity.PRODUCT.setDistrictId(0);
                 mDialog.dismiss();
             }
         });
@@ -262,13 +215,17 @@ public class ProductInformationFragment extends Fragment implements View.OnClick
     }
 
     @Override
-    public void onGetDistrict(boolean status, final ArrayList<District> mArr) {
+    public void onGetDistrict(boolean status, final ArrayList<Place> mArr) {
 
         mLoadingDialog.dismiss();
 
         DistrictAdapter district = new DistrictAdapter( getContext(), mArr);
 
         mDialog.setContentView(R.layout.dialog_list);
+
+        TextView txvTitle = mDialog.findViewById(R.id.txv_title);
+        txvTitle.setText("Chọn quận/huyện");
+
         ListView lsv = mDialog.findViewById(R.id.lsv_item);
         lsv.setAdapter(district);
 
@@ -284,7 +241,7 @@ public class ProductInformationFragment extends Fragment implements View.OnClick
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 mTxvDistrict.setText(mArr.get(position).getName());
-                NewPostActivity.POST_SALE.getProduct().setDistrictId(mArr.get(position).getId());
+                NewPostActivity.PRODUCT.setDistrictId(mArr.get(position).getId());
                 mDialog.dismiss();
             }
         });
@@ -293,15 +250,79 @@ public class ProductInformationFragment extends Fragment implements View.OnClick
     }
 
     @Override
-    public void onGetCategoriesProduct(boolean status, final ArrayList<CategoriesProduct> mArr) {
+    public void onGetCategoriesProduct(boolean status, ArrayList<Category> mArrCategory) {
 
         mLoadingDialog.dismiss();
+        if(this.mCategory.equals("amenities")){
 
+        }
+        else{
+
+        }
+
+    }
+
+    private void handleDisplayCategoryAmenityProduct(final ArrayList<Category> mArrCategory){
+
+        final String amenity = NewPostActivity.PRODUCT.getAmenities();
+        String[] amenities = amenity.split(",");
+
+        ArrayList<String> mArrSelected = new ArrayList<>();
+        for(int i = 0; i < amenities.length; i++){
+            mArrSelected.add(amenities[i].trim());
+        }
+
+        AmenityAdapter amenityAdapter = new AmenityAdapter(getContext(), mArrCategory, mArrSelected);
+
+        mDialog.setContentView(R.layout.dialog_list);
+
+        TextView txvTitle = mDialog.findViewById(R.id.txv_title);
+        txvTitle.setText("Chọn tiện ích");
+
+        ListView lsv = mDialog.findViewById(R.id.lsv_item);
+        lsv.setAdapter(amenityAdapter);
+
+        Button btnCancel = mDialog.findViewById(R.id.btn_cancel);
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mDialog.dismiss();
+            }
+        });
+
+        lsv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if(NewPostActivity.PRODUCT.getAmenities().trim().equals("")){
+                    NewPostActivity.PRODUCT.setAmenities(mArrCategory.get(position).getName());
+                }
+                else{
+                    String amenity1 = NewPostActivity.PRODUCT.getAmenities() + ", " + mArrCategory.get(position).getName();
+                    NewPostActivity.PRODUCT.setAmenities(amenity1);
+                    mTxvAmenities.setText( NewPostActivity.PRODUCT.getAmenities());
+
+                }
+            }
+        });
+
+        mDialog.show();
+    }
+
+    private void handleDisplayCategoryProduct(final ArrayList<Category> mArrCategory){
         CategoriesProductAdapter categoriesProductAdapter = new CategoriesProductAdapter(
-                getContext(), mArr);
+                getContext(), mArrCategory);
 
 
         mDialog.setContentView(R.layout.dialog_list);
+
+        TextView txvTitle = mDialog.findViewById(R.id.txv_title);
+        if(this.mCategory.equals("type")){
+            txvTitle.setText("Chọn loại nhà");
+        }
+        else if(this.mCategory.equals("architecture")){
+            txvTitle.setText("Chọn kiểu nhà");
+        }
+
         ListView lsv = mDialog.findViewById(R.id.lsv_item);
         lsv.setAdapter(categoriesProductAdapter);
 
@@ -316,9 +337,16 @@ public class ProductInformationFragment extends Fragment implements View.OnClick
         lsv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                mTxvTypeOfProduct.setText(mArr.get(position).getName());
-                NewPostActivity.POST_SALE.getProduct().setCategoryProductId(mArr.get(position).getId());
-                mDialog.dismiss();
+                if(mCategory.equals("type")){
+                    mTxvType.setText(mArrCategory.get(position).getName());
+                    NewPostActivity.PRODUCT.setTypeId(mArrCategory.get(position).getId());
+                    mDialog.dismiss();
+                }
+                else if(mCategory.equals("architecture")){
+                    mTxvArchitecture.setText(mArrCategory.get(position).getName());
+                    NewPostActivity.PRODUCT.setArchitectureId(mArrCategory.get(position).getId());
+                    mDialog.dismiss();
+                }
             }
         });
 
@@ -336,21 +364,12 @@ public class ProductInformationFragment extends Fragment implements View.OnClick
     }
 
     @Override
-    public void onUpdateNormalInformation(boolean status) {
-        mLoadingDialog.dismiss();
-        if(!status){
-            Toast.makeText(getContext(), "Có lỗi xảy ra trong quá trình lưu dữ liệu. Vui lòng thử lại sau!!!", Toast.LENGTH_SHORT).show();
-        }
-        else{
-            Toast.makeText(getContext(), "Lưu thông tin thành công!!!", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    @Override
-    public void onUpdateMoreInformation(boolean status) {
+    public void onUpdateProductInformation(boolean status) {
         mLoadingDialog.dismiss();
         if(status){
             Toast.makeText(getContext(), "Lưu thông tin thành công!!!", Toast.LENGTH_SHORT).show();
+            ViewPager viewPager = getActivity().findViewById(R.id.view_pager);
+            viewPager.setCurrentItem(2);
         }
         else{
             Toast.makeText(getContext(), "Có lỗi xảy ra trong việc lưu dữ liệu", Toast.LENGTH_SHORT).show();
@@ -368,11 +387,6 @@ public class ProductInformationFragment extends Fragment implements View.OnClick
     }
 
     @Override
-    public void onUpdateContactInformation(boolean status) {
-
-    }
-
-    @Override
     public void onDeleteFile(boolean status) {
 
     }
@@ -386,8 +400,6 @@ public class ProductInformationFragment extends Fragment implements View.OnClick
     public boolean onKey(View v, int keyCode, KeyEvent event) {
 
         switch (v.getId()){
-            case R.id.edt_legal:
-            case R.id.edt_utility:
             case R.id.edt_address:
                 EditText edt = (EditText) v;
                 if(edt.getText().toString().length() >= 100){

@@ -1,8 +1,7 @@
 package com.qtctek.realstate.presenter.new_post.GetData;
 
-import com.qtctek.realstate.dto.CategoriesProduct;
-import com.qtctek.realstate.dto.District;
-import com.qtctek.realstate.dto.ProvinceCity;
+import com.qtctek.realstate.dto.Category;
+import com.qtctek.realstate.dto.Place;
 import com.qtctek.realstate.model.new_post.ModelGetData;
 import com.qtctek.realstate.view.new_post.interfaces.ViewHandleModelGetData;
 
@@ -30,20 +29,20 @@ public class PresenterGetData implements PresenterImpHandleModelGetData {
         mModelGetData.requireGetDistrict(provinceCity);
     }
 
-    public void handleGetCategoriesProduct(){
-        mModelGetData.requireGetCategoriesProduct();
+    public void handleGetCategoriesProduct(String table, String columnName){
+        mModelGetData.requireGetCategoriesProduct(table, columnName);
     }
 
     @Override
     public void onGetProvinceCity(boolean status, String data) {
         if(status){
-            ArrayList<ProvinceCity> mArr = new ArrayList<>();
+            ArrayList<Place> mArr = new ArrayList<>();
             try {
                 JSONArray jsonArray = new JSONArray(data);
                 for (int i = 0; i < jsonArray.length(); i++){
                     JSONObject jsonObject = jsonArray.getJSONObject(i);
 
-                    ProvinceCity provinceCity = new ProvinceCity();
+                    Place provinceCity = new Place();
                     provinceCity.setId(jsonObject.getInt("id"));
                     provinceCity.setName(jsonObject.getString("name"));
                     provinceCity.setLatlng(jsonObject.getString("latlng"));
@@ -65,13 +64,13 @@ public class PresenterGetData implements PresenterImpHandleModelGetData {
     @Override
     public void onGetDistrict(boolean status, String data) {
         if(status){
-            ArrayList<District> mArr = new ArrayList<>();
+            ArrayList<Place> mArr = new ArrayList<>();
             try {
                 JSONArray jsonArray = new JSONArray(data);
                 for (int i = 0; i < jsonArray.length(); i++){
                     JSONObject jsonObject = jsonArray.getJSONObject(i);
 
-                    District district = new District();
+                    Place district = new Place();
                     district.setId(jsonObject.getInt("id"));
                     district.setName(jsonObject.getString("name"));
                     district.setLatlng(jsonObject.getString("latlng"));
@@ -90,13 +89,13 @@ public class PresenterGetData implements PresenterImpHandleModelGetData {
     @Override
     public void onGetCategoriesProduct(boolean status, String data) {
         if(status){
-            ArrayList<CategoriesProduct> mArr = new ArrayList<>();
+            ArrayList<Category> mArr = new ArrayList<>();
             try {
                 JSONArray jsonArray = new JSONArray(data);
                 for (int i = 0; i < jsonArray.length(); i++){
                     JSONObject jsonObject = jsonArray.getJSONObject(i);
 
-                    CategoriesProduct categoriesProduct = new CategoriesProduct();
+                    Category categoriesProduct = new Category();
                     categoriesProduct.setId(jsonObject.getInt("id"));
                     categoriesProduct.setName(jsonObject.getString("name"));
                     mArr.add(categoriesProduct);

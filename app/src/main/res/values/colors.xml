@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorPrimary">#CD2213</color>
+    <color name="colorPrimaryDark">#7B0A14</color>
+    <color name="colorAccent">#353535</color>
 
     <color name="colorMain">#2068A4</color>
     <color name="colorMain2">#3C9E10</color>
@@ -15,7 +15,6 @@
     <color name="colorBlackLight05">#05000000</color>
     <color name="colorGrayDark">#353535</color>
     <color name="colorTextEdtToolbar">#4b4b4b</color>
-    <color name="colorToolbar">#2068A4</color>
     <color name="colorEdtCreateAccount">#ececec</color>
     <color name="colorTabLayout">#ffffff</color>
     <color name="colorBlack">#000</color>

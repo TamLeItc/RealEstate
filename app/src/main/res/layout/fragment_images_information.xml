@@ -56,13 +56,6 @@
                 android:text="@string/select_picture"
                 android:textSize="@dimen/_8sp"/>
 
-            <Button
-                android:id="@+id/btn_save_avartar"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/save"
-                android:textSize="@dimen/_8sp"/>
-
         </LinearLayout>
 
         <TextView
@@ -99,23 +92,34 @@
                 android:text="@string/add_picture"
                 android:textSize="@dimen/_8sp"/>
 
-            <Button
-                android:id="@+id/btn_save_image"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/save"
-                android:textSize="@dimen/_8sp"/>
-
         </LinearLayout>
 
-        <Button
+        <LinearLayout
             android:layout_marginTop="@dimen/_20dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/custom_btn_create_account"
-            android:text="@string/next_to"
-            android:id="@+id/btn_next_to"
-            android:textSize="@dimen/_10sp"/>
+            android:layout_weight="2">
+
+            <Button
+                android:layout_marginRight="@dimen/_15dp"
+                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/custom_btn_create_account"
+                android:text="@string/next_to"
+                android:id="@+id/btn_next_to"
+                android:textSize="@dimen/_10sp"/>
+
+            <Button
+                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/custom_btn_create_account"
+                android:text="@string/save_and_continue"
+                android:id="@+id/btn_save_continue"
+                android:textSize="@dimen/_10sp"
+                android:layout_marginLeft="@dimen/_15dp"/>
+        </LinearLayout>
 
     </LinearLayout>
 
