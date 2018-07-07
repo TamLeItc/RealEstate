@@ -75,6 +75,7 @@ public class ModelPostedPost {
 
         @Override
         protected void onPostExecute(String s) {
+
             if(s.equals("error")){
                 mPresenterImpHandleUserControl.onGetPostListError(s);
 

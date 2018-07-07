@@ -29,12 +29,26 @@
             android:textSize="@dimen/_10sp"
             android:layout_marginBottom="@dimen/_10dp" />
 
-        <ImageView
-            android:id="@+id/imv_avartar"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/_300dp"
-            android:src="@drawable/icon_product"
-            android:scaleType="centerCrop"/>
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/imv_avartar"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_300dp"
+                android:src="@drawable/icon_product"
+                android:scaleType="centerCrop"/>
+
+            <ProgressBar
+                android:layout_width="@dimen/_40dp"
+                android:layout_height="@dimen/_40dp"
+                android:layout_centerInParent="true"
+                android:id="@+id/progress_bar"/>
+
+        </RelativeLayout>
+
+
 
         <View
             android:layout_width="match_parent"

@@ -100,7 +100,7 @@ public class NewPostActivity extends AppCompatActivity implements ViewHandleMode
 
     private void handleStart(int productId){
         if(!IS_UPDATE){
-            new PresenterNewPost(this).handleInsertBlankPost(MainActivity.USER.getEmail());
+            new PresenterNewPost(this).handleInsertBlankPost(MainActivity.USER.getId());
         }
         else{
             new PresenterPostDetail(this).handleGetDataProductDetail(productId);

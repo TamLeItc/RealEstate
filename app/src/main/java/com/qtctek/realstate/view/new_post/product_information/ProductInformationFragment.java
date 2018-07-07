@@ -34,8 +34,8 @@ import java.util.ArrayList;
 public class ProductInformationFragment extends Fragment implements View.OnClickListener, ViewHandleModelGetData,
         ViewHandleModelNewPost, View.OnKeyListener {
 
-    private EditText mTxvArchitecture;
-    private EditText mTxvType;
+    private TextView mTxvArchitecture;
+    private TextView mTxvType;
     private TextView mTxvProvinceCity;
     private TextView mTxvDistrict;
     private EditText mEdtAddress;
@@ -44,7 +44,7 @@ public class ProductInformationFragment extends Fragment implements View.OnClick
     private EditText mEdtBathrooms;
     private EditText mEdtBedrooms;
 
-    private EditText mTxvAmenities;
+    private TextView mTxvAmenities;
     private Button mBtnNextTo;
     private Dialog mDialog;
 

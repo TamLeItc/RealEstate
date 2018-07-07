@@ -1,5 +1,7 @@
 package com.qtctek.realstate.presenter.new_post;
 
+import android.util.Log;
+
 import com.qtctek.realstate.dto.PostSale;
 import com.qtctek.realstate.dto.Product;
 import com.qtctek.realstate.dto.Product1;
@@ -19,8 +21,9 @@ public class PresenterNewPost  implements PresenterImpHandleModelNewPost{
         this.mModelNewPost = new ModelNewPost(this);
     }
 
-    public void handleInsertBlankPost(String email){
-        this.mModelNewPost.requireInsertBlankPost(email, getCurrentDate());
+    public void handleInsertBlankPost(int idUser){
+        String strDate = getCurrentDate();
+        this.mModelNewPost.requireInsertBlankPost(idUser, strDate);
 
     }
 

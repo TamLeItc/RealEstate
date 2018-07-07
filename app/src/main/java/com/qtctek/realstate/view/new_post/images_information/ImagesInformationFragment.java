@@ -22,12 +22,14 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.qtctek.realstate.R;
@@ -36,6 +38,7 @@ import com.qtctek.realstate.view.new_post.interfaces.ViewHandleModelNewPost;
 import com.qtctek.realstate.view.post_news.activity.MainActivity;
 import com.qtctek.realstate.view.new_post.interfaces.OnRequireHandleFromAdapter;
 import com.qtctek.realstate.view.new_post.activity.NewPostActivity;
+import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 import java.io.FileNotFoundException;
@@ -53,6 +56,7 @@ public class ImagesInformationFragment extends Fragment implements ViewHandleMod
     private Button mBtnSelectAvartar;
     private Button mBtnNext;
     private Button mBtnSaveContinue;
+    private ProgressBar mProgressBar;
     private RecyclerView mRecyclerView;
     private Dialog mLoadingDialog;
     private ImageView mImvAvartar;
@@ -79,7 +83,6 @@ public class ImagesInformationFragment extends Fragment implements ViewHandleMod
         createLoadingDialog();
         initViews();
         handleStart();
-        handleRecyclerView();
 
         return mView;
     }
@@ -91,25 +94,29 @@ public class ImagesInformationFragment extends Fragment implements ViewHandleMod
         this.mBtnSaveContinue = mView.findViewById(R.id.btn_save_continue);
         this.mRecyclerView = mView.findViewById(R.id.recycler_view);
         mImvAvartar = mView.findViewById(R.id.imv_avartar);
+        this.mProgressBar = mView.findViewById(R.id.progress_bar);
 
         this.mBtnSelectImage.setOnClickListener(this);
         this.mBtnNext.setOnClickListener(this);
         this.mBtnSelectAvartar.setOnClickListener(this);
+        this.mBtnSaveContinue.setOnClickListener(this);
     }
 
     private void handleStart(){
-        String url = MainActivity.HOST + "/real_estate/images/" + NewPostActivity.PRODUCT.getId() + "_avartar.jpg";
-        Picasso.with(getContext()).load(url).into(mImvAvartar);
-    }
+        String url = MainActivity.WEB_SERVER + "/real_estate/images/" + NewPostActivity.PRODUCT.getThumbnail();
+        Picasso.with(getContext()).load(url).into(mImvAvartar, new Callback() {
+            @Override
+            public void onSuccess() {
+                mProgressBar.setVisibility(View.GONE);
+            }
 
-    private void createLoadingDialog(){
-        mLoadingDialog = new Dialog(getContext());
-        mLoadingDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        mLoadingDialog.setContentView(R.layout.dialog_loading);
-        mLoadingDialog.setCancelable(false);
-    }
+            @Override
+            public void onError() {
+                mProgressBar.setVisibility(View.GONE);
+                mImvAvartar.setImageResource(R.drawable.icon_product);
+            }
+        });
 
-    private void handleRecyclerView() {
         ARR_URI.clear();
         this.IMAGE_ADAPTER = new ImageAdapter(getContext(), ARR_URI, this);
 
@@ -118,6 +125,13 @@ public class ImagesInformationFragment extends Fragment implements ViewHandleMod
         this.mRecyclerView.setLayoutManager(layoutManager);
 
         this.mRecyclerView.setAdapter(IMAGE_ADAPTER);
+    }
+
+    private void createLoadingDialog(){
+        mLoadingDialog = new Dialog(getContext());
+        mLoadingDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        mLoadingDialog.setContentView(R.layout.dialog_loading);
+        mLoadingDialog.setCancelable(false);
     }
 
     private String getRealPathFromURI(Context context, Uri contentUri) {
@@ -195,6 +209,7 @@ public class ImagesInformationFragment extends Fragment implements ViewHandleMod
         else if(requestCode == 102 && resultCode == RESULT_OK && data != null){
             this.mUri = data.getData();
             this.mIsPickAvartar = true;
+
             handleResultAvartar();
         }
         super.onActivityResult(requestCode, resultCode, data);
@@ -236,21 +251,18 @@ public class ImagesInformationFragment extends Fragment implements ViewHandleMod
                 handleSelectAvartar();
                 break;
             case R.id.btn_save_continue:
+                Log.d("ttt", mIsPickAvartar + "-" + mIsPickImage);
                 if(mIsPickImage && !mIsPickAvartar){
                     if (QUALITY_IMAGE != 0 && QUALITY_IMAGE > QUALITY_IMAGE_UPLOADED && mIsPickImage) {
                         mLoadingDialog.show();
                         uploadImages();
                     }
-                    break;
                 }
-                else if(mIsPickImage && mIsPickAvartar){
+                else if(mIsPickAvartar){
                     mLoadingDialog.show();
                     uploadAvartar();
                 }
-                else if(mIsPickImage){
-                    mLoadingDialog.show();
-                    uploadImages();
-                }
+                break;
             case R.id.btn_next_to:
                 handleNextTo();
                 break;
@@ -301,7 +313,7 @@ public class ImagesInformationFragment extends Fragment implements ViewHandleMod
 
     @Override
     public void onUploadImages(boolean status) {
-        if(mIsHandleUploadAvartar){
+        if(mIsPickAvartar){
             mLoadingDialog.dismiss();
             if (!status) {
                 Toast.makeText(getContext(), "Xảy ra lỗi trong việc lưu ảnh đại điện", Toast.LENGTH_SHORT).show();
@@ -311,9 +323,7 @@ public class ImagesInformationFragment extends Fragment implements ViewHandleMod
                 if(mIsPickImage){
                     uploadImages();
                 }
-                mIsHandleUploadAvartar = false;
                 mIsPickAvartar = false;
-
             }
         }
         else{

@@ -39,8 +39,8 @@ public class ModelNewPost {
         this.mPresenterImpHandleModelNewPost = presenterImpHandleModelNewPost;
     }
 
-    public void requireInsertBlankPost(String email, String postDate){
-        new InsertBlankPost(email, postDate).execute(mUrlInsertBlankPost);
+    public void requireInsertBlankPost(int idUser, String postDate){
+        new InsertBlankPost(idUser, postDate).execute(mUrlInsertBlankPost);
     }
 
     public void requireUploadFile(int postId, String filesName, String filePath, String option){
@@ -71,9 +71,10 @@ public class ModelNewPost {
 
         OkHttpClient okHttpClient;
 
-        String email, uploadDate;
+        String uploadDate;
+        int idUser;
 
-        public InsertBlankPost(String email, String uploadDate){
+        public InsertBlankPost(int idUser, String uploadDate){
 
             okHttpClient = new OkHttpClient.Builder()
                     .connectTimeout(15, TimeUnit.SECONDS)
@@ -81,7 +82,7 @@ public class ModelNewPost {
                     .writeTimeout(10, TimeUnit.SECONDS)
                     .build();
 
-            this.email = email;
+            this.idUser = idUser;
             this.uploadDate = uploadDate;
         }
 
@@ -89,7 +90,7 @@ public class ModelNewPost {
         protected String doInBackground(String... strings) {
 
             RequestBody requestBody = new MultipartBody.Builder()
-                    .addFormDataPart("email", email)
+                    .addFormDataPart("id_user", idUser + "")
                     .addFormDataPart("date_upload", uploadDate)
                     .setType(MultipartBody.FORM)
                     .build();
