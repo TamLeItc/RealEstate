@@ -18,7 +18,7 @@ import okhttp3.Response;
 public class ModelUserManagement {
 
     private String mUrlGetUserList = MainActivity.WEB_SERVER + "get_list_user.php";
-    private String mUrlUpdateStatusUser = MainActivity.HOST + "/real_estate/update_status_user.php";
+    private String mUrlUpdateStatusUser = MainActivity.WEB_SERVER + "update_status_user.php";
 
     private PresenterImpHandleUserManagement mPresenterImpHandleUserManagement;
 

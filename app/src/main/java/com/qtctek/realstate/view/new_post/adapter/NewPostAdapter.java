@@ -1,5 +1,6 @@
 package com.qtctek.realstate.view.new_post.adapter;
 
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
@@ -7,8 +8,8 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import com.qtctek.realstate.view.new_post.description_information.DescriptionInformationFragment;
 import com.qtctek.realstate.view.new_post.NewPostSuccess;
 import com.qtctek.realstate.view.new_post.images_information.ImagesInformationFragment;
-import com.qtctek.realstate.view.new_post.map_information.MapInformationFragment;
-import com.qtctek.realstate.view.new_post.product_information.ProductInformationFragment;
+import com.qtctek.realstate.view.new_post.map_information.fragment.MapInformationFragment;
+import com.qtctek.realstate.view.new_post.product_information.fragment.ProductInformationFragment;
 
 public class NewPostAdapter extends FragmentStatePagerAdapter {
 
@@ -42,5 +43,19 @@ public class NewPostAdapter extends FragmentStatePagerAdapter {
     @Override
     public int getCount() {
         return 5;
+    }
+
+    @Nullable
+    @Override
+    public CharSequence getPageTitle(int position) {
+        String title = "";
+        switch (position){
+            case 0: title = "Thông tin hình ảnh"; break;
+            case 1: title = "Thông tin căn nhà"; break;
+            case 2: title = "Thông tin mô tả"; break;
+            case 3: title = "Vị trí căn nhà"; break;
+            case 4: title = "Đăng tin"; break;
+        }
+        return title;
     }
 }

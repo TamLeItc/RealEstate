@@ -7,9 +7,9 @@ import java.util.ArrayList;
 
 public interface ViewHandleModelGetData {
 
-    void onGetProvinceCity(boolean status, ArrayList<Place> mArr);
+    void onGetCityList(boolean status, ArrayList<Place> mArr);
 
-    void onGetDistrict(boolean status, ArrayList<Place> mArr);
+    void onGetDistrictList(boolean status, ArrayList<Place> mArr);
 
     void onGetCategoriesProduct(boolean status, ArrayList<Category> mArr);
 

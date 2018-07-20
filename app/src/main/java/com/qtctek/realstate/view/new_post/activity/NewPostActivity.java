@@ -1,10 +1,7 @@
 package com.qtctek.realstate.view.new_post.activity;
 
-import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -12,7 +9,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -22,8 +18,12 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.qtctek.realstate.R;
-import com.qtctek.realstate.dto.PostSale;
+import com.qtctek.realstate.common.general.Constant;
+import com.qtctek.realstate.helper.AlertHelper;
+import com.qtctek.realstate.dto.Photo;
 import com.qtctek.realstate.dto.Product;
+import com.qtctek.realstate.helper.DialogHelper;
+import com.qtctek.realstate.helper.ToastHelper;
 import com.qtctek.realstate.presenter.new_post.PresenterNewPost;
 import com.qtctek.realstate.view.new_post.interfaces.ViewHandleModelNewPost;
 import com.qtctek.realstate.presenter.post_detail.PresenterPostDetail;
@@ -32,23 +32,31 @@ import com.qtctek.realstate.view.post_detail.interfaces.ViewHandlePostDetail;
 import com.qtctek.realstate.view.post_news.activity.MainActivity;
 import com.qtctek.realstate.view.new_post.images_information.ImagesInformationFragment;
 import com.qtctek.realstate.view.user_control.activity.UserControlActivity;
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
 public class NewPostActivity extends AppCompatActivity implements ViewHandleModelNewPost, ViewHandlePostDetail,
-        View.OnTouchListener, View.OnClickListener {
+        View.OnTouchListener, View.OnClickListener, AlertHelper.AlertHelperCallback {
 
-    private ViewPager mViewPaper;
+    public ViewPager viewPaper;
     private Toolbar mToolbar;
 
     public static boolean IS_UPDATE = false;
 
-    private Dialog mLoadingDialog;
+    public AlertHelper alertHelper;
+    public ToastHelper toastHelper;
+    public DialogHelper dialogHelper;
 
     public static Product PRODUCT;
     private boolean mDoubleBackToExitPressedOnce = false;
 
     private Button mBtnBack;
+    private Button mBtnNext;
+    private MenuItem mMenuItem;
+
+    private NewPostAdapter mNewPostAdapter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -57,26 +65,31 @@ public class NewPostActivity extends AppCompatActivity implements ViewHandleMode
 
         initViews();
         addToolbar();
-        getDataFromIntent();
-        createLoadingDialog();
-        mLoadingDialog.show();
 
+        alertHelper = new AlertHelper(this);
+        toastHelper = new ToastHelper(this);
+        dialogHelper = new DialogHelper(this);
+
+        getDataFromIntent();
     }
 
     private void initViews(){
-        mViewPaper = findViewById(R.id.view_pager);
-        this.mBtnBack = findViewById(R.id.btn_back);
+        viewPaper = findViewById(R.id.view_pager);
+        this.mBtnBack = findViewById(R.id.imv_back);
+        this.mBtnNext = findViewById(R.id.btn_next);
         this.mToolbar = findViewById(R.id.toolbar);
 
-        mViewPaper.setOnTouchListener(this);
+        viewPaper.setOnTouchListener(this);
         this.mBtnBack.setOnClickListener(this);
+        this.mBtnNext.setOnClickListener(this);
     }
 
     private void addControl() {
         FragmentManager fragmentManager = getSupportFragmentManager();
-        NewPostAdapter newPostAdapter = new NewPostAdapter(fragmentManager);
-        mViewPaper.setAdapter(newPostAdapter);
-        mViewPaper.setCurrentItem(0);
+        mNewPostAdapter = new NewPostAdapter(fragmentManager);
+        viewPaper.setAdapter(mNewPostAdapter);
+        viewPaper.setCurrentItem(0);
+
     }
 
     private void addToolbar(){
@@ -99,19 +112,13 @@ public class NewPostActivity extends AppCompatActivity implements ViewHandleMode
     }
 
     private void handleStart(int productId){
+        dialogHelper.show();
         if(!IS_UPDATE){
             new PresenterNewPost(this).handleInsertBlankPost(MainActivity.USER.getId());
         }
         else{
             new PresenterPostDetail(this).handleGetDataProductDetail(productId);
         }
-    }
-
-    private void createLoadingDialog(){
-        mLoadingDialog = new Dialog(this);
-        mLoadingDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        mLoadingDialog.setContentView(R.layout.dialog_loading);
-        mLoadingDialog.setCancelable(false);
     }
 
     @Override
@@ -123,24 +130,12 @@ public class NewPostActivity extends AppCompatActivity implements ViewHandleMode
     @Override
     public boolean onOptionsItemSelected(final MenuItem item) {
 
-        if(this.mViewPaper.getCurrentItem() <= 4){
-            AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
-            alertDialog.setMessage("Bạn có chắc muốn thoát ra!!!");
-            alertDialog.setCancelable(false);
-            alertDialog.setPositiveButton("Xác nhận", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    handleOptionItemSelected(item);
-                }
-            })
-            .setNegativeButton("Quay lại", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
+        if(this.viewPaper.getCurrentItem() <= 4){
 
-                }
-            });
-
-            alertDialog.show();
+            alertHelper.setCallback(this);
+            alertHelper.alert("", "Bạn chắc chắn thoát ra", false, "Xác nhận",
+                    "Hủy bỏ", Constant.OPTION_MENU_SELECTED);
+            mMenuItem = item;
         }
         else{
             handleOptionItemSelected(item);
@@ -165,20 +160,12 @@ public class NewPostActivity extends AppCompatActivity implements ViewHandleMode
 
     @Override
     public void onInsertBlankPost(boolean status, int productId) {
-        mLoadingDialog.dismiss();
+        dialogHelper.dismiss();
         if(!status){
-            AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
-            alertDialog.setMessage("Có lỗi xảy ra trong kết nối. Xin thử lại sau!!!");
-            alertDialog.setCancelable(false);
-            alertDialog.setPositiveButton("Xác nhận", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    Intent intent = new Intent(NewPostActivity.this, UserControlActivity.class);
-                    startActivity(intent);
-                    finish();
-                }
-            });
-            alertDialog.show();
+
+            alertHelper.setCallback(this);
+            alertHelper.alert("Lỗi", "Có lỗi xảy ra trong kết nối. Xin thử lại sau!!!", false,
+                    "Xác nhận", Constant.INSERT_DATABASE);
         }
         else{
             PRODUCT = new Product();
@@ -221,34 +208,27 @@ public class NewPostActivity extends AppCompatActivity implements ViewHandleMode
     }
 
     @Override
-    public void onHandleDataPostDetailSuccessful(Product product, ArrayList<String> arrImages) {
+    public void onHandleDataPostDetailSuccessful(Product product, ArrayList<Photo> arrPhoto) {
 
-        mLoadingDialog.dismiss();
-
-
+        dialogHelper.dismiss();
+        NewPostActivity.PRODUCT = product;
 
         addControl();
 
-        String avartar = product.getThumbnail();
-        for(int i = 0; i < arrImages.size(); i++){
-            if(!avartar.equals(arrImages.get(i))){
-                Uri uri = Uri.parse(arrImages.get(i));
-                ImagesInformationFragment.ARR_URI.add(uri);
-            }
-        }
+        setAvartar();
+        ImagesInformationFragment.ARR_PHOTO.clear();
+        ImagesInformationFragment.ARR_PHOTO.addAll(arrPhoto);
 
-        ImagesInformationFragment.QUALITY_IMAGE = arrImages.size() - 1;
-        ImagesInformationFragment.QUALITY_IMAGE_UPLOADED = arrImages.size() - 1;
         ImagesInformationFragment.IMAGE_ADAPTER.notifyDataSetChanged();
 
-        if(!IS_UPDATE || arrImages.size() <= 1){
+        if(!IS_UPDATE || arrPhoto.size() <= 1){
             ImagesInformationFragment.FILE_NAME = 1;
         }
         else{
             int maxFile = 1;
-            for(int i = 0; i < arrImages.size(); i++){
+            for(int i = 0; i < arrPhoto.size(); i++){
                 try{
-                    String[] strImage = arrImages.get(arrImages.size() - 1).split("_");
+                    String[] strImage = arrPhoto.get(arrPhoto.size() - 1).getPhotoLink().split("_");
                     StringBuilder stringBuilder = new StringBuilder(strImage[1]);
                     stringBuilder.delete(1, 5);
                     int temp = Integer.parseInt(stringBuilder.toString());
@@ -265,26 +245,41 @@ public class NewPostActivity extends AppCompatActivity implements ViewHandleMode
 
     }
 
-    @Override
-    public void onHandleDataPostDetailError(String error) {
-        mLoadingDialog.dismiss();
+    private void setAvartar(){
 
-        AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
-        alertDialog.setMessage("Có lỗi xảy ra trong quá trình đọc dữ liệu. Xin thử lại sau!!!");
-        alertDialog.setCancelable(false);
-        alertDialog.setPositiveButton("Xác nhận", new DialogInterface.OnClickListener() {
+        ImagesInformationFragment.PROGRESSBAR.setVisibility(View.VISIBLE);
+
+        String url = MainActivity.WEB_SERVER + "images/" + NewPostActivity.PRODUCT.getThumbnail();
+
+        if(url.equals("")){
+            ImagesInformationFragment.PROGRESSBAR.setVisibility(View.GONE);
+            ImagesInformationFragment.IMV_AVARTAR.setImageResource(R.drawable.icon_product);
+            return;
+        }
+
+        Picasso.with(this).load(url).into(ImagesInformationFragment.IMV_AVARTAR, new Callback() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
-                comebackActivity();
+            public void onSuccess() {
+                ImagesInformationFragment.PROGRESSBAR.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onError() {
+                ImagesInformationFragment.PROGRESSBAR.setVisibility(View.GONE);
+                ImagesInformationFragment.IMV_AVARTAR.setImageResource(R.drawable.icon_product);
             }
         });
-        alertDialog.show();
     }
 
-    private void comebackActivity(){
-        Intent intent = new Intent(this, UserControlActivity.class);
-        startActivity(intent);
+    @Override
+    public void onHandleDataPostDetailError(String error) {
+        dialogHelper.dismiss();
+
+        alertHelper.setCallback(this);
+        alertHelper.alert("Lỗi", "Có lỗi xảy ra trong quá trình đọc dữ liệu. Xin thử lại sau!!!",
+                false, "Xác nhận", Constant.HANDLE_ERROR);
     }
+
 
     @Override
     public void onBackPressed() {
@@ -294,7 +289,7 @@ public class NewPostActivity extends AppCompatActivity implements ViewHandleMode
         }
 
         this.mDoubleBackToExitPressedOnce = true;
-        Toast.makeText(this, "Ấn thêm lần nữa để thoát khỏi ứng dụng", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Ấn thêm lần nữa để thoát ra màn hình chính", Toast.LENGTH_SHORT).show();
 
         new Handler().postDelayed(new Runnable() {
 
@@ -308,16 +303,53 @@ public class NewPostActivity extends AppCompatActivity implements ViewHandleMode
     @Override
     public void onClick(View v) {
         switch (v.getId()){
-            case R.id.btn_back:
-                if(mViewPaper.getCurrentItem() == 0){
+            case R.id.imv_back:
+                if(viewPaper.getCurrentItem() == 0){
                     Intent intent = new Intent(this, UserControlActivity.class);
                     startActivity(intent);
                     finish();
                 }
-                else{
-                    mViewPaper.setCurrentItem(mViewPaper.getCurrentItem() - 1);
+                else if(viewPaper.getCurrentItem() < 4){
+                    int currentPage = viewPaper.getCurrentItem();
+                    viewPaper.setCurrentItem(currentPage - 1);
+                }
+                break;
+            case R.id.btn_next:
+                if(viewPaper.getCurrentItem() < 3){
+                    int currentPage = viewPaper.getCurrentItem();
+                    viewPaper.setCurrentItem(currentPage + 1);
                 }
 
         }
+    }
+
+    @Override
+    protected void onStop() {
+        //clear memory
+        Runtime.getRuntime().gc();
+        System.gc();
+
+        super.onStop();
+    }
+
+    @Override
+    public void onPositiveButtonClick(int option) {
+        if(option == Constant.OPTION_MENU_SELECTED){
+            handleOptionItemSelected(mMenuItem);
+        }
+        else if (option == Constant.INSERT_DATABASE){
+            Intent intent = new Intent(NewPostActivity.this, UserControlActivity.class);
+            startActivity(intent);
+            finish();
+        }
+        else if(option == Constant.HANDLE_ERROR){
+            Intent intent = new Intent(this, UserControlActivity.class);
+            startActivity(intent);
+        }
+    }
+
+    @Override
+    public void onNegativeButtonClick(int option) {
+
     }
 }

@@ -8,7 +8,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,21 +15,23 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.PopupMenu;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.qtctek.realstate.R;
+import com.qtctek.realstate.common.general.Constant;
 import com.qtctek.realstate.dto.User;
-import com.qtctek.realstate.dto.User_Object;
+import com.qtctek.realstate.helper.AlertHelper;
+import com.qtctek.realstate.helper.ToastHelper;
 import com.qtctek.realstate.presenter.user_control.user_management.PresenterUserManagement;
+import com.qtctek.realstate.view.new_post.activity.NewPostActivity;
 import com.qtctek.realstate.view.post_news.activity.MainActivity;
+import com.qtctek.realstate.view.user_control.activity.UserControlActivity;
 
 import java.util.ArrayList;
 
-public class UserManagementFragment extends Fragment implements ViewHandleUserManagement, AbsListView.OnScrollListener, AdapterView.OnItemClickListener {
+public class UserManagementFragment extends Fragment implements ViewHandleUserManagement, AbsListView.OnScrollListener, AdapterView.OnItemClickListener, AlertHelper.AlertHelperCallback {
 
     private View mView;
     private View mItemView;
@@ -39,8 +40,6 @@ public class UserManagementFragment extends Fragment implements ViewHandleUserMa
     private UserAdapter mUserAdapter;
 
     private ListView mLsvUsers;
-
-    private Dialog mLoadingDialog;
 
     private PresenterUserManagement mPresenterUserManagement;
     private int mPositionClick = 0;
@@ -58,7 +57,6 @@ public class UserManagementFragment extends Fragment implements ViewHandleUserMa
         super.onActivityCreated(savedInstanceState);
 
         initViews();
-        createLoadingDialog();
         handleStart();
     }
 
@@ -70,7 +68,7 @@ public class UserManagementFragment extends Fragment implements ViewHandleUserMa
     }
 
     private void handleStart(){
-        this.mLoadingDialog.show();
+        ((UserControlActivity)getActivity()).dialogHelper.show();
 
         this.mUserAdapter = new UserAdapter(this.mArrUser, getContext());
         this.mLsvUsers.setAdapter(mUserAdapter);
@@ -78,17 +76,10 @@ public class UserManagementFragment extends Fragment implements ViewHandleUserMa
         this.mPresenterUserManagement.handleGetUserList(0, 20);
     }
 
-    private void createLoadingDialog(){
-        this.mLoadingDialog = new Dialog(getActivity());
-        this.mLoadingDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        this.mLoadingDialog.setContentView(R.layout.dialog_loading);
-        this.mLoadingDialog.setCancelable(false);
-    }
-
     @Override
     public void onHandleUserListSuccessful(ArrayList<User> arrayListUser) {
 
-        this.mLoadingDialog.dismiss();
+        ((UserControlActivity)getActivity()).dialogHelper.dismiss();
         this.mArrUser.addAll(arrayListUser);
         this.mUserAdapter.notifyDataSetChanged();
 
@@ -97,33 +88,28 @@ public class UserManagementFragment extends Fragment implements ViewHandleUserMa
     @Override
     public void onHandleUserListError(String error) {
 
-        this.mLoadingDialog.dismiss();
+        ((UserControlActivity)getActivity()).dialogHelper.dismiss();
 
-        AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
-        alertDialog.setMessage("Đọc dữ liệu thất bại. Vui lòng thử lại sau");
-        alertDialog.setCancelable(false);
-        alertDialog.setPositiveButton("Xác nhận", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                ViewPager viewPager = getActivity().findViewById(R.id.view_pager);
-                viewPager.setCurrentItem(0);
-            }
-        });
-        alertDialog.show();
+        ((NewPostActivity)getActivity()).alertHelper.setCallback(this);
+        ((NewPostActivity)getActivity()).alertHelper.alert("Lỗi",
+                "Đọc dữ liệu thất bại. Vui lòng thử lại sau", false,
+                "Xác nhận", Constant.HANDLE_ERROR);
     }
 
     @Override
     public void onHandleUpdateStatusUserSuccessful() {
-        mLoadingDialog.dismiss();
+        ((UserControlActivity)getActivity()).dialogHelper.dismiss();
         if(mArrUser.get(mPositionClick).getStatus().equals("disable")){
             this.mItemView.setBackgroundColor(getActivity().getResources().getColor(R.color.colorPostActive));
-            Toast.makeText(getActivity(), "Bỏ khóa tài khoản thành công", Toast.LENGTH_SHORT).show();
+
+            ((UserControlActivity)getActivity()).toastHelper.toast("Bỏ khóa tài khoản thành công", ToastHelper.LENGTH_SHORT);
 
             mArrUser.get(mPositionClick).setStatus("enable");
         }
         else{
             this.mItemView.setBackgroundColor(getActivity().getResources().getColor(R.color.colorPostNotActive));
-            Toast.makeText(getActivity(), "Khóa tài khoản thành công", Toast.LENGTH_SHORT).show();
+
+            ((UserControlActivity)getActivity()).toastHelper.toast("Khóa tài khoản thành công", ToastHelper.LENGTH_SHORT);
 
             mArrUser.get(mPositionClick).setStatus("disable");
         }
@@ -132,8 +118,9 @@ public class UserManagementFragment extends Fragment implements ViewHandleUserMa
 
     @Override
     public void onHandleUpdateStatusUserError(String error) {
-        mLoadingDialog.dismiss();
-        Toast.makeText(getActivity(), "Cập nhật trạng thái user thất bại", Toast.LENGTH_SHORT).show();
+        ((UserControlActivity)getActivity()).dialogHelper.dismiss();
+
+        ((UserControlActivity)getActivity()).toastHelper.toast("Cập nhật trạng thái user thất bại", ToastHelper.LENGTH_SHORT);
     }
 
 
@@ -143,7 +130,7 @@ public class UserManagementFragment extends Fragment implements ViewHandleUserMa
                 && (mLsvUsers.getLastVisiblePosition() - mLsvUsers.getHeaderViewsCount() -
                 mLsvUsers.getFooterViewsCount()) >= (mUserAdapter.getCount() - 1)) {
 
-            mLoadingDialog.show();
+            ((UserControlActivity)getActivity()).dialogHelper.show();
             this.mPresenterUserManagement.handleGetUserList(this.mArrUser.size(), 20);
         }
     }
@@ -173,25 +160,20 @@ public class UserManagementFragment extends Fragment implements ViewHandleUserMa
         mPositionClick = position;
         this.mItemView = view;
 
+        ((UserControlActivity)getActivity()).alertHelper.setCallback(this);
         popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()){
                     case R.id.control_update_status:
                         if(mArrUser.get(mPositionClick).getLevel() == 1){
-                            AlertDialog.Builder builder = new AlertDialog.Builder(getContext())
-                                    .setMessage("Bạn không thể thay đổi trạng thái của một user " +
-                                            "có quyền \"Admin\"")
-                                    .setPositiveButton("Xác nhận", new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-
-                                        }
-                                    });
-                            builder.show();
+                            ((UserControlActivity)getActivity()).alertHelper.alert("Lỗi",
+                                    "Bạn không thể thực thay đổi trạng thái môt" +
+                                            " user có quyền \"Admin\"", true, "Xác nhận",
+                                    Constant.DENIED);
                         }
                         else{
-                            mLoadingDialog.show();
+                            ((UserControlActivity)getActivity()).dialogHelper.dismiss();
                             mPresenterUserManagement.handleUpdateStatusUser(mArrUser.get(mPositionClick).getId());
                             break;
                         }
@@ -200,5 +182,18 @@ public class UserManagementFragment extends Fragment implements ViewHandleUserMa
             }
         });
         popupMenu.show();
+    }
+
+    @Override
+    public void onPositiveButtonClick(int option) {
+        if(option == Constant.HANDLE_ERROR){
+            ViewPager viewPager = getActivity().findViewById(R.id.view_pager);
+            viewPager.setCurrentItem(0);
+        }
+    }
+
+    @Override
+    public void onNegativeButtonClick(int option) {
+
     }
 }

@@ -19,7 +19,7 @@ public class ModelPostedPost {
 
     private String mUrl = MainActivity.WEB_SERVER + "get_list_product.php";
 
-    String mUrlDeletePost = MainActivity.HOST + "/real_estate/delete_product.php";
+    String mUrlDeletePost = MainActivity.WEB_SERVER + "delete_product.php";
 
     private PresenterImpHandlePostedPost mPresenterImpHandleUserControl;
 
@@ -56,7 +56,7 @@ public class ModelPostedPost {
 
         @Override
         protected String doInBackground(String... strings) {
-            String mUrl = strings[0] + "?email=" + email + "&start=" + start + "&limit=" + limit + "&option=";
+            String mUrl = strings[0] + "?email=" + email + "&start=" + start + "&limit=" + limit + "&option=posted";
 
             Request request = new Request.Builder()
                     .url(mUrl)
@@ -75,7 +75,6 @@ public class ModelPostedPost {
 
         @Override
         protected void onPostExecute(String s) {
-
             if(s.equals("error")){
                 mPresenterImpHandleUserControl.onGetPostListError(s);
 

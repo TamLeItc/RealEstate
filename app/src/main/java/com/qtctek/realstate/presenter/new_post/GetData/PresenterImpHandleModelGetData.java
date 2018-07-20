@@ -2,7 +2,7 @@ package com.qtctek.realstate.presenter.new_post.GetData;
 
 public interface PresenterImpHandleModelGetData {
 
-    void onGetProvinceCity(boolean status, String data);
+    void onGetListCity(boolean status, String data);
 
     void onGetDistrict(boolean status, String data);
 

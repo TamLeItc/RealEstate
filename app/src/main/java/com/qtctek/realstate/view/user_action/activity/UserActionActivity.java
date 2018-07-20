@@ -14,6 +14,9 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.qtctek.realstate.R;
+import com.qtctek.realstate.helper.AlertHelper;
+import com.qtctek.realstate.helper.DialogHelper;
+import com.qtctek.realstate.helper.ToastHelper;
 import com.qtctek.realstate.view.user_action.adapter.UserActionAdapter;
 import com.qtctek.realstate.view.user_control.activity.UserControlActivity;
 
@@ -25,6 +28,10 @@ public class UserActionActivity extends AppCompatActivity implements View.OnTouc
 
     private boolean mDoubleBackToExitPressedOnce = false;
 
+    public AlertHelper alertHelper;
+    public ToastHelper toastHelper;
+    public DialogHelper dialogHelper;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,12 +42,24 @@ public class UserActionActivity extends AppCompatActivity implements View.OnTouc
         addToolbar();
 
         getValueFromIntent();
+
+        alertHelper = new AlertHelper(this);
+        toastHelper = new ToastHelper(this);
+        dialogHelper = new DialogHelper(this);
+        dialogHelper.createLoadingDialog();
+    }
+
+    public AlertHelper getAlertHelper(){
+        if(alertHelper == null){
+            alertHelper = new AlertHelper(this);
+        }
+        return alertHelper;
     }
 
     private void initViews(){
         mViewPager = (ViewPager) findViewById(R.id.view_pager);
         this.mToolbar = findViewById(R.id.toolbar);
-        this.mBtnBack = findViewById(R.id.btn_back);
+        this.mBtnBack = findViewById(R.id.imv_back);
 
         mViewPager.setOnTouchListener(this);
         this.mBtnBack.setOnClickListener(this);
@@ -79,7 +98,7 @@ public class UserActionActivity extends AppCompatActivity implements View.OnTouc
     @Override
     public void onClick(View v) {
         switch (v.getId()){
-            case R.id.btn_back:
+            case R.id.imv_back:
                 switch (mViewPager.getCurrentItem()){
                     case 0: //fragment_login
                         finish();
@@ -107,7 +126,7 @@ public class UserActionActivity extends AppCompatActivity implements View.OnTouc
         }
 
         this.mDoubleBackToExitPressedOnce = true;
-        Toast.makeText(this, "Ấn thêm lần nữa để thoát khỏi ứng dụng", Toast.LENGTH_SHORT).show();
+        toastHelper.toast("Ấn thêm lần nữa để thoát ra màn hình chính", ToastHelper.LENGTH_SHORT);
 
         new Handler().postDelayed(new Runnable() {
 
@@ -116,5 +135,14 @@ public class UserActionActivity extends AppCompatActivity implements View.OnTouc
                 mDoubleBackToExitPressedOnce=false;
             }
         }, 2000);
+    }
+
+    @Override
+    protected void onStop() {
+        //clear memory
+        Runtime.getRuntime().gc();
+        System.gc();
+
+        super.onStop();
     }
 }

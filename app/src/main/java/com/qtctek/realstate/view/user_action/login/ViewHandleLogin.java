@@ -10,4 +10,12 @@ public interface ViewHandleLogin {
 
     void onHandleCheckUserLoginError(String error);
 
+    void onGetDataSaveLoginSuccessful(String userName, String password);
+
+    void onGetDataSaveLoginError(String error);
+
+    void onUpdateDataSaveLoginSuccessful();
+
+    void onUpdateDataSaveLoginError(String error);
+
 }

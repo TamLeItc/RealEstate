@@ -1,8 +1,6 @@
 package com.qtctek.realstate.model.user_control;
 
 import android.os.AsyncTask;
-import android.util.Log;
-import android.widget.Toast;
 
 import com.qtctek.realstate.presenter.user_control.post_management.PresenterImpHandlePostManagement;
 import com.qtctek.realstate.view.post_news.activity.MainActivity;
@@ -19,10 +17,9 @@ import okhttp3.Response;
 public class ModelPostManagement {
 
     String mUrlGetListProduct = MainActivity.WEB_SERVER + "get_list_product.php";
+    String mUrlUpdateAcceptPost = MainActivity.WEB_SERVER + "update_accept_post.php";
 
-    String mUrlUpdateAcceptPost = MainActivity.HOST + "/real_estate/update_accept_post.php";
-
-    String mUrlDeletePost = MainActivity.HOST + "/real_estate/delete_product.php";
+    String mUrlDeletePost = MainActivity.WEB_SERVER + "delete_product.php";
 
     private PresenterImpHandlePostManagement mPresenterImpHandlePostManagement;
 
@@ -46,7 +43,7 @@ public class ModelPostManagement {
 
         OkHttpClient okHttpClient;
 
-        int start = 0, limit = 0;
+        int start, limit;
 
         public GetPostList(int start, int limit){
             okHttpClient = new OkHttpClient.Builder()
@@ -62,9 +59,10 @@ public class ModelPostManagement {
         @Override
         protected String doInBackground(String... strings) {
 
-            String mUrl = strings[0] + "?email=%" + "&start=" + start + "&limit=" + limit + "&option=";
+            String url = strings[0] + "?email=%" + "&start=" + start + "&limit=" + limit + "&option=management";
+
             Request request = new Request.Builder()
-                    .url(mUrl)
+                    .url(url)
                     .get()
                     .build();
 
@@ -181,7 +179,6 @@ public class ModelPostManagement {
 
         @Override
         protected void onPostExecute(String s) {
-            Log.d("ttt", s);
             if(s.equals("successful")){
                 mPresenterImpHandlePostManagement.onDeletePostSuccessful();
             }

@@ -1,5 +1,7 @@
 package com.qtctek.realstate.presenter.user_action.login;
 
+import android.content.Context;
+
 import com.qtctek.realstate.dto.User;
 import com.qtctek.realstate.model.user_action.ModelLogin;
 import com.qtctek.realstate.view.user_action.login.ViewHandleLogin;
@@ -11,14 +13,23 @@ import org.json.JSONObject;
 public class PresenterLogin implements PresenterImpHandleLogin {
 
     private ViewHandleLogin mViewHandleUserManager;
+    private ModelLogin mModelLogin;
 
     public PresenterLogin(ViewHandleLogin viewHandleUserManager){
         this.mViewHandleUserManager = viewHandleUserManager;
+        mModelLogin = new ModelLogin(this);
     }
 
     public void handleCheckUserLogin(String user, String password){
-        ModelLogin modelUserManager = new ModelLogin(this);
-        modelUserManager.requireCheckUserLogin(user, password);
+        mModelLogin.requireCheckUserLogin(user, password);
+    }
+
+    public void handleGetDataSaveLogin(Context context){
+        mModelLogin.requireGetDataSaveLogin(context);
+    }
+
+    public void handleUpdateDataSaveLogin(String userName, String password, Context context){
+        mModelLogin.requireUpdateDataSaveLogin(userName, password, context);
     }
 
     @Override
@@ -55,5 +66,25 @@ public class PresenterLogin implements PresenterImpHandleLogin {
     @Override
     public void onCheckUserLoginError(String error) {
         this.mViewHandleUserManager.onHandleCheckUserLoginError(error);
+    }
+
+    @Override
+    public void onGetDataSaveLoginSuccessful(String userName, String password) {
+        this.mViewHandleUserManager.onGetDataSaveLoginSuccessful(userName, password);
+    }
+
+    @Override
+    public void onGetDataSaveLoginError(String error) {
+
+    }
+
+    @Override
+    public void onUpdateDataSaveLoginSuccessful() {
+        this.mViewHandleUserManager.onUpdateDataSaveLoginSuccessful();
+    }
+
+    @Override
+    public void onUpdateDataSaveLoginError(String error) {
+
     }
 }

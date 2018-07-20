@@ -42,7 +42,6 @@ public class ModelSavedPost {
     }
 
     public void requireUpdateDataProductIds(String data, Context context){
-
         try {
             SharedPreferences sharedPreferences = context.getSharedPreferences(AppUtils.SHARED_PREFERENCES, context.MODE_PRIVATE);
             SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -76,7 +75,6 @@ public class ModelSavedPost {
         protected String doInBackground(String... strings) {
             String mUrl = strings[0] + "?email=%" + "&start=" + start + "&limit=" + limit + "&option=saved_product"
                     + "&list_id=" + listId;
-
             Request request = new Request.Builder()
                     .url(mUrl)
                     .get()
@@ -94,6 +92,7 @@ public class ModelSavedPost {
 
         @Override
         protected void onPostExecute(String s) {
+
             if(s.equals("error")){
                 mPresenterImPHandleSavedPost.onGetSavedProductListError(s);
             }

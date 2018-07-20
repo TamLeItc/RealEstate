@@ -1,11 +1,8 @@
 package com.qtctek.realstate.model.user_action;
 
 import android.os.AsyncTask;
-import android.util.Log;
-import android.widget.Toast;
 
 import com.qtctek.realstate.dto.User;
-import com.qtctek.realstate.dto.User_Object;
 import com.qtctek.realstate.presenter.user_action.register.PresenterImpHandleRegister;
 import com.qtctek.realstate.view.post_news.activity.MainActivity;
 

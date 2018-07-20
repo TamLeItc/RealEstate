@@ -45,7 +45,7 @@ public class    UserSystemControlFragment extends Fragment implements View.OnCli
         mViewPager = (ViewPager) mView.findViewById(R.id.view_pager);
         mTabLayout = (TabLayout) mView.findViewById(R.id.tab_layout);
 
-        this.mBtnBack = ((UserControlActivity) getActivity()).findViewById(R.id.btn_back);
+        this.mBtnBack = ((UserControlActivity) getActivity()).findViewById(R.id.imv_back);
 
         this.mBtnBack.setOnClickListener(this);
     }
@@ -63,7 +63,7 @@ public class    UserSystemControlFragment extends Fragment implements View.OnCli
     @Override
     public void onClick(View v) {
         switch (v.getId()){
-            case R.id.btn_back:
+            case R.id.imv_back:
                 if(mViewPager.getCurrentItem() == 0){
                     getActivity().finish();
                 }

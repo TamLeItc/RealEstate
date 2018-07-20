@@ -4,11 +4,13 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
+import com.qtctek.realstate.dto.User;
 import com.qtctek.realstate.view.post_news.activity.MainActivity;
 import com.qtctek.realstate.view.user_control.post_management.PostManagementFragment;
 import com.qtctek.realstate.view.user_control.posted_post.PostedPostFragment;
 import com.qtctek.realstate.view.user_control.saved_post.SavedPostFragment;
 import com.qtctek.realstate.view.user_control.fragment.MenuUserSystemControlFragment;
+import com.qtctek.realstate.view.user_control.saved_search.SavedSearchFragment;
 import com.qtctek.realstate.view.user_control.user_management.UserManagementFragment;
 
 public class UserControlAdapter extends FragmentStatePagerAdapter {
@@ -44,6 +46,9 @@ public class UserControlAdapter extends FragmentStatePagerAdapter {
                 case 1:
                     frag = new SavedPostFragment();
                     break;
+                case 2:
+                    frag = new SavedSearchFragment();
+                    break;
             }
         }
         else if(MainActivity.USER.getLevel() == 2){
@@ -53,6 +58,16 @@ public class UserControlAdapter extends FragmentStatePagerAdapter {
                     break;
                 case 1:
                     frag = new PostManagementFragment();
+                    break;
+            }
+        }
+        else if(MainActivity.USER.getLevel() == User.USER_NULL){
+            switch (position){
+                case 0:
+                    frag = new SavedPostFragment();
+                    break;
+                case 1:
+                    frag = new SavedSearchFragment();
                     break;
             }
         }
@@ -66,9 +81,12 @@ public class UserControlAdapter extends FragmentStatePagerAdapter {
             return 3;
         }
         else if(MainActivity.USER.getLevel() == 3){
-            return 2;
+            return 3;
         }
         else if(MainActivity.USER.getLevel() == 2){
+            return 2;
+        }
+        else if(MainActivity.USER.getLevel() == User.USER_NULL){
             return 2;
         }
         else{
@@ -104,6 +122,9 @@ public class UserControlAdapter extends FragmentStatePagerAdapter {
                 case 1:
                     title = "Tin đã lưu";
                     break;
+                case 2:
+                    title = "T.kiếm đã lưu";
+                    break;
             }
         }
         else if(MainActivity.USER.getLevel() == 2){
@@ -113,6 +134,16 @@ public class UserControlAdapter extends FragmentStatePagerAdapter {
                     break;
                 case 1:
                     title = "Quản lí tin";
+                    break;
+            }
+        }
+        else if(MainActivity.USER.getLevel() == User.USER_NULL){
+            switch (position){
+                case 0:
+                    title = "Tin đã lưu";
+                    break;
+                case 1:
+                    title = "T.kiếm đã lưu";
                     break;
             }
         }

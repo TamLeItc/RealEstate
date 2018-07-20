@@ -4,33 +4,42 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.qtctek.realstate.R;
+import com.qtctek.realstate.dto.Condition;
+import com.qtctek.realstate.dto.Product;
 import com.qtctek.realstate.presenter.user_control.saved_post.PresenterSavedPost;
+import com.qtctek.realstate.view.post_news.activity.MainActivity;
 import com.qtctek.realstate.view.post_news.adapter.PostAdapter;
 import com.qtctek.realstate.view.post_detail.activity.PostDetailActivity;
-import com.qtctek.realstate.view.user_control.saved_post.ViewGetDataLocal;
+import com.qtctek.realstate.view.user_control.saved_post.ViewHandleSavedPost;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class ListPostNewsFragment extends Fragment implements AdapterView.OnItemClickListener,
-        ViewGetDataLocal {
+        ViewHandleSavedPost {
 
     private View mView;
 
-    private ListView mLsvListProduct;
+    public ListView mLsvListProduct;
 
     public static TextView TXV_INFORMATION;
 
     public static PostAdapter POST_ADAPTER;
 
     public static HashMap<String, String> LIST_SAVED_PRODUCT_ID;
+    public static ArrayList<Condition> LIST_SAVED_SEARCH;
 
     @Nullable
     @Override
@@ -51,7 +60,10 @@ public class ListPostNewsFragment extends Fragment implements AdapterView.OnItem
     }
 
     private void handleStart(){
-        POST_ADAPTER = new PostAdapter(getContext(), MapPostNewsFragment.ARR_POST);
+
+        MapPostNewsFragment mapPostNewsFragment = (MapPostNewsFragment) ((MainActivity)getActivity()).getSupportFragmentManager().getFragments().get(0);
+
+        POST_ADAPTER = new PostAdapter(getContext(), mapPostNewsFragment.arrProduct, mapPostNewsFragment);
         this.mLsvListProduct.setAdapter(POST_ADAPTER);
 
         LIST_SAVED_PRODUCT_ID = new HashMap<>();
@@ -60,9 +72,12 @@ public class ListPostNewsFragment extends Fragment implements AdapterView.OnItem
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Intent intent = new Intent(getActivity(), PostDetailActivity.class);
-        intent.putExtra("post_id", MapPostNewsFragment.ARR_POST.get(position).getId());
-        startActivity(intent);
+
+        MapPostNewsFragment mapPostNewsFragment = (MapPostNewsFragment) ((MainActivity)getActivity()).getSupportFragmentManager().getFragments().get(0);
+
+//        Intent intent = new Intent(getActivity(), PostDetailActivity.class);
+//        intent.putExtra("product_id", mapPostNewsFragment.arrProduct.get(position).getId());
+        //startActivity(intent);
     }
 
     @Override
@@ -72,6 +87,25 @@ public class ListPostNewsFragment extends Fragment implements AdapterView.OnItem
 
     @Override
     public void onHandleDataProductIdsError(String error) {
+    }
+
+    @Override
+    public void onHandleUpdateProductIdListSuccessful() {
+
+    }
+
+    @Override
+    public void onHandleUpdateProductIdListError(String e) {
+
+    }
+
+    @Override
+    public void onHandleSavedProductListSuccessful(ArrayList<Product> mArrListProduct) {
+
+    }
+
+    @Override
+    public void onHandleSavedProductListError(String error) {
 
     }
 }

@@ -1,15 +1,12 @@
 package com.qtctek.realstate.view.user_action.update_user;
 
-import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.text.InputType;
-import android.util.Log;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,25 +20,28 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.qtctek.realstate.R;
+import com.qtctek.realstate.common.AppUtils;
+import com.qtctek.realstate.common.general.Constant;
 import com.qtctek.realstate.dto.User;
-import com.qtctek.realstate.dto.User_Object;
-import com.qtctek.realstate.presenter.user_action.general.FormatPattern;
-import com.qtctek.realstate.presenter.user_action.general.HashMD5;
+import com.qtctek.realstate.common.general.FormatPattern;
+import com.qtctek.realstate.common.general.HashMD5;
+import com.qtctek.realstate.helper.AlertHelper;
+import com.qtctek.realstate.helper.ToastHelper;
 import com.qtctek.realstate.presenter.user_action.update_user.PresenterUpdateUser;
-import com.qtctek.realstate.view.post_news.activity.MainActivity;
-import com.qtctek.realstate.view.user_control.activity.UserControlActivity;
+import com.qtctek.realstate.view.user_action.activity.UserActionActivity;
 
 import java.util.Calendar;
+import java.util.Objects;
 
 import static com.qtctek.realstate.view.post_news.activity.MainActivity.USER;
 
-public class UpdateUserFragment extends Fragment implements View.OnClickListener, ViewHandleUpdateUser {
+public class UpdateUserFragment extends Fragment implements View.OnClickListener, ViewHandleUpdateUser, View.OnFocusChangeListener {
 
     private View mView;
 
     private EditText mEdtName;
     private EditText mEdtEmail;
-    private EditText mEdtPassword;
+    private EditText mEdtNewPassword;
     private EditText mEdtConfirmPassword;
     private EditText mEdtPhoneNumber;
     private Button mBtnConfirm;
@@ -54,6 +54,9 @@ public class UpdateUserFragment extends Fragment implements View.OnClickListener
     private ImageView mImvCalendar;
     private DatePicker mDpkBirthDay;
     private TextView mTxvTitle;
+    private TextView mTxvNowPassword;
+    private EditText mEdtNowPassword;
+    private TextView mTxvNewPassword;
 
     private Dialog mLoadingDialog;
 
@@ -76,7 +79,7 @@ public class UpdateUserFragment extends Fragment implements View.OnClickListener
     private void initViews(){
         this.mEdtName = mView.findViewById(R.id.edt_full_name);
         this.mEdtEmail = mView.findViewById(R.id.edt_email_address);
-        this.mEdtPassword = mView.findViewById(R.id.edt_password);
+        this.mEdtNewPassword = mView.findViewById(R.id.edt_password);
         this.mEdtConfirmPassword = mView.findViewById(R.id.edt_confirm_password);
         this.mEdtPhoneNumber = mView.findViewById(R.id.edt_phone_number);
         this.mBtnConfirm = mView.findViewById(R.id.btn_confirm);
@@ -88,6 +91,11 @@ public class UpdateUserFragment extends Fragment implements View.OnClickListener
         this.mEdtUsername = mView.findViewById(R.id.edt_username);
         this.mTxvTitle = mView.findViewById(R.id.txv_title);
         this.mRdoOther = mView.findViewById(R.id.rdo_other);
+        this.mTxvNewPassword = mView.findViewById(R.id.txv_password);
+        this.mTxvNowPassword = mView.findViewById(R.id.txv_now_password);
+        this.mEdtNowPassword = mView.findViewById(R.id.edt_now_password);
+
+        this.mTxvNewPassword.setText(getActivity().getResources().getString(R.string.new_password));
 
         this.mBtnConfirm.setOnClickListener(this);
         this.mImvCalendar.setOnClickListener(this);
@@ -144,69 +152,91 @@ public class UpdateUserFragment extends Fragment implements View.OnClickListener
         String birthday = mTxvBirthDay.getText().toString().trim();
         String username = mEdtUsername.getText().toString().trim();
         String email = mEdtEmail.getText().toString().trim();
-        String password = mEdtPassword.getText().toString().trim();
+        String password = mEdtNewPassword.getText().toString().trim();
         String phoneNumber = mEdtPhoneNumber.getText().toString().trim();
         String address = mEdtAddress.getText().toString().trim();
+        String nowPassword = mEdtNowPassword.getText().toString().trim();
 
         mLoadingDialog.dismiss();
 
-        if(username.equals("")){
-            Toast.makeText(getContext(), "Vui lòng nhập tên đăng nhập!!!", Toast.LENGTH_SHORT).show();
+        if(TextUtils.isEmpty(username)){
+            ((UserActionActivity)getActivity()).toastHelper.toast("Vui lòng nhập tên đăng nhập!!!", ToastHelper.LENGTH_SHORT);
             this.mEdtName.requestFocus();
             mEdtConfirmPassword.setText("");
-            mEdtPassword.setText("");
+            mEdtNewPassword.setText("");
+            mEdtNowPassword.setText("");
         }
-        else if(email.equals("")){
+        else if(TextUtils.isEmpty(email)){
+            ((UserActionActivity)getActivity()).toastHelper.toast("Vui lòng nhập tên đăng nhập!!!", ToastHelper.LENGTH_SHORT);
             Toast.makeText(getContext(), "Vui lòng nhập email!!!", Toast.LENGTH_SHORT).show();
             this.mEdtEmail.requestFocus();
             mEdtConfirmPassword.setText("");
-            mEdtPassword.setText("");
+            mEdtNewPassword.setText("");
+            mEdtNowPassword.setText("");
         }
         else if(!FormatPattern.checkEmail(email)){
+            ((UserActionActivity)getActivity()).toastHelper.toast("Vui lòng nhập tên đăng nhập!!!", ToastHelper.LENGTH_SHORT);
             Toast.makeText(getContext(), "Email không chính xác!!!", Toast.LENGTH_SHORT).show();
             this.mEdtEmail.requestFocus();
             mEdtConfirmPassword.setText("");
-            mEdtPassword.setText("");
+            mEdtNewPassword.setText("");
+            mEdtNowPassword.setText("");
         }
-        else if(password.equals("")){
-            Toast.makeText(getContext(), "Vui lòng nhập mật khẩu!!!", Toast.LENGTH_SHORT).show();
-            this.mEdtPassword.requestFocus();
+        else if(TextUtils.isEmpty(nowPassword)){
+            ((UserActionActivity)getActivity()).toastHelper.toast("Vui lòng nhập mật khẩu hiện tại!!!", ToastHelper.LENGTH_SHORT);
+            this.mEdtNowPassword.requestFocus();
             mEdtConfirmPassword.setText("");
-            mEdtPassword.setText("");
+            mEdtNewPassword.setText("");
+            mEdtNowPassword.setText("");
+        }
+        else if(TextUtils.isEmpty(password)){
+            ((UserActionActivity)getActivity()).toastHelper.toast("Vui lòng nhập mật khẩu mới!!!", ToastHelper.LENGTH_SHORT);
+            this.mEdtNewPassword.requestFocus();
+            mEdtConfirmPassword.setText("");
+            mEdtNewPassword.setText("");
+            mEdtNowPassword.setText("");
         }
         else if(password.length() < 6){
-            Toast.makeText(getContext(), "Mật khẩu phải có độ dài ít nhất 6 kí tự!!!", Toast.LENGTH_SHORT).show();
-            this.mEdtPassword.requestFocus();
+            ((UserActionActivity)getActivity()).toastHelper.toast("Mật khẩu phải có độ dài ít nhất 6 kí tự!!!", ToastHelper.LENGTH_SHORT);
+            this.mEdtNewPassword.requestFocus();
             mEdtConfirmPassword.setText("");
-            mEdtPassword.setText("");
+            mEdtNewPassword.setText("");
+            mEdtNowPassword.setText("");
         }
-        else if(password.equals("")){
-            Toast.makeText(getContext(), "Vui lòng xác nhận mật khẩu!!!", Toast.LENGTH_SHORT).show();
+        else if(mEdtConfirmPassword.getText().toString().equals("")){
+            ((UserActionActivity)getActivity()).toastHelper.toast("Vui lòng nhập xác nhận mật khẩu!!!", ToastHelper.LENGTH_SHORT);
             this.mEdtConfirmPassword.requestFocus();
             mEdtConfirmPassword.setText("");
-            mEdtPassword.setText("");
+            mEdtNewPassword.setText("");
+            mEdtNowPassword.setText("");
         }
-        else if(!password.equals(password)){
-            Toast.makeText(getContext(), "Mật khẩu và xác nhận mật khẩu không giống nhau!!!", Toast.LENGTH_SHORT).show();
+        else if(!mEdtConfirmPassword.getText().toString().equals(password)){
+            ((UserActionActivity)getActivity()).toastHelper.toast("Mật khẩu và xác nhận mật khẩu không giống nhau!!!", ToastHelper.LENGTH_SHORT);
             this.mEdtConfirmPassword.requestFocus();
             mEdtConfirmPassword.setText("");
-            mEdtPassword.setText("");
+            mEdtNewPassword.setText("");
+            mEdtNowPassword.setText("");
         }
-        else if(phoneNumber.equals("")){
-            Toast.makeText(getContext(), "Vui lòng nhập số điện thoại!!", Toast.LENGTH_SHORT).show();
+        else if(TextUtils.isEmpty(phoneNumber)){
+            ((UserActionActivity)getActivity()).toastHelper.toast("Vui lòng nhập số điện thoại!!!", ToastHelper.LENGTH_SHORT);
             this.mEdtPhoneNumber.requestFocus();
             mEdtConfirmPassword.setText("");
-            mEdtPassword.setText("");
+            mEdtNewPassword.setText("");
+            mEdtNowPassword.setText("");
+        }
+        else if(!FormatPattern.checkNumberPhone(phoneNumber)){
+            ((UserActionActivity)getActivity()).toastHelper.toast("Số điện thoại không hợp lệ!!!", ToastHelper.LENGTH_SHORT);
+            this.mEdtPhoneNumber.requestFocus();
+            mEdtConfirmPassword.setText("");
+            mEdtNewPassword.setText("");
+            mEdtNowPassword.setText("");
         }
         else{
             mLoadingDialog.show();
             User user = new User(name, sex, birthday, phoneNumber, email, address, username,
                     HashMD5.md5(password));
-            this.mPresenterUpdate.handleUpdateUser(user);
+            this.mPresenterUpdate.handleUpdateUser(user, HashMD5.md5(nowPassword));
         }
-
-
-
     }
 
     private void createLoadingDialog(){
@@ -221,38 +251,28 @@ public class UpdateUserFragment extends Fragment implements View.OnClickListener
 
         this.mLoadingDialog.dismiss();
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
-                .setTitle("Cập nhật tài khoản")
-                .setCancelable(false)
-                .setMessage("Cập nhật tài khoản thành công!!!")
-                .setNegativeButton("Xác nhận", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        Intent intent = new Intent(getActivity(), UserControlActivity.class);
-                        intent.putExtra("email_user", MainActivity.USERr);
-                        intent.putExtra("role", MainActivity.LEVEL);
-                        startActivity(intent);
-                        getActivity().finish();
-                    }
-                });
-        builder.show();
+        ((UserActionActivity) Objects.requireNonNull(getActivity())).getAlertHelper().alert("Cập nhật tài khoản",
+                "Cập nhật tài khoản thành công!!!",
+                false, "OK", AlertHelper.ALERT_NO_ACTION);
     }
 
     @Override
     public void onUpdateUserError(String error) {
 
+        if(error.equals("old_password_not_true")){
+            ((UserActionActivity) Objects.requireNonNull(getActivity())).getAlertHelper().alert("Cập nhật tài khoản",
+                    "Mật khẩu hiện tại không chính xác. Vui lòng kiểm tra lại!!!",
+                    false, "OK", AlertHelper.ALERT_NO_ACTION);
+        }
+        else{
+            ((UserActionActivity) Objects.requireNonNull(getActivity())).getAlertHelper().alert("Cập nhật tài khoản",
+                    "Cập nhật tài khoản không thành công. Vui lòng thử lại sau!!!",
+                    false, "OK", AlertHelper.ALERT_NO_ACTION);
+        }
+
         this.mLoadingDialog.dismiss();
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
-                .setTitle("Cập nhật tài khoản")
-                .setCancelable(false)
-                .setMessage("Cập nhật tài khoản không thành công. Vui lòng thử lại sau!!!")
-                .setNegativeButton("Xác nhận", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                    }
-                });
-        builder.show();
+
     }
 
     @Override
@@ -280,6 +300,8 @@ public class UpdateUserFragment extends Fragment implements View.OnClickListener
 
         mDpkBirthDay = dialog.findViewById(R.id.dpk_birthday);
         Button mBtnConfirm = dialog.findViewById(R.id.btn_confirm);
+        Button mBtnCancel = dialog.findViewById(R.id.btn_cancel);
+
         mBtnConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -288,7 +310,21 @@ public class UpdateUserFragment extends Fragment implements View.OnClickListener
                 dialog.dismiss();
             }
         });
+        mBtnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
 
         dialog.show();
+    }
+
+
+    @Override
+    public void onFocusChange(View v, boolean hasFocus) {
+        if(!hasFocus){
+            AppUtils.hideKeyboard(getActivity());
+        }
     }
 }

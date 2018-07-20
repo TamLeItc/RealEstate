@@ -1,7 +1,6 @@
 package com.qtctek.realstate.view.user_control.user_management;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,7 +10,6 @@ import android.widget.TextView;
 
 import com.qtctek.realstate.R;
 import com.qtctek.realstate.dto.User;
-import com.qtctek.realstate.dto.User_Object;
 
 import java.util.ArrayList;
 
@@ -53,6 +51,7 @@ public class UserAdapter extends BaseAdapter {
             viewHolder.txvNumberPhone = convertView.findViewById(R.id.txv_phone_number);
             viewHolder.txvRole = convertView.findViewById(R.id.txv_role);
             viewHolder.rlItemUser = convertView.findViewById(R.id.rl_item_user);
+            viewHolder.txvStatus = convertView.findViewById(R.id.txv_status);
 
             convertView.setTag(viewHolder);
         }
@@ -72,18 +71,20 @@ public class UserAdapter extends BaseAdapter {
         if(user.getLevel() == 1){
             viewHolder.txvRole.setTextColor(mContext.getResources().getColor(R.color.colorAdmin));
         }
-        else if(user.getLevel() == 3){
+        else if(user.getLevel() == 2){
             viewHolder.txvRole.setTextColor(mContext.getResources().getColor(R.color.colorMonitor));
         }
-        else if(user.getLevel() == 2){
+        else if(user.getLevel() == 3){
             viewHolder.txvRole.setTextColor(mContext.getResources().getColor(R.color.colorUser));
         }
 
         if(mArrLisUser.get(position).getStatus().equals("no")){
-            viewHolder.rlItemUser.setBackgroundColor(this.mContext.getResources().getColor(R.color.colorPostNotActive));
+            viewHolder.txvStatus.setText("Tạm khóa");
+            viewHolder.txvStatus.setTextColor(mContext.getResources().getColor(R.color.colorRed));
         }
         else{
-            viewHolder.rlItemUser.setBackgroundColor(this.mContext.getResources().getColor(R.color.colorPostActive));
+            viewHolder.txvStatus.setText("Hoạt động");
+            viewHolder.txvStatus.setTextColor(mContext.getResources().getColor(R.color.colorGreen));
         }
 
         return convertView;
@@ -91,7 +92,7 @@ public class UserAdapter extends BaseAdapter {
     }
 
     class ViewHolder{
-        TextView txvName, txvNumberPhone, txvEmail, txvRole;
+        TextView txvName, txvNumberPhone, txvEmail, txvRole, txvStatus;
         RelativeLayout rlItemUser;
     }
 

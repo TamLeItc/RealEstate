@@ -17,9 +17,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.qtctek.realstate.R;
+import com.qtctek.realstate.helper.ToastHelper;
 import com.qtctek.realstate.presenter.new_post.PresenterNewPost;
 import com.qtctek.realstate.view.new_post.interfaces.ViewHandleModelNewPost;
 import com.qtctek.realstate.view.new_post.activity.NewPostActivity;
+import com.qtctek.realstate.view.post_news.activity.MainActivity;
 
 public class DescriptionInformationFragment extends Fragment implements View.OnClickListener, View.OnKeyListener,
         ViewHandleModelNewPost{
@@ -29,9 +31,10 @@ public class DescriptionInformationFragment extends Fragment implements View.OnC
     private TextView mEdtQualityCharacter;
     private EditText mEdtDescription;
     private Button mBtnNext;
-    private Button mBtnSaveAndContinue;
-    private Dialog mLoadingDialog;
+    private Button mBtnSaveTemp;
+
     private boolean mIsEdited = false;
+    private boolean mIsSaveTemp;
 
 
     @Nullable
@@ -39,7 +42,6 @@ public class DescriptionInformationFragment extends Fragment implements View.OnC
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         mView = inflater.inflate(R.layout.fragment_description_information, container, false);
 
-        createLoadingDialog();
         initViews();
         handleStart();
 
@@ -49,20 +51,13 @@ public class DescriptionInformationFragment extends Fragment implements View.OnC
     private void initViews(){
         this.mEdtDescription = mView.findViewById(R.id.edt_description);
         this.mBtnNext = mView.findViewById(R.id.btn_next_to);
-        this.mBtnSaveAndContinue = mView.findViewById(R.id.btn_save_continue);
+        this.mBtnSaveTemp = mView.findViewById(R.id.btn_save_temp);
         this.mEdtQualityCharacter = mView.findViewById(R.id.txv_quality_character);
 
         this.mEdtDescription.setOnKeyListener(this);
         this.mBtnNext.setOnClickListener(this);
         this.mEdtQualityCharacter.setOnKeyListener(this);
-        this.mBtnSaveAndContinue.setOnClickListener(this);
-    }
-
-    private void createLoadingDialog(){
-        mLoadingDialog = new Dialog(getContext());
-        mLoadingDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        mLoadingDialog.setContentView(R.layout.dialog_loading);
-        mLoadingDialog.setCancelable(false);
+        this.mBtnSaveTemp.setOnClickListener(this);
     }
 
     private void handleStart(){
@@ -74,9 +69,8 @@ public class DescriptionInformationFragment extends Fragment implements View.OnC
         this.mEdtQualityCharacter.setText(text);
     }
 
-    private void handleNext(){
-
-        if(!mIsEdited){
+    private void handleSave(){
+        if(!mIsEdited && !mIsSaveTemp){
             ViewPager viewPager = getActivity().findViewById(R.id.view_pager);
             viewPager.setCurrentItem(3);
             return;
@@ -84,21 +78,21 @@ public class DescriptionInformationFragment extends Fragment implements View.OnC
 
         NewPostActivity.PRODUCT.setDescription(this.mEdtDescription.getText().toString().trim());
 
-        mLoadingDialog.show();
+        ((NewPostActivity)getActivity()).dialogHelper.show();
         new PresenterNewPost(this)
                 .handleUpdateDescriptionInformation(NewPostActivity.PRODUCT.getId(), NewPostActivity.PRODUCT.getDescription());
-
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()){
-            case R.id.btn_save_continue:
-                handleNext();
+            case R.id.btn_save_temp:
+                mIsSaveTemp = true;
+                handleSave();
                 break;
             case R.id.btn_next_to:
-                ViewPager viewPager = getActivity().findViewById(R.id.view_pager);
-                viewPager.setCurrentItem(3);
+                mIsSaveTemp = false;
+                handleSave();
                 break;
         }
     }
@@ -142,14 +136,17 @@ public class DescriptionInformationFragment extends Fragment implements View.OnC
 
     @Override
     public void onUpdateDescriptionInformation(boolean status) {
-        mLoadingDialog.dismiss();
+        ((NewPostActivity)getActivity()).dialogHelper.dismiss();
         if(status){
             mIsEdited = false;
-            ViewPager viewPager = getActivity().findViewById(R.id.view_pager);
-            viewPager.setCurrentItem(3);
+            if(!mIsSaveTemp){
+                ViewPager viewPager = getActivity().findViewById(R.id.view_pager);
+                viewPager.setCurrentItem(3);
+            }
+            ((NewPostActivity)getActivity()).toastHelper.toast("Lưu thành công", ToastHelper.LENGTH_SHORT);
         }
         else{
-            Toast.makeText(getContext(), "Có lỗi xảy ra trong việc lưu dữ liệu", Toast.LENGTH_SHORT).show();
+            ((NewPostActivity)getActivity()).toastHelper.toast("Lỗi lưu dữ liệu", ToastHelper.LENGTH_SHORT);
         }
     }
 
@@ -166,5 +163,14 @@ public class DescriptionInformationFragment extends Fragment implements View.OnC
     @Override
     public void onUpdateHandlePost(boolean status) {
 
+    }
+
+    @Override
+    public void onDestroyView() {
+        //clear memory
+        Runtime.getRuntime().gc();
+        System.gc();
+
+        super.onDestroyView();
     }
 }

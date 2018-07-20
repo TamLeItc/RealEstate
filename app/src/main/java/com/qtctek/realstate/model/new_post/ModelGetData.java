@@ -1,6 +1,7 @@
 package com.qtctek.realstate.model.new_post;
 
 import android.os.AsyncTask;
+import android.util.Log;
 
 import com.qtctek.realstate.presenter.new_post.GetData.PresenterImpHandleModelGetData;
 import com.qtctek.realstate.view.post_news.activity.MainActivity;
@@ -8,41 +9,39 @@ import com.qtctek.realstate.view.post_news.activity.MainActivity;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
-import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
-import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class ModelGetData {
 
     private PresenterImpHandleModelGetData mPresenterImpHandleModelGetData;
 
-    String mUrlProvinceCity = MainActivity.HOST + "/real_estate/get_province_city.php";
-    String mUrlDistrict = MainActivity.HOST + "/real_estate/get_district.php";
-    String mUrlCategoriesProduct = MainActivity.HOST + "/real_estate/get_categories_product.php";
+    String mUrlCity = MainActivity.WEB_SERVER + "get_city.php";
+    String mUrlDistrict = MainActivity.WEB_SERVER + "get_district.php";
+    String mUrlCategoriesProduct = MainActivity.WEB_SERVER + "get_category_product.php";
 
     public ModelGetData(PresenterImpHandleModelGetData presenterImpHandleModelGetData){
         this.mPresenterImpHandleModelGetData = presenterImpHandleModelGetData;
     }
 
-    public void requireGetProvinceCity(){
-        new GetProvinceCity().execute(mUrlProvinceCity);
+    public void requireGetListCity(){
+        new City().execute(mUrlCity);
     }
 
-    public void requireGetDistrict(int provinceCityId){
-        new GetDistrict(provinceCityId).execute(mUrlDistrict);
+    public void requireGetListDistrict(int provinceCityId){
+        new District(provinceCityId).execute(mUrlDistrict);
     }
 
     public void requireGetCategoriesProduct(String table, String columnName){
-        new GetCategoriesProduct(table, columnName).execute(mUrlCategoriesProduct);
+        new CategoryProduct(table, columnName).execute(mUrlCategoriesProduct);
     }
 
-    class GetProvinceCity extends AsyncTask<String, Void, String>{
+    class City extends AsyncTask<String, Void, String>{
 
         OkHttpClient okHttpClient;
 
-        public GetProvinceCity(){
+        public City(){
             okHttpClient = new OkHttpClient.Builder()
                     .connectTimeout(15, TimeUnit.SECONDS)
                     .writeTimeout(10, TimeUnit.SECONDS)
@@ -69,45 +68,40 @@ public class ModelGetData {
 
         @Override
         protected void onPostExecute(String s) {
-
             if(!s.equals("error")){
-                mPresenterImpHandleModelGetData.onGetProvinceCity(true, s);
+                mPresenterImpHandleModelGetData.onGetListCity(true, s);
             }
             else{
-                mPresenterImpHandleModelGetData.onGetProvinceCity(false, s);
+                mPresenterImpHandleModelGetData.onGetListCity(false, s);
             }
 
             super.onPostExecute(s);
         }
     }
 
-    class GetDistrict extends AsyncTask<String, Void, String>{
+    class District extends AsyncTask<String, Void, String>{
 
         OkHttpClient okHttpClient;
 
-        int provinceCityId;
+        int cityId;
 
-        public GetDistrict(int provinceCityId){
+        public District(int cityId){
             okHttpClient = new OkHttpClient.Builder()
                     .connectTimeout(15, TimeUnit.SECONDS)
                     .writeTimeout(10, TimeUnit.SECONDS)
                     .readTimeout(10, TimeUnit.SECONDS)
                     .build();
 
-            this.provinceCityId = provinceCityId;
+            this.cityId = cityId;
         }
 
         @Override
         protected String doInBackground(String... strings) {
 
-            RequestBody requestBody = new MultipartBody.Builder()
-                    .addFormDataPart("id_province_city", provinceCityId + "")
-                    .setType(MultipartBody.FORM)
-                    .build();
-
+            String url = strings[0] + "?city_id=" + cityId;
             Request request = new Request.Builder()
-                    .url(strings[0])
-                    .post(requestBody)
+                    .url(url)
+                    .get()
                     .build();
 
             try {
@@ -134,14 +128,14 @@ public class ModelGetData {
         }
     }
 
-    class GetCategoriesProduct extends AsyncTask<String, Void, String>{
+    class CategoryProduct extends AsyncTask<String, Void, String>{
 
         OkHttpClient okHttpClient;
 
         private String table;
         private String columnName;
 
-        public GetCategoriesProduct(String table, String columnName){
+        public CategoryProduct(String table, String columnName){
             okHttpClient = new OkHttpClient.Builder()
                     .connectTimeout(15, TimeUnit.SECONDS)
                     .writeTimeout(10, TimeUnit.SECONDS)
@@ -155,7 +149,6 @@ public class ModelGetData {
         protected String doInBackground(String... strings) {
 
             String url = mUrlCategoriesProduct + "?table=" + table + "&column_name=" + columnName;
-
             Request request = new Request.Builder()
                     .url(url)
                     .get()

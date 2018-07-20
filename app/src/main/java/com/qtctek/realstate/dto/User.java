@@ -2,7 +2,9 @@ package com.qtctek.realstate.dto;
 
 public class User {
 
-    private int mId;
+    public static int USER_NULL = -1001;
+
+    private int mId = USER_NULL;
     private String mFullName;
     private String mSex;
     private String mBirthDay;
@@ -13,12 +15,24 @@ public class User {
     private String mPassword;
     private String mType;
     private String mStatus;
-    private int mLevel;
+    private int mLevel = USER_NULL;
 
     public User(){}
 
-    public User(int mId, String mFullName, String mSex, String mBirthDay, String mPhone, String mEmail, String mAddress, String mUsername, String mPassword, String mType, String mStatus, int mLevel) {
-        this.mId = mId;
+    public User(String mFullName, String mSex, String mBirthDay, String mPhone, String mEmail, String mAddress, String mUsername, String mPassword) {
+        this.mFullName = mFullName;
+        this.mSex = mSex;
+        this.mBirthDay = mBirthDay;
+        this.mPhone = mPhone;
+        this.mEmail = mEmail;
+        this.mAddress = mAddress;
+        this.mUsername = mUsername;
+        this.mPassword = mPassword;
+    }
+
+    public User(int id, String mFullName, String mSex, String mBirthDay, String mPhone, String mEmail, String mAddress, String mUsername, String mPassword,
+                String mType, String mStatus, int mLevel) {
+        this.mId = id;
         this.mFullName = mFullName;
         this.mSex = mSex;
         this.mBirthDay = mBirthDay;
@@ -32,18 +46,19 @@ public class User {
         this.mLevel = mLevel;
     }
 
-    public User(String mFullName, String mSex, String mBirthDay, String mPhone, String mEmail, String mAddress, String mUsername, String mPassword) {
-        this.mFullName = mFullName;
-        this.mSex = mSex;
-        this.mBirthDay = mBirthDay;
-        this.mPhone = mPhone;
-        this.mEmail = mEmail;
-        this.mAddress = mAddress;
-        this.mUsername = mUsername;
-        this.mPassword = mPassword;
-        this.mType = mType;
-        this.mStatus = mStatus;
-        this.mLevel = mLevel;
+    public void clearData(){
+        this.mId = USER_NULL;
+        this.mFullName = "";
+        this.mSex = "";
+        this.mBirthDay = "";
+        this.mPhone = "";
+        this.mEmail = "";
+        this.mAddress = "";
+        this.mUsername = "";
+        this.mPassword = "";
+        this.mType = "";
+        this.mStatus = "";
+        this.mLevel = USER_NULL;
     }
 
     public int getId() {

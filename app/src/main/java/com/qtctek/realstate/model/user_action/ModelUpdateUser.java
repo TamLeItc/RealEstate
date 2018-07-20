@@ -1,9 +1,9 @@
 package com.qtctek.realstate.model.user_action;
 
 import android.os.AsyncTask;
+import android.util.Log;
 
 import com.qtctek.realstate.dto.User;
-import com.qtctek.realstate.dto.User_Object;
 import com.qtctek.realstate.presenter.user_action.update_user.PresenterImpHandleUpdateUser;
 import com.qtctek.realstate.view.post_news.activity.MainActivity;
 
@@ -27,8 +27,8 @@ public class ModelUpdateUser {
         this.mPresenterImpHandleUpdateUser = presenterImpHandleUpdateUser;
     }
 
-    public void requireUpdateUser(User user){
-        new UpdateUser(user).execute(mUrlUpdateUser);
+    public void requireUpdateUser(User user, String oldPassword){
+        new UpdateUser(user, oldPassword).execute(mUrlUpdateUser);
     }
 
     class UpdateUser extends AsyncTask<String, Void, String>{
@@ -36,14 +36,16 @@ public class ModelUpdateUser {
         OkHttpClient okHttpClient;
 
         User user;
+        String oldPassword;
 
-        public UpdateUser(User user){
+        public UpdateUser(User user, String oldPassword){
             okHttpClient = new OkHttpClient.Builder()
                     .connectTimeout(15, TimeUnit.SECONDS)
                     .readTimeout(10, TimeUnit.SECONDS)
                     .writeTimeout(10, TimeUnit.SECONDS)
                     .build();
             this.user = user;
+            this.oldPassword = oldPassword;
         }
 
         @Override
@@ -58,6 +60,7 @@ public class ModelUpdateUser {
                     .addFormDataPart("address", user.getAddress())
                     .addFormDataPart("username", user.getUsername())
                     .addFormDataPart("password", user.getPassword())
+                    .addFormDataPart("old_password", oldPassword)
                     .setType(MultipartBody.FORM)
                     .build();
 

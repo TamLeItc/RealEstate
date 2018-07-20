@@ -29,6 +29,7 @@ public class Product {
     private String mUserFullName;
     private String mUserPhone;
     private String mUserEmail;
+    private boolean mIsSaved = false;
 
     public Product(){
         this.mFormality = "yes";
@@ -48,7 +49,7 @@ public class Product {
         this.mDistrictId = 760;
         this.mDistrict = "Quận 1";
         this.mType = "Nhà chung cư";
-        this.mAmenities = "Kiểu cổ điển";
+        this.mAmenities = "";
         this.mStatus = "1";
         this.mArchitecture = "Kiểu cổ điển";
         this.mArchitectureId = 1;
@@ -311,5 +312,13 @@ public class Product {
 
     public void setUserEmail(String mUserEmail) {
         this.mUserEmail = mUserEmail;
+    }
+
+    public boolean getIsSaved() {
+        return mIsSaved;
+    }
+
+    public void setIsSaved(boolean mIsSaved) {
+        this.mIsSaved = mIsSaved;
     }
 }

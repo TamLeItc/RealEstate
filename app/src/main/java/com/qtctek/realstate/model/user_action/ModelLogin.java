@@ -1,8 +1,11 @@
 package com.qtctek.realstate.model.user_action;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.qtctek.realstate.common.AppUtils;
 import com.qtctek.realstate.presenter.user_action.login.PresenterImpHandleLogin;
 import com.qtctek.realstate.view.post_news.activity.MainActivity;
 
@@ -26,6 +29,24 @@ public class ModelLogin {
 
     public void requireCheckUserLogin(String user, String password){
         new UserLogin(user, password).execute(this.mUrl);
+    }
+
+    public void requireGetDataSaveLogin(Context context){
+        SharedPreferences sharedPreferences = context.getSharedPreferences(AppUtils.SHARED_PREFERENCES, context.MODE_PRIVATE);
+        String userName = sharedPreferences.getString(AppUtils.USERNAME, "");
+        String password = sharedPreferences.getString(AppUtils.PASSWORD, "");
+
+        this.mPresenterImpHandleUserManager.onGetDataSaveLoginSuccessful(userName, password);
+    }
+
+    public void requireUpdateDataSaveLogin(String userName, String password, Context context){
+        SharedPreferences sharedPreferences = context.getSharedPreferences(AppUtils.SHARED_PREFERENCES, context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(AppUtils.USERNAME, userName);
+        editor.putString(AppUtils.PASSWORD, password);
+        editor.commit();
+
+        this.mPresenterImpHandleUserManager.onUpdateDataSaveLoginSuccessful();
     }
 
     class UserLogin extends AsyncTask<String, Void, String>{

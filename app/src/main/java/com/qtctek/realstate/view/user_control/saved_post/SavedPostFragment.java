@@ -18,9 +18,11 @@ import android.widget.Toast;
 
 import com.qtctek.realstate.R;
 import com.qtctek.realstate.dto.Product;
+import com.qtctek.realstate.helper.ToastHelper;
 import com.qtctek.realstate.presenter.user_control.saved_post.PresenterSavedPost;
 import com.qtctek.realstate.view.post_detail.activity.PostDetailActivity;
 import com.qtctek.realstate.view.post_news.fragment.ListPostNewsFragment;
+import com.qtctek.realstate.view.user_control.activity.UserControlActivity;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -31,9 +33,6 @@ public class SavedPostFragment extends Fragment implements ViewHandleSavedPost,
     private View mView;
 
     private ListView mLsvSavedPost;
-
-
-    private Dialog mLoadingDialog;
 
     private AdapterPostSale mAdapterListPost;
     private ArrayList<Product> mArrListProduct = new ArrayList<>();
@@ -55,7 +54,7 @@ public class SavedPostFragment extends Fragment implements ViewHandleSavedPost,
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         initViews();
-        createLoadingDialog();
+
         handleStart();
     }
 
@@ -68,20 +67,13 @@ public class SavedPostFragment extends Fragment implements ViewHandleSavedPost,
 
     private void handleStart(){
 
-        this.mLoadingDialog.show();
+        ((UserControlActivity)getActivity()).dialogHelper.show();
 
         this.mPresenterSavedPost = new PresenterSavedPost(this);
         this.mPresenterSavedPost.handleGetSavedProductList(0, 20, getStrProductIdList(ListPostNewsFragment.LIST_SAVED_PRODUCT_ID));
 
         this.mAdapterListPost = new AdapterPostSale(mArrListProduct, getActivity(), R.layout.item_post);
         this.mLsvSavedPost.setAdapter(this.mAdapterListPost);
-    }
-
-    private void createLoadingDialog(){
-        this.mLoadingDialog = new Dialog(getActivity());
-        this.mLoadingDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        this.mLoadingDialog.setContentView(R.layout.dialog_loading);
-        this.mLoadingDialog.setCancelable(false);
     }
 
     @Override
@@ -101,7 +93,7 @@ public class SavedPostFragment extends Fragment implements ViewHandleSavedPost,
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, final int position, long l) {
         PopupMenu popupMenu = new PopupMenu(getContext(), view);
-        popupMenu.getMenuInflater().inflate(R.menu.poup_menu_for_saved_post, popupMenu.getMenu());
+        popupMenu.getMenuInflater().inflate(R.menu.popup_menu_for_saved_post, popupMenu.getMenu());
 
         mPositionClick = position;
 
@@ -111,11 +103,11 @@ public class SavedPostFragment extends Fragment implements ViewHandleSavedPost,
                 switch (item.getItemId()) {
                     case R.id.control_view_detail:
                         Intent intent = new Intent(getActivity(), PostDetailActivity.class);
-                        intent.putExtra("post_id", mArrListProduct.get(mPositionClick).getId());
+                        intent.putExtra("product_id", mArrListProduct.get(mPositionClick).getId());
                         startActivity(intent);
                         break;
                     case R.id.control_un_save:
-                        mLoadingDialog.show();
+                        ((UserControlActivity)getActivity()).dialogHelper.show();
                         String id = mArrListProduct.get(mPositionClick).getId() + "";
                         ListPostNewsFragment.LIST_SAVED_PRODUCT_ID.remove(id);
                         mPresenterSavedPost.handleUpdateDataProductIds(ListPostNewsFragment.LIST_SAVED_PRODUCT_ID, getContext());
@@ -128,44 +120,54 @@ public class SavedPostFragment extends Fragment implements ViewHandleSavedPost,
         });
         popupMenu.show();
     }
-
     public static String getStrProductIdList(HashMap<String, String> hashMap){
         String data = "";
-        boolean isFirst = true;
-        for(String item : hashMap.keySet()){
-            if(isFirst){
-                data += item;
+        for(String key : hashMap.keySet()){
+            if(data.equals("")){
+                data += key;
             }
             else{
-                data += "," + item;
+                data += "," + key;
             }
         }
         return data;
     }
 
     @Override
+    public void onHandleDataProductIdsSuccessful(HashMap<String, String> list) {
+
+    }
+
+    @Override
+    public void onHandleDataProductIdsError(String error) {
+
+    }
+
+    @Override
     public void onHandleUpdateProductIdListSuccessful() {
-        mLoadingDialog.dismiss();
+        ((UserControlActivity)getActivity()).dialogHelper.dismiss();
         this.mArrListProduct.remove(mPositionClick);
         mAdapterListPost.notifyDataSetChanged();
-        Toast.makeText(getContext(), "Bỏ thành công", Toast.LENGTH_SHORT).show();
+
+        ((UserControlActivity)getActivity()).toastHelper.toast("Bỏ lưu thành công", ToastHelper.LENGTH_SHORT);
     }
 
     @Override
     public void onHandleUpdateProductIdListError(String e) {
-        mLoadingDialog.dismiss();
-        Toast.makeText(getContext(), "Lỗi trong quá trình lưu dữ liệu. Vui lòng thử lại sau!!!", Toast.LENGTH_SHORT).show();
+        ((UserControlActivity)getActivity()).dialogHelper.dismiss();
+
+        ((UserControlActivity)getActivity()).toastHelper.toast("Bỏ lưu không thành công", ToastHelper.LENGTH_SHORT);
     }
 
     @Override
     public void onHandleSavedProductListSuccessful(ArrayList<Product> mArrListProduct) {
-        mLoadingDialog.dismiss();
+        ((UserControlActivity)getActivity()).dialogHelper.dismiss();
         this.mArrListProduct.addAll(mArrListProduct);
         this.mAdapterListPost.notifyDataSetChanged();
     }
 
     @Override
     public void onHandleSavedProductListError(String error) {
-        Toast.makeText(getContext(), "Lỗi trong quá trình tải dữ liệu. Vui lòng thử lại sau!!!", Toast.LENGTH_SHORT).show();
+        ((UserControlActivity)getActivity()).toastHelper.toast("Lỗi trong quá trình tải dữ liệu. Vui lòng thử lại sau!!!", ToastHelper.LENGTH_SHORT);
     }
 }

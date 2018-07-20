@@ -1,6 +1,5 @@
 package com.qtctek.realstate.view.user_control.post_management;
 
-import com.qtctek.realstate.dto.PostSale;
 import com.qtctek.realstate.dto.Product;
 
 import java.util.ArrayList;

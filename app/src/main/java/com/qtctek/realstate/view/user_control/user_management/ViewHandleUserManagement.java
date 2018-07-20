@@ -1,7 +1,6 @@
 package com.qtctek.realstate.view.user_control.user_management;
 
 import com.qtctek.realstate.dto.User;
-import com.qtctek.realstate.dto.User_Object;
 
 import java.util.ArrayList;
 

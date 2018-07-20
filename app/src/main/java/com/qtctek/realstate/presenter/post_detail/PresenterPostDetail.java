@@ -1,10 +1,7 @@
 package com.qtctek.realstate.presenter.post_detail;
 
-import com.google.gson.JsonObject;
-import com.qtctek.realstate.dto.PostSale;
+import com.qtctek.realstate.dto.Photo;
 import com.qtctek.realstate.dto.Product;
-import com.qtctek.realstate.dto.Product1;
-import com.qtctek.realstate.dto.ProductDetail;
 import com.qtctek.realstate.model.post_detail.ModelPostDetail;
 import com.qtctek.realstate.view.post_detail.interfaces.ViewHandlePostDetail;
 
@@ -47,9 +44,14 @@ public class PresenterPostDetail implements PresenterImpHandlePostDetail {
         product.setMapLat(jsonObjectProduct.getString("map_latitude"));
         product.setMapLng(jsonObjectProduct.getString("map_longitude"));
         product.setAmenities(jsonObjectProduct.getString("amenities"));
+        product.setCityId(jsonObjectProduct.getInt("city_id"));
         product.setCity(jsonObjectProduct.getString("city"));
+        product.setDistrictId(jsonObjectProduct.getInt("district_id"));
         product.setDistrict(jsonObjectProduct.getString("district"));
+        product.setAddress(jsonObjectProduct.getString("address"));
+        product.setTypeId(jsonObjectProduct.getInt("type_id"));
         product.setType(jsonObjectProduct.getString("type"));
+        product.setArchitectureId(jsonObjectProduct.getInt("architecture_id"));
         product.setArchitecture(jsonObjectProduct.getString("architecture"));
         product.setUserId(jsonObjectProduct.getInt("id_login"));
         product.setUserFullName(jsonObjectProduct.getString("login_fullname"));
@@ -57,13 +59,19 @@ public class PresenterPostDetail implements PresenterImpHandlePostDetail {
         product.setUserEmail(jsonObjectProduct.getString("login_email"));
 
         JSONArray jsonArrayImage = jsonObject.getJSONArray("photo");
-        ArrayList<String> arrImage = new ArrayList<>();
+        ArrayList<Photo> arrPhoto = new ArrayList<>();
         for(int i = 0; i < jsonArrayImage.length(); i++){
             JSONObject jsonObjectImage = jsonArrayImage.getJSONObject(i);
-            arrImage.add(jsonObjectImage.getString("photo_url"));
+
+            Photo photo = new Photo();
+            photo.setId(jsonObjectImage.getInt("id"));
+            photo.setPhotoLink(jsonObjectImage.getString("photo_url"));
+            photo.setProductId(jsonObjectImage.getInt("product_id"));
+
+            arrPhoto.add(photo);
         }
 
-        this.mViewHandlePostDetail.onHandleDataPostDetailSuccessful(product, arrImage);
+        this.mViewHandlePostDetail.onHandleDataPostDetailSuccessful(product, arrPhoto);
     }
 
     @Override

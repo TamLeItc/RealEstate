@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 
 import com.qtctek.realstate.R;
+import com.qtctek.realstate.dto.Photo;
 import com.qtctek.realstate.view.post_news.activity.MainActivity;
 import com.qtctek.realstate.view.new_post.interfaces.OnRequireHandleFromAdapter;
 import com.squareup.picasso.Picasso;
@@ -19,12 +20,12 @@ import java.util.ArrayList;
 public class ImageAdapter extends  RecyclerView.Adapter<ImageAdapter.ViewHolder>{
 
     private Context mContext;
-    private ArrayList<Uri> mArrImagesUri;
+    private ArrayList<Photo> mArrPhoto;
     private OnRequireHandleFromAdapter mHandleFromAdapter;
 
-    public ImageAdapter(Context mContext, ArrayList<Uri> mArrImagesLink, OnRequireHandleFromAdapter handleFromAdapter) {
+    public ImageAdapter(Context mContext, ArrayList<Photo> mArrPhoto, OnRequireHandleFromAdapter handleFromAdapter) {
         this.mContext = mContext;
-        this.mArrImagesUri = mArrImagesLink;
+        this.mArrPhoto = mArrPhoto;
         this.mHandleFromAdapter = handleFromAdapter;
     }
 
@@ -37,11 +38,10 @@ public class ImageAdapter extends  RecyclerView.Adapter<ImageAdapter.ViewHolder>
 
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
-        try{
-            String[] typeFile = this.mArrImagesUri.get(position).toString().split("_");
 
-            int temp = Integer.parseInt(typeFile[0]);
-            String url = MainActivity.HOST + "/real_estate/images/" + this.mArrImagesUri.get(position).toString();
+        Photo photo = mArrPhoto.get(position);
+        if (!photo.getIsUpload()) {
+            String url = MainActivity.WEB_SERVER + "/images/" + this.mArrPhoto.get(position).getPhotoLink();
             Picasso.with(mContext).load(url).into(holder.imvImage);
 
             holder.btnDelete.setOnClickListener(new View.OnClickListener() {
@@ -50,28 +50,21 @@ public class ImageAdapter extends  RecyclerView.Adapter<ImageAdapter.ViewHolder>
                     mHandleFromAdapter.onRequireDeleteFile(position);
                 }
             });
-
-        }
-        catch(java.lang.NumberFormatException e){
-            holder.imvImage.setImageURI(this.mArrImagesUri.get(position));
+        } else {
+            holder.imvImage.setImageURI(photo.getUri());
             holder.btnDelete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ImagesInformationFragment.ARR_URI.remove(position);
-                    ImagesInformationFragment.QUALITY_IMAGE -= 1;
+                    mArrPhoto.remove(position);
                     ImagesInformationFragment.IMAGE_ADAPTER.notifyDataSetChanged();
                 }
             });
-
         }
-
-
-
     }
 
     @Override
     public int getItemCount() {
-        return this.mArrImagesUri.size();
+        return this.mArrPhoto.size();
     }
 
     class ViewHolder extends RecyclerView.ViewHolder{

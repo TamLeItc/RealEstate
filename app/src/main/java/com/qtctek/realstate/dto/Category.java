@@ -4,6 +4,7 @@ public class Category {
 
     private int mId;
     private String mName;
+    private boolean mIsSelected  = false;
 
     public int getId() {
         return mId;
@@ -21,4 +22,11 @@ public class Category {
         this.mName = mName;
     }
 
+    public boolean getIsSelected() {
+        return mIsSelected;
+    }
+
+    public void setIsSelected(boolean mIsSelected) {
+        this.mIsSelected = mIsSelected;
+    }
 }

@@ -11,6 +11,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.qtctek.realstate.R;
+import com.qtctek.realstate.common.AppUtils;
 import com.qtctek.realstate.dto.Product;
 import com.qtctek.realstate.view.post_news.activity.MainActivity;
 import com.squareup.picasso.Callback;
@@ -55,13 +56,14 @@ public class AdapterPostSale extends BaseAdapter {
 
             viewHolder = new ViewHolder();
             viewHolder.llItem = convertView.findViewById(R.id.ll_item);
-            viewHolder.imvProductAvartar = convertView.findViewById(R.id.imv_product_avartar);
+            viewHolder.imvProductAvartar = convertView.findViewById(R.id.imb_product_avartar);
             viewHolder.txvArea = convertView.findViewById(R.id.txv_area);
             viewHolder.txvPrice = convertView.findViewById(R.id.txv_price);
             viewHolder.txvRooms = convertView.findViewById(R.id.txv_rooms);
             viewHolder.txvTitle = convertView.findViewById(R.id.txv_title);
             viewHolder.txvAddress = convertView.findViewById(R.id.txv_address);
             viewHolder.progressBar = convertView.findViewById(R.id.progress_bar);
+            viewHolder.txvAMonth = convertView.findViewById(R.id.txv_a_month);
 
             convertView.setTag(viewHolder);
         }
@@ -93,30 +95,14 @@ public class AdapterPostSale extends BaseAdapter {
             }
         });
 
-        String strPrice = "Thương lượng";
-        if(product.getPrice() > 1000000000){
-            float price = (float)product.getPrice() / 1000000000;
+        viewHolder.txvPrice.setText(AppUtils.getStringPrice(product.getPrice(), AppUtils.LONG_PRICE));
 
-            strPrice  = Math.round( price * 100.0)/ 100.0 + " tỉ";
-            viewHolder.txvPrice.setText(strPrice);
-        }
-        else if(product.getPrice() > 1000000){
-            float price = (float)product.getPrice() / 1000000;
-
-            strPrice  = Math.round( price * 100.0)/ 100.0 + " triệu";
-            viewHolder.txvPrice.setText(strPrice);
-        }
-        else if(product.getPrice() > 1000){
-            float price = (float)product.getPrice() / 1000;
-
-            strPrice  = Math.round( price * 100.0)/ 100.0 + "K";
-            viewHolder.txvPrice.setText(strPrice);
+        if(product.getFormality().equals("no")){
+            viewHolder.txvAMonth.setVisibility(View.VISIBLE);
         }
         else{
-            viewHolder.txvPrice.setText(strPrice);
+            viewHolder.txvAMonth.setVisibility(View.GONE);
         }
-
-        viewHolder.llItem.setBackgroundColor(this.mContext.getResources().getColor(R.color.colorMain));
 
         return convertView;
 
@@ -125,7 +111,7 @@ public class AdapterPostSale extends BaseAdapter {
     class ViewHolder{
         LinearLayout llItem;
         ImageView imvProductAvartar;
-        TextView txvPrice, txvArea, txvRooms, txvTitle, txvAddress;
+        TextView txvPrice, txvArea, txvRooms, txvTitle, txvAddress, txvAMonth;
         ProgressBar progressBar;
     }
 

@@ -7,7 +7,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,7 +45,7 @@ public class UserNormalControlFragment extends Fragment implements View.OnClickL
     private void initViews(){
         mViewPager = (ViewPager) mView.findViewById(R.id.view_pager);
         mTabLayout = (TabLayout) mView.findViewById(R.id.tab_layout);
-        this.mBtnBack = ((UserControlActivity) getActivity()).findViewById(R.id.btn_back);
+        this.mBtnBack = ((UserControlActivity) getActivity()).findViewById(R.id.imv_back);
 
         this.mToolbar = ((UserControlActivity)getActivity()).findViewById(R.id.toolbar);
         this.mBtnBack.setOnClickListener(this);
@@ -71,7 +70,7 @@ public class UserNormalControlFragment extends Fragment implements View.OnClickL
     @Override
     public void onClick(View v) {
         switch (v.getId()){
-            case R.id.btn_back:
+            case R.id.imv_back:
                 getActivity().finish();
                 break;
         }

@@ -22,11 +22,11 @@ public class PresenterGetData implements PresenterImpHandleModelGetData {
     }
 
     public void handleGetProvinceCity(){
-        mModelGetData.requireGetProvinceCity();
+        mModelGetData.requireGetListCity();
     }
 
     public void handleGetDistrict(int provinceCity){
-        mModelGetData.requireGetDistrict(provinceCity);
+        mModelGetData.requireGetListDistrict(provinceCity);
     }
 
     public void handleGetCategoriesProduct(String table, String columnName){
@@ -34,7 +34,7 @@ public class PresenterGetData implements PresenterImpHandleModelGetData {
     }
 
     @Override
-    public void onGetProvinceCity(boolean status, String data) {
+    public void onGetListCity(boolean status, String data) {
         if(status){
             ArrayList<Place> mArr = new ArrayList<>();
             try {
@@ -42,22 +42,22 @@ public class PresenterGetData implements PresenterImpHandleModelGetData {
                 for (int i = 0; i < jsonArray.length(); i++){
                     JSONObject jsonObject = jsonArray.getJSONObject(i);
 
-                    Place provinceCity = new Place();
-                    provinceCity.setId(jsonObject.getInt("id"));
-                    provinceCity.setName(jsonObject.getString("name"));
-                    provinceCity.setLatlng(jsonObject.getString("latlng"));
-                    mArr.add(provinceCity);
+                    Place place = new Place();
+                    place.setId(jsonObject.getInt("id"));
+                    place.setName(jsonObject.getString("name"));
+                    place.setLatlng(jsonObject.getString("location"));
+                    mArr.add(place);
                 }
 
-                this.mViewHandleModelGetData.onGetProvinceCity(true, mArr);
+                this.mViewHandleModelGetData.onGetCityList(true, mArr);
 
             } catch (JSONException e) {
-                this.mViewHandleModelGetData.onGetProvinceCity(false, mArr);
+                this.mViewHandleModelGetData.onGetCityList(false, mArr);
                 e.printStackTrace();
             }
         }
         else{
-            this.mViewHandleModelGetData.onGetProvinceCity(false, null);
+            this.mViewHandleModelGetData.onGetCityList(false, null);
         }
     }
 
@@ -73,14 +73,14 @@ public class PresenterGetData implements PresenterImpHandleModelGetData {
                     Place district = new Place();
                     district.setId(jsonObject.getInt("id"));
                     district.setName(jsonObject.getString("name"));
-                    district.setLatlng(jsonObject.getString("latlng"));
+                    district.setLatlng(jsonObject.getString("location"));
                     mArr.add(district);
                 }
 
-                this.mViewHandleModelGetData.onGetDistrict(true, mArr);
+                this.mViewHandleModelGetData.onGetDistrictList(true, mArr);
 
             } catch (JSONException e) {
-                this.mViewHandleModelGetData.onGetDistrict(false, mArr);
+                this.mViewHandleModelGetData.onGetDistrictList(false, mArr);
                 e.printStackTrace();
             }
         }

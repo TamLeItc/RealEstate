@@ -1,7 +1,6 @@
 package com.qtctek.realstate.presenter.user_action.register;
 
 import com.qtctek.realstate.dto.User;
-import com.qtctek.realstate.dto.User_Object;
 import com.qtctek.realstate.model.user_action.ModelRegister;
 import com.qtctek.realstate.view.user_action.register.ViewHandleRegister;
 

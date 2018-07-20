@@ -2,13 +2,12 @@ package com.qtctek.realstate.presenter.new_post;
 
 import android.util.Log;
 
-import com.qtctek.realstate.dto.PostSale;
 import com.qtctek.realstate.dto.Product;
-import com.qtctek.realstate.dto.Product1;
 import com.qtctek.realstate.model.new_post.ModelNewPost;
 import com.qtctek.realstate.view.new_post.interfaces.ViewHandleModelNewPost;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Calendar;
 
 public class PresenterNewPost  implements PresenterImpHandleModelNewPost{
@@ -22,8 +21,7 @@ public class PresenterNewPost  implements PresenterImpHandleModelNewPost{
     }
 
     public void handleInsertBlankPost(int idUser){
-        String strDate = getCurrentDate();
-        this.mModelNewPost.requireInsertBlankPost(idUser, strDate);
+        this.mModelNewPost.requireInsertBlankPost(idUser);
 
     }
 
@@ -39,16 +37,16 @@ public class PresenterNewPost  implements PresenterImpHandleModelNewPost{
         this.mModelNewPost.requireUpdateDescriptionInformation(productId, description);
     }
 
-    public void handleUpdateLocationProduct(int productId, String mapLat, String mapLng){
-        this.mModelNewPost.requireUpdateLocationProduct(productId, mapLat, mapLng);
+    public void handleUpdateLocationProduct(int productId, String mapLat, String mapLng, String option){
+        this.mModelNewPost.requireUpdateLocationProduct(productId, mapLat, mapLng, option);
     }
 
     public void handleDeleteFile(String linkImage){
         this.mModelNewPost.requireDeleteFile(linkImage);
     }
 
-    public void handleExcutePost(int id){
-        this.mModelNewPost.requireExcutePost(id);
+    public void handleExecutePost(int id){
+        this.mModelNewPost.requireExecutePost(id);
     }
 
     public String getCurrentDate(){

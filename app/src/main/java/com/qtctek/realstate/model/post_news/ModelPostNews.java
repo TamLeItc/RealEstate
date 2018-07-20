@@ -1,8 +1,10 @@
 package com.qtctek.realstate.model.post_news;
 
 import android.os.AsyncTask;
+import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.qtctek.realstate.common.AppUtils;
 import com.qtctek.realstate.presenter.post_news.PresenterImpHandlePostNews;
 import com.qtctek.realstate.view.post_news.activity.MainActivity;
 
@@ -17,7 +19,7 @@ import okhttp3.Response;
 
 public class ModelPostNews {
 
-    private String mUrlGetPostList = MainActivity.HOST + "/real_estate/get_post_list.php";
+    private String mUrlGetPostList = MainActivity.WEB_SERVER + "get_list_product_with_location.php";
     private PresenterImpHandlePostNews mPresenterImpHandlePostNews;
 
 
@@ -26,9 +28,9 @@ public class ModelPostNews {
         this.mPresenterImpHandlePostNews = mPresenterImpHandlePostNews;
     }
 
-    public void requireGetPostList(String minPrice, String maxPrice, String categoryProduct,
+    public void requireGetPostList(String option, int bedroom, int bathroom, String minPrice, String maxPrice, String formality, String architecture, String type,
                                    LatLng farRight, LatLng nearRight, LatLng farLeft, LatLng nearLeft){
-        new GetPostListWithAddress( minPrice, maxPrice, categoryProduct,  farRight, nearRight, farLeft, nearLeft)
+        new GetPostListWithAddress(option, bedroom, bathroom, minPrice, maxPrice, formality, architecture, type,  farRight, nearRight, farLeft, nearLeft)
             .execute(mUrlGetPostList);
     }
 
@@ -37,15 +39,17 @@ public class ModelPostNews {
 
         OkHttpClient okHttpClient;
 
-        String minPrice, maxPrice, categoryProduct;
+        String option;
+        int bedroom, bathroom;
+        String minPrice, maxPrice, formality, architecture, type;
         LatLng farRight;
         LatLng nearRight;
         LatLng farLeft;
         LatLng nearLeft;
 
 
-        public GetPostListWithAddress(String minPrice, String maxPrice, String categoryProduct,
-                                     LatLng farRight, LatLng nearRight, LatLng farLeft, LatLng nearLeft){
+        public GetPostListWithAddress(String option, int bathroom, int bedroom, String minPrice, String maxPrice, String formality, String architecture,
+                                      String type, LatLng farRight, LatLng nearRight, LatLng farLeft, LatLng nearLeft){
             okHttpClient = new OkHttpClient.Builder()
                     .connectTimeout(15, TimeUnit.SECONDS)
                     .readTimeout(10, TimeUnit.SECONDS)
@@ -58,7 +62,12 @@ public class ModelPostNews {
             this.nearLeft = nearLeft;
             this.farLeft = farLeft;
             this.nearRight = nearRight;
-            this.categoryProduct = categoryProduct;
+            this.formality = formality;
+            this.architecture = architecture;
+            this.type = type;
+            this.bedroom = bedroom;
+            this.bathroom = bathroom;
+            this.option = option;
         }
 
         @Override
@@ -72,7 +81,12 @@ public class ModelPostNews {
                     .addFormDataPart( "far_left_lng", farLeft.longitude + "")
                     .addFormDataPart("min_prices", minPrice)
                     .addFormDataPart("max_prices", maxPrice)
-                    .addFormDataPart("category_product", categoryProduct)
+                    .addFormDataPart("architecture", architecture)
+                    .addFormDataPart("formality", formality)
+                    .addFormDataPart("type", type)
+                    .addFormDataPart(AppUtils.QUALITY_BATHROOM, bathroom + "")
+                    .addFormDataPart(AppUtils.QUALITY_BEDROOM, bedroom + "")
+                    .addFormDataPart("option", option)
                     .setType(MultipartBody.FORM)
                     .build();
 
@@ -93,10 +107,20 @@ public class ModelPostNews {
         @Override
         protected void onPostExecute(String s) {
             if(!s.equals("error")){
-                mPresenterImpHandlePostNews.getPostListSuccessful(s);
+                if(option.equals("count")){
+                    mPresenterImpHandlePostNews.getQualityPostSuccessful(s);
+                }
+                else{
+                    mPresenterImpHandlePostNews.getPostListSuccessful(s);
+                }
             }
             else{
-                mPresenterImpHandlePostNews.getPostListError(s);
+                if(option.equals("count")){
+                    mPresenterImpHandlePostNews.getPostListError(s);
+                }
+                else{
+                    mPresenterImpHandlePostNews.getQualityPostError(s);
+                }
             }
 
             super.onPostExecute(s);

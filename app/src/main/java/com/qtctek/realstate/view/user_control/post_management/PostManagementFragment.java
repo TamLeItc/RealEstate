@@ -1,43 +1,34 @@
 package com.qtctek.realstate.view.user_control.post_management;
 
-import android.app.AlertDialog;
-import android.app.Dialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
-import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.PopupMenu;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.qtctek.realstate.R;
-import com.qtctek.realstate.dto.PostSale;
+import com.qtctek.realstate.common.general.Constant;
 import com.qtctek.realstate.dto.Product;
+import com.qtctek.realstate.helper.AlertHelper;
+import com.qtctek.realstate.helper.ToastHelper;
 import com.qtctek.realstate.presenter.user_control.post_management.PresenterPostManagement;
 import com.qtctek.realstate.view.post_detail.activity.PostDetailActivity;
+import com.qtctek.realstate.view.user_control.activity.UserControlActivity;
 
 import java.util.ArrayList;
 
-public class PostManagementFragment extends Fragment implements ViewHandlePostManagement, AbsListView.OnScrollListener, AdapterView.OnItemClickListener{
+public class PostManagementFragment extends Fragment implements ViewHandlePostManagement, AbsListView.OnScrollListener, AdapterView.OnItemClickListener, AlertHelper.AlertHelperCallback {
 
     private View mView;
 
     private ListView mLsvPost;
-
-    private Dialog mLoadingDialog;
 
     private AdapterPostSale mAdapterListPostForAdmin;
     private ArrayList<Product> mArrProduct = new ArrayList<>();
@@ -60,7 +51,6 @@ public class PostManagementFragment extends Fragment implements ViewHandlePostMa
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         initViews();
-        createLoadingDialog();
         handleStart();
     }
 
@@ -73,7 +63,7 @@ public class PostManagementFragment extends Fragment implements ViewHandlePostMa
 
     private void handleStart(){
 
-        this.mLoadingDialog.dismiss();
+        ((UserControlActivity)getActivity()).dialogHelper.show();
 
         this.mPresenterPostManagement = new PresenterPostManagement(this);
         this.mPresenterPostManagement.handleGetPostListForAdmin(0, 20);
@@ -82,50 +72,7 @@ public class PostManagementFragment extends Fragment implements ViewHandlePostMa
         this.mLsvPost.setAdapter(this.mAdapterListPostForAdmin);
     }
 
-    private void createLoadingDialog(){
-        this.mLoadingDialog = new Dialog(getActivity());
-        this.mLoadingDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        this.mLoadingDialog.setContentView(R.layout.dialog_loading);
-        this.mLoadingDialog.setCancelable(false);
-    }
 
-    private void confirmAcceptPost(){
-        AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
-        alertDialog.setMessage("Bạn có chắc duyệt bài đăng này!!!");
-        alertDialog.setCancelable(false);
-        alertDialog.setPositiveButton("Xác nhận", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                mLoadingDialog.show();
-                mPresenterPostManagement.handleUpdateAcceptPost(mArrProduct.get(mPositionClick).getId());
-            }
-        });
-        alertDialog.setNegativeButton("Hủy", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-            }
-        });
-        alertDialog.show();
-    }
-
-    private void confirmDeletePost(){
-        AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
-        alertDialog.setMessage("Bạn có chắc xóa bài đăng này!!!");
-        alertDialog.setCancelable(false);
-        alertDialog.setPositiveButton("Xác nhận", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                mLoadingDialog.show();
-                mPresenterPostManagement.handleDeletePost(mArrProduct.get(mPositionClick).getId());
-            }
-        });
-        alertDialog.setNegativeButton("Hủy", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-            }
-        });
-        alertDialog.show();
-    }
 
     @Override
     public void onScrollStateChanged(AbsListView view, int scrollState) {
@@ -133,7 +80,7 @@ public class PostManagementFragment extends Fragment implements ViewHandlePostMa
                 && (mLsvPost.getLastVisiblePosition() - mLsvPost.getHeaderViewsCount() -
                 mLsvPost.getFooterViewsCount()) >= (mAdapterListPostForAdmin.getCount() - 1)) {
 
-            this.mLoadingDialog.show();
+            ((UserControlActivity)getActivity()).dialogHelper.show();
             this.mPresenterPostManagement.handleGetPostListForAdmin(this.mArrProduct.size(), 20);
         }
     }
@@ -145,7 +92,7 @@ public class PostManagementFragment extends Fragment implements ViewHandlePostMa
     @Override
     public void onHandlePostListSuccessful(ArrayList<Product> mArrProduct) {
 
-        this.mLoadingDialog.dismiss();
+        ((UserControlActivity)getActivity()).dialogHelper.dismiss();
 
         this.mArrProduct.addAll(mArrProduct);
 
@@ -154,77 +101,45 @@ public class PostManagementFragment extends Fragment implements ViewHandlePostMa
 
     @Override
     public void onHandlePostListError(String error) {
-        this.mLoadingDialog.dismiss();
+        ((UserControlActivity)getActivity()).dialogHelper.dismiss();
 
-        Toast.makeText(getActivity(), "Đọc dữ liệu thất bại. Vui lòng thử lại sau", Toast.LENGTH_SHORT).show();
+        ((UserControlActivity)getActivity()).toastHelper.toast("Đọc dữ liệu thất bại. Vui lòng thử lại sau", ToastHelper.LENGTH_SHORT);
     }
 
     @Override
     public void onAcceptPostSuccessful() {
-        this.mLoadingDialog.dismiss();
+        ((UserControlActivity)getActivity()).dialogHelper.dismiss();
 
-        AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
-        alertDialog.setMessage("Duyệt bài thành công");
-        alertDialog.setCancelable(false);
-        alertDialog.setPositiveButton("Xác nhận", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                mArrProduct.clear();
-                mArrProduct.get(mPositionClick).setStatus("3");
-                mAdapterListPostForAdmin.notifyDataSetChanged();
-            }
-        });
-        alertDialog.show();
+        ((UserControlActivity)getActivity()).toastHelper.toast("Duyệt bài thành công", ToastHelper.LENGTH_SHORT);
+
+        mArrProduct.get(mPositionClick).setStatus("3");
+        mAdapterListPostForAdmin.notifyDataSetChanged();
     }
 
     @Override
     public void onAcceptPostError(String error) {
-        this.mLoadingDialog.dismiss();
+        ((UserControlActivity)getActivity()).dialogHelper.dismiss();
 
-        AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
-        alertDialog.setMessage(error);
-        alertDialog.setCancelable(false);
-        alertDialog.setPositiveButton("Xác nhận", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-            }
-        });
-        alertDialog.show();
+        ((UserControlActivity)getActivity()).toastHelper.toast("Duyệt bài không thành công", ToastHelper.LENGTH_SHORT);
     }
 
     @Override
     public void onDeletePostSuccessful() {
 
-        this.mLoadingDialog.dismiss();
-        AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
-        alertDialog.setMessage("Xóa thành công!!!");
-        alertDialog.setCancelable(false);
-        alertDialog.setPositiveButton("Xác nhận", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                mArrProduct.remove(mPositionClick);
-                mAdapterListPostForAdmin.notifyDataSetChanged();
-            }
-        });
-        alertDialog.show();
+        ((UserControlActivity)getActivity()).dialogHelper.dismiss();
+        ((UserControlActivity)getActivity()).toastHelper.toast("Xóa bài thành công", ToastHelper.LENGTH_SHORT);
 
+        mArrProduct.remove(mPositionClick);
+        mAdapterListPostForAdmin.notifyDataSetChanged();
 
     }
 
     @Override
     public void onDeletePostError(String error) {
 
-        this.mLoadingDialog.dismiss();
+        ((UserControlActivity)getActivity()).dialogHelper.dismiss();
 
-        AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
-        alertDialog.setMessage("Xóa thất bại. vui lòng kiểm tra lại!!!");
-        alertDialog.setCancelable(false);
-        alertDialog.setPositiveButton("Xác nhận", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-            }
-        });
-        alertDialog.show();
+        ((UserControlActivity)getActivity()).toastHelper.toast("Xóa bài không thành công", ToastHelper.LENGTH_SHORT);
     }
 
     @Override
@@ -233,25 +148,30 @@ public class PostManagementFragment extends Fragment implements ViewHandlePostMa
         popupMenu.getMenuInflater().inflate(R.menu.popup_menu_for_post_management, popupMenu.getMenu());
 
         mPositionClick = position;
-        if(mArrProduct.get(mPositionClick).getStatus().equals("Đã đăng")){
+        if(mArrProduct.get(mPositionClick).getStatus().equals("3")){
             MenuItem menuItem = popupMenu.getMenu().findItem(R.id.control_accept_post);
             menuItem.setVisible(false);
         }
 
+        ((UserControlActivity)getActivity()).alertHelper.setCallback(this);
         popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.control_view_detail:
                         Intent intent = new Intent(getActivity(), PostDetailActivity.class);
-                        intent.putExtra("post_id", mArrProduct.get(mPositionClick).getId());
+                        intent.putExtra("product_id", mArrProduct.get(mPositionClick).getId());
                         startActivity(intent);
                         break;
                     case R.id.control_accept_post:
-                        confirmAcceptPost();
+                        ((UserControlActivity)getActivity()).alertHelper.alert("Xác nhận",
+                                "Bạn chắc chắc muốn duyệt bài đăng này", false,
+                                "Xác nhận", "Hủy bỏ", Constant.ACCEPT);
                         break;
                     case R.id.control_delete_post:
-                        confirmDeletePost();
+                        ((UserControlActivity)getActivity()).alertHelper.alert("Xác nhận",
+                                "Bạn chắc chắc muốn duyệt bài đăng này", false,
+                                "Xác nhận", "Hủy bỏ", Constant.DELETE);
                         break;
 
                 }
@@ -260,5 +180,22 @@ public class PostManagementFragment extends Fragment implements ViewHandlePostMa
             }
         });
         popupMenu.show();
+    }
+
+    @Override
+    public void onPositiveButtonClick(int option) {
+        if(option == Constant.ACCEPT){
+            ((UserControlActivity)getActivity()).dialogHelper.dismiss();
+            mPresenterPostManagement.handleUpdateAcceptPost(mArrProduct.get(mPositionClick).getId());
+        }
+        else if(option == Constant.DELETE){
+            ((UserControlActivity)getActivity()).dialogHelper.dismiss();
+            mPresenterPostManagement.handleDeletePost(mArrProduct.get(mPositionClick).getId());
+        }
+    }
+
+    @Override
+    public void onNegativeButtonClick(int option) {
+
     }
 }
