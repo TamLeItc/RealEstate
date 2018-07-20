@@ -6,6 +6,7 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 
 import com.qtctek.realstate.view.post_news.fragment.ListPostNewsFragment;
 import com.qtctek.realstate.view.post_news.fragment.MapPostNewsFragment;
+import com.qtctek.realstate.view.post_news.fragment.StartFragment;
 
 public class MainAdapter extends FragmentStatePagerAdapter {
 

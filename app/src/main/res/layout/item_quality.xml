@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="50dp"
+    android:layout_height="@dimen/_30dp"
+    android:orientation="horizontal"
+    android:gravity="center"
+    android:background="@drawable/custom_border_normal"
+    android:id="@+id/ll_item_quality">
+
+    <TextView
+        android:textColor="@color/colorGrayDark"
+        android:id="@+id/txv_quality"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0"
+        android:textSize="@dimen/_11sp"/>
+
+    <TextView
+        android:id="@+id/txv_add"
+        android:textColor="@color/colorGrayDark"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="+"
+        android:textSize="@dimen/_11sp"/>
+
+</LinearLayout>
