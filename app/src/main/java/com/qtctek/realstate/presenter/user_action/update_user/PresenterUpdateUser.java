@@ -1,13 +1,8 @@
 package com.qtctek.realstate.presenter.user_action.update_user;
 
 import com.qtctek.realstate.dto.User;
-import com.qtctek.realstate.dto.User_Object;
 import com.qtctek.realstate.model.user_action.ModelUpdateUser;
 import com.qtctek.realstate.view.user_action.update_user.ViewHandleUpdateUser;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 public class PresenterUpdateUser implements PresenterImpHandleUpdateUser {
 
@@ -20,8 +15,8 @@ public class PresenterUpdateUser implements PresenterImpHandleUpdateUser {
         this.mModelUpdateUser = new ModelUpdateUser(this);
     }
 
-    public void handleUpdateUser(User user){
-        this.mModelUpdateUser.requireUpdateUser(user);
+    public void handleUpdateUser(User user, String oldPassword){
+        this.mModelUpdateUser.requireUpdateUser(user, oldPassword);
     }
 
     @Override

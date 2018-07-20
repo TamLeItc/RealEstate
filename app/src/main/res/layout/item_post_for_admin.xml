@@ -10,14 +10,14 @@
         android:layout_width="@dimen/_115dp"
         android:layout_height="@dimen/_140dp"
         android:src="@drawable/icon_product"
-        android:id="@+id/imv_product_avartar"
+        android:id="@+id/imb_product_avartar"
         android:scaleType="centerCrop"
         android:adjustViewBounds="true"/>
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/_140dp"
-        android:layout_toRightOf="@id/imv_product_avartar"
+        android:layout_toRightOf="@id/imb_product_avartar"
         android:paddingLeft="@dimen/_10dp"
         android:paddingRight="@dimen/_10dp"
         android:paddingTop="@dimen/_3dp"
@@ -33,6 +33,22 @@
             android:textStyle="bold" />
 
         <TextView
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:visibility="gone"
+            android:layout_marginRight="@dimen/_10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/_10sp"
+            android:layout_toRightOf="@id/txv_price"
+            android:text="@string/for_one_month"
+            android:textColor="@color/colorMain"
+            android:layout_marginTop="@dimen/_3dp"
+            android:id="@+id/txv_a_month"
+            android:layout_toLeftOf="@+id/txv_area"/>
+
+        <TextView
+            android:layout_marginTop="@dimen/_2dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/txv_area"
@@ -42,6 +58,20 @@
             android:textColor="@color/colorMain" />
 
         <TextView
+            android:id="@+id/txv_status"
+            android:textColor="@color/colorGreen"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/txv_area"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="@dimen/_3dp"
+            android:textSize="@dimen/_9sp"
+            android:layout_marginTop="@dimen/_5dp"/>
+
+        <TextView
+            android:layout_alignParentLeft="true"
+            android:layout_toLeftOf="@+id/txv_status"
+            android:layout_marginRight="@dimen/_15dp"
             android:maxLines="1"
             android:ellipsize="end"
             android:layout_width="wrap_content"

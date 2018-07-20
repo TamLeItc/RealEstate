@@ -5,26 +5,58 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/colorMainBackground">
 
-    <android.support.design.widget.AppBarLayout
+
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.AppBarOverlay">
+        android:layout_height="match_parent"
+        android:theme="@style/AppTheme.AppBarOverlay"
+        android:orientation="vertical">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/fl_start" />
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/_45dp"
-            android:background="@color/colorPrimary"
+            android:layout_height="@dimen/_60dp"
+            android:background="@drawable/custom_edt_search"
             app:popupTheme="@style/AppTheme.PopupOverlay" >
 
+            <EditText
+                android:focusable="false"
+                android:id="@+id/edt_search"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:textSize="@dimen/_10sp"
+                android:paddingLeft="@dimen/_10dp"
+                android:paddingRight="@dimen/_10dp"
+                android:paddingTop="@dimen/_8dp"
+                android:paddingBottom="@dimen/_8dp"
+                android:hint="@string/search_suggestion"
+                android:textColorHint="@color/colorGray"
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:singleLine="true"
+                android:textColor="@color/colorGrayDark"/>
 
         </android.support.v7.widget.Toolbar>
 
         <include android:layout_height="match_parent"
             android:layout_width="match_parent"
             android:id="@+id/txv_content_main"
-            layout="@layout/content_main"/>
+            layout="@layout/content_main" />
 
-    </android.support.design.widget.AppBarLayout>
+    </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/fl_search"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorMainBackground"/>
 
 </RelativeLayout>

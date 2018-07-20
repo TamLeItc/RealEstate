@@ -1,25 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:padding="@dimen/_10dp"
-    android:theme="@style/Animation.AppCompat.Dialog"
-    android:layout_gravity="center"
-    android:background="@color/colorMainBackground">
+<ProgressBar android:layout_width="@dimen/_50dp"
+    android:layout_height="@dimen/_50dp"
+    android:foreground="@android:color/transparent"
+    android:background="@android:color/transparent"
+    android:progressBackgroundTintMode="multiply"
+    android:progressTintMode="multiply"
+    android:indeterminateDrawable="@drawable/custom_progress_bar"
+    xmlns:android="http://schemas.android.com/apk/res/android" />
 
-    <ProgressBar
-        android:layout_width="@dimen/_50dp"
-        android:layout_height="@dimen/_50dp"
-        android:indeterminateDrawable="@drawable/custom_progress_bar"/>
-
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/loading"
-        android:layout_gravity="center_vertical"
-        android:layout_marginLeft="5dp"/>
-
-</LinearLayout>

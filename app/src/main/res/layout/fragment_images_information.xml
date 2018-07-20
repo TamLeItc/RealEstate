@@ -3,6 +3,7 @@
 <ScrollView android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:scrollbars="none"
+    android:overScrollMode="never"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <LinearLayout
@@ -41,6 +42,7 @@
                 android:scaleType="centerCrop"/>
 
             <ProgressBar
+                android:visibility="gone"
                 android:layout_width="@dimen/_40dp"
                 android:layout_height="@dimen/_40dp"
                 android:layout_centerInParent="true"
@@ -83,6 +85,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/recycler_view"
+            android:scrollbars="none"
+            android:overScrollMode="never"
             android:layout_gravity="center_horizontal"
             android:background="@color/colorWhite"/>
 
@@ -119,18 +123,18 @@
                 android:layout_weight="1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/custom_btn_create_account"
-                android:text="@string/next_to"
-                android:id="@+id/btn_next_to"
+                android:background="@drawable/custom_btn_main"
+                android:text="@string/save_temp"
+                android:id="@+id/btn_save_temp"
                 android:textSize="@dimen/_10sp"/>
 
             <Button
                 android:layout_weight="1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/custom_btn_create_account"
-                android:text="@string/save_and_continue"
-                android:id="@+id/btn_save_continue"
+                android:background="@drawable/custom_btn_main"
+                android:text="@string/next_to"
+                android:id="@+id/btn_next_to"
                 android:textSize="@dimen/_10sp"
                 android:layout_marginLeft="@dimen/_15dp"/>
         </LinearLayout>

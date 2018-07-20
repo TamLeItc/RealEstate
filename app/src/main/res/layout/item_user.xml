@@ -14,7 +14,7 @@
         android:textSize="@dimen/_10sp"
         android:maxLines="1"
         android:ellipsize="end"
-        android:textColor="@color/colorGrayDark"/>
+        android:textColor="@color/colorPrimaryDark"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -26,6 +26,17 @@
         android:textSize="@dimen/_10sp"/>
 
     <TextView
+        android:id="@+id/txv_status"
+        android:layout_alignParentRight="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/_10sp"
+        android:layout_below="@+id/txv_role"/>
+
+    <TextView
+        android:layout_marginRight="@dimen/_50dp"
+        android:layout_alignParentLeft="true"
+        android:layout_toLeftOf="@+id/txv_status"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/txv_phone_number"

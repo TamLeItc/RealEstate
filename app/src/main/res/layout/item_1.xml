@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
+    android:id="@+id/rl_item_1"
     xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorMainBackground"
@@ -14,7 +15,8 @@
         android:text="City"
         android:id="@+id/txv_item"
         android:textSize="@dimen/_10sp"
-        android:textColor="@color/colorGrayDark"/>
+        android:textColor="@color/colorPrimaryDark"
+        android:layout_marginBottom="@dimen/_10dp"/>
 
     <ImageView
         android:id="@+id/imv_selected"
@@ -22,15 +24,15 @@
         android:layout_alignParentRight="true"
         android:layout_width="@dimen/_25dp"
         android:layout_height="@dimen/_25dp"
-        android:src="@drawable/icon_select"/>
+        android:src="@drawable/icon_check_black_24dp"/>
 
     
     <View
+        android:id="@+id/view_scroll"
         android:layout_below="@+id/txv_item"
         android:layout_width="match_parent"
         android:layout_height="@dimen/_1dp"
         android:background="@color/colorGray"
-        android:layout_marginTop="@dimen/_10dp"
         android:layout_marginBottom="@dimen/_10dp"/>
 
 </RelativeLayout>

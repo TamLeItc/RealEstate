@@ -26,7 +26,7 @@
             android:layout_marginTop="@dimen/_20dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/custom_btn_create_account"
+            android:background="@drawable/custom_btn_main"
             android:text="@string/view_posted_product"
             android:textSize="@dimen/_8sp"
             android:layout_weight="1"
@@ -39,7 +39,7 @@
             android:layout_marginLeft="@dimen/_20dp"
             android:layout_marginTop="@dimen/_20dp"
             android:layout_weight="1"
-            android:background="@drawable/custom_btn_create_account"
+            android:background="@drawable/custom_btn_main"
             android:text="@string/add_new_post"
             android:textSize="@dimen/_8sp" />
 

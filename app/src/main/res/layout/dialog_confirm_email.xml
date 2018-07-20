@@ -45,7 +45,7 @@
             android:id="@+id/edt_confirm_code"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_40dp"
-            android:background="@drawable/custom_edt_create_account"/>
+            android:background="@drawable/custom_edt_main"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -67,10 +67,10 @@
                 android:layout_weight="1"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_50dp"
-                android:background="@drawable/custom_btn_create_account"
+                android:background="@drawable/custom_btn_main"
                 android:text="@string/cancel"
                 android:textSize="@dimen/_9sp"
-                android:textColor="@color/colorGrayDark"
+                android:textColor="@color/colorPrimaryDark"
                 android:layout_marginRight="@dimen/_10dp"
                 android:paddingLeft="@dimen/_5dp"
                 android:paddingRight="@dimen/_5dp"/>
@@ -81,10 +81,10 @@
                 android:layout_marginLeft="@dimen/_10dp"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_50dp"
-                android:background="@drawable/custom_btn_create_account"
+                android:background="@drawable/custom_btn_main"
                 android:text="@string/confirm"
                 android:textSize="@dimen/_9sp"
-                android:textColor="@color/colorGrayDark"
+                android:textColor="@color/colorPrimaryDark"
                 android:paddingLeft="@dimen/_5dp"
                 android:paddingRight="@dimen/_5dp"
                 android:layout_marginBottom="@dimen/_1dp"/>

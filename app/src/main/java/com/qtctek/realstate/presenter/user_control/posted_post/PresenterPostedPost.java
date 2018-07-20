@@ -1,8 +1,6 @@
 package com.qtctek.realstate.presenter.user_control.posted_post;
 
-import com.qtctek.realstate.dto.PostSale;
 import com.qtctek.realstate.dto.Product;
-import com.qtctek.realstate.dto.Product1;
 import com.qtctek.realstate.model.user_control.ModelPostedPost;
 import com.qtctek.realstate.view.user_control.posted_post.ViewHandlePostedPost;
 

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -10,15 +11,16 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/_30dp"
         android:id="@+id/txv_title"
-        android:background="@color/colorPrimary"
+        android:textColor="@color/colorPrimary"
         android:layout_marginBottom="@dimen/_5dp"
         android:text="@string/user_management"
         android:textSize="@dimen/_11sp"
         android:gravity="center"
-        android:textStyle="bold"
-        android:textColor="@color/colorWhite"/>
+        android:textStyle="bold" />
 
     <ListView
+        android:overScrollMode="never"
+        tools:listitem="@layout/item_user"
         android:layout_marginTop="@dimen/_5dp"
         android:layout_below="@+id/txv_title"
         android:id="@+id/lsv_user"
@@ -38,7 +40,7 @@
         android:layout_gravity=""
         android:background="@color/colorBtnMoreView"
         android:text="@string/more_view"
-        android:textColor="@color/colorGrayDark"
+        android:textColor="@color/colorPrimaryDark"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"/>
 

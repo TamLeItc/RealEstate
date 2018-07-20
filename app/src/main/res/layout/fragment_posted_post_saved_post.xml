@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -8,6 +9,8 @@
 
 
     <ListView
+        android:overScrollMode="never"
+        tools:listitem="@layout/item_post"
         android:layout_marginTop="@dimen/_5dp"
         android:id="@+id/lsv_posts"
         android:layout_width="match_parent"

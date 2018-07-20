@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -9,36 +10,38 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/_5dp"
+        android:background="@color/colorGrayDark"
         android:orientation="horizontal"
-        android:weightSum="5"
-        android:background="@color/colorPrimary">
+        android:weightSum="5">
 
         <TextView
-            android:layout_weight="4"
+            android:id="@+id/txv_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="@dimen/_10dp"
-            android:id="@+id/txv_title"
+            android:layout_weight="4"
+            android:background="@color/colorGrayDark"
+            android:padding="@dimen/_11dp"
             android:text="@string/please_select"
-            android:background="@color/colorPrimary"
-            android:textSize="@dimen/_12sp"
             android:textColor="@color/colorWhite"
-            android:gravity="center"/>
+            android:textSize="@dimen/_12sp" />
 
         <Button
-            android:layout_gravity="center_vertical"
-            android:background="@drawable/icon_cancel"
-            android:layout_weight="2"
+            android:id="@+id/btn_cancel"
             android:layout_width="@dimen/_50dp"
             android:layout_height="@dimen/_30dp"
-            android:id="@+id/btn_cancel"/>
+            android:layout_gravity="center_vertical"
+            android:layout_weight="2"
+            android:background="@drawable/icon_close_white_24dp" />
 
     </LinearLayout>
 
     <ListView
+        android:overScrollMode="never"
         android:scrollbars="none"
         android:padding="@dimen/_8dp"
         android:layout_width="match_parent"
+        tools:listitem="@layout/item_1"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/_10dp"
         android:id="@+id/lsv_item" />

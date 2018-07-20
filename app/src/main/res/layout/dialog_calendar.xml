@@ -13,15 +13,36 @@
         android:layout_toEndOf="@id/txv_sex"
         android:layout_below="@+id/txv_name_birthday" />
 
-    <Button
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/btn_confirm"
-        android:text="@string/confirm"
-        android:background="@drawable/custom_btn_create_account"
-        android:paddingLeft="@dimen/_15dp"
-        android:paddingRight="@dimen/_15dp"
-        android:layout_gravity="center"
-        android:layout_marginTop="@dimen/_12dp"/>
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_marginTop="@dimen/_12dp">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/btn_cancel"
+            android:text="@string/cancel"
+            android:background="@drawable/custom_btn_main"
+            android:paddingLeft="@dimen/_15dp"
+            android:paddingRight="@dimen/_15dp"
+            android:layout_gravity="center"
+            android:layout_marginRight="@dimen/_15dp"/>
+
+        <Button
+            android:layout_marginLeft="@dimen/_15dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/btn_confirm"
+            android:text="@string/confirm"
+            android:background="@drawable/custom_btn_main"
+            android:paddingLeft="@dimen/_15dp"
+            android:paddingRight="@dimen/_15dp"
+            android:layout_gravity="center" />
+
+
+    </LinearLayout>
 
 </LinearLayout>

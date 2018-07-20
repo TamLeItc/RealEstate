@@ -4,6 +4,7 @@
     android:layout_height="match_parent"
     android:padding="@dimen/_16dp"
     android:scrollbars="none"
+    android:overScrollMode="never"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <LinearLayout
@@ -36,7 +37,7 @@
             android:layout_height="wrap_content"
             android:text="1000"
             android:layout_marginTop="@dimen/_5dp"
-            android:textColor="@color/colorRedLight"/>
+            android:textColor="@color/colorRed"/>
 
         <EditText
             android:padding="@dimen/_5dp"
@@ -44,7 +45,7 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/_350dp"
             android:textSize="@dimen/_9sp"
-            android:background="@drawable/custom_edt_create_account"
+            android:background="@drawable/custom_edt_main"
             android:inputType="textMultiLine"
             android:gravity="top|left"
             android:scrollbars="vertical"/>
@@ -60,18 +61,18 @@
                 android:layout_weight="1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/custom_btn_create_account"
-                android:text="@string/next_to"
-                android:id="@+id/btn_next_to"
+                android:background="@drawable/custom_btn_main"
+                android:text="@string/save_temp"
+                android:id="@+id/btn_save_temp"
                 android:textSize="@dimen/_10sp"/>
 
             <Button
                 android:layout_weight="1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/custom_btn_create_account"
-                android:text="@string/save_and_continue"
-                android:id="@+id/btn_save_continue"
+                android:background="@drawable/custom_btn_main"
+                android:text="@string/next_to"
+                android:id="@+id/btn_next_to"
                 android:textSize="@dimen/_10sp"
                 android:layout_marginLeft="@dimen/_15dp"/>
 

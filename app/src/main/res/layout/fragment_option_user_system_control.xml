@@ -22,7 +22,7 @@
         android:layout_marginTop="@dimen/_20dp"
         android:text="@string/post_management"
         android:background="@drawable/custom_btn_user_control"
-        android:textColor="@color/colorWhite"/>
+        android:textColor="@color/colorWhite" />
 
     <Button
         android:id="@+id/btn_user_management"

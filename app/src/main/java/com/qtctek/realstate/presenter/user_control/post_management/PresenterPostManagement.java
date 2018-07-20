@@ -1,9 +1,6 @@
 package com.qtctek.realstate.presenter.user_control.post_management;
 
-import com.qtctek.realstate.dto.PostSale;
 import com.qtctek.realstate.dto.Product;
-import com.qtctek.realstate.dto.Product1;
-import com.qtctek.realstate.dto.User_Object;
 import com.qtctek.realstate.model.user_control.ModelPostManagement;
 import com.qtctek.realstate.view.user_control.post_management.ViewHandlePostManagement;
 
@@ -60,6 +57,7 @@ public class PresenterPostManagement implements PresenterImpHandlePostManagement
             product.setUserId(jsonObject.getInt("id_login"));
             product.setUserFullName(jsonObject.getString("login_fullname"));
             product.setUserPhone(jsonObject.getString("login_phone"));
+            product.setUserEmail(jsonObject.getString("login_email"));
 
             arrProduct.add(product);
         }

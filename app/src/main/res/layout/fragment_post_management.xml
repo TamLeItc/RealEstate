@@ -4,21 +4,22 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/colorMainBackground">
+    android:background="@color/colorMainBackground"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="@dimen/_30dp"
         android:id="@+id/txv_title"
-        android:background="@color/colorPrimary"
         android:layout_marginBottom="@dimen/_5dp"
         android:text="@string/post_management"
         android:textSize="@dimen/_11sp"
         android:gravity="center"
         android:textStyle="bold"
-        android:textColor="@color/colorWhite"/>
+        android:textColor="@color/colorPrimary" />
     <ListView
-
+        android:overScrollMode="never"
+        tools:listitem="@layout/item_post"
         android:layout_marginTop="@dimen/_5dp"
         android:layout_below="@+id/txv_title"
         android:id="@+id/lsv_posts"
@@ -38,7 +39,7 @@
         android:layout_gravity=""
         android:background="@color/colorBtnMoreView"
         android:text="@string/more_view"
-        android:textColor="@color/colorGrayDark"
+        android:textColor="@color/colorPrimaryDark"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"/>
 

@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:overScrollMode="never"
+    android:scrollbars="none"
     xmlns:android="http://schemas.android.com/apk/res/android" >
 
     <LinearLayout
@@ -37,7 +39,7 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/_35dp"
             android:textSize="@dimen/_10sp"
-            android:background="@drawable/custom_edt_create_account" />
+            android:background="@drawable/custom_edt_main" />
 
 
         <RelativeLayout
@@ -134,7 +136,7 @@
             android:id="@+id/edt_email_address"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_40dp"
-            android:background="@drawable/custom_edt_create_account"/>
+            android:background="@drawable/custom_edt_main"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -152,9 +154,28 @@
             android:id="@+id/edt_username"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_40dp"
-            android:background="@drawable/custom_edt_create_account"/>
+            android:background="@drawable/custom_edt_main"/>
 
         <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/now_password"
+            android:textSize="@dimen/_10sp"
+            android:layout_marginTop="@dimen/_5dp"
+            android:id="@+id/txv_now_password"/>
+
+        <EditText
+            android:inputType="textPassword"
+            android:paddingLeft="@dimen/_5dp"
+            android:paddingRight="@dimen/_5dp"
+            android:textSize="@dimen/_10sp"
+            android:id="@+id/edt_now_password"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_35dp"
+            android:background="@drawable/custom_edt_main"/>
+
+        <TextView
+            android:id="@+id/txv_password"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/password"
@@ -169,7 +190,7 @@
             android:id="@+id/edt_password"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_35dp"
-            android:background="@drawable/custom_edt_create_account"/>
+            android:background="@drawable/custom_edt_main"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -187,7 +208,7 @@
             android:id="@+id/edt_confirm_password"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_35dp"
-            android:background="@drawable/custom_edt_create_account"/>
+            android:background="@drawable/custom_edt_main"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -205,7 +226,7 @@
             android:id="@+id/edt_phone_number"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_35dp"
-            android:background="@drawable/custom_edt_create_account"/>
+            android:background="@drawable/custom_edt_main"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -221,17 +242,17 @@
             android:id="@+id/edt_address"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_35dp"
-            android:background="@drawable/custom_edt_create_account"/>
+            android:background="@drawable/custom_edt_main"/>
 
         <Button
             android:id="@+id/btn_confirm"
             android:layout_marginTop="@dimen/_20dp"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_50dp"
-            android:background="@drawable/custom_btn_create_account"
+            android:background="@drawable/custom_btn_main"
             android:text="@string/confirm"
             android:textSize="@dimen/_9sp"
-            android:textColor="@color/colorGrayDark"/>
+            android:textColor="@color/colorPrimaryDark"/>
 
     </LinearLayout>
 

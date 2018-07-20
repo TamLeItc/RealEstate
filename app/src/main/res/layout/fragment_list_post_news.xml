@@ -2,20 +2,25 @@
 <RelativeLayout android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:background="@color/colorMainBackground">
+    android:background="@color/colorMainBackground"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <ListView
+        android:overScrollMode="never"
+        tools:listitem="@layout/item_post_2"
         android:scrollbars="none"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/lsv_list_product"/>
+        android:id="@+id/lsv_list_product"
+        android:layout_marginBottom="@dimen/_40dp"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/no_data"
+        tools:visibility="visible"
         android:layout_centerInParent="true"
         android:id="@+id/txv_information"
-        android:textColor="@color/colorGrayDark"/>
+        android:textColor="@color/colorPrimaryDark"/>
 
 </RelativeLayout>

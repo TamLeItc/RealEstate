@@ -1,12 +1,12 @@
 package com.qtctek.realstate.presenter.user_control.saved_post;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.qtctek.realstate.dto.Product;
 import com.qtctek.realstate.model.user_control.ModelSavedPost;
-import com.qtctek.realstate.view.user_control.saved_post.ViewGetDataLocal;
 import com.qtctek.realstate.view.user_control.saved_post.ViewHandleSavedPost;
 
 import org.json.JSONArray;
@@ -20,18 +20,10 @@ import java.util.HashMap;
 public class PresenterSavedPost implements PresenterImpIHandleSavedPost {
 
     private ViewHandleSavedPost mViewHandelSavedPost;
-    private ViewGetDataLocal mLocalHandleSavedPost;
     private ModelSavedPost mModelSavedPost;
-
-    private int mQualityPost = 0;
 
     public PresenterSavedPost(ViewHandleSavedPost viewHandelSavedPost){
         this.mViewHandelSavedPost = viewHandelSavedPost;
-        this.mModelSavedPost = new ModelSavedPost(this);
-    }
-
-    public PresenterSavedPost(ViewGetDataLocal localHandleSavedPost){
-        this.mLocalHandleSavedPost = localHandleSavedPost;
         this.mModelSavedPost = new ModelSavedPost(this);
     }
 
@@ -60,7 +52,7 @@ public class PresenterSavedPost implements PresenterImpIHandleSavedPost {
             Type type = new TypeToken<HashMap<String, String>>() {}.getType();
             listProductId = gson.fromJson(data, type);
         }
-        this.mLocalHandleSavedPost.onHandleDataProductIdsSuccessful(listProductId);
+        this.mViewHandelSavedPost.onHandleDataProductIdsSuccessful(listProductId);
     }
 
     private ArrayList<Product> handleData(String data) throws JSONException {
@@ -99,7 +91,7 @@ public class PresenterSavedPost implements PresenterImpIHandleSavedPost {
 
     @Override
     public void onGetDataProductIdsError(String error) {
-        this.mLocalHandleSavedPost.onHandleDataProductIdsError(error);
+        this.mViewHandelSavedPost.onHandleDataProductIdsError(error);
     }
 
     @Override

@@ -1,11 +1,6 @@
 package com.qtctek.realstate.presenter.user_control.user_management;
 
-import android.util.Log;
-
-import com.google.gson.JsonArray;
-import com.google.gson.annotations.JsonAdapter;
 import com.qtctek.realstate.dto.User;
-import com.qtctek.realstate.dto.User_Object;
 import com.qtctek.realstate.model.user_control.ModelUserManagement;
 import com.qtctek.realstate.view.user_control.user_management.ViewHandleUserManagement;
 
