@@ -34,6 +34,7 @@
             android:layout_marginTop="@dimen/_5dp"/>
 
         <EditText
+            android:selectAllOnFocus="true"
             android:singleLine="true"
             android:maxLines="1"
             android:paddingLeft="@dimen/_5dp"
@@ -188,6 +189,7 @@
             android:layout_marginTop="@dimen/_5dp"/>
 
         <EditText
+            android:selectAllOnFocus="true"
             android:singleLine="true"
             android:maxLines="1"
             android:paddingLeft="@dimen/_5dp"

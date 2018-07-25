@@ -32,6 +32,7 @@
 
 
         <EditText
+            android:selectAllOnFocus="true"
             android:singleLine="true"
             android:paddingLeft="@dimen/_5dp"
             android:paddingRight="@dimen/_5dp"
@@ -161,6 +162,7 @@
         </LinearLayout>
 
         <EditText
+            android:selectAllOnFocus="true"
             android:singleLine="true"
             android:inputType="textEmailAddress"
             android:paddingLeft="@dimen/_5dp"
@@ -206,6 +208,7 @@
         </LinearLayout>
 
         <EditText
+            android:selectAllOnFocus="true"
             android:singleLine="true"
             android:inputType="textEmailAddress"
             android:paddingLeft="@dimen/_5dp"
@@ -265,6 +268,7 @@
         </LinearLayout>
 
         <EditText
+            android:selectAllOnFocus="true"
             android:inputType="textPassword"
             android:paddingLeft="@dimen/_5dp"
             android:paddingRight="@dimen/_5dp"
@@ -323,6 +327,7 @@
         </LinearLayout>
 
         <EditText
+            android:selectAllOnFocus="true"
             android:inputType="textPassword"
             android:paddingLeft="@dimen/_5dp"
             android:paddingRight="@dimen/_5dp"
@@ -379,6 +384,7 @@
         </LinearLayout>
 
         <EditText
+            android:selectAllOnFocus="true"
             android:singleLine="true"
             android:inputType="textPassword"
             android:paddingLeft="@dimen/_5dp"
@@ -424,6 +430,7 @@
         </LinearLayout>
 
         <EditText
+            android:selectAllOnFocus="true"
             android:inputType="number"
             android:singleLine="true"
             android:ellipsize="end"
@@ -442,6 +449,7 @@
             android:layout_marginTop="@dimen/_5dp"/>
 
         <EditText
+            android:selectAllOnFocus="true"
             android:singleLine="true"
             android:paddingLeft="@dimen/_5dp"
             android:textSize="@dimen/_10sp"

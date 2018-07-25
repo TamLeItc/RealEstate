@@ -470,6 +470,8 @@ public class MainActivity extends AppCompatActivity
                 searchPlaceFragment.edtSearch.setFocusable(true);
                 searchPlaceFragment.edtSearch.setFocusableInTouchMode(true);
 
+                searchPlaceFragment.edtSearch.setText(this.edtSearch.getText().toString());
+
                 expandableLayoutSearch.expand();
 
                 keyboardHelper.showKeyboard(searchPlaceFragment.edtSearch);

@@ -56,6 +56,10 @@
             android:gravity="right">
 
             <Button
+                android:minWidth="@dimen/_0dp"
+                android:minHeight="@dimen/_0dp"
+                android:paddingTop="@dimen/_5dp"
+                android:paddingBottom="@dimen/_10dp"
                 android:background="?attr/selectableItemBackground"
                 android:id="@+id/btn_select_avartar"
                 android:layout_width="wrap_content"
@@ -95,6 +99,10 @@
             android:gravity="right">
 
             <Button
+                android:minWidth="@dimen/_0dp"
+                android:minHeight="@dimen/_0dp"
+                android:paddingTop="@dimen/_5dp"
+                android:paddingBottom="@dimen/_10dp"
                 android:id="@+id/btn_select_image"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
