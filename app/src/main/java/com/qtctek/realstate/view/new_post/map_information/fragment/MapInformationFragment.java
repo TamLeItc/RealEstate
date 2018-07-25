@@ -4,6 +4,7 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.os.Build;
@@ -12,6 +13,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,6 +40,8 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.kofigyan.stateprogressbar.StateProgressBar;
 import com.qtctek.realstate.R;
 import com.qtctek.realstate.common.AppUtils;
+import com.qtctek.realstate.common.general.Constant;
+import com.qtctek.realstate.helper.AlertHelper;
 import com.qtctek.realstate.helper.KeyboardHelper;
 import com.qtctek.realstate.helper.ToastHelper;
 import com.qtctek.realstate.presenter.new_post.PresenterNewPost;
@@ -47,7 +51,7 @@ import com.qtctek.realstate.view.new_post.activity.NewPostActivity;
 import static android.support.v4.content.ContextCompat.checkSelfPermission;
 
 public class MapInformationFragment extends Fragment implements OnMapReadyCallback, GoogleApiClient.OnConnectionFailedListener,
-        GoogleApiClient.ConnectionCallbacks, View.OnClickListener, ViewHandleModelNewPost {
+        GoogleApiClient.ConnectionCallbacks, View.OnClickListener, ViewHandleModelNewPost, AlertHelper.AlertHelperCallback {
 
     private View mView;
 
@@ -80,23 +84,12 @@ public class MapInformationFragment extends Fragment implements OnMapReadyCallba
         initSupportMapFragment();
         initViews();
 
-//        if(!checkGoogleService()){
-//            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-//            builder.setCancelable(false);
-//            builder.setMessage("Device does not support Google Play services");
-//            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-//                @Override
-//                public void onClick(DialogInterface dialogInterface, int i) {
-//                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-//                        getActivity().finishAffinity();
-//                    }
-//                    else{
-//                        ViewPager viewPager = getActivity().findViewById(R.id.view_pager);
-//                        viewPager.setCurrentItem(4);
-//                    }
-//                }
-//            });
-//        }
+        if (!checkGoogleService()) {
+            ((NewPostActivity)getActivity()).alertHelper.setCallback(this);
+            ((NewPostActivity)getActivity()).alertHelper.alert("Lỗi thiết bị","Thiết bị của bạn không hỗ trợ " +
+                    "dịch vụ Google Play",false, "OK", Constant.GOOGLE_PLAY_SERVICE_NOT_FOUND);
+
+        }
 
         return mView;
     }
@@ -204,6 +197,7 @@ public class MapInformationFragment extends Fragment implements OnMapReadyCallba
         super.onDestroyView();
     }
 
+    @Override
     public void onMapReady(GoogleMap googleMap) {
 
         mMap = googleMap;
@@ -243,7 +237,7 @@ public class MapInformationFragment extends Fragment implements OnMapReadyCallba
             }
         });
 
-        setButtonMyLocation();
+        initPermission();
     }
 
     @SuppressLint("MissingPermission")
@@ -365,6 +359,12 @@ public class MapInformationFragment extends Fragment implements OnMapReadyCallba
                     || checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED){
                 requestPermissions(permission, AppUtils.REQUEST_CODE_PERMISSION);
             }
+            else{
+                setButtonMyLocation();
+            }
+        }
+        else{
+            setButtonMyLocation();
         }
     }
 
@@ -375,6 +375,7 @@ public class MapInformationFragment extends Fragment implements OnMapReadyCallba
         if (requestCode == AppUtils.REQUEST_CODE_PERMISSION) {
             if (grantResults.length == 2 && grantResults[0] == PackageManager.PERMISSION_GRANTED
                     && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
+                setButtonMyLocation();
             }
         }
         else{
@@ -382,4 +383,17 @@ public class MapInformationFragment extends Fragment implements OnMapReadyCallba
         }
     }
 
+    @Override
+    public void onPositiveButtonClick(int option) {
+        if(option == Constant.GOOGLE_PLAY_SERVICE_NOT_FOUND){
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                getActivity().finishAffinity();
+            }
+        }
+    }
+
+    @Override
+    public void onNegativeButtonClick(int option) {
+
+    }
 }
