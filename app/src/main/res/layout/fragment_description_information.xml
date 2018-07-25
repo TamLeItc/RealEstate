@@ -17,19 +17,8 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/description_information"
-            android:layout_gravity="center"
-            android:textSize="@dimen/_13sp"
-            android:textColor="@color/colorMain"
-            android:layout_marginBottom="@dimen/_10dp"
-            android:id="@+id/txv_title"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:text="@string/max_2000_character"
-            android:textSize="@dimen/_10sp"
-            android:layout_marginTop="@dimen/_5dp"/>
+            android:textSize="@dimen/_10sp" />
 
         <TextView
             android:id="@+id/txv_quality_character"
@@ -43,9 +32,9 @@
             android:padding="@dimen/_5dp"
             android:id="@+id/edt_description"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/_350dp"
+            android:layout_height="@dimen/_300dp"
             android:textSize="@dimen/_9sp"
-            android:background="@drawable/custom_edt_main"
+            android:background="@drawable/custom_border_gray_backgroud_white"
             android:inputType="textMultiLine"
             android:gravity="top|left"
             android:scrollbars="vertical"/>
@@ -60,7 +49,8 @@
                 android:layout_marginRight="@dimen/_15dp"
                 android:layout_weight="1"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/_40dp"
+                android:minHeight="@dimen/_0dp"
                 android:background="@drawable/custom_btn_main"
                 android:text="@string/save_temp"
                 android:id="@+id/btn_save_temp"
@@ -69,7 +59,8 @@
             <Button
                 android:layout_weight="1"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/_40dp"
+                android:minHeight="@dimen/_0dp"
                 android:background="@drawable/custom_btn_main"
                 android:text="@string/next_to"
                 android:id="@+id/btn_next_to"

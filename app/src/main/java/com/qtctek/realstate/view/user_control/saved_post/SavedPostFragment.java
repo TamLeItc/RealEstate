@@ -14,6 +14,7 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.PopupMenu;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.qtctek.realstate.R;
@@ -33,6 +34,7 @@ public class SavedPostFragment extends Fragment implements ViewHandleSavedPost,
     private View mView;
 
     private ListView mLsvSavedPost;
+    private TextView mTxvInformation;
 
     private AdapterPostSale mAdapterListPost;
     private ArrayList<Product> mArrListProduct = new ArrayList<>();
@@ -60,6 +62,7 @@ public class SavedPostFragment extends Fragment implements ViewHandleSavedPost,
 
     private void initViews(){
         this.mLsvSavedPost = mView.findViewById(R.id.lsv_posts);
+        this.mTxvInformation = mView.findViewById(R.id.txv_information);
 
         this.mLsvSavedPost.setOnScrollListener(this);
         this.mLsvSavedPost.setOnItemClickListener(this);
@@ -70,6 +73,7 @@ public class SavedPostFragment extends Fragment implements ViewHandleSavedPost,
         ((UserControlActivity)getActivity()).dialogHelper.show();
 
         this.mPresenterSavedPost = new PresenterSavedPost(this);
+
         this.mPresenterSavedPost.handleGetSavedProductList(0, 20, getStrProductIdList(ListPostNewsFragment.LIST_SAVED_PRODUCT_ID));
 
         this.mAdapterListPost = new AdapterPostSale(mArrListProduct, getActivity(), R.layout.item_post);
@@ -112,7 +116,6 @@ public class SavedPostFragment extends Fragment implements ViewHandleSavedPost,
                         ListPostNewsFragment.LIST_SAVED_PRODUCT_ID.remove(id);
                         mPresenterSavedPost.handleUpdateDataProductIds(ListPostNewsFragment.LIST_SAVED_PRODUCT_ID, getContext());
                         break;
-
                 }
 
                 return true;
@@ -150,6 +153,14 @@ public class SavedPostFragment extends Fragment implements ViewHandleSavedPost,
         mAdapterListPost.notifyDataSetChanged();
 
         ((UserControlActivity)getActivity()).toastHelper.toast("Bỏ lưu thành công", ToastHelper.LENGTH_SHORT);
+
+        if(mArrListProduct.size() > 0){
+            this.mTxvInformation.setVisibility(View.GONE);
+        }
+        else{
+            this.mTxvInformation.setText(getResources().getString(R.string.no_data));
+            this.mTxvInformation.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
@@ -160,14 +171,26 @@ public class SavedPostFragment extends Fragment implements ViewHandleSavedPost,
     }
 
     @Override
-    public void onHandleSavedProductListSuccessful(ArrayList<Product> mArrListProduct) {
+    public void onHandleSavedProductListSuccessful(ArrayList<Product> arrListProduct) {
         ((UserControlActivity)getActivity()).dialogHelper.dismiss();
-        this.mArrListProduct.addAll(mArrListProduct);
+        this.mArrListProduct.addAll(arrListProduct);
         this.mAdapterListPost.notifyDataSetChanged();
+
+        if(mArrListProduct.size() > 0){
+            this.mTxvInformation.setVisibility(View.GONE);
+        }
+        else{
+            this.mTxvInformation.setText(getResources().getString(R.string.no_data));
+            this.mTxvInformation.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
     public void onHandleSavedProductListError(String error) {
+
+        this.mTxvInformation.setText(getResources().getString(R.string.load_data_error));
+        this.mTxvInformation.setVisibility(View.VISIBLE);
+
         ((UserControlActivity)getActivity()).toastHelper.toast("Lỗi trong quá trình tải dữ liệu. Vui lòng thử lại sau!!!", ToastHelper.LENGTH_SHORT);
     }
 }

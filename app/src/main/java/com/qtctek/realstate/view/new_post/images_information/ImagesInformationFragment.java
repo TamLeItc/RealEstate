@@ -276,14 +276,12 @@ public class ImagesInformationFragment extends Fragment implements ViewHandleMod
         }
         else{
             if(!mIsSaveTemp){
-                handleNextTo();
+                ViewPager viewPager = getActivity().findViewById(R.id.view_pager);
+                viewPager.setCurrentItem(1);
+                ((NewPostActivity)getActivity()).setCurrentStateNumberProgressBar(
+                        ((NewPostActivity) getActivity()).viewPaper.getCurrentItem());
             }
         }
-    }
-
-    private void handleNextTo(){
-        ViewPager viewPager = getActivity().findViewById(R.id.view_pager);
-        viewPager.setCurrentItem(1);
     }
 
     @Override
@@ -308,6 +306,8 @@ public class ImagesInformationFragment extends Fragment implements ViewHandleMod
                     if(!mIsSaveTemp){
                         ViewPager viewPager = getActivity().findViewById(R.id.view_pager);
                         viewPager.setCurrentItem(1);
+                        ((NewPostActivity)getActivity()).setCurrentStateNumberProgressBar(
+                                ((NewPostActivity) getActivity()).viewPaper.getCurrentItem());
                     }
 
                 }
@@ -325,6 +325,8 @@ public class ImagesInformationFragment extends Fragment implements ViewHandleMod
                     if(!mIsSaveTemp){
                         ViewPager viewPager = getActivity().findViewById(R.id.view_pager);
                         viewPager.setCurrentItem(1);
+                        ((NewPostActivity)getActivity()).setCurrentStateNumberProgressBar(
+                                ((NewPostActivity) getActivity()).viewPaper.getCurrentItem());
                     }
                 }
                 mIsPickImage = false;

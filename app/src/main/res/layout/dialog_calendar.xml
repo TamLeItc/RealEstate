@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="wrap_content"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="@dimen/_8dp">
+    android:paddingBottom="@dimen/_8dp">
 
     <DatePicker
         android:layout_gravity="center"
@@ -21,20 +21,22 @@
         android:layout_marginTop="@dimen/_12dp">
 
         <Button
+            android:minHeight="@dimen/_0dp"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/_40dp"
             android:id="@+id/btn_cancel"
             android:text="@string/cancel"
             android:background="@drawable/custom_btn_main"
             android:paddingLeft="@dimen/_15dp"
             android:paddingRight="@dimen/_15dp"
             android:layout_gravity="center"
-            android:layout_marginRight="@dimen/_15dp"/>
+            android:layout_marginRight="@dimen/_15dp" />
 
         <Button
+            android:minHeight="@dimen/_0dp"
             android:layout_marginLeft="@dimen/_15dp"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/_40dp"
             android:id="@+id/btn_confirm"
             android:text="@string/confirm"
             android:background="@drawable/custom_btn_main"

@@ -108,7 +108,10 @@
     <string name="edit">Sửa</string>
     <string name="view_detail">Xem chi tiết</string>
     <string name="view">Xem</string>
-    <string name="image_view">Hình ảnh</string>
+    <string name="image">Hình ảnh</string>
+    <string name="information">Thông tin</string>
+    <string name="description">Mô tả</string>
+    <string name="location">Vị trí</string>
     <string name="map_view">Bản đồ</string>
     <string name="type_product">Loại nhà</string>
     <string name="area">Diện tích (m²)</string>
@@ -152,8 +155,11 @@
         không nằm trên bản tin nữa cho đến khi bạn "đăng" lại và được duyệt</string>
     <string name="quality_prodcut">"Số lượng nhà trên bản đồ: "</string>
     <string name="saved_search_name">Tên tìm kiếm</string>
+    <string name="finish">Hoàn tất</string>
 
     <string name="google_api_key_value">AIzaSyAowoC2lTSVNGAJZkimZBlPuxPy0so5a_A</string>
 
+
 </resources>
+
 

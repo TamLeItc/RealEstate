@@ -45,7 +45,7 @@
             android:id="@+id/edt_confirm_code"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_40dp"
-            android:background="@drawable/custom_edt_main"/>
+            android:background="@drawable/custom_border_gray_backgroud_white"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -63,10 +63,11 @@
             android:weightSum="2">
 
             <Button
+                android:minHeight="@dimen/_0dp"
                 android:id="@+id/btn_cancel"
                 android:layout_weight="1"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/_50dp"
+                android:layout_height="@dimen/_40dp"
                 android:background="@drawable/custom_btn_main"
                 android:text="@string/cancel"
                 android:textSize="@dimen/_9sp"
@@ -80,7 +81,8 @@
                 android:layout_weight="1"
                 android:layout_marginLeft="@dimen/_10dp"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/_50dp"
+                android:layout_height="@dimen/_40dp"
+                android:minHeight="@dimen/_0dp"
                 android:background="@drawable/custom_btn_main"
                 android:text="@string/confirm"
                 android:textSize="@dimen/_9sp"

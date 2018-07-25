@@ -1,19 +1,13 @@
 package com.qtctek.realstate.view.post_news.fragment;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.qtctek.realstate.R;
 import com.qtctek.realstate.dto.Condition;
@@ -21,14 +15,12 @@ import com.qtctek.realstate.dto.Product;
 import com.qtctek.realstate.presenter.user_control.saved_post.PresenterSavedPost;
 import com.qtctek.realstate.view.post_news.activity.MainActivity;
 import com.qtctek.realstate.view.post_news.adapter.PostAdapter;
-import com.qtctek.realstate.view.post_detail.activity.PostDetailActivity;
 import com.qtctek.realstate.view.user_control.saved_post.ViewHandleSavedPost;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class ListPostNewsFragment extends Fragment implements AdapterView.OnItemClickListener,
-        ViewHandleSavedPost {
+public class ListPostNewsFragment extends Fragment implements ViewHandleSavedPost {
 
     private View mView;
 
@@ -55,8 +47,6 @@ public class ListPostNewsFragment extends Fragment implements AdapterView.OnItem
     private void initViews(){
         this.mLsvListProduct = mView.findViewById(R.id.lsv_list_product);
         TXV_INFORMATION = mView.findViewById(R.id.txv_information);
-
-        this.mLsvListProduct.setOnItemClickListener(this);
     }
 
     private void handleStart(){
@@ -70,15 +60,6 @@ public class ListPostNewsFragment extends Fragment implements AdapterView.OnItem
         new PresenterSavedPost(this).handleGetDataProductIds(getContext());
     }
 
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-        MapPostNewsFragment mapPostNewsFragment = (MapPostNewsFragment) ((MainActivity)getActivity()).getSupportFragmentManager().getFragments().get(0);
-
-//        Intent intent = new Intent(getActivity(), PostDetailActivity.class);
-//        intent.putExtra("product_id", mapPostNewsFragment.arrProduct.get(position).getId());
-        //startActivity(intent);
-    }
 
     @Override
     public void onHandleDataProductIdsSuccessful(HashMap<String, String> list) {

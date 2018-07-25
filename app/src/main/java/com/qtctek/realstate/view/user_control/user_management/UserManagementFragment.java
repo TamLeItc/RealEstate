@@ -17,6 +17,7 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.PopupMenu;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.qtctek.realstate.R;
@@ -40,6 +41,7 @@ public class UserManagementFragment extends Fragment implements ViewHandleUserMa
     private UserAdapter mUserAdapter;
 
     private ListView mLsvUsers;
+    private TextView mTxvInformation;
 
     private PresenterUserManagement mPresenterUserManagement;
     private int mPositionClick = 0;
@@ -62,6 +64,7 @@ public class UserManagementFragment extends Fragment implements ViewHandleUserMa
 
     private void initViews(){
         this.mLsvUsers = mView.findViewById(R.id.lsv_user);
+        this.mTxvInformation = mView.findViewById(R.id.txv_information);
 
         this.mLsvUsers.setOnScrollListener(this);
         this.mLsvUsers.setOnItemClickListener(this);
@@ -82,6 +85,14 @@ public class UserManagementFragment extends Fragment implements ViewHandleUserMa
         ((UserControlActivity)getActivity()).dialogHelper.dismiss();
         this.mArrUser.addAll(arrayListUser);
         this.mUserAdapter.notifyDataSetChanged();
+
+        if(mArrUser.size() > 0){
+            this.mTxvInformation.setVisibility(View.GONE);
+        }
+        else{
+            this.mTxvInformation.setVisibility(View.VISIBLE);
+            this.mTxvInformation.setText(getResources().getString(R.string.no_data));
+        }
 
     }
 

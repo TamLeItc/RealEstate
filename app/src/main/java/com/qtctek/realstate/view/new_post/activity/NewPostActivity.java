@@ -1,6 +1,5 @@
 package com.qtctek.realstate.view.new_post.activity;
 
-import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -13,16 +12,17 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.Window;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.kofigyan.stateprogressbar.StateProgressBar;
 import com.qtctek.realstate.R;
 import com.qtctek.realstate.common.general.Constant;
 import com.qtctek.realstate.helper.AlertHelper;
 import com.qtctek.realstate.dto.Photo;
 import com.qtctek.realstate.dto.Product;
 import com.qtctek.realstate.helper.DialogHelper;
+import com.qtctek.realstate.helper.KeyboardHelper;
 import com.qtctek.realstate.helper.ToastHelper;
 import com.qtctek.realstate.presenter.new_post.PresenterNewPost;
 import com.qtctek.realstate.view.new_post.interfaces.ViewHandleModelNewPost;
@@ -48,13 +48,17 @@ public class NewPostActivity extends AppCompatActivity implements ViewHandleMode
     public AlertHelper alertHelper;
     public ToastHelper toastHelper;
     public DialogHelper dialogHelper;
+    public KeyboardHelper keyboardHelper;
 
     public static Product PRODUCT;
     private boolean mDoubleBackToExitPressedOnce = false;
 
+    private String[] mArrDescriptionDataProgressBarState;
+
     private Button mBtnBack;
     private Button mBtnNext;
     private MenuItem mMenuItem;
+    public StateProgressBar progressBarState;
 
     private NewPostAdapter mNewPostAdapter;
 
@@ -63,12 +67,15 @@ public class NewPostActivity extends AppCompatActivity implements ViewHandleMode
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_post);
 
+        this.mArrDescriptionDataProgressBarState = getResources().getStringArray(R.array.description_data_progressbar_state);
+
         initViews();
         addToolbar();
 
         alertHelper = new AlertHelper(this);
         toastHelper = new ToastHelper(this);
         dialogHelper = new DialogHelper(this);
+        keyboardHelper = new KeyboardHelper(this);
 
         getDataFromIntent();
     }
@@ -78,10 +85,13 @@ public class NewPostActivity extends AppCompatActivity implements ViewHandleMode
         this.mBtnBack = findViewById(R.id.imv_back);
         this.mBtnNext = findViewById(R.id.btn_next);
         this.mToolbar = findViewById(R.id.toolbar);
+        this.progressBarState = findViewById(R.id.progress_bar_state);
 
         viewPaper.setOnTouchListener(this);
         this.mBtnBack.setOnClickListener(this);
         this.mBtnNext.setOnClickListener(this);
+
+        this.progressBarState.setStateDescriptionData(mArrDescriptionDataProgressBarState);
     }
 
     private void addControl() {
@@ -106,6 +116,7 @@ public class NewPostActivity extends AppCompatActivity implements ViewHandleMode
             IS_UPDATE = true;
         }
         else{
+            this.mBtnNext.setVisibility(View.GONE);
             IS_UPDATE = false;
         }
         handleStart(productId);
@@ -312,14 +323,31 @@ public class NewPostActivity extends AppCompatActivity implements ViewHandleMode
                 else if(viewPaper.getCurrentItem() < 4){
                     int currentPage = viewPaper.getCurrentItem();
                     viewPaper.setCurrentItem(currentPage - 1);
+                    setCurrentStateNumberProgressBar(viewPaper.getCurrentItem());
                 }
                 break;
             case R.id.btn_next:
                 if(viewPaper.getCurrentItem() < 3){
                     int currentPage = viewPaper.getCurrentItem();
                     viewPaper.setCurrentItem(currentPage + 1);
+                    setCurrentStateNumberProgressBar(viewPaper.getCurrentItem());
                 }
 
+        }
+    }
+
+    public void setCurrentStateNumberProgressBar(int current){
+        if(current == 0){
+            progressBarState.setCurrentStateNumber(StateProgressBar.StateNumber.ONE);
+        }
+        else if(current == 1){
+            progressBarState.setCurrentStateNumber(StateProgressBar.StateNumber.TWO);
+        }
+        else if(current == 2){
+            progressBarState.setCurrentStateNumber(StateProgressBar.StateNumber.THREE);
+        }
+        else if(current == 3){
+            progressBarState.setCurrentStateNumber(StateProgressBar.StateNumber.FOUR);
         }
     }
 

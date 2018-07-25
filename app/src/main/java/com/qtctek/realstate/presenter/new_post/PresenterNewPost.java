@@ -49,13 +49,6 @@ public class PresenterNewPost  implements PresenterImpHandleModelNewPost{
         this.mModelNewPost.requireExecutePost(id);
     }
 
-    public String getCurrentDate(){
-        Calendar calendar = Calendar.getInstance();
-        SimpleDateFormat mdformat = new SimpleDateFormat("yyyy-MM-dd ");
-        String strDate = mdformat.format(calendar.getTime());
-        return strDate;
-    }
-
     @Override
     public void onInsertBlankPost(boolean status, int productId) {
         this.mViewHandleModelNewPost.onInsertBlankPost(status, productId);

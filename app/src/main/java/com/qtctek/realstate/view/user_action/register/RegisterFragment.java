@@ -1,25 +1,27 @@
 package com.qtctek.realstate.view.user_action.register;
 
-import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.text.InputType;
 import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
+import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.qtctek.realstate.R;
 import com.qtctek.realstate.common.general.Constant;
@@ -36,7 +38,7 @@ import com.qtctek.realstate.view.user_action.activity.UserActionActivity;
 import java.util.Calendar;
 
 public class RegisterFragment extends Fragment implements View.OnClickListener, ViewHandleRegister,
-        AlertHelper.AlertHelperCallback{
+        AlertHelper.AlertHelperCallback, View.OnKeyListener, CompoundButton.OnCheckedChangeListener {
 
     private View mView;
 
@@ -54,8 +56,10 @@ public class RegisterFragment extends Fragment implements View.OnClickListener, 
     private EditText mEdtUsername;
     private ImageView mImvCalendar;
     private DatePicker mDpkBirthDay;
-    private TextView mTxvOldPassword;
+    private LinearLayout mLLOlPassword;
     private EditText mEdtOldPassword;
+    private Switch mSwtPassword;
+    private Switch mSwtConfirmPassword;
 
     private Dialog mDialog;
     private Dialog mLoadingDialog;
@@ -91,16 +95,26 @@ public class RegisterFragment extends Fragment implements View.OnClickListener, 
         this.mEdtAddress = mView.findViewById(R.id.edt_address);
         this.mImvCalendar = mView.findViewById(R.id.imv_calendar);
         this.mEdtUsername = mView.findViewById(R.id.edt_username);
-        this.mTxvOldPassword = mView.findViewById(R.id.txv_now_password);
+        this.mLLOlPassword = mView.findViewById(R.id.ll_now_password);
         this.mEdtOldPassword = mView.findViewById(R.id.edt_now_password);
+        this.mSwtPassword = mView.findViewById(R.id.swt_password);
+        this.mSwtConfirmPassword = mView.findViewById(R.id.swt_confirm_password);
 
-        this.mTxvOldPassword.setVisibility(View.GONE);
+        this.mLLOlPassword.setVisibility(View.GONE);
         this.mEdtOldPassword.setVisibility(View.GONE);
 
         this.mBtnConfirm.setOnClickListener(this);
         this.mImvCalendar.setOnClickListener(this);
-    }
 
+        this.mEdtUsername.setOnKeyListener(this);
+        this.mEdtEmail.setOnKeyListener(this);
+        this.mEdtPassword.setOnKeyListener(this);
+        this.mEdtConfirmPassword.setOnKeyListener(this);
+        this.mEdtPhoneNumber.setOnKeyListener(this);
+
+        this.mSwtPassword.setOnCheckedChangeListener(this);
+        this.mSwtConfirmPassword.setOnCheckedChangeListener(this);
+    }
 
 
     private void handleStart(){
@@ -114,58 +128,86 @@ public class RegisterFragment extends Fragment implements View.OnClickListener, 
         String confirmPassword = this.mEdtConfirmPassword.getText().toString().trim();
         String phoneNumber = this.mEdtPhoneNumber.getText().toString().trim();
 
-        if(TextUtils.isEmpty(username)){
-            ((UserActionActivity)getActivity()).toastHelper.toast("Vui lòng nhập tên đăng nhập!!!", ToastHelper.LENGTH_SHORT);
-            this.mEdtName.requestFocus();
-            mEdtConfirmPassword.setText("");
-            mEdtPassword.setText("");
-        }
 
-        else if(TextUtils.isEmpty(email)){
+        if(TextUtils.isEmpty(email)){
             ((UserActionActivity)getActivity()).toastHelper.toast("Vui lòng nhập email!!!!!!", ToastHelper.LENGTH_SHORT);
             this.mEdtEmail.requestFocus();
             mEdtConfirmPassword.setText("");
             mEdtPassword.setText("");
+
+            this.mEdtEmail.setBackground(getResources().getDrawable(R.drawable.custom_border_red_backgroud_white));
         }
         else if(!FormatPattern.checkEmail(email)){
             ((UserActionActivity)getActivity()).toastHelper.toast("Email không chính xác!!!", ToastHelper.LENGTH_SHORT);
             this.mEdtEmail.requestFocus();
             mEdtConfirmPassword.setText("");
             mEdtPassword.setText("");
+
+            this.mEdtEmail.setBackground(getResources().getDrawable(R.drawable.custom_border_red_backgroud_white));
+        }
+        else if(TextUtils.isEmpty(username)){
+            ((UserActionActivity)getActivity()).toastHelper.toast("Vui lòng nhập tên đăng nhập!!!", ToastHelper.LENGTH_SHORT);
+            this.mEdtUsername.requestFocus();
+            mEdtConfirmPassword.setText("");
+            mEdtPassword.setText("");
+
+            this.mEdtUsername.setBackground(getResources().getDrawable(R.drawable.custom_border_red_backgroud_white));
         }
         else if(TextUtils.isEmpty(password)){
             ((UserActionActivity)getActivity()).toastHelper.toast("Vui lòng nhập mật khẩu!!!", ToastHelper.LENGTH_SHORT);
             this.mEdtPassword.requestFocus();
             mEdtConfirmPassword.setText("");
             mEdtPassword.setText("");
+
+            this.mEdtPassword.setBackground(getResources().getDrawable(R.drawable.custom_border_red_backgroud_white));
         }
         else if(password.length() < 6){
-            ((UserActionActivity)getActivity()).toastHelper.toast("Mật khẩu phải có độ dài ít nhất 6 kí tự!!!", ToastHelper.LENGTH_SHORT);
+            ((UserActionActivity)getActivity()).toastHelper.toast("Mật khẩu phải có độ dài dài ít nhất 6 kí tự!!!", ToastHelper.LENGTH_SHORT);
             this.mEdtPassword.requestFocus();
             mEdtConfirmPassword.setText("");
             mEdtPassword.setText("");
+
+            this.mEdtPassword.setBackground(getResources().getDrawable(R.drawable.custom_border_red_backgroud_white));
+        }
+        else if(password.length() > 20){
+            ((UserActionActivity)getActivity()).toastHelper.toast("Mật khẩu tối đa 20 kí tự!!!", ToastHelper.LENGTH_SHORT);
+            this.mEdtPassword.requestFocus();
+            mEdtConfirmPassword.setText("");
+            mEdtPassword.setText("");
+
+            this.mEdtPassword.setBackground(getResources().getDrawable(R.drawable.custom_border_red_backgroud_white));
         }
         else if(TextUtils.isEmpty(confirmPassword)){
             ((UserActionActivity)getActivity()).toastHelper.toast("Vui lòng xác nhận mật khẩu!!!", ToastHelper.LENGTH_SHORT);
             this.mEdtConfirmPassword.requestFocus();
             mEdtConfirmPassword.setText("");
             mEdtPassword.setText("");
+
+            this.mEdtConfirmPassword.setBackground(getResources().getDrawable(R.drawable.custom_border_red_backgroud_white));
         }
         else if(!password.equals(confirmPassword)){
             ((UserActionActivity)getActivity()).toastHelper.toast("Mật khẩu và xác nhận mật khẩu không giống nhau!!!", ToastHelper.LENGTH_SHORT);
             this.mEdtConfirmPassword.requestFocus();
+            mEdtConfirmPassword.setText("");
+            mEdtPassword.setText("");
+
+            this.mEdtConfirmPassword.setBackground(getResources().getDrawable(R.drawable.custom_border_red_backgroud_white));
         }
         else if(TextUtils.isEmpty(phoneNumber)){
             ((UserActionActivity)getActivity()).toastHelper.toast("Vui lòng nhập số điện thoại!!!", ToastHelper.LENGTH_SHORT);
             this.mEdtPhoneNumber.requestFocus();
             mEdtConfirmPassword.setText("");
             mEdtPassword.setText("");
+
+            this.mEdtPhoneNumber.setBackground(getResources().getDrawable(R.drawable.custom_border_red_backgroud_white));
         }
         else if(!FormatPattern.checkNumberPhone(phoneNumber)){
             ((UserActionActivity)getActivity()).toastHelper.toast("Số điện thoại không hợp lệ!!!", ToastHelper.LENGTH_SHORT);
             this.mEdtPhoneNumber.requestFocus();
             mEdtConfirmPassword.setText("");
             mEdtPassword.setText("");
+
+            this.mEdtPhoneNumber.setBackground(getResources().getDrawable(R.drawable.custom_border_red_backgroud_white));
         }
         else{
             mLoadingDialog.show();
@@ -399,5 +441,75 @@ public class RegisterFragment extends Fragment implements View.OnClickListener, 
     @Override
     public void onNegativeButtonClick(int option) {
 
+    }
+
+    @Override
+    public boolean onKey(View v, int keyCode, KeyEvent event) {
+
+        switch (v.getId()){
+            case R.id.edt_username:
+                if(this.mEdtUsername.getText().toString().equals("")){
+                    this.mEdtUsername.setBackground(getResources().getDrawable(R.drawable.custom_border_red_backgroud_white));
+                }
+                else{
+                    this.mEdtUsername.setBackground(getResources().getDrawable(R.drawable.custom_border_gray_backgroud_white));
+                }
+                break;
+            case R.id.edt_email_address:
+                if(!FormatPattern.checkEmail(this.mEdtEmail.getText().toString().trim())){
+                    this.mEdtEmail.setBackground(getResources().getDrawable(R.drawable.custom_border_red_backgroud_white));
+                }
+                else{
+                    this.mEdtEmail.setBackground(getResources().getDrawable(R.drawable.custom_border_gray_backgroud_white));
+                }
+                break;
+            case R.id.edt_password:
+                if(this.mEdtPassword.getText().toString().trim().length() < 6 || this.mEdtPassword.getText().toString().trim().length() > 20){
+                    this.mEdtPassword.setBackground(getResources().getDrawable(R.drawable.custom_border_red_backgroud_white));
+                }
+                else{
+                    this.mEdtPassword.setBackground(getResources().getDrawable(R.drawable.custom_border_gray_backgroud_white));
+                }
+                break;
+            case R.id.edt_confirm_password:
+                if(!this.mEdtPassword.getText().toString().trim().equals(this.mEdtConfirmPassword.getText().toString().trim())){
+                    this.mEdtConfirmPassword.setBackground(getResources().getDrawable(R.drawable.custom_border_red_backgroud_white));
+                }
+                else{
+                    this.mEdtConfirmPassword.setBackground(getResources().getDrawable(R.drawable.custom_border_gray_backgroud_white));
+                }
+                break;
+            case R.id.edt_phone_number:
+                if(!FormatPattern.checkNumberPhone(this.mEdtPhoneNumber.getText().toString().trim())){
+                    this.mEdtPhoneNumber.setBackground(getResources().getDrawable(R.drawable.custom_border_red_backgroud_white));
+                }
+                else{
+                    this.mEdtPhoneNumber.setBackground(getResources().getDrawable(R.drawable.custom_border_gray_backgroud_white));
+                }
+        }
+
+        return false;
+    }
+
+    @Override
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        switch (buttonView.getId()){
+            case R.id.swt_password:
+                if(!isChecked){
+                    this.mEdtPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                }
+                else{
+                    this.mEdtPassword.setInputType(InputType.TYPE_CLASS_TEXT);
+                }
+                break;
+            case R.id.swt_confirm_password:
+                if(!isChecked){
+                    this.mEdtConfirmPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                }
+                else{
+                    this.mEdtConfirmPassword.setInputType(InputType.TYPE_CLASS_TEXT);
+                }
+                break;
+        }
     }
 }

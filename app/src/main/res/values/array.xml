@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="description_data_progressbar_state">
+        <item>@string/image</item>
+        <item>@string/information</item>
+        <item>@string/description</item>
+        <item>@string/location</item>
+        <item>@string/finish</item>
+    </array>
+</resources>

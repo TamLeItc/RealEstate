@@ -2,7 +2,8 @@ package com.qtctek.realstate.view.post_news.activity;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.DialogInterface;
+import android.app.Fragment;
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
@@ -16,11 +17,13 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.InputType;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
@@ -29,7 +32,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
@@ -39,6 +41,7 @@ import com.qtctek.realstate.common.AppUtils;
 import com.qtctek.realstate.common.general.Constant;
 import com.qtctek.realstate.helper.AlertHelper;
 import com.qtctek.realstate.helper.DialogHelper;
+import com.qtctek.realstate.helper.KeyboardHelper;
 import com.qtctek.realstate.helper.ToastHelper;
 import com.qtctek.realstate.network.receiver.NetworkConnectionReceiver;
 import com.qtctek.realstate.dto.Condition;
@@ -75,7 +78,6 @@ public class MainActivity extends AppCompatActivity
     public static OnUserLogin ON_USER_LOGIN;
 
     private PostFragment mPostFragment;
-    private SearchPlaceFragment mSearchPlaceFragment;
 
     public ViewPager viewPaper;
     private Toolbar mToolbar;
@@ -83,16 +85,18 @@ public class MainActivity extends AppCompatActivity
     private LinearLayout mLlSort;
     private LinearLayout mLlViewMode;
     private LinearLayout mLlSaveSearch;
-    public FrameLayout flSearch;
     private ImageView mImvViewMode;
     private TextView mTxvViewMode;
     public EditText edtSearch;
-    public ExpandableLayout expandableLayout;
+    public ExpandableLayout expandableLayoutProduct;
+    public ExpandableLayout expandableLayoutSearch;
+    private Fragment frgSearchPlace;
 
     public static Dialog NETWORK_CONNECTION_DIALOG;
     public AlertHelper alertHelper;
     public ToastHelper toastHelper;
     public DialogHelper dialogHelper;
+    public KeyboardHelper keyboardHelper;
 
     //product
     public String minPrice = "000000";
@@ -116,6 +120,7 @@ public class MainActivity extends AppCompatActivity
         toastHelper = new ToastHelper(this);
         alertHelper = new AlertHelper(this);
         dialogHelper = new DialogHelper(this);
+        keyboardHelper = new KeyboardHelper(this);
 
         handleInternetReceiver();
         createNetworkConnectionFailedDialog();
@@ -144,11 +149,11 @@ public class MainActivity extends AppCompatActivity
         this.mLlViewMode = findViewById(R.id.ll_view_mode);
         this.mImvViewMode = findViewById(R.id.imv_view_mode);
         this.mTxvViewMode = findViewById(R.id.txv_view_mode);
-        this.expandableLayout = findViewById(R.id.expandable_layout_product);
+        this.expandableLayoutProduct = findViewById(R.id.expandable_layout_product);
+        this.expandableLayoutSearch = findViewById(R.id.expandable_layout_search);
         this.edtSearch = findViewById(R.id.edt_search);
-        this.flSearch = findViewById(R.id.fl_search);
         this.mLlSaveSearch = findViewById(R.id.ll_save_search);
-
+        this.frgSearchPlace = getFragmentManager().findFragmentById(R.id.frg_search_place);
 
         viewPaper.setOnTouchListener(this);
 
@@ -212,11 +217,6 @@ public class MainActivity extends AppCompatActivity
         fragmentTransaction.replace(R.id.fl_start, startFragment);
         fragmentTransaction.commit();
 
-        mSearchPlaceFragment = new SearchPlaceFragment();
-        android.app.FragmentTransaction fragmentTransaction1 = getFragmentManager().beginTransaction();
-        fragmentTransaction1.replace(R.id.fl_search, mSearchPlaceFragment);
-        fragmentTransaction1.commit();
-
         final FrameLayout flStart = findViewById(R.id.fl_start);
 
         new Handler().postDelayed(new Runnable() {
@@ -234,8 +234,7 @@ public class MainActivity extends AppCompatActivity
         fragmentTransaction.replace(R.id.fl_item_post, mPostFragment);
         fragmentTransaction.commit();
 
-        expandableLayout.expand();
-
+        expandableLayoutProduct.expand();
     }
 
     private void createNetworkConnectionFailedDialog(){
@@ -385,13 +384,24 @@ public class MainActivity extends AppCompatActivity
         }
         else if (id == R.id.nav_saved_post) {
             Intent intent = new Intent(MainActivity.this, UserControlActivity.class);
-            intent.putExtra("fragment", 1);
+            if(USER.getLevel() == User.USER_NULL){
+                intent.putExtra("fragment", 0);
+            }
+            else{
+                intent.putExtra("fragment", 1);
+            }
             startActivity(intent);
 
         }
         else if(id == R.id.nav_saved_search){
             Intent intent = new Intent(MainActivity.this, UserControlActivity.class);
-            intent.putExtra("fragment", 2);
+
+            if(USER.getLevel() == User.USER_NULL){
+                intent.putExtra("fragment", 1);
+            }
+            else{
+                intent.putExtra("fragment", 2);
+            }
             startActivity(intent);
         }
         else if (id == R.id.nav_account_manage) {
@@ -456,11 +466,19 @@ public class MainActivity extends AppCompatActivity
                 }
                 break;
             case R.id.edt_search:
-                flSearch.setVisibility(View.VISIBLE);
+                final SearchPlaceFragment searchPlaceFragment = (SearchPlaceFragment) frgSearchPlace;
+                searchPlaceFragment.edtSearch.setFocusable(true);
+                searchPlaceFragment.edtSearch.setFocusableInTouchMode(true);
+
+                expandableLayoutSearch.expand();
+
+                keyboardHelper.showKeyboard(searchPlaceFragment.edtSearch);
+
                 break;
 
         }
     }
+
 
     private void handleGetSavedSearch() {
         new PresenterSavedSearch(this).handleGetDataSavedSearch(this);
@@ -550,10 +568,15 @@ public class MainActivity extends AppCompatActivity
         lsv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                dialogHelper.show();
-                mOption = position;
-                handleSort();
-                dialog.dismiss();
+                if(mOption != position){
+                    dialogHelper.show();
+                    mOption = position;
+                    handleSort();
+                    dialog.dismiss();
+
+                    MapPostNewsFragment mapPostNewsFragment = (MapPostNewsFragment)getSupportFragmentManager().getFragments().get(0);
+                    mapPostNewsFragment.handlePostList(mapPostNewsFragment.arrProduct);
+                }
             }
         });
 
@@ -639,7 +662,7 @@ public class MainActivity extends AppCompatActivity
         }
         ListPostNewsFragment.POST_ADAPTER.notifyDataSetChanged();
 
-        ListPostNewsFragment fragment = (ListPostNewsFragment) getSupportFragmentManager().getFragments().get(0);
+        ListPostNewsFragment fragment = (ListPostNewsFragment) getSupportFragmentManager().getFragments().get(1);
         fragment.mLsvListProduct.smoothScrollToPosition(0);
 
         dialogHelper.dismiss();

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+    android:id="@+id/ll_item_post_map"
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@android:color/transparent"
+    android:orientation="horizontal"
+    android:gravity="center">
+
+    <TextView
+        android:layout_marginLeft="@dimen/_4dp"
+        android:id="@+id/txv_price"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/_9sp"
+        android:textColor="@color/colorWhite"
+        android:text="12M"/>
+
+    <ImageView
+        android:id="@+id/imv_favorite"
+        android:layout_gravity="right|top"
+        android:layout_width="@dimen/_10dp"
+        android:layout_height="@dimen/_10dp"
+        android:src="@drawable/icon_favorite_red_24dp"
+        android:layout_marginLeft="@dimen/_4dp"/>
+
+</LinearLayout>

@@ -15,6 +15,7 @@ import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.PopupMenu;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.qtctek.realstate.R;
@@ -34,6 +35,7 @@ public class SavedSearchFragment extends Fragment implements ViewHandleSavedSear
     private View mView;
 
     private ListView mLsvSavedSearch;
+    private TextView mTxvInformation;
 
     private SavedSearchAdapter mSavedSearchAdapter;
     private int mPositionClick;
@@ -50,11 +52,20 @@ public class SavedSearchFragment extends Fragment implements ViewHandleSavedSear
 
     private void initViews(){
         this.mLsvSavedSearch = mView.findViewById(R.id.lsv_saved_search);
+        this.mTxvInformation = mView.findViewById(R.id.txv_information);
 
         this.mLsvSavedSearch.setOnItemClickListener(this);
 
         mSavedSearchAdapter = new SavedSearchAdapter(getContext(), ListPostNewsFragment.LIST_SAVED_SEARCH);
         this.mLsvSavedSearch.setAdapter(mSavedSearchAdapter);
+
+        if(ListPostNewsFragment.LIST_SAVED_SEARCH.size() > 0){
+            this.mTxvInformation.setVisibility(View.GONE);
+        }
+        else{
+            this.mTxvInformation.setText(getResources().getString(R.string.no_data));
+            this.mTxvInformation.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
@@ -75,6 +86,15 @@ public class SavedSearchFragment extends Fragment implements ViewHandleSavedSear
         ListPostNewsFragment.LIST_SAVED_SEARCH.remove(mPositionClick);
 
         this.mSavedSearchAdapter.notifyDataSetChanged();
+
+        if(ListPostNewsFragment.LIST_SAVED_SEARCH.size() > 0){
+            this.mTxvInformation.setVisibility(View.GONE);
+        }
+        else{
+            this.mTxvInformation.setText(getResources().getString(R.string.no_data));
+            this.mTxvInformation.setVisibility(View.VISIBLE);
+        }
+
     }
 
     @Override

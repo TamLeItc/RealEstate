@@ -1,9 +1,6 @@
 package com.qtctek.realstate.view.post_detail.activity;
 
 import android.Manifest;
-import android.app.AlertDialog;
-import android.app.Dialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -13,10 +10,8 @@ import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewTreeObserver;
-import android.view.Window;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
@@ -343,13 +338,13 @@ public class PostDetailActivity extends AppCompatActivity implements ViewHandleP
             case R.id.btn_image_view:
                 this.mRlSlide.setVisibility(View.VISIBLE);
                 this.mBtnImageView.setTextColor(getResources().getColor(R.color.colorWhite));
-                this.mBtnMapView.setTextColor(getResources().getColor(R.color.colorGray));
+                this.mBtnMapView.setTextColor(getResources().getColor(R.color.colorGrayLight));
                 break;
             case R.id.btn_map_view:
                 this.mRlSlide.setVisibility(View.GONE);
 
                 this.mBtnMapView.setTextColor(getResources().getColor(R.color.colorWhite));
-                this.mBtnImageView.setTextColor(getResources().getColor(R.color.colorGray));
+                this.mBtnImageView.setTextColor(getResources().getColor(R.color.colorGrayLight));
                 break;
             case R.id.imv_back:
                 mMap.clear();

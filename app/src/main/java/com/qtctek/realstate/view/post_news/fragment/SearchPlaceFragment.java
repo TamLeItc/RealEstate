@@ -30,6 +30,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.qtctek.realstate.R;
 import com.qtctek.realstate.common.AppUtils;
+import com.qtctek.realstate.helper.KeyboardHelper;
 import com.qtctek.realstate.view.post_news.activity.MainActivity;
 import com.qtctek.realstate.view.post_news.adapter.PlaceAutocompleteAdapter;
 
@@ -49,7 +50,7 @@ public class SearchPlaceFragment extends Fragment implements PlaceAutocompleteAd
     private static final LatLngBounds BOUNDS_INDIA = new LatLngBounds(
             new LatLng(-0, 0), new LatLng(0, 0));
 
-    private EditText mEdtSearch;
+    public EditText edtSearch;
     private ImageView mImvClear;
     private ImageView mImvBack;
     private LinearLayout mLlNearbySearchForSale;
@@ -104,7 +105,7 @@ public class SearchPlaceFragment extends Fragment implements PlaceAutocompleteAd
 
         this.mLlNearbySearchForRent = mView.findViewById(R.id.ll_for_rent);
         this.mLlNearbySearchForSale = mView.findViewById(R.id.ll_for_sale);
-        mEdtSearch = (EditText)mView.findViewById(R.id.edt_search);
+        edtSearch = (EditText)mView.findViewById(R.id.edt_search);
         mImvClear = (ImageView)mView.findViewById(R.id.imv_clear);
         this.mImvBack = mView.findViewById(R.id.imv_back);
         this.PROGRESS_BAR_SEARCH_PLACE = mView.findViewById(R.id.progress_bar_search_place);
@@ -117,13 +118,13 @@ public class SearchPlaceFragment extends Fragment implements PlaceAutocompleteAd
 
     private void handleStart(){
 
-        this.mEdtSearch.requestFocus();
-        this.mEdtSearch.setText("");
+        this.edtSearch.requestFocus();
+        this.edtSearch.setText("");
 
         mAdapter = new PlaceAutocompleteAdapter(mContext, R.layout.item_place_search,
                 mGoogleApiClient, BOUNDS_INDIA, null, this);
 
-        mEdtSearch.addTextChangedListener(new TextWatcher() {
+        edtSearch.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -159,23 +160,29 @@ public class SearchPlaceFragment extends Fragment implements PlaceAutocompleteAd
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.imv_clear:
-                mEdtSearch.setText("");
+                edtSearch.setText("");
                 if(mAdapter!=null){
                     mAdapter.clearList();
                 }
                 break;
             case R.id.imv_back:
-                ((MainActivity)getActivity()).flSearch.setVisibility(View.GONE);
+
+                ((MainActivity)getActivity()).keyboardHelper.hideKeyboard(edtSearch);
+                ((MainActivity)getActivity()).expandableLayoutSearch.collapse();
                 break;
             case R.id.ll_for_rent:
                 ((MainActivity)getActivity()).viewPaper.setCurrentItem(0);
                 MapPostNewsFragment.ON_EVENT_FROM_ACTIVITY.onNearBySearchForRent();
-                ((MainActivity)getActivity()).flSearch.setVisibility(View.GONE);
+
+                ((MainActivity)getActivity()).keyboardHelper.hideKeyboard(edtSearch);
+                ((MainActivity)getActivity()).expandableLayoutSearch.collapse();
                 break;
             case R.id.ll_for_sale:
                 ((MainActivity)getActivity()).viewPaper.setCurrentItem(0);
                 MapPostNewsFragment.ON_EVENT_FROM_ACTIVITY.onNearBySearchForSale();
-                ((MainActivity)getActivity()).flSearch.setVisibility(View.GONE);
+
+                ((MainActivity)getActivity()).keyboardHelper.hideKeyboard(edtSearch);
+                ((MainActivity)getActivity()).expandableLayoutSearch.collapse();
                 break;
         }
 
@@ -212,12 +219,13 @@ public class SearchPlaceFragment extends Fragment implements PlaceAutocompleteAd
                             MapPostNewsFragment.ON_EVENT_FROM_ACTIVITY.onPlaceSelected(places.get(0).getAddress().toString(),
                                     places.get(0).getViewport(), places.get(0).getLatLng().latitude, places.get(0).getLatLng().longitude);
 
-                            ((MainActivity)getActivity()).flSearch.setVisibility(View.GONE);
+                            ((MainActivity)getActivity()).keyboardHelper.hideKeyboard(edtSearch);
+                            ((MainActivity)getActivity()).expandableLayoutSearch.collapse();
                             ((MainActivity)getActivity()).viewPaper.setCurrentItem(0);
 
                             AppUtils.hideKeyboard(getActivity());
 
-                            mEdtSearch.setText("");
+                            edtSearch.setText("");
                         }else {
                             Toast.makeText(getActivity(),"Lỗi xảy ra trong quá trình xử lí",Toast.LENGTH_SHORT).show();
                         }

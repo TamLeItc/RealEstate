@@ -9,8 +9,11 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
 import com.qtctek.realstate.dto.Room;
+import com.qtctek.realstate.view.post_news.activity.MainActivity;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class AppUtils {
 
@@ -49,15 +52,33 @@ public class AppUtils {
             float fPrice;
             if(price > 1000000000){
                 fPrice = (float)price / 1000000000;
-                return Math.round( fPrice * 100.0)/ 100.0 + " tỉ";
+                fPrice = (float) (Math.round(fPrice * 100.0)/100.0);
+                if(fPrice == (int)fPrice){
+                    return (int)fPrice + " tỉ";
+                }
+                else{
+                    return fPrice + " tỉ";
+                }
             }
             else if(price > 1000000){
                 fPrice = (float)price / 1000000;
-                return  Math.round( fPrice * 100.0)/ 100.0 + " tr";
+                fPrice = (float) (Math.round(fPrice * 100.0)/100.0);
+                if(fPrice == (int)fPrice){
+                    return (int)fPrice + " tr";
+                }
+                else{
+                    return fPrice + " tr";
+                }
             }
             else if(price > 1000){
                 fPrice = (float)price / 1000;
-                return Math.round( fPrice * 100.0)/ 100.0 + " K";
+                fPrice = (float) (Math.round(fPrice * 100.0)/100.0);
+                if(fPrice == (int)fPrice){
+                    return (int)fPrice + " K";
+                }
+                else{
+                    return fPrice + " K";
+                }
             }
             else{
                 return SHORT_NEGOTIATE;
@@ -67,15 +88,33 @@ public class AppUtils {
             float fPrice;
             if(price > 1000000000){
                 fPrice = (float)price / 1000000000;
-                return Math.round( fPrice * 100.0)/ 100.0 + " tỉ";
+                fPrice = (float) (Math.round(fPrice * 100.0)/100.0);
+                if(fPrice == (int)fPrice){
+                    return (int)fPrice + " tỉ";
+                }
+                else{
+                    return fPrice + " tỉ";
+                }
             }
             else if(price > 1000000){
                 fPrice = (float)price / 1000000;
-                return  Math.round( fPrice * 100.0)/ 100.0 + " triệu";
+                fPrice = (float) (Math.round(fPrice * 100.0)/100.0);
+                if(fPrice == (int)fPrice){
+                    return (int)fPrice + " triệu";
+                }
+                else{
+                    return fPrice + " triệu";
+                }
             }
             else if(price > 1000){
                 fPrice = (float)price / 1000;
-                return Math.round( fPrice * 100.0)/ 100.0 + " K";
+                fPrice = (float) (Math.round(fPrice * 100.0)/100.0);
+                if(fPrice == (int)fPrice){
+                    return (int)fPrice + " K";
+                }
+                else{
+                    return fPrice + " K";
+                }
             }
             else{
                 return LONG_NEGOTIATE;
@@ -92,6 +131,13 @@ public class AppUtils {
             view = new View(activity);
         }
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
+
+    public static String getCurrentDate(){
+        Calendar calendar = Calendar.getInstance();
+        SimpleDateFormat mdformat = new SimpleDateFormat("yyyy-MM-dd ");
+        String strDate = mdformat.format(calendar.getTime());
+        return strDate;
     }
 
 }

@@ -7,15 +7,18 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.text.InputType;
 import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioButton;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,7 +38,7 @@ import java.util.Objects;
 
 import static com.qtctek.realstate.view.post_news.activity.MainActivity.USER;
 
-public class UpdateUserFragment extends Fragment implements View.OnClickListener, ViewHandleUpdateUser, View.OnFocusChangeListener {
+public class UpdateUserFragment extends Fragment implements View.OnClickListener, ViewHandleUpdateUser, View.OnFocusChangeListener, View.OnKeyListener, CompoundButton.OnCheckedChangeListener {
 
     private View mView;
 
@@ -57,6 +60,9 @@ public class UpdateUserFragment extends Fragment implements View.OnClickListener
     private TextView mTxvNowPassword;
     private EditText mEdtNowPassword;
     private TextView mTxvNewPassword;
+    private Switch mSwtNowPassword;
+    private Switch mSwtNewPassword;
+    private Switch mSwtConfirmPassword;
 
     private Dialog mLoadingDialog;
 
@@ -94,6 +100,9 @@ public class UpdateUserFragment extends Fragment implements View.OnClickListener
         this.mTxvNewPassword = mView.findViewById(R.id.txv_password);
         this.mTxvNowPassword = mView.findViewById(R.id.txv_now_password);
         this.mEdtNowPassword = mView.findViewById(R.id.edt_now_password);
+        this.mSwtNowPassword = mView.findViewById(R.id.swt_now_password);
+        this.mSwtNewPassword = mView.findViewById(R.id.swt_password);
+        this.mSwtConfirmPassword = mView.findViewById(R.id.swt_confirm_password);
 
         this.mTxvNewPassword.setText(getActivity().getResources().getString(R.string.new_password));
 
@@ -104,6 +113,15 @@ public class UpdateUserFragment extends Fragment implements View.OnClickListener
         this.mEdtEmail.setInputType(InputType.TYPE_NULL);
 
         this.mBtnConfirm.setOnClickListener(this);
+
+        this.mEdtNowPassword.setOnKeyListener(this);
+        this.mEdtNewPassword.setOnKeyListener(this);
+        this.mEdtConfirmPassword.setOnKeyListener(this);
+        this.mEdtPhoneNumber.setOnKeyListener(this);
+
+        this.mSwtNowPassword.setOnCheckedChangeListener(this);
+        this.mSwtNewPassword.setOnCheckedChangeListener(this);
+        this.mSwtConfirmPassword.setOnCheckedChangeListener(this);
     }
 
 
@@ -129,6 +147,8 @@ public class UpdateUserFragment extends Fragment implements View.OnClickListener
             this.mRdoOther.setChecked(true);
         }
 
+        this.mEdtEmail.setBackground(getResources().getDrawable(R.drawable.custom_border_gray_bakcgroud_main));
+        this.mEdtUsername.setBackground(getResources().getDrawable(R.drawable.custom_border_gray_bakcgroud_main));
 
     }
 
@@ -159,35 +179,15 @@ public class UpdateUserFragment extends Fragment implements View.OnClickListener
 
         mLoadingDialog.dismiss();
 
-        if(TextUtils.isEmpty(username)){
-            ((UserActionActivity)getActivity()).toastHelper.toast("Vui lòng nhập tên đăng nhập!!!", ToastHelper.LENGTH_SHORT);
-            this.mEdtName.requestFocus();
-            mEdtConfirmPassword.setText("");
-            mEdtNewPassword.setText("");
-            mEdtNowPassword.setText("");
-        }
-        else if(TextUtils.isEmpty(email)){
-            ((UserActionActivity)getActivity()).toastHelper.toast("Vui lòng nhập tên đăng nhập!!!", ToastHelper.LENGTH_SHORT);
-            Toast.makeText(getContext(), "Vui lòng nhập email!!!", Toast.LENGTH_SHORT).show();
-            this.mEdtEmail.requestFocus();
-            mEdtConfirmPassword.setText("");
-            mEdtNewPassword.setText("");
-            mEdtNowPassword.setText("");
-        }
-        else if(!FormatPattern.checkEmail(email)){
-            ((UserActionActivity)getActivity()).toastHelper.toast("Vui lòng nhập tên đăng nhập!!!", ToastHelper.LENGTH_SHORT);
-            Toast.makeText(getContext(), "Email không chính xác!!!", Toast.LENGTH_SHORT).show();
-            this.mEdtEmail.requestFocus();
-            mEdtConfirmPassword.setText("");
-            mEdtNewPassword.setText("");
-            mEdtNowPassword.setText("");
-        }
-        else if(TextUtils.isEmpty(nowPassword)){
+
+        if(TextUtils.isEmpty(nowPassword)){
             ((UserActionActivity)getActivity()).toastHelper.toast("Vui lòng nhập mật khẩu hiện tại!!!", ToastHelper.LENGTH_SHORT);
             this.mEdtNowPassword.requestFocus();
             mEdtConfirmPassword.setText("");
             mEdtNewPassword.setText("");
             mEdtNowPassword.setText("");
+
+            this.mEdtNowPassword.setBackground(getResources().getDrawable(R.drawable.custom_border_red_backgroud_white));
         }
         else if(TextUtils.isEmpty(password)){
             ((UserActionActivity)getActivity()).toastHelper.toast("Vui lòng nhập mật khẩu mới!!!", ToastHelper.LENGTH_SHORT);
@@ -195,6 +195,8 @@ public class UpdateUserFragment extends Fragment implements View.OnClickListener
             mEdtConfirmPassword.setText("");
             mEdtNewPassword.setText("");
             mEdtNowPassword.setText("");
+
+            this.mEdtNewPassword.setBackground(getResources().getDrawable(R.drawable.custom_border_red_backgroud_white));
         }
         else if(password.length() < 6){
             ((UserActionActivity)getActivity()).toastHelper.toast("Mật khẩu phải có độ dài ít nhất 6 kí tự!!!", ToastHelper.LENGTH_SHORT);
@@ -202,6 +204,17 @@ public class UpdateUserFragment extends Fragment implements View.OnClickListener
             mEdtConfirmPassword.setText("");
             mEdtNewPassword.setText("");
             mEdtNowPassword.setText("");
+
+            this.mEdtNewPassword.setBackground(getResources().getDrawable(R.drawable.custom_border_red_backgroud_white));
+        }
+        else if(password.length() > 20){
+            ((UserActionActivity)getActivity()).toastHelper.toast("Mật khẩu tối đa 20 kí tự!!!", ToastHelper.LENGTH_SHORT);
+            this.mEdtNewPassword.requestFocus();
+            mEdtConfirmPassword.setText("");
+            mEdtNewPassword.setText("");
+            mEdtNowPassword.setText("");
+
+            this.mEdtNewPassword.setBackground(getResources().getDrawable(R.drawable.custom_border_red_backgroud_white));
         }
         else if(mEdtConfirmPassword.getText().toString().equals("")){
             ((UserActionActivity)getActivity()).toastHelper.toast("Vui lòng nhập xác nhận mật khẩu!!!", ToastHelper.LENGTH_SHORT);
@@ -209,6 +222,8 @@ public class UpdateUserFragment extends Fragment implements View.OnClickListener
             mEdtConfirmPassword.setText("");
             mEdtNewPassword.setText("");
             mEdtNowPassword.setText("");
+
+            this.mEdtConfirmPassword.setBackground(getResources().getDrawable(R.drawable.custom_border_red_backgroud_white));
         }
         else if(!mEdtConfirmPassword.getText().toString().equals(password)){
             ((UserActionActivity)getActivity()).toastHelper.toast("Mật khẩu và xác nhận mật khẩu không giống nhau!!!", ToastHelper.LENGTH_SHORT);
@@ -216,6 +231,8 @@ public class UpdateUserFragment extends Fragment implements View.OnClickListener
             mEdtConfirmPassword.setText("");
             mEdtNewPassword.setText("");
             mEdtNowPassword.setText("");
+
+            this.mEdtConfirmPassword.setBackground(getResources().getDrawable(R.drawable.custom_border_red_backgroud_white));
         }
         else if(TextUtils.isEmpty(phoneNumber)){
             ((UserActionActivity)getActivity()).toastHelper.toast("Vui lòng nhập số điện thoại!!!", ToastHelper.LENGTH_SHORT);
@@ -223,6 +240,8 @@ public class UpdateUserFragment extends Fragment implements View.OnClickListener
             mEdtConfirmPassword.setText("");
             mEdtNewPassword.setText("");
             mEdtNowPassword.setText("");
+
+            this.mEdtPhoneNumber.setBackground(getResources().getDrawable(R.drawable.custom_border_red_backgroud_white));
         }
         else if(!FormatPattern.checkNumberPhone(phoneNumber)){
             ((UserActionActivity)getActivity()).toastHelper.toast("Số điện thoại không hợp lệ!!!", ToastHelper.LENGTH_SHORT);
@@ -230,6 +249,8 @@ public class UpdateUserFragment extends Fragment implements View.OnClickListener
             mEdtConfirmPassword.setText("");
             mEdtNewPassword.setText("");
             mEdtNowPassword.setText("");
+
+            this.mEdtPhoneNumber.setBackground(getResources().getDrawable(R.drawable.custom_border_red_backgroud_white));
         }
         else{
             mLoadingDialog.show();
@@ -325,6 +346,76 @@ public class UpdateUserFragment extends Fragment implements View.OnClickListener
     public void onFocusChange(View v, boolean hasFocus) {
         if(!hasFocus){
             AppUtils.hideKeyboard(getActivity());
+        }
+    }
+
+    @Override
+    public boolean onKey(View v, int keyCode, KeyEvent event) {
+
+        switch (v.getId()){
+            case R.id.edt_now_password:
+                if(this.mEdtNowPassword.getText().toString().trim().length() < 6 || this.mEdtNowPassword.getText().toString().trim().length() > 20){
+                    this.mEdtNowPassword.setBackground(getResources().getDrawable(R.drawable.custom_border_red_backgroud_white));
+                }
+                else{
+                    this.mEdtNowPassword.setBackground(getResources().getDrawable(R.drawable.custom_border_gray_backgroud_white));
+                }
+                break;
+            case R.id.edt_password:
+                if(this.mEdtNewPassword.getText().toString().trim().length() < 6 || this.mEdtNewPassword.getText().toString().trim().length() > 20){
+                    this.mEdtNewPassword.setBackground(getResources().getDrawable(R.drawable.custom_border_red_backgroud_white));
+                }
+                else{
+                    this.mEdtNewPassword.setBackground(getResources().getDrawable(R.drawable.custom_border_gray_backgroud_white));
+                }
+                break;
+            case R.id.edt_confirm_password:
+                if(!this.mEdtNewPassword.getText().toString().trim().equals(this.mEdtConfirmPassword.getText().toString().trim())){
+                    this.mEdtConfirmPassword.setBackground(getResources().getDrawable(R.drawable.custom_border_red_backgroud_white));
+                }
+                else{
+                    this.mEdtConfirmPassword.setBackground(getResources().getDrawable(R.drawable.custom_border_gray_backgroud_white));
+                }
+                break;
+            case R.id.edt_phone_number:
+                if(!FormatPattern.checkNumberPhone(this.mEdtPhoneNumber.getText().toString().trim())){
+                    this.mEdtPhoneNumber.setBackground(getResources().getDrawable(R.drawable.custom_border_red_backgroud_white));
+                }
+                else{
+                    this.mEdtPhoneNumber.setBackground(getResources().getDrawable(R.drawable.custom_border_gray_backgroud_white));
+                }
+        }
+
+        return false;
+    }
+
+    @Override
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        switch (buttonView.getId()){
+            case R.id.swt_now_password:
+                if(!isChecked){
+                    this.mEdtNowPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                }
+                else{
+                    this.mEdtNowPassword.setInputType(InputType.TYPE_CLASS_TEXT);
+                }
+                break;
+            case R.id.swt_password:
+                if(!isChecked){
+                    this.mEdtNewPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                }
+                else{
+                    this.mEdtNewPassword.setInputType(InputType.TYPE_CLASS_TEXT);
+                }
+                break;
+            case R.id.swt_confirm_password:
+                if(!isChecked){
+                    this.mEdtConfirmPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                }
+                else{
+                    this.mEdtConfirmPassword.setInputType(InputType.TYPE_CLASS_TEXT);
+                }
+                break;
         }
     }
 }

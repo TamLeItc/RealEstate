@@ -8,7 +8,7 @@
 
     <style name="Theme.Dialog" parent="@android:style/Theme.Holo.Dialog.NoActionBar">
         <item name="android:backgroundDimEnabled">false</item>
-        <item name="actionMenuTextColor">@color/colorGray</item>
+        <item name="actionMenuTextColor">@color/colorGrayLight</item>
     </style>
 
     <style name="iconGenText">

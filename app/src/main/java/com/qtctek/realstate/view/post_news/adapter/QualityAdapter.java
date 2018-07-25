@@ -42,7 +42,7 @@ public class QualityAdapter extends RecyclerView.Adapter<QualityAdapter.ViewHold
         holder.txvQuality.setText(mArrRoom.get(position).getQuality() + "");
 
         if(mArrRoom.get(position).isIsSelected()){
-            holder.llItemQuality.setBackgroundColor(mContext.getResources().getColor(R.color.colorGray));
+            holder.llItemQuality.setBackgroundColor(mContext.getResources().getColor(R.color.colorGrayLight));
             holder.txvQuality.setTextColor(mContext.getResources().getColor(R.color.colorWhite));
             holder.txvAdd.setTextColor(mContext.getResources().getColor(R.color.colorWhite));
         }

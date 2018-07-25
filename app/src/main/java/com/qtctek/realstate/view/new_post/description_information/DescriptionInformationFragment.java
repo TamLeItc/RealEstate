@@ -73,6 +73,8 @@ public class DescriptionInformationFragment extends Fragment implements View.OnC
         if(!mIsEdited && !mIsSaveTemp){
             ViewPager viewPager = getActivity().findViewById(R.id.view_pager);
             viewPager.setCurrentItem(3);
+            ((NewPostActivity)getActivity()).setCurrentStateNumberProgressBar(
+                    ((NewPostActivity) getActivity()).viewPaper.getCurrentItem());
             return;
         }
 
@@ -142,6 +144,8 @@ public class DescriptionInformationFragment extends Fragment implements View.OnC
             if(!mIsSaveTemp){
                 ViewPager viewPager = getActivity().findViewById(R.id.view_pager);
                 viewPager.setCurrentItem(3);
+                ((NewPostActivity)getActivity()).setCurrentStateNumberProgressBar(
+                        ((NewPostActivity) getActivity()).viewPaper.getCurrentItem());
             }
             ((NewPostActivity)getActivity()).toastHelper.toast("Lưu thành công", ToastHelper.LENGTH_SHORT);
         }

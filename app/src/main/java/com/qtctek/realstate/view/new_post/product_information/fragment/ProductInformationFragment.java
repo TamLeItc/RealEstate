@@ -475,6 +475,8 @@ public class ProductInformationFragment extends Fragment implements View.OnClick
             if(!mIsSaveTemp){
                 ViewPager viewPager = getActivity().findViewById(R.id.view_pager);
                 viewPager.setCurrentItem(2);
+                ((NewPostActivity)getActivity()).setCurrentStateNumberProgressBar(
+                        ((NewPostActivity) getActivity()).viewPaper.getCurrentItem());
             }
         }
         else{

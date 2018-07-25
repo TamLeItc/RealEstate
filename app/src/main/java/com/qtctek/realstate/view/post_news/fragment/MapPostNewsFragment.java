@@ -13,13 +13,18 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
+import android.support.annotation.ColorInt;
+import android.support.annotation.ColorRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -54,7 +59,10 @@ import com.qtctek.realstate.view.post_news.activity.MainActivity;
 import com.qtctek.realstate.view.post_news.interfaces.ViewHandlePostNews;
 import com.qtctek.realstate.view.post_news.interfaces.OnEventForMapPostNews;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import static android.content.Context.LOCATION_SERVICE;
 import static android.support.v4.content.ContextCompat.checkSelfPermission;
@@ -91,6 +99,7 @@ public class MapPostNewsFragment extends Fragment implements OnMapReadyCallback,
 
     private int mMinZoom = 10;
     private int mSecondZoom = 15;
+    private int mZoom = 16;
 
 
     @Nullable
@@ -230,7 +239,6 @@ public class MapPostNewsFragment extends Fragment implements OnMapReadyCallback,
     }
 
     private void searchNearby() {
-
         ((MainActivity) getActivity()).alertHelper.setCallback(this);
         ((MainActivity) getActivity()).alertHelper.alert("Tìm kiếm", "Bạn có muốn tìm kiếm gần" +
                         " vị trí hiện tại không", false, "OK", "Hủy bỏ",
@@ -269,7 +277,13 @@ public class MapPostNewsFragment extends Fragment implements OnMapReadyCallback,
     private void removeAllMarker() {
         for (int i = 0; i < mArrMarket.size(); i++) {
             Marker marker = mArrMarket.get(i);
-            marker.remove();
+            try {
+                marker.remove();
+            }
+            catch (java.lang.NullPointerException e){
+
+            }
+
         }
     }
 
@@ -323,7 +337,7 @@ public class MapPostNewsFragment extends Fragment implements OnMapReadyCallback,
     }
 
 
-    private void handlePostList(ArrayList<Product> arrPost) {
+    public void handlePostList(ArrayList<Product> arrPost) {
 
         removeAllMarker();
 
@@ -371,11 +385,65 @@ public class MapPostNewsFragment extends Fragment implements OnMapReadyCallback,
         }
     }
 
-    private Marker createMarker(LatLng latLng, int positionInArr, int color, String message) {
+    private boolean isNew(String strDateUpload){
+        String strToday = AppUtils.getCurrentDate();
+
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Date toDate;
+        Date dateUpload;
+        try {
+            toDate = simpleDateFormat.parse(strToday);
+            dateUpload = simpleDateFormat.parse(strDateUpload);
+
+            if(toDate.equals(dateUpload)){
+                return true;
+            }
+            else{
+                return false;
+            }
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    private Marker createMarker(LatLng latLng, int positionInArr, @ColorRes int color, String message) {
+
+        if(positionInArr > arrProduct.size() - 1){
+            return null;
+        }
+
+        View view = LayoutInflater.from(getContext()).inflate(R.layout.item_post_map, null);
+        ImageView imvFavorite = view.findViewById(R.id.imv_favorite);
+        TextView txvPrice = view.findViewById(R.id.txv_price);
+
+        txvPrice.setText(message);
+
+        if(this.arrProduct.get(positionInArr).getIsSaved()){
+            imvFavorite.setVisibility(View.VISIBLE);
+        }
+        else{
+
+
+            if(isNew(arrProduct.get(positionInArr).getDateUpload())){
+                imvFavorite.setVisibility(View.VISIBLE);
+                imvFavorite.setImageResource(R.drawable.icon_fiber_new_black_24dp);
+            }
+            else{
+                imvFavorite.setVisibility(View.GONE);
+                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT);
+                layoutParams.setMargins(5, 0, 5, 0);
+                txvPrice.setLayoutParams(layoutParams);
+            }
+        }
+
         IconGenerator iconFactory = new IconGenerator(getContext());
-        iconFactory.setColor(getResources().getColor(color));
+        iconFactory.setContentView(view);
+        iconFactory.setColor(ContextCompat.getColor(getContext(), color));
         iconFactory.setTextAppearance(R.style.iconGenText);
-        iconFactory.setContentPadding(3, 1, 3, 1);
+        iconFactory.setContentPadding(0, 0, 0, 0);
 
         Marker marker = mMap.addMarker(new MarkerOptions()
                 .position(latLng)
@@ -426,14 +494,14 @@ public class MapPostNewsFragment extends Fragment implements OnMapReadyCallback,
         try {
 
             LatLng latLng = this.lastMarkerClicked.getPosition();
-            int lastPositionProductClick = Integer.parseInt(this.lastMarkerClicked.getSnippet());
+            int lastPositionProductClickId = Integer.parseInt(this.lastMarkerClicked.getSnippet());
             String strShortPrice = AppUtils.getStringPrice(mLastProductClicked.getPrice(), AppUtils.SHORT_PRICE);
             this.lastMarkerClicked.remove();
 
-            if (arrProduct.get(lastPositionProductClick).getFormality().equals("no")) {
-                this.mArrMarket.add(createMarker(latLng, lastPositionProductClick, R.color.colorGreen, strShortPrice));
+            if (arrProduct.get(lastPositionProductClickId).getFormality().equals("no")) {
+                this.mArrMarket.add(createMarker(latLng, lastPositionProductClickId, R.color.colorGreen, strShortPrice));
             } else {
-                this.mArrMarket.add(createMarker(latLng, lastPositionProductClick, R.color.colorMain, strShortPrice));
+                this.mArrMarket.add(createMarker(latLng, lastPositionProductClickId, R.color.colorMain, strShortPrice));
             }
 
             this.lastMarkerClicked = marker;
@@ -456,7 +524,7 @@ public class MapPostNewsFragment extends Fragment implements OnMapReadyCallback,
             int positionInArr = Integer.parseInt(this.lastMarkerClicked.getSnippet());
             String strShortPrice = AppUtils.getStringPrice(mLastProductClicked.getPrice(), AppUtils.SHORT_PRICE);
             this.lastMarkerClicked.remove();
-            this.mArrMarket.add(createMarker(latLng, positionInArr, R.color.colorPrimary, strShortPrice));
+            this.mArrMarket.add(createMarker(latLng, positionInArr, R.color.colorMainLight, strShortPrice));
         } catch (java.lang.NullPointerException e) {
         }
     }
@@ -502,13 +570,12 @@ public class MapPostNewsFragment extends Fragment implements OnMapReadyCallback,
         } else {
             handleGetData("count");
         }
-
     }
 
 
     @Override
     public void onPlaceSelected(String address, LatLngBounds latLngs, Double lat, Double lng) {
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(lat, lng), 16));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(lat, lng), mZoom));
 
         ((MainActivity) getActivity()).edtSearch.setText(address);
 
@@ -639,7 +706,7 @@ public class MapPostNewsFragment extends Fragment implements OnMapReadyCallback,
             return;
         }
         Location lastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(lastLocation.getLatitude(), lastLocation.getLongitude()), 16));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(lastLocation.getLatitude(), lastLocation.getLongitude()), mZoom));
     }
 
     @Override

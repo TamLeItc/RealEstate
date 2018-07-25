@@ -91,6 +91,7 @@ public class ModelLogin {
 
         @Override
         protected void onPostExecute(String s) {
+            Log.d("ttt", s);
             if(!s.equals("error")){
                 mPresenterImpHandleUserManager.onCheckUserLoginSuccessful(s);
             }

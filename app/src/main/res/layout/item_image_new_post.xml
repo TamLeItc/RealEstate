@@ -19,7 +19,7 @@
 
         <ImageView
             android:id="@+id/imv_image"
-            android:layout_width="@dimen/_180dp"
+            android:layout_width="@dimen/_170dp"
             android:layout_height="@dimen/_120dp"
             android:scaleType="centerCrop"
             xmlns:android="http://schemas.android.com/apk/res/android" />

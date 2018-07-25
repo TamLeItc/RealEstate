@@ -54,6 +54,34 @@
 
     </android.support.v7.widget.Toolbar>
 
+    <com.kofigyan.stateprogressbar.StateProgressBar
+        android:layout_margin="@dimen/_5dp"
+        android:id="@+id/progress_bar_state"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:spb_stateTextSize="@dimen/_8sp"
+        app:spb_stateDescriptionSize="@dimen/_9sp"
+        app:spb_stateLineThickness="@dimen/_3dp"
+        app:spb_stateSize="@dimen/_5dp"
+        app:spb_currentStateNumber="one"
+        app:spb_maxStateNumber="five"
+        app:spb_stateBackgroundColor="#BDBDBD"
+        app:spb_stateForegroundColor="@color/colorPrimaryDark"
+        app:spb_stateNumberBackgroundColor="@color/colorGray"
+        app:spb_stateNumberForegroundColor="#eeeeee"
+        app:spb_currentStateDescriptionColor="@color/colorGrayDark"
+        app:spb_stateDescriptionColor="@color/colorGray"
+        app:spb_animateToCurrentProgressState="true"
+        app:spb_checkStateCompleted="true"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_1dp"
+        android:background="@color/colorGrayLight"
+        android:layout_marginBottom="@dimen/_8dp"
+        android:layout_marginLeft="@dimen/_8dp"
+        android:layout_marginRight="@dimen/_8dp"/>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -61,7 +89,9 @@
         <android.support.v4.view.ViewPager
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/view_pager"/>
+            android:id="@+id/view_pager"
+            android:scrollbars="none"
+            android:overScrollMode="never"/>
 
     </LinearLayout>
 

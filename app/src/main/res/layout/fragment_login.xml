@@ -7,7 +7,6 @@
     android:background="@color/colorMainBackground"
     android:paddingLeft="@dimen/_16dp"
     android:paddingRight="@dimen/_16dp"
-    android:paddingTop="@dimen/_16dp"
     android:paddingBottom="@dimen/_8dp"
     android:scrollbars="none"
     android:overScrollMode="never">
@@ -17,13 +16,14 @@
         android:layout_height="wrap_content">
 
         <ImageView
+            android:scaleType="centerCrop"
             android:id="@+id/imv_logo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/_150dp"
+            android:layout_height="@dimen/_150dp"
             android:layout_centerHorizontal="true"
-            android:layout_marginBottom="@dimen/_40dp"
-            android:layout_marginTop="@dimen/_40dp"
-            android:src="@drawable/logo_qtc" />
+            android:layout_marginBottom="@dimen/_30dp"
+            android:layout_marginTop="@dimen/_10dp"
+            android:background="@color/colorPrimary" />
 
         <TextView
             android:id="@+id/txv_email_address"
@@ -41,7 +41,7 @@
             android:layout_height="@dimen/_40dp"
             android:layout_below="@+id/txv_email_address"
             android:layout_marginBottom="@dimen/_20dp"
-            android:background="@drawable/custom_edt_main"
+            android:background="@drawable/custom_border_gray_backgroud_white"
             android:inputType="textEmailAddress"
             android:paddingLeft="@dimen/_5dp"
             android:textSize="@dimen/_10sp" />
@@ -56,14 +56,12 @@
             android:textSize="@dimen/_10sp"
             android:textColor="@color/colorGrayDark"/>
 
-        <CheckBox
-            android:id="@+id/chk_show_password"
+        <Switch
+            android:id="@+id/swt_show_password"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/edt_email_address"
             android:layout_alignParentRight="true"
-
-            android:text="@string/show_password"
             android:textSize="@dimen/_9sp"
             android:textColor="@color/colorGrayDark"/>
 
@@ -72,7 +70,7 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/_40dp"
             android:layout_below="@+id/txv_password"
-            android:background="@drawable/custom_edt_main"
+            android:background="@drawable/custom_border_gray_backgroud_white"
             android:inputType="textPassword"
             android:paddingLeft="@dimen/_5dp"
             android:textSize="@dimen/_10sp" />
@@ -87,35 +85,37 @@
             android:text="@string/save_login"
             android:textSize="@dimen/_9sp"/>
 
+        <TextView
+            android:textColor="@color/colorGrayDark"
+            android:layout_marginTop="@dimen/_6dp"
+            android:textSize="@dimen/_9sp"
+            android:id="@+id/txv_forgot_password"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/edt_password"
+            android:layout_alignParentRight="true"
+            android:text="@string/forgot_password" />
+
         <Button
+            android:minWidth="@dimen/_0dp"
             android:id="@+id/btn_login"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/_50dp"
+            android:layout_height="@dimen/_40dp"
             android:layout_below="@+id/chk_save_login"
             android:layout_marginBottom="@dimen/_5dp"
             android:layout_marginTop="@dimen/_20dp"
             android:background="@drawable/custom_btn_main"
             android:text="@string/login"
-            android:textColor="@color/colorPrimaryDark"
+            android:textColor="@color/colorGrayDark"
             android:textSize="@dimen/_9sp" />
 
         <TextView
-            android:textSize="@dimen/_9sp"
-            android:id="@+id/txv_forgot_password"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/btn_login"
-            android:layout_centerHorizontal="true"
-            android:layout_marginBottom="@dimen/_40dp"
-            android:layout_marginTop="@dimen/_5dp"
-            android:text="@string/forgot_password" />
-
-        <TextView
+            android:textColor="@color/colorGrayDark"
             android:textSize="@dimen/_9sp"
             android:id="@+id/txv_register_user"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/txv_forgot_password"
+            android:layout_below="@+id/btn_login"
             android:layout_centerHorizontal="true"
             android:text="@string/register_user" />
 

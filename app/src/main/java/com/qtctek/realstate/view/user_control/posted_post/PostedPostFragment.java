@@ -13,6 +13,7 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.PopupMenu;
+import android.widget.TextView;
 
 import com.qtctek.realstate.R;
 import com.qtctek.realstate.common.general.Constant;
@@ -33,6 +34,7 @@ public class PostedPostFragment extends Fragment implements ViewHandlePostedPost
     private View mView;
 
     private ListView mLsvPostedPost;
+    private TextView mTxvInformation;
 
     private AdapterPostSale mAdapterListPost;
     private ArrayList<Product> mArrProduct = new ArrayList<>();
@@ -58,6 +60,7 @@ public class PostedPostFragment extends Fragment implements ViewHandlePostedPost
 
     private void initViews(){
         this.mLsvPostedPost = mView.findViewById(R.id.lsv_posts);
+        this.mTxvInformation = mView.findViewById(R.id.txv_information);
 
         this.mLsvPostedPost.setOnScrollListener(this);
         this.mLsvPostedPost.setOnItemClickListener(this);
@@ -83,10 +86,21 @@ public class PostedPostFragment extends Fragment implements ViewHandlePostedPost
 
         this.mArrProduct.addAll(arrListPost);
         this.mAdapterListPost.notifyDataSetChanged();
+
+        if(mArrProduct.size() > 0){
+            this.mTxvInformation.setVisibility(View.GONE);
+        }
+        else{
+            this.mTxvInformation.setText(getResources().getString(R.string.no_data));
+            this.mTxvInformation.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
     public void onHandlePostListError(String error) {
+
+        this.mTxvInformation.setText(getResources().getString(R.string.load_data_error));
+        this.mTxvInformation.setVisibility(View.VISIBLE);
 
         ((UserControlActivity)getActivity()).dialogHelper.dismiss();
 
@@ -101,11 +115,19 @@ public class PostedPostFragment extends Fragment implements ViewHandlePostedPost
         mArrProduct.remove(mPositionClick);
         mAdapterListPost.notifyDataSetChanged();
 
+        if(mArrProduct.size() > 0){
+            this.mTxvInformation.setVisibility(View.GONE);
+        }
+        else{
+            this.mTxvInformation.setText(getResources().getString(R.string.no_data));
+            this.mTxvInformation.setVisibility(View.VISIBLE);
+        }
 
     }
 
     @Override
     public void onDeletePostError(String error) {
+
 
         ((UserControlActivity)getActivity()).dialogHelper.dismiss();
 

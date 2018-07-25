@@ -8,6 +8,7 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:actionOverflowButtonStyle">@style/MyActionButtonOverflow</item>
         <item name="actionMenuTextColor">@color/colorGrayDark</item>
+
     </style>
 
     <!-- Style to replace actionbar overflow icon. set item 'android:actionOverflowButtonStyle' in AppTheme -->
@@ -32,7 +33,7 @@
 
     <style name="Theme.Dialog" parent="@android:style/Theme.Holo.Dialog.NoActionBar">
         <item name="android:backgroundDimEnabled">false</item>
-        <item name="actionMenuTextColor">@color/colorGray</item>
+        <item name="actionMenuTextColor">@color/colorGrayLight</item>
     </style>
 
     <style name="iconGenText">

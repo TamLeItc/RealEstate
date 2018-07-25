@@ -12,6 +12,7 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.PopupMenu;
+import android.widget.TextView;
 
 import com.qtctek.realstate.R;
 import com.qtctek.realstate.common.general.Constant;
@@ -29,6 +30,7 @@ public class PostManagementFragment extends Fragment implements ViewHandlePostMa
     private View mView;
 
     private ListView mLsvPost;
+    private TextView mTxvInformation;
 
     private AdapterPostSale mAdapterListPostForAdmin;
     private ArrayList<Product> mArrProduct = new ArrayList<>();
@@ -56,6 +58,7 @@ public class PostManagementFragment extends Fragment implements ViewHandlePostMa
 
     private void initViews(){
         this.mLsvPost = mView.findViewById(R.id.lsv_posts);
+        this.mTxvInformation = mView.findViewById(R.id.txv_information);
 
         this.mLsvPost.setOnScrollListener(this);
         this.mLsvPost.setOnItemClickListener(this);
@@ -97,10 +100,22 @@ public class PostManagementFragment extends Fragment implements ViewHandlePostMa
         this.mArrProduct.addAll(mArrProduct);
 
         this.mAdapterListPostForAdmin.notifyDataSetChanged();
+
+        if(mArrProduct.size() > 0){
+            this.mTxvInformation.setText(getResources().getString(R.string.no_data));
+            this.mTxvInformation.setVisibility(View.VISIBLE);
+        }
+        else{
+            this.mTxvInformation.setVisibility(View.GONE);
+        }
     }
 
     @Override
     public void onHandlePostListError(String error) {
+
+        this.mTxvInformation.setText(getResources().getString(R.string.load_data_error));
+        this.mTxvInformation.setVisibility(View.VISIBLE);
+
         ((UserControlActivity)getActivity()).dialogHelper.dismiss();
 
         ((UserControlActivity)getActivity()).toastHelper.toast("Đọc dữ liệu thất bại. Vui lòng thử lại sau", ToastHelper.LENGTH_SHORT);
@@ -132,6 +147,8 @@ public class PostManagementFragment extends Fragment implements ViewHandlePostMa
         mArrProduct.remove(mPositionClick);
         mAdapterListPostForAdmin.notifyDataSetChanged();
 
+        this.mTxvInformation.setText(getResources().getString(R.string.no_data));
+        this.mTxvInformation.setVisibility(View.VISIBLE);
     }
 
     @Override

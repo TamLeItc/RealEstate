@@ -32,7 +32,7 @@
         android:layout_below="@+id/txv_item"
         android:layout_width="match_parent"
         android:layout_height="@dimen/_1dp"
-        android:background="@color/colorGray"
+        android:background="@color/colorGrayLight"
         android:layout_marginBottom="@dimen/_10dp"/>
 
 </RelativeLayout>

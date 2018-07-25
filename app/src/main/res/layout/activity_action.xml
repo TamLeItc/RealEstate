@@ -10,7 +10,7 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/_40dp"
-        android:background="@color/colorGrayDark"
+        android:background="@android:color/transparent"
         app:popupTheme="@style/AppTheme.PopupOverlay"
         app:contentInsetStart="@dimen/_0dp">
 
@@ -23,16 +23,7 @@
                 android:id="@+id/imv_back"
                 android:layout_width="@dimen/_40dp"
                 android:layout_height="@dimen/_40dp"
-                android:background="@drawable/icon_arrow_left_white_24dp" />
-
-            <TextView
-                android:textColor="@color/colorWhite"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:text="@string/app_name"
-                android:textSize="@dimen/_13sp"
-                android:textStyle="bold" />
+                android:background="@drawable/icon_arrow_left_black_24dp" />
 
         </RelativeLayout>
 
@@ -42,7 +33,9 @@
         android:layout_below="@id/tab_layout"
         android:id="@+id/view_pager"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:scrollbars="none"
+        android:overScrollMode="never"/>
 
 
 

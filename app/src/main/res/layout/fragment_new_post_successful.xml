@@ -25,7 +25,8 @@
         <Button
             android:layout_marginTop="@dimen/_20dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/_40dp"
+            android:minHeight="@dimen/_0dp"
             android:background="@drawable/custom_btn_main"
             android:text="@string/view_posted_product"
             android:textSize="@dimen/_8sp"
@@ -35,7 +36,8 @@
         <Button
             android:id="@+id/btn_new_post"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/_40dp"
+            android:minHeight="@dimen/_0dp"
             android:layout_marginLeft="@dimen/_20dp"
             android:layout_marginTop="@dimen/_20dp"
             android:layout_weight="1"

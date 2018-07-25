@@ -17,6 +17,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,7 +42,7 @@ public class LoginFragment extends Fragment implements ViewHandleLogin, View.OnC
     private TextView mTxvForgotPassword;
     private TextView mTxvRegister;
     private CheckBox mChkSaveLogin;
-    private CheckBox mChkShowPassword;
+    private Switch mSwtShowPassword;
 
     private PresenterLogin mPresenterUserManager;
 
@@ -71,14 +72,14 @@ public class LoginFragment extends Fragment implements ViewHandleLogin, View.OnC
         this.mTxvForgotPassword = this.mView.findViewById(R.id.txv_forgot_password);
         this.mTxvRegister = this.mView.findViewById(R.id.txv_register_user);
         this.mChkSaveLogin = mView.findViewById(R.id.chk_save_login);
-        this.mChkShowPassword = mView.findViewById(R.id.chk_show_password);
+        this.mSwtShowPassword = mView.findViewById(R.id.swt_show_password);
 
 
         this.mBtnConfirm.setOnClickListener(this);
         this.mTxvForgotPassword.setOnClickListener(this);
         this.mTxvRegister.setOnClickListener(this);
         this.mChkSaveLogin.setOnCheckedChangeListener(this);
-        this.mChkShowPassword.setOnCheckedChangeListener(this);
+        this.mSwtShowPassword.setOnCheckedChangeListener(this);
 
     }
 
@@ -157,7 +158,7 @@ public class LoginFragment extends Fragment implements ViewHandleLogin, View.OnC
 
         ((UserActionActivity)getActivity()).dialogHelper.dismiss();
 
-        ((NewPostActivity)getActivity()).alertHelper.alert("Lỗi", "Đăng nhập không thành công " +
+        ((UserActionActivity)getActivity()).alertHelper.alert("Lỗi", "Đăng nhập không thành công " +
                         "vui lòng thử lại sau", false, "Xác nhập",
                 AlertHelper.ALERT_NO_ACTION);
     }
@@ -228,7 +229,7 @@ public class LoginFragment extends Fragment implements ViewHandleLogin, View.OnC
                     mPresenterUserManager.handleUpdateDataSaveLogin("", "", getContext());
                 }
                 break;
-            case R.id.chk_show_password:
+            case R.id.swt_show_password:
                 if(!isChecked){
                     this.mEdtPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
                 }

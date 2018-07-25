@@ -35,8 +35,10 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.kofigyan.stateprogressbar.StateProgressBar;
 import com.qtctek.realstate.R;
 import com.qtctek.realstate.common.AppUtils;
+import com.qtctek.realstate.helper.KeyboardHelper;
 import com.qtctek.realstate.helper.ToastHelper;
 import com.qtctek.realstate.presenter.new_post.PresenterNewPost;
 import com.qtctek.realstate.view.new_post.interfaces.ViewHandleModelNewPost;
@@ -293,6 +295,13 @@ public class MapInformationFragment extends Fragment implements OnMapReadyCallba
                 }
                 break;
             case R.id.edt_search:
+
+                SearchPlaceFragment searchPlaceFragment = (SearchPlaceFragment) mFrgSearch;
+                searchPlaceFragment.edtSearch.setFocusable(true);
+                searchPlaceFragment.edtSearch.setFocusableInTouchMode(true);
+
+                ((NewPostActivity)getActivity()).keyboardHelper.showKeyboard(searchPlaceFragment.edtSearch);
+
                 flSearch.setVisibility(View.VISIBLE);
         }
     }
@@ -330,6 +339,7 @@ public class MapInformationFragment extends Fragment implements OnMapReadyCallba
                 mMap.clear();
                 ViewPager viewPager = getActivity().findViewById(R.id.view_pager);
                 viewPager.setCurrentItem(4);
+                ((NewPostActivity)getActivity()).progressBarState.setCurrentStateNumber(StateProgressBar.StateNumber.FIVE);
             }
         }
         else{

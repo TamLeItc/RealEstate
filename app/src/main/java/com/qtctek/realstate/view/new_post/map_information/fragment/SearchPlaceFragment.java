@@ -17,7 +17,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -50,7 +49,7 @@ public class SearchPlaceFragment extends Fragment implements PlaceAutocompleteAd
     private static final LatLngBounds BOUNDS_INDIA = new LatLngBounds(
             new LatLng(-0, 0), new LatLng(0, 0));
 
-    private EditText mEdtSearch;
+    public EditText edtSearch;
     private ImageView mImvClear;
     private ImageView mImvBack;
     private RelativeLayout mRlBottom;
@@ -103,7 +102,7 @@ public class SearchPlaceFragment extends Fragment implements PlaceAutocompleteAd
         mRecyclerView.setAdapter(mAdapter);
 
         this.mRlBottom = mView.findViewById(R.id.rl_bottom);
-        mEdtSearch = (EditText)mView.findViewById(R.id.edt_search);
+        edtSearch = (EditText)mView.findViewById(R.id.edt_search);
         mImvClear = (ImageView)mView.findViewById(R.id.imv_clear);
         this.mImvBack = mView.findViewById(R.id.imv_back);
         this.PROGRESS_BAR_SEARCH_PLACE = mView.findViewById(R.id.progress_bar_search_place);
@@ -115,15 +114,15 @@ public class SearchPlaceFragment extends Fragment implements PlaceAutocompleteAd
 
     private void handleStart(){
 
-        this.mEdtSearch.requestFocus();
-        this.mEdtSearch.setText("");
+        this.edtSearch.requestFocus();
+        this.edtSearch.setText("");
 
         mAdapter = new PlaceAutocompleteAdapter(mContext, R.layout.item_place_search,
                 mGoogleApiClient, BOUNDS_INDIA, null, this);
 
 
 
-        mEdtSearch.addTextChangedListener(new TextWatcher() {
+        edtSearch.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -158,27 +157,35 @@ public class SearchPlaceFragment extends Fragment implements PlaceAutocompleteAd
 
     @Override
     public void onClick(View v) {
+
+        MapInformationFragment mapInformationFragment = (MapInformationFragment) ((NewPostActivity)getActivity()).getSupportFragmentManager().getFragments().get(1);
+
         switch (v.getId()){
             case R.id.imv_clear:
-                mEdtSearch.setText("");
+                edtSearch.setText("");
                 if(mAdapter!=null){
                     mAdapter.clearList();
                 }
                 break;
             case R.id.imv_back:
-                this.mEdtSearch.setText("");
-                MapInformationFragment mapInformationFragment = (MapInformationFragment) ((NewPostActivity)getActivity()).getSupportFragmentManager().getFragments().get(1);
+                this.edtSearch.setText("");
+
+                ((NewPostActivity)getActivity()).keyboardHelper.hideKeyboard(edtSearch);
                 mapInformationFragment.flSearch.setVisibility(View.GONE);
                 break;
             case R.id.ll_for_rent:
                 ((MainActivity)getActivity()).viewPaper.setCurrentItem(0);
                 MapPostNewsFragment.ON_EVENT_FROM_ACTIVITY.onNearBySearchForRent();
-                ((MainActivity)getActivity()).flSearch.setVisibility(View.GONE);
+
+                ((NewPostActivity)getActivity()).keyboardHelper.hideKeyboard(edtSearch);
+                mapInformationFragment.flSearch.setVisibility(View.GONE);
                 break;
             case R.id.ll_for_sale:
                 ((MainActivity)getActivity()).viewPaper.setCurrentItem(0);
                 MapPostNewsFragment.ON_EVENT_FROM_ACTIVITY.onNearBySearchForSale();
-                ((MainActivity)getActivity()).flSearch.setVisibility(View.GONE);
+
+                ((NewPostActivity)getActivity()).keyboardHelper.hideKeyboard(edtSearch);
+                mapInformationFragment.flSearch.setVisibility(View.GONE);
                 break;
         }
 
@@ -215,16 +222,20 @@ public class SearchPlaceFragment extends Fragment implements PlaceAutocompleteAd
 
                             try{
                                 MapInformationFragment mapInformationFragment = (MapInformationFragment) ((NewPostActivity)getActivity()).getSupportFragmentManager().getFragments().get(1);
+
+                                ((NewPostActivity)getActivity()).keyboardHelper.hideKeyboard(edtSearch);
                                 mapInformationFragment.moveCameraToLocationClick(places.get(0).getLatLng().latitude,
                                         places.get(0).getLatLng().longitude);
                             }
                             catch (Exception e){
                                 ((NewPostActivity)getActivity()).toastHelper.toast("Lỗi xử lí!!!", ToastHelper.LENGTH_SHORT);
                                 MapInformationFragment mapInformationFragment = (MapInformationFragment) ((NewPostActivity)getActivity()).getSupportFragmentManager().getFragments().get(1);
+
+                                ((NewPostActivity)getActivity()).keyboardHelper.hideKeyboard(edtSearch);
                                 mapInformationFragment.flSearch.setVisibility(View.GONE);
                             }
 
-                            mEdtSearch.setText("");
+                            edtSearch.setText("");
                         }else {
                             ((NewPostActivity)getActivity()).toastHelper.toast("Lỗi xử lí!!!", ToastHelper.LENGTH_SHORT);
                         }

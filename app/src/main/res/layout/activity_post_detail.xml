@@ -70,7 +70,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:background="@color/colorPrimaryDark"
-                        android:text="@string/image_view"
+                        android:text="@string/image"
                         android:textColor="@color/colorWhite"
                         android:textSize="@dimen/_8sp" />
 
@@ -78,7 +78,7 @@
                         android:layout_width="@dimen/_1dp"
                         android:layout_height="@dimen/_30dp"
                         android:layout_gravity="center"
-                        android:background="@color/colorGray"/>
+                        android:background="@color/colorGrayLight"/>
 
                     <Button
                         android:id="@+id/btn_map_view"
@@ -87,7 +87,7 @@
                         android:layout_weight="1"
                         android:background="@color/colorPrimaryDark"
                         android:text="@string/map_view"
-                        android:textColor="@color/colorGray"
+                        android:textColor="@color/colorGrayLight"
                         android:textSize="@dimen/_8sp" />
 
                 </LinearLayout>

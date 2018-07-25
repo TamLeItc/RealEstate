@@ -2,7 +2,7 @@
 <resources>
     <color name="colorPrimary">#CD2213</color>
     <color name="colorPrimaryDark">#333333</color>
-    <color name="colorAccent">#333333</color>
+    <color name="colorAccent">#2068A4</color>
 
     <color name="colorMain">#2068A4</color>
     <color name="colorGreen">#258500</color>
@@ -13,7 +13,8 @@
     <color name="colorWhite10">#10ffffff</color>
     <color name="colorWhite30">#30ffffff</color>
     <color name="colorWhite60">#60ffffff</color>
-    <color name="colorGray">#bebebe</color>
+    <color name="colorGrayLight">#bebebe</color>
+    <color name="colorGray">#808080</color>
     <color name="colorGrayDark">#4b4b4b</color>
     <color name="colorBlackLight99">#99000000</color>
     <color name="colorBlackLight15">#15000000</color>
@@ -31,5 +32,7 @@
     <color name="colorPostNotActive">#fff6f6</color>
     <color name="colorPostActive">#f1f8ff</color>
     <color name="colorBtnMoreView">#10ffffff</color>
+    <color name="colorBlueLight">#00D1FB</color>
+    <color name="colorBlue">#00ABF9</color>
 
 </resources>

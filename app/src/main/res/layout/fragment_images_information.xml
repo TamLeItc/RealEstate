@@ -16,16 +16,6 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/image_information"
-            android:layout_gravity="center"
-            android:textSize="@dimen/_13sp"
-            android:textColor="@color/colorMain"
-            android:layout_marginBottom="@dimen/_10dp"
-            android:id="@+id/txv_title"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:text="@string/avartar_information"
             android:textSize="@dimen/_10sp"
             android:layout_marginBottom="@dimen/_10dp" />
@@ -55,7 +45,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="@dimen/_1dp"
-            android:background="@color/colorGray"
+            android:background="@color/colorGrayLight"
             android:layout_marginTop="@dimen/_10dp"
             android:layout_marginBottom="@dimen/_5dp"/>
 
@@ -66,6 +56,7 @@
             android:gravity="right">
 
             <Button
+                android:background="?attr/selectableItemBackground"
                 android:id="@+id/btn_select_avartar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -93,7 +84,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="@dimen/_1dp"
-            android:background="@color/colorGray"
+            android:background="@color/colorGrayLight"
             android:layout_marginTop="@dimen/_10dp"
             android:layout_marginBottom="@dimen/_5dp"/>
 
@@ -108,7 +99,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/add_picture"
-                android:textSize="@dimen/_8sp"/>
+                android:textSize="@dimen/_8sp"
+                android:background="?attr/selectableItemBackground"/>
 
         </LinearLayout>
 
@@ -122,7 +114,8 @@
                 android:layout_marginRight="@dimen/_15dp"
                 android:layout_weight="1"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/_40dp"
+                android:minHeight="@dimen/_0dp"
                 android:background="@drawable/custom_btn_main"
                 android:text="@string/save_temp"
                 android:id="@+id/btn_save_temp"
@@ -131,7 +124,8 @@
             <Button
                 android:layout_weight="1"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/_40dp"
+                android:minHeight="@dimen/_0dp"
                 android:background="@drawable/custom_btn_main"
                 android:text="@string/next_to"
                 android:id="@+id/btn_next_to"

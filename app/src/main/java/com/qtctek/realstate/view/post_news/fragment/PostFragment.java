@@ -98,7 +98,11 @@ public class PostFragment extends Fragment implements View.OnClickListener, View
     }
 
     private void removeFragment(){
-        getFragmentManager().beginTransaction().remove(this).commit();
+        try{
+            getFragmentManager().beginTransaction().remove(this).commit();
+        }
+        catch (java.lang.NullPointerException e){
+        }
     }
 
     private void setValue() throws NullPointerException{
@@ -144,7 +148,7 @@ public class PostFragment extends Fragment implements View.OnClickListener, View
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.imv_cancel:
-                ((MainActivity)getActivity()).expandableLayout.collapse();
+                ((MainActivity)getActivity()).expandableLayoutProduct.collapse();
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
@@ -212,6 +216,7 @@ public class PostFragment extends Fragment implements View.OnClickListener, View
             mapPostNewsFragment.arrProduct.get(MapPostNewsFragment.POSITION).setIsSaved(true);
         }
         setBackgroundForButton();
+        mapPostNewsFragment.handlePostList(mapPostNewsFragment.arrProduct);
     }
 
     @Override

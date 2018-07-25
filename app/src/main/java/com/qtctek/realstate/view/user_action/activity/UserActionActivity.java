@@ -92,7 +92,7 @@ public class UserActionActivity extends AppCompatActivity implements View.OnTouc
 
     @Override
     public boolean onTouch(View v, MotionEvent event) {
-        return false;
+        return true;
     }
 
     @Override

@@ -127,7 +127,7 @@
                 android:layout_below="@+id/edt_max_price"
                 android:layout_marginBottom="@dimen/_15dp"
                 android:layout_marginTop="@dimen/_15dp"
-                android:background="@color/colorGray" />
+                android:background="@color/colorGrayLight" />
 
             <CheckBox
                 android:id="@+id/chk_for_sale"
@@ -160,7 +160,7 @@
                 android:layout_below="@+id/chk_for_sale"
                 android:layout_marginBottom="@dimen/_15dp"
                 android:layout_marginTop="@dimen/_15dp"
-                android:background="@color/colorGray" />
+                android:background="@color/colorGrayLight" />
 
             <TextView
                 android:id="@+id/txv_name_architecture"
@@ -233,7 +233,7 @@
                 android:layout_below="@+id/btn_reset_type"
                 android:layout_marginBottom="@dimen/_15dp"
                 android:layout_marginTop="@dimen/_15dp"
-                android:background="@color/colorGray" />
+                android:background="@color/colorGrayLight" />
 
             <TextView
                 android:id="@+id/txv_name_bedroom"
@@ -274,7 +274,8 @@
             <Button
                 android:id="@+id/btn_search"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/_40dp"
+                android:minHeight="@dimen/_0dp"
                 android:layout_below="@id/recycler_view_bedroom"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="@dimen/_30dp"
