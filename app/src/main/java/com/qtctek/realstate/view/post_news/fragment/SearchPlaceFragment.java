@@ -176,6 +176,9 @@ public class SearchPlaceFragment extends Fragment implements PlaceAutocompleteAd
 
                 ((MainActivity)getActivity()).keyboardHelper.hideKeyboard(edtSearch);
                 ((MainActivity)getActivity()).expandableLayoutSearch.collapse();
+
+                this.edtSearch.setText("");
+                ((MainActivity)getActivity()).edtSearch.setText("");
                 break;
             case R.id.ll_for_sale:
                 ((MainActivity)getActivity()).viewPaper.setCurrentItem(0);
@@ -183,6 +186,9 @@ public class SearchPlaceFragment extends Fragment implements PlaceAutocompleteAd
 
                 ((MainActivity)getActivity()).keyboardHelper.hideKeyboard(edtSearch);
                 ((MainActivity)getActivity()).expandableLayoutSearch.collapse();
+
+                this.edtSearch.setText("");
+                ((MainActivity)getActivity()).edtSearch.setText("");
                 break;
         }
 

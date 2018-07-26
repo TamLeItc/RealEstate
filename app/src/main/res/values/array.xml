@@ -7,4 +7,15 @@
         <item>@string/location</item>
         <item>@string/finish</item>
     </array>
+    <array name="product_status">
+        <item>@string/all</item>
+        <item>@string/save_temp</item>
+        <item>@string/pending</item>
+        <item>@string/posted</item>
+    </array>
+    <array name="user_status">
+        <item>@string/all</item>
+        <item>@string/not_active</item>
+        <item>@string/active</item>
+    </array>
 </resources>

@@ -3,7 +3,6 @@ package com.qtctek.realstate.view.post_news.activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.Fragment;
-import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
@@ -17,13 +16,11 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.InputType;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
@@ -50,7 +47,7 @@ import com.qtctek.realstate.dto.User;
 import com.qtctek.realstate.presenter.user_control.save_search.PresenterSavedSearch;
 import com.qtctek.realstate.view.post_news.adapter.MainAdapter;
 import com.qtctek.realstate.view.post_news.adapter.SortAdapter;
-import com.qtctek.realstate.view.post_news.dialog.FilterDialog;
+import com.qtctek.realstate.view.post_news.dialog.SearchFilterDialog;
 import com.qtctek.realstate.view.post_news.fragment.SearchPlaceFragment;
 import com.qtctek.realstate.view.post_news.fragment.PostFragment;
 import com.qtctek.realstate.view.post_news.fragment.StartFragment;
@@ -319,7 +316,7 @@ public class MainActivity extends AppCompatActivity
 
         }
         else if (id == R.id.action_search){
-            Intent intent = new Intent(MainActivity.this, FilterDialog.class);
+            Intent intent = new Intent(MainActivity.this, SearchFilterDialog.class);
             intent.putExtra("formality", formality);
             intent.putExtra("architecture", architecture);
             intent.putExtra("type", type);
@@ -395,7 +392,6 @@ public class MainActivity extends AppCompatActivity
         }
         else if(id == R.id.nav_saved_search){
             Intent intent = new Intent(MainActivity.this, UserControlActivity.class);
-
             if(USER.getLevel() == User.USER_NULL){
                 intent.putExtra("fragment", 1);
             }

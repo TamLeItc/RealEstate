@@ -2,7 +2,7 @@
 <RelativeLayout
     android:id="@+id/rl_item_1"
     xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:background="@color/colorMainBackground"
     android:orientation="vertical"
     android:paddingRight="@dimen/_16dp"
@@ -12,7 +12,6 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="City"
         android:id="@+id/txv_item"
         android:textSize="@dimen/_10sp"
         android:textColor="@color/colorPrimaryDark"
@@ -28,7 +27,7 @@
 
     
     <View
-        android:id="@+id/view_scroll"
+        android:id="@+id/view_boundary"
         android:layout_below="@+id/txv_item"
         android:layout_width="match_parent"
         android:layout_height="@dimen/_1dp"

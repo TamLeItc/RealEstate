@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/colorMainBackground"
+    android:orientation="vertical"
+    xmlns:tools="http://schemas.android.com/tools">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/_5dp"
+        android:background="@color/colorGrayDark"
+        android:orientation="horizontal"
+        android:weightSum="5">
+
+        <TextView
+            android:id="@+id/txv_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="4"
+            android:background="@color/colorGrayDark"
+            android:padding="@dimen/_11dp"
+            android:text="@string/filter_list"
+            android:textColor="@color/colorWhite"
+            android:textSize="@dimen/_12sp" />
+
+        <Button
+            android:id="@+id/btn_cancel"
+            android:layout_width="@dimen/_50dp"
+            android:layout_height="@dimen/_30dp"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="2"
+            android:background="@drawable/icon_close_white_24dp" />
+
+    </LinearLayout>
+
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:overScrollMode="never"
+        android:scrollbars="none">
+
+        <RelativeLayout
+            android:padding="@dimen/_8dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/txv_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/status"
+                android:textSize="@dimen/_10sp"
+                android:textColor="@color/colorMain"
+                />
+
+            <View
+                android:id="@+id/view_1"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_1dp"
+                android:layout_below="@+id/txv_status"
+                android:layout_marginBottom="@dimen/_10dp"
+                android:layout_marginTop="@dimen/_5dp"
+                android:background="@color/colorGrayLight" />
+
+            <android.support.v7.widget.RecyclerView
+                android:layout_below="@+id/view_1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/recycler_view_status"
+                android:overScrollMode="never"
+                android:scrollbars="none"/>
+
+            <TextView
+                android:layout_marginTop="@dimen/_10dp"
+                android:id="@+id/txv_formality"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/formality"
+                android:textSize="@dimen/_10sp"
+                android:textColor="@color/colorMain"
+                android:layout_below="@+id/recycler_view_status"/>
+
+            <View
+                android:id="@+id/view_3"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_1dp"
+                android:layout_below="@+id/txv_formality"
+                android:layout_marginBottom="@dimen/_10dp"
+                android:layout_marginTop="@dimen/_5dp"
+                android:background="@color/colorGrayLight" />
+
+            <CheckBox
+                android:id="@+id/chk_for_sale"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/view_3"
+                android:layout_marginLeft="@dimen/_10dp"
+                android:layout_weight="1"
+                android:text="@string/house_for_sale"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="@dimen/_10sp" />
+
+
+            <CheckBox
+                android:id="@+id/chk_rent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_below="@+id/view_3"
+                android:layout_marginRight="@dimen/_20dp"
+                android:layout_weight="1"
+                android:text="@string/rent_house"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="@dimen/_10sp" />
+
+            <Button
+                android:id="@+id/btn_confirm"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/_40dp"
+                android:minHeight="@dimen/_0dp"
+                android:layout_below="@id/chk_rent"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="@dimen/_30dp"
+                android:background="@drawable/custom_btn_main"
+                android:paddingLeft="@dimen/_20dp"
+                android:paddingRight="@dimen/_20dp"
+                android:text="@string/confirm"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="@dimen/_10sp" />
+
+        </RelativeLayout>
+
+    </ScrollView>
+</LinearLayout>

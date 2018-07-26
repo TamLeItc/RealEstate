@@ -22,8 +22,8 @@ public class PresenterPostedPost implements PresenterImpHandlePostedPost {
         this.mModelUserControlPost = new ModelPostedPost(this);
     }
 
-    public void handleGetListPostedPost(int start, int limit, String email){
-        this.mModelUserControlPost.requirePostedPostList(start, limit, email);
+    public void handleGetListPostedPost(int start, int limit, String email, String formality, String status){
+        this.mModelUserControlPost.requirePostedPostList(start, limit, email, formality, status);
     }
 
     public void handleDeletePost(int productId){

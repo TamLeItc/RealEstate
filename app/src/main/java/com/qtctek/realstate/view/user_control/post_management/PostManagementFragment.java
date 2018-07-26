@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,10 +23,12 @@ import com.qtctek.realstate.helper.ToastHelper;
 import com.qtctek.realstate.presenter.user_control.post_management.PresenterPostManagement;
 import com.qtctek.realstate.view.post_detail.activity.PostDetailActivity;
 import com.qtctek.realstate.view.user_control.activity.UserControlActivity;
+import com.qtctek.realstate.view.user_control.interfaces.ManagementFilterCallback;
 
 import java.util.ArrayList;
 
-public class PostManagementFragment extends Fragment implements ViewHandlePostManagement, AbsListView.OnScrollListener, AdapterView.OnItemClickListener, AlertHelper.AlertHelperCallback {
+public class PostManagementFragment extends Fragment implements ViewHandlePostManagement, AbsListView.OnScrollListener, AdapterView.OnItemClickListener,
+        AlertHelper.AlertHelperCallback, ManagementFilterCallback {
 
     private View mView;
 
@@ -38,13 +41,14 @@ public class PostManagementFragment extends Fragment implements ViewHandlePostMa
     private PresenterPostManagement mPresenterPostManagement;
 
     private int mPositionClick;
-
-
+    private boolean mIsFirstLoad = true;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         this.mView = inflater.inflate(R.layout.fragment_post_management, container, false);
+
+        ((UserControlActivity)getActivity()).postFilterCallback = this;
 
         return mView;
     }
@@ -65,11 +69,11 @@ public class PostManagementFragment extends Fragment implements ViewHandlePostMa
     }
 
     private void handleStart(){
-
         ((UserControlActivity)getActivity()).dialogHelper.show();
 
         this.mPresenterPostManagement = new PresenterPostManagement(this);
-        this.mPresenterPostManagement.handleGetPostListForAdmin(0, 20);
+        this.mPresenterPostManagement.handleGetPostListForAdmin(0, 20, ((UserControlActivity)getActivity()).productFormality,
+                ((UserControlActivity)getActivity()).productStatus);
 
         this.mAdapterListPostForAdmin = new AdapterPostSale(mArrProduct, getActivity());
         this.mLsvPost.setAdapter(this.mAdapterListPostForAdmin);
@@ -84,7 +88,8 @@ public class PostManagementFragment extends Fragment implements ViewHandlePostMa
                 mLsvPost.getFooterViewsCount()) >= (mAdapterListPostForAdmin.getCount() - 1)) {
 
             ((UserControlActivity)getActivity()).dialogHelper.show();
-            this.mPresenterPostManagement.handleGetPostListForAdmin(this.mArrProduct.size(), 20);
+            this.mPresenterPostManagement.handleGetPostListForAdmin(this.mArrProduct.size(), 20,
+                    ((UserControlActivity)getActivity()).productFormality, ((UserControlActivity)getActivity()).productStatus);
         }
     }
 
@@ -93,20 +98,25 @@ public class PostManagementFragment extends Fragment implements ViewHandlePostMa
     }
 
     @Override
-    public void onHandlePostListSuccessful(ArrayList<Product> mArrProduct) {
+    public void onHandlePostListSuccessful(ArrayList<Product> arrProduct) {
 
         ((UserControlActivity)getActivity()).dialogHelper.dismiss();
 
-        this.mArrProduct.addAll(mArrProduct);
+        if(mIsFirstLoad){
+            this.mArrProduct.clear();
+            mIsFirstLoad = false;
+        }
+
+        this.mArrProduct.addAll(arrProduct);
 
         this.mAdapterListPostForAdmin.notifyDataSetChanged();
 
         if(mArrProduct.size() > 0){
-            this.mTxvInformation.setText(getResources().getString(R.string.no_data));
-            this.mTxvInformation.setVisibility(View.VISIBLE);
+            this.mTxvInformation.setVisibility(View.GONE);
         }
         else{
-            this.mTxvInformation.setVisibility(View.GONE);
+            this.mTxvInformation.setText(getResources().getString(R.string.no_data));
+            this.mTxvInformation.setVisibility(View.VISIBLE);
         }
     }
 
@@ -214,5 +224,16 @@ public class PostManagementFragment extends Fragment implements ViewHandlePostMa
     @Override
     public void onNegativeButtonClick(int option) {
 
+    }
+
+    @Override
+    public void onFilter() {
+
+        Log.d("ttt", "post");
+        mIsFirstLoad = true;
+
+        ((UserControlActivity)getActivity()).dialogHelper.show();
+        this.mPresenterPostManagement.handleGetPostListForAdmin(0, 20,
+                ((UserControlActivity)getActivity()).productFormality, ((UserControlActivity)getActivity()).productStatus);
     }
 }

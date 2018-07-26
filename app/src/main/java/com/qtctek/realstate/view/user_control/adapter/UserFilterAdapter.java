@@ -1,4 +1,4 @@
-package com.qtctek.realstate.view.post_news.adapter;
+package com.qtctek.realstate.view.user_control.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -12,13 +12,13 @@ import com.qtctek.realstate.R;
 
 import java.util.ArrayList;
 
-public class SortAdapter extends BaseAdapter {
+public class UserFilterAdapter extends BaseAdapter {
 
     private Context mContext;
     private ArrayList<String> mArrList;
-    private int mOption = 0;
+    private int mOption;
 
-    public SortAdapter(Context mContext, ArrayList<String> mArrList, int option) {
+    public UserFilterAdapter(Context mContext, ArrayList<String> mArrList, int option) {
         this.mContext = mContext;
         this.mArrList = mArrList;
         this.mOption = option;
@@ -65,6 +65,4 @@ public class SortAdapter extends BaseAdapter {
 
         return convertView;
     }
-
-
 }

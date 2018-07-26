@@ -21,8 +21,8 @@ public class PresenterPostManagement implements PresenterImpHandlePostManagement
         this.mModelPostManagement = new ModelPostManagement(this);
     }
 
-    public void handleGetPostListForAdmin(int start, int limit){
-        this.mModelPostManagement.requirePostListForAdmin(start, limit);
+    public void handleGetPostListForAdmin(int start, int limit, String formality, String status){
+        this.mModelPostManagement.requirePostListForAdmin(start, limit, formality, status);
     }
 
     public void handleUpdateAcceptPost(int productId){

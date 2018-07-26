@@ -8,6 +8,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -29,13 +30,14 @@ import com.qtctek.realstate.presenter.user_control.user_management.PresenterUser
 import com.qtctek.realstate.view.new_post.activity.NewPostActivity;
 import com.qtctek.realstate.view.post_news.activity.MainActivity;
 import com.qtctek.realstate.view.user_control.activity.UserControlActivity;
+import com.qtctek.realstate.view.user_control.interfaces.ManagementFilterCallback;
 
 import java.util.ArrayList;
 
-public class UserManagementFragment extends Fragment implements ViewHandleUserManagement, AbsListView.OnScrollListener, AdapterView.OnItemClickListener, AlertHelper.AlertHelperCallback {
+public class UserManagementFragment extends Fragment implements ViewHandleUserManagement, AbsListView.OnScrollListener, AdapterView.OnItemClickListener,
+        AlertHelper.AlertHelperCallback, ManagementFilterCallback {
 
     private View mView;
-    private View mItemView;
 
     private ArrayList<User> mArrUser = new ArrayList<>();
     private UserAdapter mUserAdapter;
@@ -46,10 +48,14 @@ public class UserManagementFragment extends Fragment implements ViewHandleUserMa
     private PresenterUserManagement mPresenterUserManagement;
     private int mPositionClick = 0;
 
+    private boolean isFistLoad = true;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         this.mView = inflater.inflate(R.layout.fragment_user_management, container, false);
+
+        ((UserControlActivity)getActivity()).userFilterCallback = this;
 
         return mView;
     }
@@ -76,11 +82,16 @@ public class UserManagementFragment extends Fragment implements ViewHandleUserMa
         this.mUserAdapter = new UserAdapter(this.mArrUser, getContext());
         this.mLsvUsers.setAdapter(mUserAdapter);
         this.mPresenterUserManagement = new PresenterUserManagement(this);
-        this.mPresenterUserManagement.handleGetUserList(0, 20);
+        this.mPresenterUserManagement.handleGetUserList(0, 20, ((UserControlActivity)getActivity()).userStatus);
     }
 
     @Override
     public void onHandleUserListSuccessful(ArrayList<User> arrayListUser) {
+
+        if(isFistLoad){
+            this.mArrUser.clear();
+            isFistLoad = false;
+        }
 
         ((UserControlActivity)getActivity()).dialogHelper.dismiss();
         this.mArrUser.addAll(arrayListUser);
@@ -101,8 +112,8 @@ public class UserManagementFragment extends Fragment implements ViewHandleUserMa
 
         ((UserControlActivity)getActivity()).dialogHelper.dismiss();
 
-        ((NewPostActivity)getActivity()).alertHelper.setCallback(this);
-        ((NewPostActivity)getActivity()).alertHelper.alert("Lỗi",
+        ((UserControlActivity)getActivity()).alertHelper.setCallback(this);
+        ((UserControlActivity)getActivity()).alertHelper.alert("Lỗi",
                 "Đọc dữ liệu thất bại. Vui lòng thử lại sau", false,
                 "Xác nhận", Constant.HANDLE_ERROR);
     }
@@ -110,25 +121,26 @@ public class UserManagementFragment extends Fragment implements ViewHandleUserMa
     @Override
     public void onHandleUpdateStatusUserSuccessful() {
         ((UserControlActivity)getActivity()).dialogHelper.dismiss();
-        if(mArrUser.get(mPositionClick).getStatus().equals("disable")){
-            this.mItemView.setBackgroundColor(getActivity().getResources().getColor(R.color.colorPostActive));
+        if(mArrUser.get(mPositionClick).getStatus().equals("no")){
+            mUserAdapter.notifyDataSetChanged();
 
             ((UserControlActivity)getActivity()).toastHelper.toast("Bỏ khóa tài khoản thành công", ToastHelper.LENGTH_SHORT);
 
-            mArrUser.get(mPositionClick).setStatus("enable");
+            mArrUser.get(mPositionClick).setStatus("yes");
         }
         else{
-            this.mItemView.setBackgroundColor(getActivity().getResources().getColor(R.color.colorPostNotActive));
+            mUserAdapter.notifyDataSetChanged();
 
             ((UserControlActivity)getActivity()).toastHelper.toast("Khóa tài khoản thành công", ToastHelper.LENGTH_SHORT);
 
-            mArrUser.get(mPositionClick).setStatus("disable");
+            mArrUser.get(mPositionClick).setStatus("no");
         }
 
     }
 
     @Override
     public void onHandleUpdateStatusUserError(String error) {
+
         ((UserControlActivity)getActivity()).dialogHelper.dismiss();
 
         ((UserControlActivity)getActivity()).toastHelper.toast("Cập nhật trạng thái user thất bại", ToastHelper.LENGTH_SHORT);
@@ -142,7 +154,7 @@ public class UserManagementFragment extends Fragment implements ViewHandleUserMa
                 mLsvUsers.getFooterViewsCount()) >= (mUserAdapter.getCount() - 1)) {
 
             ((UserControlActivity)getActivity()).dialogHelper.show();
-            this.mPresenterUserManagement.handleGetUserList(this.mArrUser.size(), 20);
+            this.mPresenterUserManagement.handleGetUserList(this.mArrUser.size(), 20, ((UserControlActivity)getActivity()).userStatus);
         }
     }
 
@@ -161,7 +173,7 @@ public class UserManagementFragment extends Fragment implements ViewHandleUserMa
         popupMenu.getMenuInflater().inflate(R.menu.popup_menu_for_user_management, popupMenu.getMenu());
 
         MenuItem menuItem = popupMenu.getMenu().getItem(0);
-        if(this.mArrUser.get(position).getStatus().equals("disable")){
+        if(this.mArrUser.get(position).getStatus().equals("no")){
             menuItem.setTitle(getActivity().getResources().getString(R.string.enable_user));
         }
         else{
@@ -169,7 +181,6 @@ public class UserManagementFragment extends Fragment implements ViewHandleUserMa
         }
 
         mPositionClick = position;
-        this.mItemView = view;
 
         ((UserControlActivity)getActivity()).alertHelper.setCallback(this);
         popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
@@ -206,5 +217,14 @@ public class UserManagementFragment extends Fragment implements ViewHandleUserMa
     @Override
     public void onNegativeButtonClick(int option) {
 
+    }
+
+    @Override
+    public void onFilter() {
+
+        isFistLoad = true;
+
+        ((UserControlActivity)getActivity()).dialogHelper.show();
+        this.mPresenterUserManagement.handleGetUserList(0, 20, ((UserControlActivity)getActivity()).userStatus);
     }
 }

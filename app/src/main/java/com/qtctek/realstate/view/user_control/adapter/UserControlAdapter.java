@@ -9,7 +9,7 @@ import com.qtctek.realstate.view.post_news.activity.MainActivity;
 import com.qtctek.realstate.view.user_control.post_management.PostManagementFragment;
 import com.qtctek.realstate.view.user_control.posted_post.PostedPostFragment;
 import com.qtctek.realstate.view.user_control.saved_post.SavedPostFragment;
-import com.qtctek.realstate.view.user_control.fragment.MenuUserSystemControlFragment;
+import com.qtctek.realstate.view.user_control.fragment.OptionUserSystemControlFragment;
 import com.qtctek.realstate.view.user_control.saved_search.SavedSearchFragment;
 import com.qtctek.realstate.view.user_control.user_management.UserManagementFragment;
 
@@ -28,7 +28,7 @@ public class UserControlAdapter extends FragmentStatePagerAdapter {
         if(MainActivity.USER.getLevel() == 1){
             switch (position){
                 case 0:
-                    frag = new MenuUserSystemControlFragment();
+                    frag = new OptionUserSystemControlFragment();
                     break;
                 case 1:
                     frag = new PostManagementFragment();
@@ -54,7 +54,7 @@ public class UserControlAdapter extends FragmentStatePagerAdapter {
         else if(MainActivity.USER.getLevel() == 2){
             switch (position) {
                 case 0:
-                    frag = new MenuUserSystemControlFragment();
+                    frag = new OptionUserSystemControlFragment();
                     break;
                 case 1:
                     frag = new PostManagementFragment();

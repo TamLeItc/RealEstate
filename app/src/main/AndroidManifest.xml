@@ -48,7 +48,7 @@
 
         </activity>
 
-        <activity android:name=".view.post_news.dialog.FilterDialog"
+        <activity android:name=".view.post_news.dialog.SearchFilterDialog"
             android:theme="@style/Theme.Dialog">
         </activity>
 

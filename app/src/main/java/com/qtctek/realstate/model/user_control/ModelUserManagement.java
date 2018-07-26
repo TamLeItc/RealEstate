@@ -26,8 +26,8 @@ public class ModelUserManagement {
         this.mPresenterImpHandleUserManagement = presenterImpHandleUserManagement;
     }
 
-    public void requireUserList(int start, int limit){
-        new GetListUser(start, limit).execute(mUrlGetUserList);
+    public void requireUserList(int start, int limit, String status){
+        new GetListUser(start, limit, status).execute(mUrlGetUserList);
     }
 
     public void requireUpdateSatusUser(int userId){
@@ -39,8 +39,9 @@ public class ModelUserManagement {
         OkHttpClient okHttpClient;
 
         int start = 0, limit = 0;
+        String status;
 
-        public GetListUser(int start, int limit){
+        public GetListUser(int start, int limit, String status){
             okHttpClient = new OkHttpClient.Builder()
                     .connectTimeout(15, TimeUnit.SECONDS)
                     .readTimeout(10, TimeUnit.SECONDS)
@@ -49,16 +50,18 @@ public class ModelUserManagement {
 
             this.start = start;
             this.limit = limit;
+            this.status = status;
         }
 
         @Override
         protected String doInBackground(String... strings) {
 
-            String url = strings[0] + "?limit=" + limit + "&start=" + start;
+            String url = strings[0] + "?limit=" + limit + "&start=" + start + "&status=" + status;
             Request request = new Request.Builder()
                     .url(url)
                     .get()
                     .build();
+            Log.d("ttt", url + "");
 
             try {
                 Response response = okHttpClient.newCall(request).execute();
@@ -72,6 +75,7 @@ public class ModelUserManagement {
 
         @Override
         protected void onPostExecute(String s) {
+
             if(s.equals("error")){
                 mPresenterImpHandleUserManagement.onGetUserListError(s);
             }

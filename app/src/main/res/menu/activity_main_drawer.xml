@@ -6,12 +6,12 @@
     <group android:checkableBehavior="none">
 
         <item android:id="@+id/nav_post_management"
-            android:icon="@drawable/icon_post_management"
+            android:icon="@drawable/icon_event_note_black_24dp"
             android:title="@string/post_management"
             android:visible="false"/>
 
         <item android:id="@+id/nav_user_management"
-            android:icon="@drawable/icon_user_management"
+            android:icon="@drawable/icon_people_outline_black_24dp"
             android:title="@string/user_management"
             android:visible="false"/>
 
@@ -33,18 +33,18 @@
             android:visible="true"/>
         <item
             android:id="@+id/nav_account_manage"
-            android:icon="@drawable/icon_account_box_black_24dp"
+            android:icon="@drawable/icon_person_outline_black_24dp"
             android:title="@string/account_manage"
             android:visible="false"/>
 
         <item android:id="@+id/nav_login"
-            android:icon="@drawable/icon_login"
+            android:icon="@drawable/ic_icon_login_black_24dp"
             android:title="@string/login"
             android:visible="true"/>
 
         <item
             android:id="@+id/nav_logout"
-            android:icon="@drawable/icon_logout"
+            android:icon="@drawable/ic_icon_logout_black_24dp"
             android:title="@string/logout"
             android:visible="false"/>
 
@@ -54,11 +54,11 @@
         <menu>
             <item
                 android:id="@+id/nav_introduction"
-                android:icon="@drawable/icon_about_us"
+                android:icon="@drawable/icon_introduction_black_24dp"
                 android:title="@string/introduction" />
             <item
                 android:id="@+id/nav_feedback"
-                android:icon="@drawable/icon_feedback"
+                android:icon="@drawable/icon_feedback_black_24dp"
                 android:title="@string/feedback" />
         </menu>
     </item>

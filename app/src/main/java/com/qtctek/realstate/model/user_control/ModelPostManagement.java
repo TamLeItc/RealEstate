@@ -1,6 +1,7 @@
 package com.qtctek.realstate.model.user_control;
 
 import android.os.AsyncTask;
+import android.util.Log;
 
 import com.qtctek.realstate.presenter.user_control.post_management.PresenterImpHandlePostManagement;
 import com.qtctek.realstate.view.post_news.activity.MainActivity;
@@ -27,8 +28,8 @@ public class ModelPostManagement {
         this.mPresenterImpHandlePostManagement = presenterImpHandlePostManagement;
     }
 
-    public void requirePostListForAdmin(int start, int limit){
-        new GetPostList(start, limit).execute(mUrlGetListProduct);
+    public void requirePostListForAdmin(int start, int limit, String formality, String status){
+        new GetPostList(start, limit, formality, status).execute(mUrlGetListProduct);
     }
 
     public void requireAcceptPost(int productId){
@@ -43,9 +44,10 @@ public class ModelPostManagement {
 
         OkHttpClient okHttpClient;
 
+        String formality, status;
         int start, limit;
 
-        public GetPostList(int start, int limit){
+        public GetPostList(int start, int limit, String formality, String status){
             okHttpClient = new OkHttpClient.Builder()
                     .connectTimeout(15, TimeUnit.SECONDS)
                     .writeTimeout(10, TimeUnit.SECONDS)
@@ -54,12 +56,15 @@ public class ModelPostManagement {
 
             this.start = start;
             this.limit = limit;
+            this.formality = formality;
+            this.status = status;
         }
 
         @Override
         protected String doInBackground(String... strings) {
 
-            String url = strings[0] + "?email=%" + "&start=" + start + "&limit=" + limit + "&option=management";
+            String url = strings[0] + "?email=" + "&formality=" + formality + "&status=" + status
+                    + "&start=" + start + "&limit=" + limit + "&option=management";
 
             Request request = new Request.Builder()
                     .url(url)
@@ -79,6 +84,7 @@ public class ModelPostManagement {
 
         @Override
         protected void onPostExecute(String s) {
+            Log.d("post_management", s);
             if(s.equals("error")){
                 mPresenterImpHandlePostManagement.onGetPostListError(s);
             }

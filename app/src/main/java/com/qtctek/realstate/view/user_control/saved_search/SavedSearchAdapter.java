@@ -1,7 +1,6 @@
 package com.qtctek.realstate.view.user_control.saved_search;
 
 import android.content.Context;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,7 +47,7 @@ public class SavedSearchAdapter extends BaseAdapter {
 
             viewHolder = new ViewHolder();
             viewHolder.txvNameSavedSearch = convertView.findViewById(R.id.txv_item);
-            viewHolder.viewScroll = convertView.findViewById(R.id.view_scroll);
+            viewHolder.viewScroll = convertView.findViewById(R.id.view_boundary);
             viewHolder.rlItem1 = convertView.findViewById(R.id.rl_item_1);
 
             convertView.setTag(viewHolder);

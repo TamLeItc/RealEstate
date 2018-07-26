@@ -7,23 +7,26 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.qtctek.realstate.R;
+import com.qtctek.realstate.view.post_news.activity.MainActivity;
 import com.qtctek.realstate.view.user_control.activity.UserControlActivity;
 import com.qtctek.realstate.view.user_control.adapter.UserControlAdapter;
+import com.qtctek.realstate.view.user_control.post_management.PostManagementFragment;
+import com.qtctek.realstate.view.user_control.user_management.UserManagementFragment;
 
-public class    UserSystemControlFragment extends Fragment implements View.OnClickListener {
+public class    UserSystemControlFragment extends Fragment implements View.OnClickListener, ViewPager.OnPageChangeListener {
 
     private View mView;
 
     private ViewPager mViewPager;
     private TabLayout mTabLayout;
     private Button mBtnBack;
-    private Toolbar mToolbar;
 
     @Nullable
     @Override
@@ -48,6 +51,7 @@ public class    UserSystemControlFragment extends Fragment implements View.OnCli
         this.mBtnBack = ((UserControlActivity) getActivity()).findViewById(R.id.imv_back);
 
         this.mBtnBack.setOnClickListener(this);
+        mViewPager.addOnPageChangeListener(this);
     }
 
     private void addControl() {
@@ -73,4 +77,33 @@ public class    UserSystemControlFragment extends Fragment implements View.OnCli
         }
     }
 
+    @Override
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+    }
+
+    @Override
+    public void onPageSelected(int position) {
+        if(position == 1){
+            ((UserControlActivity)getActivity()).showMenuFilter(UserControlActivity.POST_MANAGEMENT);
+
+            ((UserControlActivity)getActivity()).txvToolbarTitle.setText(getResources().getString(R.string.post_management));
+        }
+        else if(position == 2 && MainActivity.USER.getLevel() == 1){
+            ((UserControlActivity)getActivity()).showMenuFilter(UserControlActivity.USER_MANAGEMENT);
+
+            ((UserControlActivity)getActivity()).txvToolbarTitle.setText(getResources().getString(R.string.user_management));
+        }
+        else{
+
+            ((UserControlActivity)getActivity()).txvToolbarTitle.setText(getResources().getString(R.string.account_manage));
+
+            ((UserControlActivity)getActivity()).showMenuFilter(UserControlActivity.OTHER);
+        }
+    }
+
+    @Override
+    public void onPageScrollStateChanged(int state) {
+
+    }
 }

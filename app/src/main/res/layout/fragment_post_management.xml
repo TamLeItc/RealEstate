@@ -7,16 +7,6 @@
     android:background="@color/colorMainBackground"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/_30dp"
-        android:id="@+id/txv_title"
-        android:layout_marginBottom="@dimen/_5dp"
-        android:text="@string/post_management"
-        android:textSize="@dimen/_11sp"
-        android:gravity="center"
-        android:textStyle="bold"
-        android:textColor="@color/colorPrimary" />
     <ListView
         android:overScrollMode="never"
         tools:listitem="@layout/item_post"

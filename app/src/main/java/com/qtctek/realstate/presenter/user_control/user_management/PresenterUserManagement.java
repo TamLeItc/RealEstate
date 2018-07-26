@@ -22,9 +22,9 @@ public class PresenterUserManagement implements PresenterImpHandleUserManagement
         this.mModelUserManagement = new ModelUserManagement(this);
     }
 
-    public void handleGetUserList(int start, int quality){
+    public void handleGetUserList(int start, int quality, String status){
         this.mModelUserManagement = new ModelUserManagement(this);
-        this.mModelUserManagement.requireUserList(start, quality);
+        this.mModelUserManagement.requireUserList(start, quality, status);
     }
 
     public void handleUpdateStatusUser(int userId){

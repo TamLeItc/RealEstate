@@ -25,11 +25,13 @@ import com.qtctek.realstate.view.post_news.activity.MainActivity;
 import com.qtctek.realstate.view.new_post.activity.NewPostActivity;
 import com.qtctek.realstate.view.post_detail.activity.PostDetailActivity;
 import com.qtctek.realstate.view.user_control.activity.UserControlActivity;
+import com.qtctek.realstate.view.user_control.interfaces.ManagementFilterCallback;
 
 import java.util.ArrayList;
 
 public class PostedPostFragment extends Fragment implements ViewHandlePostedPost ,
-        AbsListView.OnScrollListener, AdapterView.OnItemClickListener, AlertHelper.AlertHelperCallback {
+        AbsListView.OnScrollListener, AdapterView.OnItemClickListener, AlertHelper.AlertHelperCallback,
+        ManagementFilterCallback{
 
     private View mView;
 
@@ -42,11 +44,14 @@ public class PostedPostFragment extends Fragment implements ViewHandlePostedPost
     private PresenterPostedPost mPresenterPostedPost;
 
     private int mPositionClick;
+    private boolean mIsFirstLoad = true;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         mView = inflater.inflate(R.layout.fragment_posted_post_saved_post, container, false);
+
+        ((UserControlActivity)getActivity()).postFilterCallback = this;
 
         return mView;
     }
@@ -71,7 +76,8 @@ public class PostedPostFragment extends Fragment implements ViewHandlePostedPost
         ((UserControlActivity)getActivity()).dialogHelper.show();
 
         this.mPresenterPostedPost = new PresenterPostedPost(this);
-        this.mPresenterPostedPost.handleGetListPostedPost(0, 20, MainActivity.USER.getEmail());
+        this.mPresenterPostedPost.handleGetListPostedPost(0, 20, MainActivity.USER.getEmail(),
+                ((UserControlActivity)getActivity()).productFormality, ((UserControlActivity)getActivity()).productStatus);
 
         this.mAdapterListPost = new AdapterPostSale(mArrProduct, getActivity(), R.layout.item_post);
         this.mLsvPostedPost.setAdapter(this.mAdapterListPost);
@@ -83,6 +89,11 @@ public class PostedPostFragment extends Fragment implements ViewHandlePostedPost
     public void onHandlePostListSuccessful(ArrayList<Product> arrListPost) {
 
         ((UserControlActivity)getActivity()).dialogHelper.dismiss();
+
+        if(mIsFirstLoad){
+            this.mArrProduct.clear();
+            mIsFirstLoad = false;
+        }
 
         this.mArrProduct.addAll(arrListPost);
         this.mAdapterListPost.notifyDataSetChanged();
@@ -142,7 +153,8 @@ public class PostedPostFragment extends Fragment implements ViewHandlePostedPost
                 mLsvPostedPost.getFooterViewsCount()) >= (mAdapterListPost.getCount() - 1)) {
 
             ((UserControlActivity)getActivity()).dialogHelper.show();
-            this.mPresenterPostedPost.handleGetListPostedPost(this.mArrProduct.size(), 20, MainActivity.USER.getEmail());
+            this.mPresenterPostedPost.handleGetListPostedPost(this.mArrProduct.size(), 20, MainActivity.USER.getEmail(),
+                    ((UserControlActivity)getActivity()).productFormality, ((UserControlActivity)getActivity()).productStatus);
         }
 
     }
@@ -206,5 +218,15 @@ public class PostedPostFragment extends Fragment implements ViewHandlePostedPost
     @Override
     public void onNegativeButtonClick(int option) {
 
+    }
+
+    @Override
+    public void onFilter() {
+
+        mIsFirstLoad = true;
+
+        ((UserControlActivity)getActivity()).dialogHelper.show();
+        this.mPresenterPostedPost.handleGetListPostedPost(0, 20, MainActivity.USER.getEmail(),
+                ((UserControlActivity)getActivity()).productFormality, ((UserControlActivity)getActivity()).productStatus);
     }
 }

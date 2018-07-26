@@ -134,7 +134,7 @@ public class NewPostActivity extends AppCompatActivity implements ViewHandleMode
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.new_post_menu, menu);
+        getMenuInflater().inflate(R.menu.option_menu_new_post, menu);
         return true;
     }
 

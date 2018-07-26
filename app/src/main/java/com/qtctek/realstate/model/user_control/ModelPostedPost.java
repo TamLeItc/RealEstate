@@ -27,8 +27,8 @@ public class ModelPostedPost {
         this.mPresenterImpHandleUserControl = presenterImpHandleUserControl;
     }
 
-    public void requirePostedPostList(int start, int limit, String email){
-        new GetPostedPostList(email, start, limit).execute(mUrl);
+    public void requirePostedPostList(int start, int limit, String email, String formality, String status){
+        new GetPostedPostList(start, limit, email, formality, status).execute(mUrl);
     }
 
     public void requireDeletePost(int productId){
@@ -39,10 +39,10 @@ public class ModelPostedPost {
 
         OkHttpClient okHttpClient;
 
-        String email = "";
-        int start = 0, limit = 0;
+        String email, formality, status;
+        int start, limit;
 
-        public GetPostedPostList(String email, int start, int limit){
+        public GetPostedPostList(int start, int limit, String email, String formality, String status){
             okHttpClient = new OkHttpClient.Builder()
                     .connectTimeout(15, TimeUnit.SECONDS)
                     .readTimeout(10, TimeUnit.SECONDS)
@@ -50,13 +50,16 @@ public class ModelPostedPost {
                     .build();
 
             this.email = email;
+            this.formality = formality;
+            this.status = status;
             this.start = start;
             this.limit = limit;
         }
 
         @Override
         protected String doInBackground(String... strings) {
-            String mUrl = strings[0] + "?email=" + email + "&start=" + start + "&limit=" + limit + "&option=posted";
+            String mUrl = strings[0] + "?email=" + email + "&formality=" + formality + "&status=" + status
+                    + "&start=" + start + "&limit=" + limit + "&option=posted";
 
             Request request = new Request.Builder()
                     .url(mUrl)
@@ -75,6 +78,7 @@ public class ModelPostedPost {
 
         @Override
         protected void onPostExecute(String s) {
+
             if(s.equals("error")){
                 mPresenterImpHandleUserControl.onGetPostListError(s);
 

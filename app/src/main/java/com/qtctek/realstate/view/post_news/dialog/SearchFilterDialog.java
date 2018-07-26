@@ -31,7 +31,7 @@ import com.qtctek.realstate.view.post_news.interfaces.OnFromAdapter;
 
 import java.util.ArrayList;
 
-public class FilterDialog extends Activity implements View.OnClickListener, View.OnKeyListener, ViewHandleModelGetData,
+public class SearchFilterDialog extends Activity implements View.OnClickListener, View.OnKeyListener, ViewHandleModelGetData,
         OnFromAdapter{
 
     private TextView mTxvPrice;
@@ -64,7 +64,7 @@ public class FilterDialog extends Activity implements View.OnClickListener, View
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.dialog_filter);
+        setContentView(R.layout.dialog_search_filter);
 
         getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 

@@ -23,7 +23,7 @@
             android:layout_weight="4"
             android:background="@color/colorGrayDark"
             android:padding="@dimen/_11dp"
-            android:text="@string/filter"
+            android:text="@string/filter_search"
             android:textColor="@color/colorWhite"
             android:textSize="@dimen/_12sp" />
 

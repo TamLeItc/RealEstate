@@ -36,7 +36,7 @@
     <string name="satellite">Vệ tinh</string>
     <string name="map_vietnamese">Bản đồ</string>
     <string name="list">List</string>
-    <string name="posted_post">Quản lí tin đăng</string>
+    <string name="posted_post">Quản lí tin</string>
     <string name="saved_post_short">Tin rao đã lưu</string>
     <string name="product_detail">Chi tiết</string>
     <string name="product_detail_map">Xem bản đồ</string>
@@ -88,7 +88,8 @@
     <string name="register_user">Đăng ký tài khoản</string>
     <string name="recent_searches">Tìm kiếm gần đây</string>
     <string name="search">Tìm kiếm</string>
-    <string name="filter">Lọc tìm kiếm</string>
+    <string name="filter_search">Lọc tìm kiếm</string>
+    <string name="filter_list">Lọc danh sách</string>
     <string name="home">Trang chính</string>
     <string name="logout">Đăng xuất</string>
     <string name="add_post">Rao tin</string>
@@ -156,8 +157,16 @@
     <string name="quality_prodcut">"Số lượng nhà trên bản đồ: "</string>
     <string name="saved_search_name">Tên tìm kiếm</string>
     <string name="finish">Hoàn tất</string>
+    <string name="all">Tất cả</string>
+    <string name="pending">Chờ duyệt</string>
+    <string name="not_active">Tạm khóa</string>
+    <string name="active">Hoạt động</string>
+    <string name="posted">Đã đăng</string>
+    <string name="status" >Trạng thái</string>
+    <string name="formality" >Loại nhà</string>
 
     <string name="google_api_key_value">AIzaSyAowoC2lTSVNGAJZkimZBlPuxPy0so5a_A</string>
+
 
 
 </resources>
