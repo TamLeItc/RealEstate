@@ -17,4 +17,5 @@ public class Constant {
     public static final int DELETE = 1013;
     public static final int EDIT = 1014;
     public static final int DENIED = 1015;
+    public static final int LOGIN = 1016;
 }

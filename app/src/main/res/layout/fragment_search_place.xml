@@ -16,7 +16,7 @@
         android:layout_alignParentTop="true"
         android:gravity="center_vertical"
         android:orientation="vertical"
-        android:background="@drawable/custom_edt_search">
+        android:background="@drawable/icon_shadow_black">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -94,7 +94,7 @@
         android:id="@+id/rl_bottom"
         android:layout_width="match_parent"
         android:layout_height="@dimen/_100dp"
-        android:background="@color/colorMainBackground"
+        android:background="@color/colorDefaultBackground"
         android:paddingTop="@dimen/_8dp"
         android:paddingBottom="@dimen/_8dp"
         android:paddingRight="@dimen/_16dp"

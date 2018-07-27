@@ -20,11 +20,9 @@ import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.qtctek.realstate.R;
 import com.qtctek.realstate.common.AppUtils;
-import com.qtctek.realstate.common.general.Constant;
 import com.qtctek.realstate.dto.User;
 import com.qtctek.realstate.common.general.FormatPattern;
 import com.qtctek.realstate.common.general.HashMD5;
@@ -56,7 +54,6 @@ public class UpdateUserFragment extends Fragment implements View.OnClickListener
     private EditText mEdtUsername;
     private ImageView mImvCalendar;
     private DatePicker mDpkBirthDay;
-    private TextView mTxvTitle;
     private TextView mTxvNowPassword;
     private EditText mEdtNowPassword;
     private TextView mTxvNewPassword;
@@ -95,7 +92,6 @@ public class UpdateUserFragment extends Fragment implements View.OnClickListener
         this.mEdtAddress = mView.findViewById(R.id.edt_address);
         this.mImvCalendar = mView.findViewById(R.id.imv_calendar);
         this.mEdtUsername = mView.findViewById(R.id.edt_username);
-        this.mTxvTitle = mView.findViewById(R.id.txv_title);
         this.mRdoOther = mView.findViewById(R.id.rdo_other);
         this.mTxvNewPassword = mView.findViewById(R.id.txv_password);
         this.mTxvNowPassword = mView.findViewById(R.id.txv_now_password);
@@ -109,8 +105,8 @@ public class UpdateUserFragment extends Fragment implements View.OnClickListener
         this.mBtnConfirm.setOnClickListener(this);
         this.mImvCalendar.setOnClickListener(this);
 
-        this.mEdtUsername.setInputType(InputType.TYPE_NULL);
-        this.mEdtEmail.setInputType(InputType.TYPE_NULL);
+        this.mEdtUsername.setFocusable(false);
+        this.mEdtEmail.setFocusable(false);
 
         this.mBtnConfirm.setOnClickListener(this);
 
@@ -127,7 +123,6 @@ public class UpdateUserFragment extends Fragment implements View.OnClickListener
 
     private void handleStart(){
         this.mPresenterUpdate = new PresenterUpdateUser(this);
-        this.mTxvTitle.setText(getActivity().getResources().getString(R.string.update_user));
 
         this.mEdtName.setText(USER.getFullName());
         this.mEdtAddress.setText(USER.getAddress());
@@ -147,8 +142,8 @@ public class UpdateUserFragment extends Fragment implements View.OnClickListener
             this.mRdoOther.setChecked(true);
         }
 
-        this.mEdtEmail.setBackground(getResources().getDrawable(R.drawable.custom_border_gray_bakcgroud_main));
-        this.mEdtUsername.setBackground(getResources().getDrawable(R.drawable.custom_border_gray_bakcgroud_main));
+        this.mEdtEmail.setBackground(getResources().getDrawable(R.drawable.custom_border_gray_bakcgroud_gray));
+        this.mEdtUsername.setBackground(getResources().getDrawable(R.drawable.custom_border_gray_bakcgroud_gray));
 
     }
 
@@ -358,7 +353,7 @@ public class UpdateUserFragment extends Fragment implements View.OnClickListener
                     this.mEdtNowPassword.setBackground(getResources().getDrawable(R.drawable.custom_border_red_backgroud_white));
                 }
                 else{
-                    this.mEdtNowPassword.setBackground(getResources().getDrawable(R.drawable.custom_border_gray_backgroud_white));
+                    this.mEdtNowPassword.setBackground(getResources().getDrawable(R.drawable.custom_border_gray_backgroud_default));
                 }
                 break;
             case R.id.edt_password:
@@ -366,7 +361,7 @@ public class UpdateUserFragment extends Fragment implements View.OnClickListener
                     this.mEdtNewPassword.setBackground(getResources().getDrawable(R.drawable.custom_border_red_backgroud_white));
                 }
                 else{
-                    this.mEdtNewPassword.setBackground(getResources().getDrawable(R.drawable.custom_border_gray_backgroud_white));
+                    this.mEdtNewPassword.setBackground(getResources().getDrawable(R.drawable.custom_border_gray_backgroud_default));
                 }
                 break;
             case R.id.edt_confirm_password:
@@ -374,7 +369,7 @@ public class UpdateUserFragment extends Fragment implements View.OnClickListener
                     this.mEdtConfirmPassword.setBackground(getResources().getDrawable(R.drawable.custom_border_red_backgroud_white));
                 }
                 else{
-                    this.mEdtConfirmPassword.setBackground(getResources().getDrawable(R.drawable.custom_border_gray_backgroud_white));
+                    this.mEdtConfirmPassword.setBackground(getResources().getDrawable(R.drawable.custom_border_gray_backgroud_default));
                 }
                 break;
             case R.id.edt_phone_number:
@@ -382,7 +377,7 @@ public class UpdateUserFragment extends Fragment implements View.OnClickListener
                     this.mEdtPhoneNumber.setBackground(getResources().getDrawable(R.drawable.custom_border_red_backgroud_white));
                 }
                 else{
-                    this.mEdtPhoneNumber.setBackground(getResources().getDrawable(R.drawable.custom_border_gray_backgroud_white));
+                    this.mEdtPhoneNumber.setBackground(getResources().getDrawable(R.drawable.custom_border_gray_backgroud_default));
                 }
         }
 

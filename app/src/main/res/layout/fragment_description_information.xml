@@ -5,14 +5,15 @@
     android:padding="@dimen/_16dp"
     android:scrollbars="none"
     android:overScrollMode="never"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="@color/colorWhite">
 
     <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:padding="@dimen/_8dp"
         android:orientation="vertical"
-        android:background="@color/colorMainBackground">
+        android:background="@color/colorWhite">
 
         <TextView
             android:layout_width="wrap_content"
@@ -34,7 +35,7 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/_300dp"
             android:textSize="@dimen/_9sp"
-            android:background="@drawable/custom_border_gray_backgroud_white"
+            android:background="@drawable/custom_border_gray_backgroud_default"
             android:inputType="textMultiLine"
             android:gravity="top|left"
             android:scrollbars="vertical"/>

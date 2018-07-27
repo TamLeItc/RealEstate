@@ -12,7 +12,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.kofigyan.stateprogressbar.StateProgressBar;
@@ -55,8 +55,8 @@ public class NewPostActivity extends AppCompatActivity implements ViewHandleMode
 
     private String[] mArrDescriptionDataProgressBarState;
 
-    private Button mBtnBack;
-    private Button mBtnNext;
+    private ImageView mImvBack;
+    private ImageView mImvNext;
     private MenuItem mMenuItem;
     public StateProgressBar progressBarState;
 
@@ -82,14 +82,14 @@ public class NewPostActivity extends AppCompatActivity implements ViewHandleMode
 
     private void initViews(){
         viewPaper = findViewById(R.id.view_pager);
-        this.mBtnBack = findViewById(R.id.imv_back);
-        this.mBtnNext = findViewById(R.id.btn_next);
+        this.mImvBack = findViewById(R.id.imv_back);
+        this.mImvNext = findViewById(R.id.imv_next);
         this.mToolbar = findViewById(R.id.toolbar);
         this.progressBarState = findViewById(R.id.progress_bar_state);
 
         viewPaper.setOnTouchListener(this);
-        this.mBtnBack.setOnClickListener(this);
-        this.mBtnNext.setOnClickListener(this);
+        this.mImvBack.setOnClickListener(this);
+        this.mImvNext.setOnClickListener(this);
 
         this.progressBarState.setStateDescriptionData(mArrDescriptionDataProgressBarState);
     }
@@ -116,7 +116,7 @@ public class NewPostActivity extends AppCompatActivity implements ViewHandleMode
             IS_UPDATE = true;
         }
         else{
-            this.mBtnNext.setVisibility(View.GONE);
+            this.mImvNext.setVisibility(View.GONE);
             IS_UPDATE = false;
         }
         handleStart(productId);
@@ -326,7 +326,7 @@ public class NewPostActivity extends AppCompatActivity implements ViewHandleMode
                     setCurrentStateNumberProgressBar(viewPaper.getCurrentItem());
                 }
                 break;
-            case R.id.btn_next:
+            case R.id.imv_next:
                 if(viewPaper.getCurrentItem() < 3){
                     int currentPage = viewPaper.getCurrentItem();
                     viewPaper.setCurrentItem(currentPage + 1);

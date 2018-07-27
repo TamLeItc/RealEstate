@@ -36,7 +36,7 @@
     <string name="satellite">Vệ tinh</string>
     <string name="map_vietnamese">Bản đồ</string>
     <string name="list">List</string>
-    <string name="posted_post">Quản lí tin</string>
+    <string name="posted_post_management">Quản lí tin</string>
     <string name="saved_post_short">Tin rao đã lưu</string>
     <string name="product_detail">Chi tiết</string>
     <string name="product_detail_map">Xem bản đồ</string>
@@ -96,7 +96,6 @@
     <string name="more_view">Hiển thị thêm</string>
     <string name="arrange_post_width">Sắp xếp tin rao theo</string>
     <string name="page_for_user_system">Trang dành cho user hệ thống</string>
-    <string name="update_information">Cập nhật tài khoản</string>
     <string name="just_unapproved_post">Chỉ tin chưa duyệt</string>
     <string name="confirm_email">Xác nhận email</string>
     <string name="confirm_email_description">Một mã xác nhận đã được gửi đến mail của bạn. Nhập mã xác nhập để hoàn tất quá trình đăng kí</string>
@@ -164,6 +163,8 @@
     <string name="posted">Đã đăng</string>
     <string name="status" >Trạng thái</string>
     <string name="formality" >Loại nhà</string>
+    <string name="saved_information">Thông tin đã lưu</string>
+    <string name="management">Quản lí</string>
 
     <string name="google_api_key_value">AIzaSyAowoC2lTSVNGAJZkimZBlPuxPy0so5a_A</string>
 

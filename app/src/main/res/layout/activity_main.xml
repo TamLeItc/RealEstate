@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     tools:openDrawer="start"
-    android:background="@color/colorMainBackground">
+    android:background="@color/colorWhite">
 
     <include
         layout="@layout/app_bar_main"
@@ -23,6 +23,8 @@
         app:headerLayout="@layout/nav_header_main"
         app:menu="@menu/activity_main_drawer"
         app:itemTextColor="@color/colorGrayDark"
-        app:itemIconTint="@color/colorGrayDark" />
+        app:itemIconTint="@color/colorGrayDark"
+        android:scrollbars="none"
+        android:overScrollMode="never"/>
 
 </android.support.v4.widget.DrawerLayout>

@@ -19,6 +19,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
+import android.view.SubMenu;
 import android.view.View;
 import android.view.Window;
 import android.widget.AdapterView;
@@ -45,6 +46,7 @@ import com.qtctek.realstate.dto.Condition;
 import com.qtctek.realstate.dto.Product;
 import com.qtctek.realstate.dto.User;
 import com.qtctek.realstate.presenter.user_control.save_search.PresenterSavedSearch;
+import com.qtctek.realstate.view.new_post.activity.NewPostActivity;
 import com.qtctek.realstate.view.post_news.adapter.MainAdapter;
 import com.qtctek.realstate.view.post_news.adapter.SortAdapter;
 import com.qtctek.realstate.view.post_news.dialog.SearchFilterDialog;
@@ -172,24 +174,6 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        Menu menu = navigationView.getMenu();
-        MenuItem mIPostManagement = menu.getItem(0);
-        MenuItem mIUserManagement = menu.getItem(1);
-        MenuItem mIPostedPost = menu.getItem(2);
-        MenuItem mISavedPost = menu.getItem(3);
-        MenuItem mISavedSearch = menu.getItem(4);
-        MenuItem mIAccountManagement = menu.getItem(5);
-        MenuItem mILogin = menu.getItem(6);
-        MenuItem mILogout = menu.getItem(7);
-
-        mIPostManagement.setVisible(false);
-        mIUserManagement.setVisible(false);
-        mIPostedPost.setVisible(false);
-        mISavedPost.setVisible(true);
-        mISavedSearch.setVisible(true);
-        mIAccountManagement.setVisible(false);
-        mILogout.setVisible(false);
-        mILogin.setVisible(true);
     }
 
     private void addControl() {
@@ -364,6 +348,18 @@ public class MainActivity extends AppCompatActivity
 
         int id = item.getItemId();
 
+        if(id == R.id.nav_new_post){
+            if(USER.getLevel() == User.USER_NULL){
+                alertHelper.setCallback(this);
+                alertHelper.alert("Xác nhận", "Hãy đăng nhập để sử dụng chức năng này", false,
+                        "Xác nhận", "Hủy bỏ", Constant.LOGIN);
+            }
+            else{
+                Intent intent = new Intent(MainActivity.this, NewPostActivity.class);
+                intent.putExtra("post_id", -1);
+                startActivity(intent);
+            }
+        }
         if(id == R.id.nav_post_management){
             Intent intent = new Intent(MainActivity.this, UserControlActivity.class);
             intent.putExtra("fragment", 1);
@@ -376,7 +372,7 @@ public class MainActivity extends AppCompatActivity
         }
         else if(id == R.id.nav_posted_post){
             Intent intent = new Intent(MainActivity.this, UserControlActivity.class);
-            intent.putExtra("fragment", 0);
+            intent.putExtra("fragment", 1);
             startActivity(intent);
         }
         else if (id == R.id.nav_saved_post) {
@@ -384,8 +380,14 @@ public class MainActivity extends AppCompatActivity
             if(USER.getLevel() == User.USER_NULL){
                 intent.putExtra("fragment", 0);
             }
+            else if(USER.getLevel() == 1){
+                intent.putExtra("fragment", 3);
+            }
+            else if(USER.getLevel() == 2){
+                intent.putExtra("fragment", 2);
+            }
             else{
-                intent.putExtra("fragment", 1);
+                intent.putExtra("fragment", 2);
             }
             startActivity(intent);
 
@@ -395,8 +397,14 @@ public class MainActivity extends AppCompatActivity
             if(USER.getLevel() == User.USER_NULL){
                 intent.putExtra("fragment", 1);
             }
+            else if(USER.getLevel() == 1){
+                intent.putExtra("fragment", 4);
+            }
+            else if(USER.getLevel() == 2){
+                intent.putExtra("fragment", 3);
+            }
             else{
-                intent.putExtra("fragment", 2);
+                intent.putExtra("fragment", 3);
             }
             startActivity(intent);
         }
@@ -454,12 +462,7 @@ public class MainActivity extends AppCompatActivity
                 handleViewMode();
                 break;
             case R.id.ll_save_search:
-                if(USER.getLevel() != User.USER_NULL && USER.getLevel() != 3){
-                    toastHelper.toast("User của bạn không thể sử dụng chức năng này", ToastHelper.LENGTH_SHORT);
-                }
-                else{
-                    handleSavedSearch();
-                }
+                handleSavedSearch();
                 break;
             case R.id.edt_search:
                 final SearchPlaceFragment searchPlaceFragment = (SearchPlaceFragment) frgSearchPlace;
@@ -587,55 +590,52 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         Menu menu = navigationView.getMenu();
-        MenuItem mIPostManagement = menu.getItem(0);
-        MenuItem mIUserManagement = menu.getItem(1);
-        MenuItem mIPostedPost = menu.getItem(2);
-        MenuItem mISavedPost = menu.getItem(3);
-        MenuItem mISavedSearch = menu.getItem(4);
-        MenuItem mIAccountManagement = menu.getItem(5);
-        MenuItem mILogin = menu.getItem(6);
-        MenuItem mILogout = menu.getItem(7);
+        MenuItem mINewPost = menu.getItem(0);
+        MenuItem mIManagement = menu.getItem(1);
+
+        SubMenu subMenuManagement = mIManagement.getSubMenu();
+        MenuItem mIPostManagement = subMenuManagement.getItem(0);
+        MenuItem mIUserManagement = subMenuManagement.getItem(1);
+        MenuItem mIPostedPost = subMenuManagement.getItem(2);
+        MenuItem mIAccountManagement = subMenuManagement.getItem(5);
+        MenuItem mILogin = subMenuManagement.getItem(6);
+        MenuItem mILogout = subMenuManagement.getItem(7);
 
         if(USER.getLevel() == 1){
+            mINewPost.setVisible(false);
             mIPostManagement.setVisible(true);
             mIUserManagement.setVisible(true);
             mIPostedPost.setVisible(false);
-            mISavedPost.setVisible(false);
-            mISavedSearch.setVisible(false);
             mIAccountManagement.setVisible(true);
             mILogout.setVisible(true);
             mILogin.setVisible(false);
         }
         else if(USER.getLevel() == 2){
-            mISavedSearch.setVisible(false);
+            mINewPost.setVisible(false);
             mIPostManagement.setVisible(true);
             mIUserManagement.setVisible(false);
             mIPostedPost.setVisible(false);
-            mISavedPost.setVisible(false);
-            mISavedSearch.setVisible(false);
             mIAccountManagement.setVisible(true);
             mILogout.setVisible(true);
             mILogin.setVisible(false);
         }
         else if(USER.getLevel() == 3){
+            mINewPost.setVisible(true);
             mIPostManagement.setVisible(false);
             mIUserManagement.setVisible(false);
             mIPostedPost.setVisible(true);
-            mISavedPost.setVisible(true);
-            mISavedSearch.setVisible(true);
             mIAccountManagement.setVisible(true);
             mILogout.setVisible(true);
             mILogin.setVisible(false);
         }
         else {
+            mINewPost.setVisible(true);
             mIPostManagement.setVisible(false);
             mIUserManagement.setVisible(false);
             mIPostedPost.setVisible(false);
             mIAccountManagement.setVisible(false);
             mILogout.setVisible(false);
             mILogin.setVisible(true);
-            mISavedSearch.setVisible(true);
-            mISavedPost.setVisible(true);
         }
     }
 
@@ -690,6 +690,10 @@ public class MainActivity extends AppCompatActivity
     public void onPositiveButtonClick(int option) {
         if(option == Constant.LOGOUT){
             MainActivity.USER.clearData();
+            Intent intent = new Intent(MainActivity.this, UserActionActivity.class);
+            startActivity(intent);
+        }
+        else if(option == Constant.LOGIN){
             Intent intent = new Intent(MainActivity.this, UserActionActivity.class);
             startActivity(intent);
         }

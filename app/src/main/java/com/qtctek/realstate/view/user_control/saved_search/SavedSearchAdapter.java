@@ -58,7 +58,7 @@ public class SavedSearchAdapter extends BaseAdapter {
 
         viewHolder.txvNameSavedSearch.setText(this.mArrCondition.get(position).getName());
 
-        viewHolder.rlItem1.setBackgroundColor(mContext.getResources().getColor(R.color.colorMainBackground));
+        viewHolder.rlItem1.setBackgroundColor(mContext.getResources().getColor(R.color.colorWhite));
 
         viewHolder.viewScroll.setVisibility(View.GONE);
 

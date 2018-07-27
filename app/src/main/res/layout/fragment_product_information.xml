@@ -5,7 +5,7 @@
     android:overScrollMode="never"
     android:scrollbars="none"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:background="@color/colorMainBackground">
+    android:background="@color/colorWhite">
 
     <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
@@ -42,7 +42,7 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/_30dp"
             android:textSize="@dimen/_9sp"
-            android:background="@drawable/custom_border_gray_backgroud_white" />
+            android:background="@drawable/custom_border_gray_backgroud_default" />
 
         <RadioGroup
             android:layout_height="wrap_content"
@@ -97,7 +97,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_30dp"
                     android:textSize="@dimen/_9sp"
-                    android:background="@drawable/custom_border_gray_backgroud_white"
+                    android:background="@drawable/custom_border_gray_backgroud_default"
                     android:inputType="none"/>
 
             </LinearLayout>
@@ -120,7 +120,7 @@
                     android:id="@+id/txv_type"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_30dp"
-                    android:background="@drawable/custom_border_gray_backgroud_white"
+                    android:background="@drawable/custom_border_gray_backgroud_default"
                     android:inputType="none"
                     android:paddingLeft="@dimen/_5dp"
                     android:paddingTop="@dimen/_5dp"
@@ -163,7 +163,7 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/_30dp"
             android:textSize="@dimen/_9sp"
-            android:background="@drawable/custom_border_gray_backgroud_white" />
+            android:background="@drawable/custom_border_gray_backgroud_default" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -179,7 +179,7 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/_30dp"
             android:textSize="@dimen/_9sp"
-            android:background="@drawable/custom_border_gray_backgroud_white" />
+            android:background="@drawable/custom_border_gray_backgroud_default" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -197,7 +197,7 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/_30dp"
             android:textSize="@dimen/_9sp"
-            android:background="@drawable/custom_border_gray_backgroud_white" />
+            android:background="@drawable/custom_border_gray_backgroud_default" />
 
         <TextView
             android:singleLine="true"
@@ -262,7 +262,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_30dp"
                     android:textSize="@dimen/_9sp"
-                    android:background="@drawable/custom_border_gray_backgroud_white"
+                    android:background="@drawable/custom_border_gray_backgroud_default"
                     android:inputType="number"/>
 
             </LinearLayout>
@@ -290,7 +290,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_30dp"
                     android:textSize="@dimen/_9sp"
-                    android:background="@drawable/custom_border_gray_backgroud_white"
+                    android:background="@drawable/custom_border_gray_backgroud_default"
                     android:inputType="numberDecimal"/>
 
             </LinearLayout>
@@ -326,7 +326,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_30dp"
                     android:textSize="@dimen/_9sp"
-                    android:background="@drawable/custom_border_gray_backgroud_white"
+                    android:background="@drawable/custom_border_gray_backgroud_default"
                     android:inputType="number"/>
 
             </LinearLayout>
@@ -354,7 +354,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_30dp"
                     android:textSize="@dimen/_9sp"
-                    android:background="@drawable/custom_border_gray_backgroud_white"
+                    android:background="@drawable/custom_border_gray_backgroud_default"
                     android:inputType="number"/>
 
             </LinearLayout>
@@ -376,7 +376,7 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/_65dp"
             android:textSize="@dimen/_9sp"
-            android:background="@drawable/custom_border_gray_backgroud_white" />
+            android:background="@drawable/custom_border_gray_backgroud_default" />
 
         <LinearLayout
             android:layout_marginTop="@dimen/_20dp"

@@ -4,9 +4,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/colorMainBackground">
+    android:background="@color/colorDefaultBackground">
     
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:theme="@style/AppTheme.AppBarOverlay"
@@ -17,11 +17,17 @@
             android:layout_height="match_parent"
             android:id="@+id/fl_start" />
 
+        <include android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/_55dp"
+            android:layout_width="match_parent"
+            android:id="@+id/txv_content_main"
+            layout="@layout/content_main" />
+
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_60dp"
-            android:background="@drawable/custom_edt_search"
+            android:background="@drawable/icon_shadow_black"
             app:popupTheme="@style/AppTheme.PopupOverlay" >
 
             <EditText
@@ -44,12 +50,7 @@
 
         </android.support.v7.widget.Toolbar>
 
-        <include android:layout_height="match_parent"
-            android:layout_width="match_parent"
-            android:id="@+id/txv_content_main"
-            layout="@layout/content_main" />
-
-    </LinearLayout>
+    </RelativeLayout>
 
     <net.cachapa.expandablelayout.ExpandableLayout
         android:layout_width="match_parent"
@@ -63,7 +64,7 @@
             android:id="@+id/frg_search_place"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/colorMainBackground"
+            android:background="@color/colorDefaultBackground"
             android:name="com.qtctek.realstate.view.post_news.fragment.SearchPlaceFragment"
             tools:layout="@layout/fragment_search_place" />
 

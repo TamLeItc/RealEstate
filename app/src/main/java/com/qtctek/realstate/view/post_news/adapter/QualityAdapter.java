@@ -47,7 +47,7 @@ public class QualityAdapter extends RecyclerView.Adapter<QualityAdapter.ViewHold
             holder.txvAdd.setTextColor(mContext.getResources().getColor(R.color.colorWhite));
         }
         else{
-            holder.llItemQuality.setBackgroundColor(mContext.getResources().getColor(R.color.colorMainBackground));
+            holder.llItemQuality.setBackgroundColor(mContext.getResources().getColor(R.color.colorDefaultBackground));
             holder.txvQuality.setTextColor(mContext.getResources().getColor(R.color.colorGrayDark));
             holder.txvAdd.setTextColor(mContext.getResources().getColor(R.color.colorGrayDark));
         }

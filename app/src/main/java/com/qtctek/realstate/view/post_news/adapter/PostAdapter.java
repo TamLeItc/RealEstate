@@ -107,15 +107,9 @@ public class PostAdapter extends BaseAdapter implements ViewHandleSavedPost {
         viewHolder.imbSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(MainActivity.USER.getLevel() != 3 && MainActivity.USER.getLevel() != User.USER_NULL){
-                    MainActivity mainActivity = (MainActivity) mContext;
-                    mainActivity.toastHelper.toast("User của bạn không thể sử dụng chức năng này", ToastHelper.LENGTH_SHORT);
-                }
-                else{
-                    mPositionClick = position;
-                    mImbSave = finalViewHolder1.imbSave;
-                    handleSave();
-                }
+                mPositionClick = position;
+                mImbSave = finalViewHolder1.imbSave;
+                handleSave();
             }
         });
 

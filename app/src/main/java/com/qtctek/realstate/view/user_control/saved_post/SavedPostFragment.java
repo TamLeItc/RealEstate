@@ -1,6 +1,5 @@
 package com.qtctek.realstate.view.user_control.saved_post;
 
-import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -9,13 +8,12 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.PopupMenu;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.qtctek.realstate.R;
 import com.qtctek.realstate.dto.Product;
@@ -35,6 +33,7 @@ public class SavedPostFragment extends Fragment implements ViewHandleSavedPost,
 
     private ListView mLsvSavedPost;
     private TextView mTxvInformation;
+    private RelativeLayout mRlPostItem;
 
     private AdapterPostSale mAdapterListPost;
     private ArrayList<Product> mArrListProduct = new ArrayList<>();
@@ -101,6 +100,10 @@ public class SavedPostFragment extends Fragment implements ViewHandleSavedPost,
 
         mPositionClick = position;
 
+        this.mRlPostItem = view.findViewById(R.id.rl_post_item);
+        mRlPostItem.setBackground(getResources().getDrawable(R.drawable.custom_border_normal));
+
+
         popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
@@ -121,6 +124,14 @@ public class SavedPostFragment extends Fragment implements ViewHandleSavedPost,
                 return true;
             }
         });
+
+        popupMenu.setOnDismissListener(new PopupMenu.OnDismissListener() {
+            @Override
+            public void onDismiss(PopupMenu menu) {
+                mRlPostItem.setBackgroundColor(getResources().getColor(R.color.colorWhite));
+            }
+        });
+
         popupMenu.show();
     }
     public static String getStrProductIdList(HashMap<String, String> hashMap){

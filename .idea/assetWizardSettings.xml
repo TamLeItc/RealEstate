@@ -34,9 +34,9 @@
                         <option name="values">
                           <map>
                             <entry key="assetSourceType" value="FILE" />
-                            <entry key="outputName" value="icon_feedback_black_24dp" />
+                            <entry key="outputName" value="icon_note_black_24dp" />
                             <entry key="overrideSize" value="true" />
-                            <entry key="sourceFile" value="C:\Users\admin\Desktop\feedback.psd" />
+                            <entry key="sourceFile" value="C:\Users\admin\Desktop\notes.psd" />
                           </map>
                         </option>
                       </PersistentState>

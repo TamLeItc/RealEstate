@@ -13,6 +13,7 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.PopupMenu;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.qtctek.realstate.R;
@@ -37,6 +38,7 @@ public class PostedPostFragment extends Fragment implements ViewHandlePostedPost
 
     private ListView mLsvPostedPost;
     private TextView mTxvInformation;
+    private RelativeLayout mRlPostItem;
 
     private AdapterPostSale mAdapterListPost;
     private ArrayList<Product> mArrProduct = new ArrayList<>();
@@ -171,6 +173,9 @@ public class PostedPostFragment extends Fragment implements ViewHandlePostedPost
         popupMenu.getMenuInflater().inflate(R.menu.popup_menu_for_posted_post, popupMenu.getMenu());
 
         mPositionClick = position;
+        this.mRlPostItem = view.findViewById(R.id.rl_post_item);
+
+        mRlPostItem.setBackground(getResources().getDrawable(R.drawable.custom_border_normal));
 
         ((UserControlActivity)getActivity()).alertHelper.setCallback(this);
         popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
@@ -197,8 +202,16 @@ public class PostedPostFragment extends Fragment implements ViewHandlePostedPost
                 return true;
             }
         });
-        popupMenu.show();
 
+        popupMenu.setOnDismissListener(new PopupMenu.OnDismissListener() {
+            @Override
+            public void onDismiss(PopupMenu menu) {
+                mRlPostItem.setBackgroundColor(getResources().getColor(R.color.colorWhite));
+            }
+        });
+
+
+        popupMenu.show();
     }
 
 

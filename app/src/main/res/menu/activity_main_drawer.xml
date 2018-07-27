@@ -3,52 +3,65 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:showIn="navigation_view">
 
-    <group android:checkableBehavior="none">
+    <item
+        android:id="@+id/nav_new_post"
+        android:icon="@drawable/icon_write_black_24dp"
+        android:title="@string/add_new_post"
+        android:visible="true" />
 
-        <item android:id="@+id/nav_post_management"
-            android:icon="@drawable/icon_event_note_black_24dp"
-            android:title="@string/post_management"
-            android:visible="false"/>
+    <item android:title="@string/management"
+        android:id="@+id/nav_management">
 
-        <item android:id="@+id/nav_user_management"
-            android:icon="@drawable/icon_people_outline_black_24dp"
-            android:title="@string/user_management"
-            android:visible="false"/>
+        <menu>
+            <item
+                android:id="@+id/nav_post_management"
+                android:icon="@drawable/icon_event_note_black_24dp"
+                android:title="@string/post_management"
+                android:visible="false" />
 
-        <item android:id="@+id/nav_posted_post"
-            android:title="@string/posted_post"
-            android:icon="@drawable/icon_post"
-            android:visible="false"/>
+            <item
+                android:id="@+id/nav_user_management"
+                android:icon="@drawable/icon_people_outline_black_24dp"
+                android:title="@string/user_management"
+                android:visible="false" />
 
-        <item
-            android:id="@+id/nav_saved_post"
-            android:icon="@drawable/icon_house"
-            android:title="@string/saved_post"
-            android:visible="true"/>
+            <item
+                android:id="@+id/nav_posted_post"
+                android:icon="@drawable/icon_post_black_24dp"
+                android:title="@string/posted_post_management"
+                android:visible="false" />
 
-        <item
-            android:id="@+id/nav_saved_search"
-            android:icon="@drawable/icon_search_black_24dp"
-            android:title="@string/saved_search"
-            android:visible="true"/>
-        <item
-            android:id="@+id/nav_account_manage"
-            android:icon="@drawable/icon_person_outline_black_24dp"
-            android:title="@string/account_manage"
-            android:visible="false"/>
+            <item
+                android:id="@+id/nav_saved_post"
+                android:icon="@drawable/icon_favorite_star_black_24dp"
+                android:title="@string/saved_post"
+                android:visible="true" />
 
-        <item android:id="@+id/nav_login"
-            android:icon="@drawable/ic_icon_login_black_24dp"
-            android:title="@string/login"
-            android:visible="true"/>
+            <item
+                android:id="@+id/nav_saved_search"
+                android:icon="@drawable/icon_post_search_black_24dp"
+                android:title="@string/saved_search"
+                android:visible="true" />
+            <item
+                android:id="@+id/nav_account_manage"
+                android:icon="@drawable/icon_avatar_black_24dp"
+                android:title="@string/account_manage"
+                android:visible="false" />
 
-        <item
-            android:id="@+id/nav_logout"
-            android:icon="@drawable/ic_icon_logout_black_24dp"
-            android:title="@string/logout"
-            android:visible="false"/>
+            <item
+                android:id="@+id/nav_login"
+                android:icon="@drawable/ic_icon_login_black_24dp"
+                android:title="@string/login"
+                android:visible="true" />
 
-    </group>
+            <item
+                android:id="@+id/nav_logout"
+                android:icon="@drawable/ic_icon_logout_black_24dp"
+                android:title="@string/logout"
+                android:visible="false" />
+        </menu>
+
+    </item>
 
     <item android:title="@string/about_us">
         <menu>
@@ -62,5 +75,6 @@
                 android:title="@string/feedback" />
         </menu>
     </item>
+
 
 </menu>

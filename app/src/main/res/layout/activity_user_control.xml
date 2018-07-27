@@ -4,13 +4,13 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    android:background="@color/colorMainBackground">
+    android:background="@color/colorWhite">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/_40dp"
-        android:background="@color/colorGrayDark"
+        android:layout_height="@dimen/_60dp"
+        android:background="@drawable/icon_shadow_black"
         app:popupTheme="@style/AppTheme.PopupOverlay"
         app:contentInsetStart="@dimen/_0dp">
 
@@ -18,22 +18,42 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <Button
+            <ImageView
+                android:layout_centerVertical="true"
+                android:background="?attr/selectableItemBackground"
                 android:id="@+id/imv_back"
                 android:layout_width="@dimen/_40dp"
                 android:layout_height="@dimen/_40dp"
-                android:background="@drawable/icon_arrow_left_white_24dp" />
+                android:src="@drawable/icon_arrow_left_black_24dp" />
 
             <TextView
                 android:id="@+id/txv_toolbar_title"
-                android:layout_centerVertical="true"
-                android:layout_toRightOf="@+id/imv_back"
-                android:layout_marginLeft="@dimen/_10dp"
-                android:textColor="@color/colorWhite"
+                android:layout_centerInParent="true"
+                android:textColor="@color/colorGrayDark"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/account_manage"
-                android:textSize="@dimen/_11sp" />
+                android:textSize="@dimen/_12sp"  />
+
+            <ImageView
+                android:background="?attr/selectableItemBackground"
+                android:layout_width="@dimen/_25dp"
+                android:layout_height="@dimen/_25dp"
+                android:id="@+id/imv_filter"
+                android:src="@drawable/icon_filter_list_black_24dp"
+                android:layout_toLeftOf="@+id/imv_option_menu"
+                android:layout_centerVertical="true"/>
+
+            <ImageView
+                android:background="?attr/selectableItemBackground"
+                android:layout_marginLeft="@dimen/_8dp"
+                android:layout_marginRight="@dimen/_8dp"
+                android:layout_width="@dimen/_25dp"
+                android:layout_height="@dimen/_25dp"
+                android:id="@+id/imv_option_menu"
+                android:src="@drawable/icon_more_vert_black_24dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"/>
 
         </RelativeLayout>
 

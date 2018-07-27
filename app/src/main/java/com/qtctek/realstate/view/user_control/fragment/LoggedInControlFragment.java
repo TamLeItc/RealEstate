@@ -6,27 +6,23 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
-import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.ImageView;
 
 import com.qtctek.realstate.R;
 import com.qtctek.realstate.view.post_news.activity.MainActivity;
 import com.qtctek.realstate.view.user_control.activity.UserControlActivity;
 import com.qtctek.realstate.view.user_control.adapter.UserControlAdapter;
-import com.qtctek.realstate.view.user_control.post_management.PostManagementFragment;
-import com.qtctek.realstate.view.user_control.user_management.UserManagementFragment;
 
-public class    UserSystemControlFragment extends Fragment implements View.OnClickListener, ViewPager.OnPageChangeListener {
+public class LoggedInControlFragment extends Fragment implements View.OnClickListener, ViewPager.OnPageChangeListener {
 
     private View mView;
 
     private ViewPager mViewPager;
     private TabLayout mTabLayout;
-    private Button mBtnBack;
+    private ImageView mImvBack;
 
     @Nullable
     @Override
@@ -48,9 +44,9 @@ public class    UserSystemControlFragment extends Fragment implements View.OnCli
         mViewPager = (ViewPager) mView.findViewById(R.id.view_pager);
         mTabLayout = (TabLayout) mView.findViewById(R.id.tab_layout);
 
-        this.mBtnBack = ((UserControlActivity) getActivity()).findViewById(R.id.imv_back);
+        this.mImvBack = ((UserControlActivity) getActivity()).findViewById(R.id.imv_back);
 
-        this.mBtnBack.setOnClickListener(this);
+        this.mImvBack.setOnClickListener(this);
         mViewPager.addOnPageChangeListener(this);
     }
 
@@ -61,18 +57,23 @@ public class    UserSystemControlFragment extends Fragment implements View.OnCli
         mViewPager.setAdapter(adapter);
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(mTabLayout));
 
-        mViewPager.setCurrentItem(UserControlActivity.POSITION_FRAGMENT);
+        mViewPager.setCurrentItem(((UserControlActivity)getActivity()).positionFragment);
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.imv_back:
-                if(mViewPager.getCurrentItem() == 0){
-                    getActivity().finish();
+                if(((UserControlActivity)getActivity()).isRequireAccountManagement){
+                    if(mViewPager.getCurrentItem() == 0){
+                        getActivity().finish();
+                    }
+                    else{
+                        mViewPager.setCurrentItem(0);
+                    }
                 }
                 else{
-                    mViewPager.setCurrentItem(0);
+                    getActivity().finish();
                 }
         }
     }
@@ -85,20 +86,33 @@ public class    UserSystemControlFragment extends Fragment implements View.OnCli
     @Override
     public void onPageSelected(int position) {
         if(position == 1){
-            ((UserControlActivity)getActivity()).showMenuFilter(UserControlActivity.POST_MANAGEMENT);
+            ((UserControlActivity)getActivity()).handleShowButtonFilter(UserControlActivity.POST);
 
-            ((UserControlActivity)getActivity()).txvToolbarTitle.setText(getResources().getString(R.string.post_management));
+            if(MainActivity.USER.getLevel() == 1 || MainActivity.USER.getLevel() == 2){
+                ((UserControlActivity)getActivity()).txvToolbarTitle.setText(getResources().getString(R.string.post_management));
+            }
+            else{
+                ((UserControlActivity)getActivity()).txvToolbarTitle.setText(getResources().getString(R.string.posted_post_management));
+            }
         }
         else if(position == 2 && MainActivity.USER.getLevel() == 1){
-            ((UserControlActivity)getActivity()).showMenuFilter(UserControlActivity.USER_MANAGEMENT);
+            ((UserControlActivity)getActivity()).handleShowButtonFilter(UserControlActivity.USER);
 
             ((UserControlActivity)getActivity()).txvToolbarTitle.setText(getResources().getString(R.string.user_management));
         }
         else{
 
-            ((UserControlActivity)getActivity()).txvToolbarTitle.setText(getResources().getString(R.string.account_manage));
+            if(MainActivity.USER.getLevel() == 1 && position == 3 || position == 2){
+                ((UserControlActivity)getActivity()).txvToolbarTitle.setText(getResources().getString(R.string.saved_post));
+            }
+            else if(MainActivity.USER.getLevel() == 1 && position == 4 || position == 3){
+                ((UserControlActivity)getActivity()).txvToolbarTitle.setText(getResources().getString(R.string.saved_search));
+            }
+            else{
+                ((UserControlActivity)getActivity()).txvToolbarTitle.setText(getResources().getString(R.string.account_manage));
+            }
 
-            ((UserControlActivity)getActivity()).showMenuFilter(UserControlActivity.OTHER);
+            ((UserControlActivity)getActivity()).handleShowButtonFilter(UserControlActivity.OTHER);
         }
     }
 

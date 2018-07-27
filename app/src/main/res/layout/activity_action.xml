@@ -4,13 +4,13 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    android:background="@color/colorMainBackground">
+    android:background="@color/colorWhite">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/_40dp"
-        android:background="@android:color/transparent"
+        android:layout_height="@dimen/_60dp"
+        android:background="@drawable/icon_shadow_black"
         app:popupTheme="@style/AppTheme.PopupOverlay"
         app:contentInsetStart="@dimen/_0dp">
 
@@ -19,11 +19,22 @@
             android:layout_height="match_parent"
             android:orientation="horizontal">
 
-            <Button
+            <ImageView
+                android:background="?attr/selectableItemBackground"
+                android:layout_centerVertical="true"
                 android:id="@+id/imv_back"
                 android:layout_width="@dimen/_40dp"
                 android:layout_height="@dimen/_40dp"
-                android:background="@drawable/icon_arrow_left_black_24dp" />
+                android:src="@drawable/icon_arrow_left_black_24dp" />
+
+            <TextView
+                android:id="@+id/txv_toolbar_title"
+                android:layout_centerInParent="true"
+                android:textColor="@color/colorGrayDark"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/app_name"
+                android:textSize="@dimen/_12sp" />
 
         </RelativeLayout>
 

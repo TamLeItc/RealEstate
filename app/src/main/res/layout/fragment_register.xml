@@ -3,25 +3,18 @@
     android:layout_height="match_parent"
     android:overScrollMode="never"
     android:scrollbars="none"
-    xmlns:android="http://schemas.android.com/apk/res/android" >
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="@color/colorWhite">
 
     <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/colorMainBackground"
+
         android:orientation="vertical"
         android:paddingLeft="@dimen/_25dp"
         android:paddingRight="@dimen/_25dp"
-        android:paddingBottom="@dimen/_10dp">
-
-        <TextView
-            android:id="@+id/txv_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/register_account"
-            android:textSize="@dimen/_12sp"
-            android:layout_gravity="center_horizontal"
-            android:textColor="@color/colorMain"/>
+        android:paddingBottom="@dimen/_10dp"
+        android:paddingTop="@dimen/_10dp">
 
         <TextView
             android:layout_width="wrap_content"
@@ -40,7 +33,7 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/_35dp"
             android:textSize="@dimen/_10sp"
-            android:background="@drawable/custom_border_gray_backgroud_white" />
+            android:background="@drawable/custom_border_gray_backgroud_default" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -120,7 +113,7 @@
                     android:layout_height="@dimen/_30dp"
                     android:id="@+id/imv_calendar"
                     android:layout_marginTop="@dimen/_5dp"
-                    android:src="@drawable/icon_calendar"/>
+                    android:src="@drawable/icon_calendar_black_24dp"/>
 
             </LinearLayout>
 
@@ -171,7 +164,7 @@
             android:id="@+id/edt_email_address"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_40dp"
-            android:background="@drawable/custom_border_gray_backgroud_white"/>
+            android:background="@drawable/custom_border_gray_backgroud_default"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -217,7 +210,7 @@
             android:id="@+id/edt_username"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_40dp"
-            android:background="@drawable/custom_border_gray_backgroud_white"/>
+            android:background="@drawable/custom_border_gray_backgroud_default"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -276,7 +269,7 @@
             android:id="@+id/edt_now_password"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_35dp"
-            android:background="@drawable/custom_border_gray_backgroud_white"/>
+            android:background="@drawable/custom_border_gray_backgroud_default"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -335,7 +328,7 @@
             android:id="@+id/edt_password"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_35dp"
-            android:background="@drawable/custom_border_gray_backgroud_white"/>
+            android:background="@drawable/custom_border_gray_backgroud_default"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -393,7 +386,7 @@
             android:id="@+id/edt_confirm_password"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_35dp"
-            android:background="@drawable/custom_border_gray_backgroud_white"/>
+            android:background="@drawable/custom_border_gray_backgroud_default"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -439,7 +432,7 @@
             android:id="@+id/edt_phone_number"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_35dp"
-            android:background="@drawable/custom_border_gray_backgroud_white"/>
+            android:background="@drawable/custom_border_gray_backgroud_default"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -456,7 +449,7 @@
             android:id="@+id/edt_address"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_35dp"
-            android:background="@drawable/custom_border_gray_backgroud_white"/>
+            android:background="@drawable/custom_border_gray_backgroud_default"/>
 
         <Button
             android:minWidth="@dimen/_0dp"

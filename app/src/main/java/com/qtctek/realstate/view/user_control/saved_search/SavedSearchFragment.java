@@ -15,6 +15,7 @@ import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.PopupMenu;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,6 +37,7 @@ public class SavedSearchFragment extends Fragment implements ViewHandleSavedSear
 
     private ListView mLsvSavedSearch;
     private TextView mTxvInformation;
+    private RelativeLayout mRlSearchItem;
 
     private SavedSearchAdapter mSavedSearchAdapter;
     private int mPositionClick;
@@ -109,6 +111,9 @@ public class SavedSearchFragment extends Fragment implements ViewHandleSavedSear
         popupMenu.getMenuInflater().inflate(R.menu.popup_menu_for_saved_search, popupMenu.getMenu());
 
         mPositionClick = position;
+        this.mRlSearchItem = view.findViewById(R.id.rl_item_1);
+
+        this.mRlSearchItem.setBackground(getResources().getDrawable(R.drawable.custom_border_normal));
 
         popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             @Override
@@ -128,6 +133,14 @@ public class SavedSearchFragment extends Fragment implements ViewHandleSavedSear
                 return true;
             }
         });
+
+        popupMenu.setOnDismissListener(new PopupMenu.OnDismissListener() {
+            @Override
+            public void onDismiss(PopupMenu menu) {
+                mRlSearchItem.setBackgroundColor(getResources().getColor(R.color.colorWhite));
+            }
+        });
+
         popupMenu.show();
     }
 

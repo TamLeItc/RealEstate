@@ -5,19 +5,20 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/colorMainBackground">
+    android:background="@color/colorWhite"
+    android:paddingLeft="@dimen/_8dp"
+    android:paddingRight="@dimen/_8dp"
+    android:paddingTop="@dimen/_5dp"
+    android:paddingBottom="@dimen/_5dp">
 
 
     <ListView
         android:overScrollMode="never"
         tools:listitem="@layout/item_post"
-        android:layout_marginTop="@dimen/_5dp"
         android:id="@+id/lsv_posts"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scrollbars="none"
-        android:layout_marginLeft="@dimen/_8dp"
-        android:layout_marginRight="@dimen/_8dp"/>
+        android:scrollbars="none"/>
 
     <TextView
         android:layout_width="wrap_content"

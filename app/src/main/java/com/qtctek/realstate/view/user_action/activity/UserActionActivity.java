@@ -10,8 +10,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Button;
-import android.widget.Toast;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.qtctek.realstate.R;
 import com.qtctek.realstate.helper.AlertHelper;
@@ -20,11 +20,12 @@ import com.qtctek.realstate.helper.ToastHelper;
 import com.qtctek.realstate.view.user_action.adapter.UserActionAdapter;
 import com.qtctek.realstate.view.user_control.activity.UserControlActivity;
 
-public class UserActionActivity extends AppCompatActivity implements View.OnTouchListener, View.OnClickListener {
+public class UserActionActivity extends AppCompatActivity implements View.OnTouchListener, View.OnClickListener, ViewPager.OnPageChangeListener {
 
     private ViewPager mViewPager;
     private Toolbar mToolbar;
-    private Button mBtnBack;
+    private ImageView mImvBack;
+    private TextView mTxvToolbarTitle;
 
     private boolean mDoubleBackToExitPressedOnce = false;
 
@@ -59,10 +60,12 @@ public class UserActionActivity extends AppCompatActivity implements View.OnTouc
     private void initViews(){
         mViewPager = (ViewPager) findViewById(R.id.view_pager);
         this.mToolbar = findViewById(R.id.toolbar);
-        this.mBtnBack = findViewById(R.id.imv_back);
+        this.mImvBack = findViewById(R.id.imv_back);
+        this.mTxvToolbarTitle = findViewById(R.id.txv_toolbar_title);
 
         mViewPager.setOnTouchListener(this);
-        this.mBtnBack.setOnClickListener(this);
+        mViewPager.addOnPageChangeListener(this);
+        this.mImvBack.setOnClickListener(this);
     }
 
     private void addControl() {
@@ -75,7 +78,7 @@ public class UserActionActivity extends AppCompatActivity implements View.OnTouc
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
-        this.mBtnBack.setOnClickListener(this);
+        this.mImvBack.setOnClickListener(this);
     }
 
     private void getValueFromIntent(){
@@ -144,5 +147,35 @@ public class UserActionActivity extends AppCompatActivity implements View.OnTouc
         System.gc();
 
         super.onStop();
+    }
+
+    @Override
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+    }
+
+    @Override
+    public void onPageSelected(int position) {
+        switch (position){
+            case 0:
+                this.mTxvToolbarTitle.setText(getResources().getString(R.string.app_name));
+                break;
+            case 1:
+                this.mTxvToolbarTitle.setText(getResources().getString(R.string.register_account));
+                break;
+            case 2:
+                this.mTxvToolbarTitle.setText(getResources().getString(R.string.forgot_password));
+                break;
+            case 3:
+                this.mTxvToolbarTitle.setText(getResources().getString(R.string.update_user));
+                break;
+            default:
+                this.mTxvToolbarTitle.setText(getResources().getString(R.string.app_name));
+        }
+    }
+
+    @Override
+    public void onPageScrollStateChanged(int state) {
+
     }
 }

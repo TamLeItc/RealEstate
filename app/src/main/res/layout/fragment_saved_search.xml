@@ -5,12 +5,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/colorMainBackground">
+    android:background="@color/colorDefaultBackground"
+    android:paddingLeft="@dimen/_8dp"
+    android:paddingRight="@dimen/_8dp"
+    android:paddingBottom="@dimen/_5dp"
+    android:paddingTop="@dimen/_5dp">
 
     <ListView
         android:overScrollMode="never"
         tools:listitem="@layout/item_1"
-        android:layout_marginTop="@dimen/_5dp"
         android:id="@+id/lsv_saved_search"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

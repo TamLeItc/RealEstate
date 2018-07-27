@@ -1,17 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    android:background="@color/colorMainBackground">
+    android:background="@color/colorWhite">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/_40dp"
-        android:background="@color/colorGrayDark"
+        android:layout_height="@dimen/_60dp"
+        android:background="@drawable/icon_shadow_black"
         app:popupTheme="@style/AppTheme.PopupOverlay"
         app:contentInsetStart="@dimen/_0dp">
 
@@ -19,35 +18,38 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <Button
+            <ImageView
+                android:layout_centerVertical="true"
                 android:id="@+id/imv_back"
                 android:layout_width="@dimen/_40dp"
                 android:layout_height="@dimen/_40dp"
-                android:background="@drawable/icon_arrow_left_white_24dp" />
+                android:src="@drawable/icon_arrow_left_black_24dp"
+                android:background="?attr/selectableItemBackground"/>
 
             <TextView
-                android:textStyle="bold"
                 android:layout_marginLeft="@dimen/_10dp"
                 android:layout_marginRight="@dimen/_10dp"
                 android:id="@+id/txv_toolbar_title"
                 android:maxLines="1"
                 android:ellipsize="end"
-                android:textSize="@dimen/_18dp"
+                android:textSize="@dimen/_12sp"
                 android:text="@string/post"
                 android:gravity="center"
-                android:textColor="@color/colorWhite"
+                android:textColor="@color/colorGrayDark"
                 android:layout_centerVertical="true"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_toRightOf="@+id/imv_back"
-                android:layout_toLeftOf="@+id/btn_next"/>
+                android:layout_toLeftOf="@+id/imv_next"/>
 
-            <Button
+            <ImageView
+                android:layout_centerVertical="true"
                 android:layout_alignParentRight="true"
-                android:id="@+id/btn_next"
+                android:id="@+id/imv_next"
                 android:layout_width="@dimen/_40dp"
                 android:layout_height="@dimen/_40dp"
-                android:background="@drawable/icon_arrow_right_white_24dp" />
+                android:src="@drawable/icon_arrow_right_black_24dp"
+                android:background="?attr/selectableItemBackground"/>
 
         </RelativeLayout>
 

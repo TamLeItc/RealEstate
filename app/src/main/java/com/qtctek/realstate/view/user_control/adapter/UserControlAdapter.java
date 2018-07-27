@@ -9,7 +9,7 @@ import com.qtctek.realstate.view.post_news.activity.MainActivity;
 import com.qtctek.realstate.view.user_control.post_management.PostManagementFragment;
 import com.qtctek.realstate.view.user_control.posted_post.PostedPostFragment;
 import com.qtctek.realstate.view.user_control.saved_post.SavedPostFragment;
-import com.qtctek.realstate.view.user_control.fragment.OptionUserSystemControlFragment;
+import com.qtctek.realstate.view.user_control.fragment.UserControlFragment;
 import com.qtctek.realstate.view.user_control.saved_search.SavedSearchFragment;
 import com.qtctek.realstate.view.user_control.user_management.UserManagementFragment;
 
@@ -28,7 +28,7 @@ public class UserControlAdapter extends FragmentStatePagerAdapter {
         if(MainActivity.USER.getLevel() == 1){
             switch (position){
                 case 0:
-                    frag = new OptionUserSystemControlFragment();
+                    frag = new UserControlFragment();
                     break;
                 case 1:
                     frag = new PostManagementFragment();
@@ -36,17 +36,10 @@ public class UserControlAdapter extends FragmentStatePagerAdapter {
                 case 2:
                     frag = new UserManagementFragment();
                     break;
-            }
-        }
-        else if(MainActivity.USER.getLevel() == 3){
-            switch (position) {
-                case 0:
-                    frag = new PostedPostFragment();
-                    break;
-                case 1:
+                case 3:
                     frag = new SavedPostFragment();
                     break;
-                case 2:
+                case 4:
                     frag = new SavedSearchFragment();
                     break;
             }
@@ -54,10 +47,32 @@ public class UserControlAdapter extends FragmentStatePagerAdapter {
         else if(MainActivity.USER.getLevel() == 2){
             switch (position) {
                 case 0:
-                    frag = new OptionUserSystemControlFragment();
+                    frag = new UserControlFragment();
                     break;
                 case 1:
                     frag = new PostManagementFragment();
+                    break;
+                case 2:
+                    frag = new SavedPostFragment();
+                    break;
+                case 3:
+                    frag = new SavedSearchFragment();
+                    break;
+            }
+        }
+        else if(MainActivity.USER.getLevel() == 3){
+            switch (position) {
+                case 0:
+                    frag = new UserControlFragment();
+                    break;
+                case 1:
+                    frag = new PostedPostFragment();
+                    break;
+                case 2:
+                    frag = new SavedPostFragment();
+                    break;
+                case 3:
+                    frag = new SavedSearchFragment();
                     break;
             }
         }
@@ -78,13 +93,13 @@ public class UserControlAdapter extends FragmentStatePagerAdapter {
     public int getCount() {
 
         if(MainActivity.USER.getLevel() == 1){
-            return 3;
-        }
-        else if(MainActivity.USER.getLevel() == 3){
-            return 3;
+            return 5;
         }
         else if(MainActivity.USER.getLevel() == 2){
-            return 2;
+            return 4;
+        }
+        else if(MainActivity.USER.getLevel() == 3){
+            return 4;
         }
         else if(MainActivity.USER.getLevel() == User.USER_NULL){
             return 2;

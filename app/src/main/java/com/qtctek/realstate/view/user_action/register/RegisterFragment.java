@@ -452,7 +452,7 @@ public class RegisterFragment extends Fragment implements View.OnClickListener, 
                     this.mEdtUsername.setBackground(getResources().getDrawable(R.drawable.custom_border_red_backgroud_white));
                 }
                 else{
-                    this.mEdtUsername.setBackground(getResources().getDrawable(R.drawable.custom_border_gray_backgroud_white));
+                    this.mEdtUsername.setBackground(getResources().getDrawable(R.drawable.custom_border_gray_backgroud_default));
                 }
                 break;
             case R.id.edt_email_address:
@@ -460,7 +460,7 @@ public class RegisterFragment extends Fragment implements View.OnClickListener, 
                     this.mEdtEmail.setBackground(getResources().getDrawable(R.drawable.custom_border_red_backgroud_white));
                 }
                 else{
-                    this.mEdtEmail.setBackground(getResources().getDrawable(R.drawable.custom_border_gray_backgroud_white));
+                    this.mEdtEmail.setBackground(getResources().getDrawable(R.drawable.custom_border_gray_backgroud_default));
                 }
                 break;
             case R.id.edt_password:
@@ -468,7 +468,7 @@ public class RegisterFragment extends Fragment implements View.OnClickListener, 
                     this.mEdtPassword.setBackground(getResources().getDrawable(R.drawable.custom_border_red_backgroud_white));
                 }
                 else{
-                    this.mEdtPassword.setBackground(getResources().getDrawable(R.drawable.custom_border_gray_backgroud_white));
+                    this.mEdtPassword.setBackground(getResources().getDrawable(R.drawable.custom_border_gray_backgroud_default));
                 }
                 break;
             case R.id.edt_confirm_password:
@@ -476,7 +476,7 @@ public class RegisterFragment extends Fragment implements View.OnClickListener, 
                     this.mEdtConfirmPassword.setBackground(getResources().getDrawable(R.drawable.custom_border_red_backgroud_white));
                 }
                 else{
-                    this.mEdtConfirmPassword.setBackground(getResources().getDrawable(R.drawable.custom_border_gray_backgroud_white));
+                    this.mEdtConfirmPassword.setBackground(getResources().getDrawable(R.drawable.custom_border_gray_backgroud_default));
                 }
                 break;
             case R.id.edt_phone_number:
@@ -484,7 +484,7 @@ public class RegisterFragment extends Fragment implements View.OnClickListener, 
                     this.mEdtPhoneNumber.setBackground(getResources().getDrawable(R.drawable.custom_border_red_backgroud_white));
                 }
                 else{
-                    this.mEdtPhoneNumber.setBackground(getResources().getDrawable(R.drawable.custom_border_gray_backgroud_white));
+                    this.mEdtPhoneNumber.setBackground(getResources().getDrawable(R.drawable.custom_border_gray_backgroud_default));
                 }
         }
 

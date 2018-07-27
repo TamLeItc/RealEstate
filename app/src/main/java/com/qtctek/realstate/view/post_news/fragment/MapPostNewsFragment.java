@@ -283,7 +283,6 @@ public class MapPostNewsFragment extends Fragment implements OnMapReadyCallback,
             catch (java.lang.NullPointerException e){
 
             }
-
         }
     }
 
@@ -450,6 +449,7 @@ public class MapPostNewsFragment extends Fragment implements OnMapReadyCallback,
                 .snippet(positionInArr + "")
                 .icon(BitmapDescriptorFactory.fromBitmap(iconFactory.makeIcon(message)))
                 .anchor(iconFactory.getAnchorU(), iconFactory.getAnchorV()));
+
 
         return marker;
     }
@@ -713,7 +713,6 @@ public class MapPostNewsFragment extends Fragment implements OnMapReadyCallback,
     public void onPositiveButtonClick(int option) {
         if(option == Constant.NEAR_BY_SEARCH){
             if(!isGpsOn()){
-
                 GpsStatus.Listener gpsListener = new GpsStatus.Listener() {
                     public void onGpsStatusChanged(int event) {
                         if( event == GpsStatus.GPS_EVENT_FIRST_FIX){

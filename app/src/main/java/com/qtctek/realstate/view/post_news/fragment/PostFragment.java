@@ -164,22 +164,17 @@ public class PostFragment extends Fragment implements View.OnClickListener, View
                 startActivity(intent);
                 break;
             case R.id.imb_save:
-                if(MainActivity.USER.getLevel() != 3 && MainActivity.USER.getLevel() != User.USER_NULL){
-                    ((MainActivity)getActivity()).toastHelper.toast("User của bạn không thể sử dụng chức năng này", ToastHelper.LENGTH_SHORT);
+                if(mProduct.getIsSaved()){
+                    try {
+                        ListPostNewsFragment.LIST_SAVED_PRODUCT_ID.remove(mProduct.getId() + "");
+                    }
+                    catch (Exception e){}
+                    new PresenterSavedPost(this).handleUpdateDataProductIds(ListPostNewsFragment.LIST_SAVED_PRODUCT_ID, getContext());
                 }
                 else{
-                    if(mProduct.getIsSaved()){
-                        try {
-                            ListPostNewsFragment.LIST_SAVED_PRODUCT_ID.remove(mProduct.getId() + "");
-                        }
-                        catch (Exception e){}
-                        new PresenterSavedPost(this).handleUpdateDataProductIds(ListPostNewsFragment.LIST_SAVED_PRODUCT_ID, getContext());
-                    }
-                    else{
-                        ListPostNewsFragment.LIST_SAVED_PRODUCT_ID.put(mProduct.getId() + "", mProduct.getId() + "");
-                        new PresenterSavedPost(this).handleUpdateDataProductIds(ListPostNewsFragment.LIST_SAVED_PRODUCT_ID, getContext());
+                    ListPostNewsFragment.LIST_SAVED_PRODUCT_ID.put(mProduct.getId() + "", mProduct.getId() + "");
+                    new PresenterSavedPost(this).handleUpdateDataProductIds(ListPostNewsFragment.LIST_SAVED_PRODUCT_ID, getContext());
 
-                    }
                 }
         }
     }

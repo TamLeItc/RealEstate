@@ -10,7 +10,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,7 +17,9 @@ import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import com.qtctek.realstate.R;
@@ -28,25 +29,22 @@ import com.qtctek.realstate.helper.AlertHelper;
 import com.qtctek.realstate.helper.DialogHelper;
 import com.qtctek.realstate.helper.ToastHelper;
 import com.qtctek.realstate.view.post_news.activity.MainActivity;
-import com.qtctek.realstate.view.new_post.activity.NewPostActivity;
 import com.qtctek.realstate.view.user_action.activity.UserActionActivity;
 import com.qtctek.realstate.view.user_control.adapter.PostFilterAdapter;
 import com.qtctek.realstate.view.user_control.adapter.UserFilterAdapter;
-import com.qtctek.realstate.view.user_control.fragment.UserNormalControlFragment;
-import com.qtctek.realstate.view.user_control.fragment.UserSystemControlFragment;
+import com.qtctek.realstate.view.user_control.fragment.NotLoggedInControlFragment;
+import com.qtctek.realstate.view.user_control.fragment.LoggedInControlFragment;
 import com.qtctek.realstate.view.user_control.interfaces.ManagementFilterCallback;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class UserControlActivity extends AppCompatActivity implements AlertHelper.AlertHelperCallback {
+public class UserControlActivity extends AppCompatActivity implements AlertHelper.AlertHelperCallback, View.OnClickListener {
 
     private Toolbar mToolbar;
-    public Menu menuOption;
+    private ImageView mImvOptionMenu;
+    private ImageView mImvFilter;
     public TextView txvToolbarTitle;
-
-    private boolean mDoubleBackToExitPressedOnce = false;
-    public static int POSITION_FRAGMENT = 0;
 
     public AlertHelper alertHelper;
     public ToastHelper toastHelper;
@@ -56,17 +54,18 @@ public class UserControlActivity extends AppCompatActivity implements AlertHelpe
 
     public ManagementFilterCallback userFilterCallback;
 
-    public int currentFragment;
+    public int optionManagement;
+    public int positionFragment = 0;
+    public boolean isRequireAccountManagement = false;
+    private boolean mDoubleBackToExitPressedOnce = false;
 
     public String productFormality = "%";
     public String productStatus = "%";
     private int mProductStatusTemp;
-
     public String userStatus = "%";
 
-    public static final int POST_MANAGEMENT = 101;
-    public static final int POSTED_POST = 102;
-    public static final int USER_MANAGEMENT = 103;
+    public static final int POST = 101;
+    public static final int USER = 103;
     public static final int OTHER = 100;
 
     @Override
@@ -87,6 +86,13 @@ public class UserControlActivity extends AppCompatActivity implements AlertHelpe
     private void initViews(){
         this.mToolbar = findViewById(R.id.toolbar);
         this.txvToolbarTitle = findViewById(R.id.txv_toolbar_title);
+        this.mImvOptionMenu = findViewById(R.id.imv_option_menu);
+        this.mImvFilter = findViewById(R.id.imv_filter);
+
+        this.mImvFilter.setVisibility(View.GONE);
+
+        this.mImvOptionMenu.setOnClickListener(this);
+        this.mImvFilter.setOnClickListener(this);
     }
 
     private void addToolbar(){
@@ -97,112 +103,113 @@ public class UserControlActivity extends AppCompatActivity implements AlertHelpe
     private void handleValueFromIntent(){
         try{
             Intent intent = getIntent();
-            POSITION_FRAGMENT = intent.getIntExtra("fragment", 0);
+            positionFragment = intent.getIntExtra("fragment", 0);
+
+            if(positionFragment == 0){
+                this.isRequireAccountManagement = true;
+            }
+            else{
+                this.isRequireAccountManagement = false;
+            }
+
         }
         catch (java.lang.NullPointerException e){
-            POSITION_FRAGMENT = 0;
+            positionFragment = 0;
+            this.isRequireAccountManagement = false;
         }
     }
 
-    public void showMenuFilter(final int currentFrg){
-
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                MenuItem menuItemFilter = menuOption.getItem(0);
-                if(currentFrg == UserControlActivity.OTHER){
-                    menuItemFilter.setVisible(false);
-                }
-                else{
-                    menuItemFilter.setVisible(true);
-                }
-                currentFragment = currentFrg;
-            }
-        }, 500);
+    public void handleShowButtonFilter(final int currentFrg){
+        optionManagement = currentFrg;
+        if(currentFrg == UserControlActivity.OTHER){
+            this.mImvFilter.setVisibility(View.GONE);
+        }
+        else{
+            this.mImvFilter.setVisibility(View.VISIBLE);
+        }
     }
 
     //To know what screen to display after the user log on
     private void handleStart(){
-        if(MainActivity.USER.getLevel() == 3 || MainActivity.USER.getLevel() == User.USER_NULL){ //người dùng
+        if(MainActivity.USER.getLevel() == User.USER_NULL){ //Chưa đăng nhập
+
+            this.txvToolbarTitle.setText(getResources().getString(R.string.saved_information));
+
             FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-            fragmentTransaction.replace(R.id.fl_user_control, new UserNormalControlFragment());
+            fragmentTransaction.replace(R.id.fl_user_control, new NotLoggedInControlFragment());
             fragmentTransaction.commit();
         }
         else{
             FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-            fragmentTransaction.replace(R.id.fl_user_control, new UserSystemControlFragment());
+            fragmentTransaction.replace(R.id.fl_user_control, new LoggedInControlFragment());
             fragmentTransaction.commit();
         }
     }
 
-
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.option_menu_user_control, menu);
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.imv_option_menu:
+                handlePopupOptionMenu();
+                break;
+            case R.id.imv_filter:
+                handleShowFilter();
+                break;
+        }
+    }
 
-        MenuItem menuItemNewPost = menu.findItem(R.id.control_new_post);
-        MenuItem menuItemLogout = menu.findItem(R.id.control_logout);
+    private void handlePopupOptionMenu(){
+        PopupMenu popupMenu = new PopupMenu(this, this.mImvOptionMenu);
+        popupMenu.getMenuInflater().inflate(R.menu.popup_menu_user_control, popupMenu.getMenu());
+
+        Menu menu = popupMenu.getMenu();
         MenuItem menuItemUpdateUser = menu.findItem(R.id.control_update_information);
+        MenuItem menuItemLogout = menu.findItem(R.id.control_logout);
+        MenuItem menuItemLogin = menu.findItem(R.id.control_login);
+
         if(MainActivity.USER.getId() == User.USER_NULL){
-            menuItemNewPost.setVisible(false);
             menuItemLogout.setVisible(false);
             menuItemUpdateUser.setVisible(false);
         }
-
-        if(MainActivity.USER.getLevel() == 3){
-            menuItemNewPost.setVisible(true);
-        }
         else{
-            menuItemNewPost.setVisible(false);
+            menuItemLogin.setVisible(false);
         }
 
-        menuOption = menu;
-        MenuItem menuItemFilter = menuOption.getItem(0);
-        if((currentFragment == POST_MANAGEMENT && (MainActivity.USER.getLevel() == 1 || MainActivity.USER.getLevel() == 2))
-                || currentFragment == USER_MANAGEMENT && MainActivity.USER.getLevel() == 1
-                || currentFragment == POSTED_POST && (MainActivity.USER.getLevel() == 3) ){
-            menuItemFilter.setVisible(true);
-        }
-        else{
-            menuItemFilter.setVisible(false);
-        }
+        alertHelper.setCallback(this);
+        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                Intent intent;
+                switch (item.getItemId()){
+                    case R.id.control_home:
+                        finish();
+                        break;
+                    case R.id.control_update_information:
+                        intent = new Intent(UserControlActivity.this, UserActionActivity.class);
+                        intent.putExtra("option", "update_user");
+                        startActivity(intent);
+                        finish();
+                        break;
+                    case R.id.control_login:
+                        intent = new Intent(UserControlActivity.this, UserActionActivity.class);
+                        startActivity(intent);
+                        finish();
+                        break;
+                    case R.id.control_logout:
+                        alertHelper.alert("Xác nhận", "Bạn có chắc chắn muốn đăng xuất", false,
+                                "Xác nhận", "Hủy bỏ", Constant.LOGOUT);
+                        break;
+                }
 
-        return true;
-    }
+                return false;
+            }
+        });
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        Intent intent;
-        switch (item.getItemId()){
-            case R.id.control_management_filter:
-                handleShowFilter();
-                break;
-            case R.id.control_home:
-                finish();
-                break;
-            case R.id.control_new_post:
-                intent = new Intent(UserControlActivity.this, NewPostActivity.class);
-                intent.putExtra("post_id", -1);
-                startActivity(intent);
-                finish();
-                break;
-            case R.id.control_update_information:
-                intent = new Intent(UserControlActivity.this, UserActionActivity.class);
-                intent.putExtra("option", "update_user");
-                startActivity(intent);
-                finish();
-                break;
-            case R.id.control_logout:
-                alertHelper.setCallback(this);
-                alertHelper.alert("Xác nhận", "Bạn có chắc chắn muốn đăng xuất", false,
-                        "Xác nhập", "Hủy bỏ", Constant.LOGOUT);
-                break;
-        }
-        return super.onOptionsItemSelected(item);
+        popupMenu.show();
     }
 
     private void handleShowFilter(){
-        if(this.currentFragment == POST_MANAGEMENT || this.currentFragment == POSTED_POST){
+        if(this.optionManagement == POST || this.optionManagement == POST){
             handlePostFilter();
         }
         else{
@@ -390,4 +397,6 @@ public class UserControlActivity extends AppCompatActivity implements AlertHelpe
     public void onNegativeButtonClick(int option) {
 
     }
+
+
 }
