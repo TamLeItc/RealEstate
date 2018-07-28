@@ -1,25 +1,19 @@
 package com.qtctek.realstate.view.user_control.user_management;
 
-import android.app.AlertDialog;
-import android.app.Dialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.qtctek.realstate.R;
 import com.qtctek.realstate.common.general.Constant;
@@ -27,7 +21,6 @@ import com.qtctek.realstate.dto.User;
 import com.qtctek.realstate.helper.AlertHelper;
 import com.qtctek.realstate.helper.ToastHelper;
 import com.qtctek.realstate.presenter.user_control.user_management.PresenterUserManagement;
-import com.qtctek.realstate.view.new_post.activity.NewPostActivity;
 import com.qtctek.realstate.view.post_news.activity.MainActivity;
 import com.qtctek.realstate.view.user_control.activity.UserControlActivity;
 import com.qtctek.realstate.view.user_control.interfaces.ManagementFilterCallback;
@@ -187,7 +180,7 @@ public class UserManagementFragment extends Fragment implements ViewHandleUserMa
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()){
-                    case R.id.control_update_status:
+                    case R.id.action_update_status:
                         if(mArrUser.get(mPositionClick).getLevel() == 1){
                             ((UserControlActivity)getActivity()).alertHelper.alert("Lỗi",
                                     "Bạn không thể thực thay đổi trạng thái môt" +

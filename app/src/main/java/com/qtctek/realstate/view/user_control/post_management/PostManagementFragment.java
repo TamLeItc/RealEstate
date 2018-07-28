@@ -181,7 +181,7 @@ public class PostManagementFragment extends Fragment implements ViewHandlePostMa
         mRlPostItem.setBackground(getResources().getDrawable(R.drawable.custom_border_normal));
 
         if(mArrProduct.get(mPositionClick).getStatus().equals("3")){
-            MenuItem menuItem = popupMenu.getMenu().findItem(R.id.control_accept_post);
+            MenuItem menuItem = popupMenu.getMenu().findItem(R.id.action_accept_post);
             menuItem.setVisible(false);
         }
 
@@ -190,17 +190,17 @@ public class PostManagementFragment extends Fragment implements ViewHandlePostMa
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
-                    case R.id.control_view_detail:
+                    case R.id.action_view_detail:
                         Intent intent = new Intent(getActivity(), PostDetailActivity.class);
                         intent.putExtra("product_id", mArrProduct.get(mPositionClick).getId());
                         startActivity(intent);
                         break;
-                    case R.id.control_accept_post:
+                    case R.id.action_accept_post:
                         ((UserControlActivity)getActivity()).alertHelper.alert("Xác nhận",
                                 "Bạn chắc chắc muốn duyệt bài đăng này", false,
                                 "Xác nhận", "Hủy bỏ", Constant.ACCEPT);
                         break;
-                    case R.id.control_delete_post:
+                    case R.id.action_delete_post:
                         ((UserControlActivity)getActivity()).alertHelper.alert("Xác nhận",
                                 "Bạn chắc chắc muốn duyệt bài đăng này", false,
                                 "Xác nhận", "Hủy bỏ", Constant.DELETE);

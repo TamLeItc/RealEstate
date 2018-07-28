@@ -182,18 +182,18 @@ public class PostedPostFragment extends Fragment implements ViewHandlePostedPost
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()){
-                    case R.id.control_view_detail:
+                    case R.id.action_view_detail:
                         Intent intent = new Intent(getActivity(), PostDetailActivity.class);
                         intent.putExtra("product_id", mArrProduct.get(mPositionClick).getId());
                         startActivity(intent);
                         break;
-                    case R.id.control_edit_post:
+                    case R.id.action_edit_post:
 
                         ((UserControlActivity)getActivity()).alertHelper.alert("Xác nhận",
                                 getActivity().getResources().getString(R.string.confirm_edit_product), false, "Xác nhận",
                                 "Hủy bỏ", Constant.EDIT);
                         break;
-                    case R.id.control_delete_post:
+                    case R.id.action_delete_post:
                         ((UserControlActivity)getActivity()).alertHelper.alert("Xác nhận",
                                 "Bạn có chắc chắn xóa bài đăng này", false, "Xác nhận",
                                 "Hủy bỏ", Constant.DELETE);

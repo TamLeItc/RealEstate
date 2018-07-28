@@ -450,7 +450,6 @@ public class MapPostNewsFragment extends Fragment implements OnMapReadyCallback,
                 .icon(BitmapDescriptorFactory.fromBitmap(iconFactory.makeIcon(message)))
                 .anchor(iconFactory.getAnchorU(), iconFactory.getAnchorV()));
 
-
         return marker;
     }
 

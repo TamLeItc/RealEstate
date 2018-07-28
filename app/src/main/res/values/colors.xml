@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#CD2213</color>
+    <color name="colorPrimary">#ffffff</color>
     <color name="colorPrimaryDark">#333333</color>
     <color name="colorAccent">#2068A4</color>
 
@@ -29,6 +29,7 @@
     <color name="colorUser">#5b5b5b</color>
     <color name="colorMainLight">#60b6ff</color>
     <color name="colorRed">#ea4d40</color>
+    <color name="colorPink">#CA8A8B</color>
     <color name="colorPostNotActive">#fff6f6</color>
     <color name="colorPostActive">#f1f8ff</color>
     <color name="colorBtnMoreView">#10ffffff</color>

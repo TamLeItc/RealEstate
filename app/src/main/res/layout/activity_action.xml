@@ -10,7 +10,7 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/_60dp"
-        android:background="@drawable/icon_shadow_black"
+        android:background="@color/colorWhite"
         app:popupTheme="@style/AppTheme.PopupOverlay"
         app:contentInsetStart="@dimen/_0dp">
 

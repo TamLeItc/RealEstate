@@ -108,12 +108,12 @@ public class SavedPostFragment extends Fragment implements ViewHandleSavedPost,
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
-                    case R.id.control_view_detail:
+                    case R.id.action_view_detail:
                         Intent intent = new Intent(getActivity(), PostDetailActivity.class);
                         intent.putExtra("product_id", mArrListProduct.get(mPositionClick).getId());
                         startActivity(intent);
                         break;
-                    case R.id.control_un_save:
+                    case R.id.action_un_save:
                         ((UserControlActivity)getActivity()).dialogHelper.show();
                         String id = mArrListProduct.get(mPositionClick).getId() + "";
                         ListPostNewsFragment.LIST_SAVED_PRODUCT_ID.remove(id);

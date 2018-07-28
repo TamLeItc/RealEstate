@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout android:layout_width="wrap_content"
+<RelativeLayout
+    android:id="@+id/rl_image_detail"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_marginRight="@dimen/_10dp"
     android:layout_gravity="center_horizontal"
@@ -8,19 +10,20 @@
     <Button
         android:id="@+id/btn_delete"
         android:layout_alignParentRight="true"
-        android:layout_width="@dimen/_20dp"
-        android:layout_height="@dimen/_20dp"
+        android:layout_width="@dimen/_30dp"
+        android:layout_height="@dimen/_30dp"
         android:background="@drawable/icon_close_black_24dp"/>
 
     <LinearLayout
-        android:padding="@dimen/_10dp"
+        android:padding="@dimen/_15dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 
         <ImageView
+            android:src="@drawable/icon_product"
             android:id="@+id/imv_image"
-            android:layout_width="@dimen/_170dp"
-            android:layout_height="@dimen/_120dp"
+            android:layout_width="@dimen/_150dp"
+            android:layout_height="@dimen/_100dp"
             android:scaleType="centerCrop"
             xmlns:android="http://schemas.android.com/apk/res/android" />
 

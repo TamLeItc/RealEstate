@@ -4,19 +4,22 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import com.kofigyan.stateprogressbar.StateProgressBar;
 import com.qtctek.realstate.R;
+import com.qtctek.realstate.common.AppUtils;
 import com.qtctek.realstate.common.general.Constant;
 import com.qtctek.realstate.helper.AlertHelper;
 import com.qtctek.realstate.dto.Photo;
@@ -25,9 +28,12 @@ import com.qtctek.realstate.helper.DialogHelper;
 import com.qtctek.realstate.helper.KeyboardHelper;
 import com.qtctek.realstate.helper.ToastHelper;
 import com.qtctek.realstate.presenter.new_post.PresenterNewPost;
+import com.qtctek.realstate.view.new_post.description_information.DescriptionInformationFragment;
 import com.qtctek.realstate.view.new_post.interfaces.ViewHandleModelNewPost;
 import com.qtctek.realstate.presenter.post_detail.PresenterPostDetail;
 import com.qtctek.realstate.view.new_post.adapter.NewPostAdapter;
+import com.qtctek.realstate.view.new_post.map_information.fragment.MapInformationFragment;
+import com.qtctek.realstate.view.new_post.product_information.fragment.ProductInformationFragment;
 import com.qtctek.realstate.view.post_detail.interfaces.ViewHandlePostDetail;
 import com.qtctek.realstate.view.post_news.activity.MainActivity;
 import com.qtctek.realstate.view.new_post.images_information.ImagesInformationFragment;
@@ -38,27 +44,27 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 
 public class NewPostActivity extends AppCompatActivity implements ViewHandleModelNewPost, ViewHandlePostDetail,
-        View.OnTouchListener, View.OnClickListener, AlertHelper.AlertHelperCallback {
+        View.OnTouchListener, View.OnClickListener, AlertHelper.AlertHelperCallback, ViewPager.OnPageChangeListener {
 
     public ViewPager viewPaper;
     private Toolbar mToolbar;
-
-    public static boolean IS_UPDATE = false;
+    private Fragment mCurrentFragment;
+    private TextView mTxvToolbarTitle;
+    private Menu mMenu;
 
     public AlertHelper alertHelper;
     public ToastHelper toastHelper;
     public DialogHelper dialogHelper;
     public KeyboardHelper keyboardHelper;
 
-    public static Product PRODUCT;
+    public static boolean IS_UPDATE = false;
+    public Product product;
     private boolean mDoubleBackToExitPressedOnce = false;
-
-    private String[] mArrDescriptionDataProgressBarState;
+    private int mCurrentPositionFragment;
 
     private ImageView mImvBack;
     private ImageView mImvNext;
     private MenuItem mMenuItem;
-    public StateProgressBar progressBarState;
 
     private NewPostAdapter mNewPostAdapter;
 
@@ -66,8 +72,6 @@ public class NewPostActivity extends AppCompatActivity implements ViewHandleMode
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_post);
-
-        this.mArrDescriptionDataProgressBarState = getResources().getStringArray(R.array.description_data_progressbar_state);
 
         initViews();
         addToolbar();
@@ -85,21 +89,21 @@ public class NewPostActivity extends AppCompatActivity implements ViewHandleMode
         this.mImvBack = findViewById(R.id.imv_back);
         this.mImvNext = findViewById(R.id.imv_next);
         this.mToolbar = findViewById(R.id.toolbar);
-        this.progressBarState = findViewById(R.id.progress_bar_state);
+        this.mTxvToolbarTitle = findViewById(R.id.txv_toolbar_title);
 
         viewPaper.setOnTouchListener(this);
+        viewPaper.addOnPageChangeListener(this);
         this.mImvBack.setOnClickListener(this);
         this.mImvNext.setOnClickListener(this);
-
-        this.progressBarState.setStateDescriptionData(mArrDescriptionDataProgressBarState);
     }
 
     private void addControl() {
         FragmentManager fragmentManager = getSupportFragmentManager();
         mNewPostAdapter = new NewPostAdapter(fragmentManager);
         viewPaper.setAdapter(mNewPostAdapter);
-        viewPaper.setCurrentItem(0);
 
+        this.mCurrentFragment = getSupportFragmentManager().getFragments().get(0);
+        this.mCurrentPositionFragment = 0;
     }
 
     private void addToolbar(){
@@ -135,13 +139,15 @@ public class NewPostActivity extends AppCompatActivity implements ViewHandleMode
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.option_menu_new_post, menu);
+
+        this.mMenu = menu;
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(final MenuItem item) {
 
-        if(this.viewPaper.getCurrentItem() <= 4){
+        if(this.viewPaper.getCurrentItem() <= 4 && item.getItemId() != R.id.action_save_temp){
 
             alertHelper.setCallback(this);
             alertHelper.alert("", "Bạn chắc chắn thoát ra", false, "Xác nhận",
@@ -156,6 +162,27 @@ public class NewPostActivity extends AppCompatActivity implements ViewHandleMode
     }
 
 
+    private void handleSaveTemp(){
+        switch (mCurrentPositionFragment){
+            case 0:
+                ((ImagesInformationFragment) mCurrentFragment).isSaveTemp = true;
+                ((ImagesInformationFragment) mCurrentFragment).handleSaveImageInformation();
+                break;
+            case 1:
+                ((ProductInformationFragment) mCurrentFragment).isSaveTemp = true;
+                ((ProductInformationFragment) mCurrentFragment).handleSaveProductInformation();
+                break;
+            case 2:
+                ((DescriptionInformationFragment) mCurrentFragment).isSaveTemp = true;
+                ((DescriptionInformationFragment) mCurrentFragment).handleSaveDescriptionInformation();
+                break;
+            case 3:
+                ((MapInformationFragment) mCurrentFragment).isSaveTemp = true;
+                ((MapInformationFragment) mCurrentFragment).handleSaveMapInformation();
+                break;
+        }
+    }
+
     private void handleOptionItemSelected(MenuItem item){
         switch (item.getItemId()){
             case R.id.action_home:
@@ -165,6 +192,9 @@ public class NewPostActivity extends AppCompatActivity implements ViewHandleMode
                 Intent intent1 = new Intent(NewPostActivity.this, UserControlActivity.class);
                 startActivity(intent1);
                 finish();
+                break;
+            case R.id.action_save_temp:
+                handleSaveTemp();
                 break;
         }
     }
@@ -179,8 +209,8 @@ public class NewPostActivity extends AppCompatActivity implements ViewHandleMode
                     "Xác nhận", Constant.INSERT_DATABASE);
         }
         else{
-            PRODUCT = new Product();
-            PRODUCT.setId(productId);
+            product = new Product();
+            product.setId(productId);
             addControl();
         }
     }
@@ -222,7 +252,7 @@ public class NewPostActivity extends AppCompatActivity implements ViewHandleMode
     public void onHandleDataPostDetailSuccessful(Product product, ArrayList<Photo> arrPhoto) {
 
         dialogHelper.dismiss();
-        NewPostActivity.PRODUCT = product;
+        this.product = product;
 
         addControl();
 
@@ -260,7 +290,7 @@ public class NewPostActivity extends AppCompatActivity implements ViewHandleMode
 
         ImagesInformationFragment.PROGRESSBAR.setVisibility(View.VISIBLE);
 
-        String url = MainActivity.WEB_SERVER + "images/" + NewPostActivity.PRODUCT.getThumbnail();
+        String url = MainActivity.WEB_SERVER + "images/" + product.getThumbnail();
 
         if(url.equals("")){
             ImagesInformationFragment.PROGRESSBAR.setVisibility(View.GONE);
@@ -323,31 +353,14 @@ public class NewPostActivity extends AppCompatActivity implements ViewHandleMode
                 else if(viewPaper.getCurrentItem() < 4){
                     int currentPage = viewPaper.getCurrentItem();
                     viewPaper.setCurrentItem(currentPage - 1);
-                    setCurrentStateNumberProgressBar(viewPaper.getCurrentItem());
                 }
                 break;
             case R.id.imv_next:
                 if(viewPaper.getCurrentItem() < 3){
                     int currentPage = viewPaper.getCurrentItem();
                     viewPaper.setCurrentItem(currentPage + 1);
-                    setCurrentStateNumberProgressBar(viewPaper.getCurrentItem());
                 }
 
-        }
-    }
-
-    public void setCurrentStateNumberProgressBar(int current){
-        if(current == 0){
-            progressBarState.setCurrentStateNumber(StateProgressBar.StateNumber.ONE);
-        }
-        else if(current == 1){
-            progressBarState.setCurrentStateNumber(StateProgressBar.StateNumber.TWO);
-        }
-        else if(current == 2){
-            progressBarState.setCurrentStateNumber(StateProgressBar.StateNumber.THREE);
-        }
-        else if(current == 3){
-            progressBarState.setCurrentStateNumber(StateProgressBar.StateNumber.FOUR);
         }
     }
 
@@ -379,5 +392,48 @@ public class NewPostActivity extends AppCompatActivity implements ViewHandleMode
     @Override
     public void onNegativeButtonClick(int option) {
 
+    }
+
+    @Override
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+    }
+
+    @Override
+    public void onPageSelected(int position) {
+        if(position == 0){
+            this.mCurrentFragment = getSupportFragmentManager().getFragments().get(0);
+        }
+        else{
+            this.mCurrentFragment = getSupportFragmentManager().getFragments().get(1);
+        }
+        mCurrentPositionFragment = position;
+
+        switch (position){
+            case 0:
+                this.mTxvToolbarTitle.setText(getResources().getString(R.string.new_post_image));
+                break;
+            case 1:
+                this.mTxvToolbarTitle.setText(getResources().getString(R.string.new_post_information));
+                break;
+            case 2:
+                this.mTxvToolbarTitle.setText(getResources().getString(R.string.new_post_description));
+                break;
+            case 3:
+                this.mTxvToolbarTitle.setText(getResources().getString(R.string.new_post_location));
+                break;
+            case 4:
+                MenuItem menuItem = mMenu.getItem(2);
+                menuItem.setVisible(false);
+                this.mTxvToolbarTitle.setText(getResources().getString(R.string.new_post_finish));
+                break;
+        }
+
+    }
+
+    @Override
+    public void onPageScrollStateChanged(int state) {
+        if(state == 0){
+            AppUtils.hideKeyboard(this);
+        }
     }
 }

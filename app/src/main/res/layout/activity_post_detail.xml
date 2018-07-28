@@ -124,7 +124,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:text="2,2 tỷ"
-                                    android:textColor="@color/colorPrimary"
+                                    android:textColor="@color/colorRed"
                                     android:textSize="@dimen/_14sp"
                                     android:textStyle="bold" />
 
@@ -134,7 +134,7 @@
                                     android:textSize="@dimen/_12sp"
                                     android:layout_toRightOf="@id/txv_price"
                                     android:text="@string/for_one_month"
-                                    android:textColor="@color/colorPrimary"
+                                    android:textColor="@color/colorRed"
                                     android:layout_marginTop="@dimen/_3dp"
                                     android:id="@+id/txv_a_month"/>
                                 

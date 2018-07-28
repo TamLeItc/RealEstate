@@ -2,10 +2,6 @@ package com.qtctek.realstate.view.new_post.map_information.fragment;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.AlertDialog;
-import android.app.Dialog;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -13,17 +9,13 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
-import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
@@ -37,12 +29,10 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.kofigyan.stateprogressbar.StateProgressBar;
 import com.qtctek.realstate.R;
 import com.qtctek.realstate.common.AppUtils;
 import com.qtctek.realstate.common.general.Constant;
 import com.qtctek.realstate.helper.AlertHelper;
-import com.qtctek.realstate.helper.KeyboardHelper;
 import com.qtctek.realstate.helper.ToastHelper;
 import com.qtctek.realstate.presenter.new_post.PresenterNewPost;
 import com.qtctek.realstate.view.new_post.interfaces.ViewHandleModelNewPost;
@@ -65,16 +55,15 @@ public class MapInformationFragment extends Fragment implements OnMapReadyCallba
     private GoogleMap mMap;
     private Marker mMarker;
 
-    private Button mBtnSave;
     private Button mBtnPost;
     private android.app.Fragment mFrgSearch;
     private EditText mEdtSearch;
     public FrameLayout flSearch;
-    private TextView mTxvInformation;
 
     private String mMapLat = "";
     private String mMapLng = "";
-    private String mOption;
+    public boolean isSaveTemp;
+    private boolean mIsEditedLocation = false;
 
     @Nullable
     @Override
@@ -95,13 +84,10 @@ public class MapInformationFragment extends Fragment implements OnMapReadyCallba
     }
 
     private void initViews(){
-        this.mBtnSave = mView.findViewById(R.id.btn_save_temp);
         this.mBtnPost = mView.findViewById(R.id.btn_post);
         this.mEdtSearch = mView.findViewById(R.id.edt_search);
         this.flSearch = mView.findViewById(R.id.fl_search);
-        this.mTxvInformation = mView.findViewById(R.id.txv_information);
 
-        this.mBtnSave.setOnClickListener(this);
         this.mBtnPost.setOnClickListener(this);
         this.mEdtSearch.setOnClickListener(this);
 
@@ -202,13 +188,13 @@ public class MapInformationFragment extends Fragment implements OnMapReadyCallba
 
         mMap = googleMap;
 
-        this.mMapLat = NewPostActivity.PRODUCT.getMapLat();
-        this.mMapLng = NewPostActivity.PRODUCT.getMapLng();
+        this.mMapLat = ((NewPostActivity)getActivity()).product.getMapLat();
+        this.mMapLng = ((NewPostActivity)getActivity()).product.getMapLng();
         try{
 
             LatLng latLng = new LatLng(Double.parseDouble(mMapLat), Double.parseDouble(mMapLng));
             mMarker = mMap.addMarker(new MarkerOptions().position(latLng));
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 14));
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 16));
         }
         catch (Exception e){
         }
@@ -217,8 +203,6 @@ public class MapInformationFragment extends Fragment implements OnMapReadyCallba
         mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
             public void onMapClick(LatLng latLng) {
-
-                mTxvInformation.setVisibility(View.GONE);
 
                 try{
                     mMarker.remove();
@@ -234,6 +218,8 @@ public class MapInformationFragment extends Fragment implements OnMapReadyCallba
                 mMapLng = location[1].trim();
 
                 mMarker = mMap.addMarker(new MarkerOptions().position(latLng).title("Nhà bán tại đây"));
+
+                mIsEditedLocation = true;
             }
         });
 
@@ -257,35 +243,40 @@ public class MapInformationFragment extends Fragment implements OnMapReadyCallba
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(mapLat, mapLng), 16));
     }
 
-    public void handleNext(){
+    public void handleSaveMapInformation(){
+
+        if(!mIsEditedLocation && (isSaveTemp || (!isSaveTemp && ((NewPostActivity)getActivity()).product.getStatus() == "3"))){
+            return;
+        }
+
+        String option = "post";
+        if(isSaveTemp){
+            option = "save";
+        }
+
         ((NewPostActivity)getActivity()).dialogHelper.show();
 
-        NewPostActivity.PRODUCT.setMapLat(this.mMapLat);
-        NewPostActivity.PRODUCT.setMapLng(this.mMapLng);
+        ((NewPostActivity)getActivity()).product.setMapLat(this.mMapLat);
+        ((NewPostActivity)getActivity()).product.setMapLng(this.mMapLng);
         new PresenterNewPost(this).handleUpdateLocationProduct(
-                NewPostActivity.PRODUCT.getId(),
-                NewPostActivity.PRODUCT.getMapLat(),
-                NewPostActivity.PRODUCT.getMapLng(),
-                mOption
+                ((NewPostActivity)getActivity()).product.getId(),
+                ((NewPostActivity)getActivity()).product.getMapLat(),
+                ((NewPostActivity)getActivity()).product.getMapLng(),
+                option
         );
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()){
-            case R.id.imb_save:
-                mMap.clear();
-                mOption = "save";
-                handleNext();
-                break;
             case R.id.btn_post:
-                mOption = "post";
+                isSaveTemp = false;
                 mMap.clear();
                 if(this.mMapLat.equals("")){
                     ((NewPostActivity)getActivity()).toastHelper.toast("Bạn chưa chọn vị trí nhà. Không thể đăng!!!", ToastHelper.LENGTH_SHORT);
                 }
                 else{
-                    handleNext();
+                    handleSaveMapInformation();
                 }
                 break;
             case R.id.edt_search:
@@ -324,7 +315,7 @@ public class MapInformationFragment extends Fragment implements OnMapReadyCallba
     public void onUpdateMapInformation(boolean status) {
         ((NewPostActivity)getActivity()).dialogHelper.dismiss();
         if(status){
-            if(mOption.equals("save")){
+            if(isSaveTemp){
                 mMarker.remove();
                 mMarker = mMap.addMarker(new MarkerOptions().position(new LatLng(Double.parseDouble(mMapLat), Double.parseDouble(mMapLng))).title("Nhà bán tại đây"));
                 ((NewPostActivity)getActivity()).toastHelper.toast("Lưu thành công", ToastHelper.LENGTH_SHORT);
@@ -333,8 +324,8 @@ public class MapInformationFragment extends Fragment implements OnMapReadyCallba
                 mMap.clear();
                 ViewPager viewPager = getActivity().findViewById(R.id.view_pager);
                 viewPager.setCurrentItem(4);
-                ((NewPostActivity)getActivity()).progressBarState.setCurrentStateNumber(StateProgressBar.StateNumber.FIVE);
             }
+            mIsEditedLocation = false;
         }
         else{
             ((NewPostActivity)getActivity()).toastHelper.toast("Lỗi lưu dữ liệu!!!", ToastHelper.LENGTH_SHORT);

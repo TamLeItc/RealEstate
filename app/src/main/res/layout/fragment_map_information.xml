@@ -1,89 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView android:layout_width="match_parent"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:scrollbars="none"
-    android:overScrollMode="never"
-    android:background="@color/colorWhite"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    android:background="@color/colorWhite">
 
-    <RelativeLayout
-        xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:padding="@dimen/_8dp">
+        android:layout_above="@+id/btn_next_to"
+        android:layout_centerInParent="true">
 
-        <fragment
-            android:layout_below="@+id/txv_title"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="350dp"
-            android:id="@+id/frg_map"
-            android:name="com.google.android.gms.maps.SupportMapFragment"/>
+            android:layout_height="wrap_content">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/txv_information"
-            android:text="@string/map_information_text"
-            android:layout_centerInParent="true"
-            android:textSize="@dimen/_9sp"
-            android:textColor="@color/colorPrimary"/>
+            <fragment
+                android:id="@+id/frg_map"
+                android:name="com.google.android.gms.maps.SupportMapFragment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="@dimen/_44dp"
+                android:layout_marginLeft="@dimen/_4dp"
+                android:layout_marginRight="@dimen/_4dp"/>
 
-        <EditText
-            android:maxLines="1"
-            android:ellipsize="end"
-            android:layout_marginLeft="@dimen/_8dp"
-            android:layout_marginRight="@dimen/_65dp"
-            android:layout_marginTop="@dimen/_11dp"
-            android:focusable="false"
-            android:id="@+id/edt_search"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/_40dp"
-            android:layout_below="@+id/txv_title"
-            android:background="@color/colorWhite"
-            android:hint="@string/search_suggestion"
-            android:textSize="@dimen/_10sp"
-            android:paddingLeft="@dimen/_10dp"
-            android:paddingRight="@dimen/_8dp"
-            android:drawableRight="@drawable/icon_search_black_24dp"/>
-
-        <FrameLayout
-            android:layout_margin="@dimen/_8dp"
-            android:layout_below="@+id/txv_title"
-            android:layout_width="match_parent"
-            android:layout_height="334dp"
-            android:id="@+id/fl_search"
-            android:visibility="gone"/>
-
-        <LinearLayout
-            android:layout_below="@+id/frg_map"
-            android:layout_marginTop="@dimen/_20dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="2">
-
-            <Button
-                android:minHeight="@dimen/_0dp"
-                android:layout_marginRight="@dimen/_15dp"
-                android:layout_weight="1"
+            <EditText
+                android:id="@+id/edt_search"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_40dp"
-                android:background="@drawable/custom_btn_main"
-                android:text="@string/save_temp"
-                android:id="@+id/btn_save_temp"
-                android:textSize="@dimen/_10sp"/>
-
-            <Button
-                android:minHeight="@dimen/_0dp"
-                android:layout_weight="1"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/_40dp"
-                android:background="@drawable/custom_btn_main"
-                android:text="@string/post"
-                android:id="@+id/btn_post"
+                android:layout_below="@+id/txv_title"
+                android:layout_marginLeft="@dimen/_12dp"
+                android:layout_marginRight="@dimen/_65dp"
+                android:layout_marginTop="@dimen/_12dp"
+                android:background="@drawable/icon_shadow_black"
+                android:drawableRight="@drawable/icon_search_black_24dp"
+                android:ellipsize="end"
+                android:focusable="false"
+                android:hint="@string/search_suggestion"
+                android:maxLines="1"
+                android:paddingLeft="@dimen/_10dp"
+                android:paddingRight="@dimen/_8dp"
                 android:textSize="@dimen/_10sp"
-                android:layout_marginLeft="@dimen/_15dp"/>
-        </LinearLayout>
+                android:inputType="textNoSuggestions"/>
 
-    </RelativeLayout>
+            <FrameLayout
+                android:id="@+id/fl_search"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/txv_title"
+                android:layout_marginTop="@dimen/_8dp"
+                android:layout_marginLeft="@dimen/_12dp"
+                android:layout_marginBottom="@dimen/_52dp"
+                android:layout_marginRight="@dimen/_12dp"
+                android:visibility="gone"/>
 
-</ScrollView>
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btn_post"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_40dp"
+        android:layout_alignParentBottom="true"
+        android:layout_weight="1"
+        android:background="@color/colorPink"
+        android:minHeight="@dimen/_0dp"
+        android:text="@string/post"
+        android:textColor="@color/colorWhite"
+        android:textSize="@dimen/_10sp" />
+
+</RelativeLayout>

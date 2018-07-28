@@ -15,7 +15,6 @@
     <string name="saved_search_short">T.kiếm đã lưu</string>
     <string name="account_manage">Quản lí tài khoản</string>
     <string name="account">Tài khoản</string>
-
     <string name="about_us">Về chúng tôi</string>
     <string name="introduction">Giới thiệu</string>
     <string name="feedback">Phản hồi</string>
@@ -165,6 +164,11 @@
     <string name="formality" >Loại nhà</string>
     <string name="saved_information">Thông tin đã lưu</string>
     <string name="management">Quản lí</string>
+    <string name="new_post_image">Đăng tin - 1/4 Hình ảnh</string>
+    <string name="new_post_information">Đăng tin - 2/4 Thông tin</string>
+    <string name="new_post_description">Đăng tin - 3/4 Mô tả</string>
+    <string name="new_post_location">Đăng tin - 4/4 Vị trí</string>
+    <string name="new_post_finish">Đăng tin - Hoàn tất</string>
 
     <string name="google_api_key_value">AIzaSyAowoC2lTSVNGAJZkimZBlPuxPy0so5a_A</string>
 

@@ -44,12 +44,12 @@ public class NewPostSuccess extends Fragment implements View.OnClickListener {
         switch (v.getId()){
             case R.id.btn_new_post:
                 Intent intent = new Intent(getContext(), NewPostActivity.class);
-                int postId = intent.getIntExtra("post_id", -1);
                 startActivity(intent);
                 getActivity().finish();
                 break;
             case R.id.btn_posted_post:
                 Intent intent1 = new Intent(getContext(), UserControlActivity.class);
+                intent1.putExtra("fragment", 1);
                 startActivity(intent1);
                 getActivity().finish();
         }

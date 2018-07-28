@@ -1,30 +1,23 @@
 package com.qtctek.realstate.view.user_control.saved_search;
 
-import android.app.Dialog;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.PopupMenu;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.qtctek.realstate.R;
 import com.qtctek.realstate.dto.Condition;
 import com.qtctek.realstate.helper.ToastHelper;
 import com.qtctek.realstate.presenter.user_control.save_search.PresenterSavedSearch;
-import com.qtctek.realstate.view.post_detail.activity.PostDetailActivity;
-import com.qtctek.realstate.view.post_news.activity.MainActivity;
 import com.qtctek.realstate.view.post_news.fragment.ListPostNewsFragment;
 import com.qtctek.realstate.view.post_news.fragment.MapPostNewsFragment;
 import com.qtctek.realstate.view.user_control.activity.UserControlActivity;
@@ -119,11 +112,11 @@ public class SavedSearchFragment extends Fragment implements ViewHandleSavedSear
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
-                    case R.id.control_view_detail:
+                    case R.id.action_view_detail:
                         MapPostNewsFragment.ON_EVENT_FROM_ACTIVITY.onHandleSearch(ListPostNewsFragment.LIST_SAVED_SEARCH.get(position));
                         getActivity().finish();
                         break;
-                    case R.id.control_un_save:
+                    case R.id.action_un_save:
                         ((UserControlActivity)getActivity()).dialogHelper.show();
                         handleUpdateSavedSearch();
                         break;

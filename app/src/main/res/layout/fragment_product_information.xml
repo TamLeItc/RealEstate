@@ -1,416 +1,426 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<ScrollView android:layout_width="match_parent"
+<RelativeLayout android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:overScrollMode="never"
-    android:scrollbars="none"
+    android:orientation="vertical"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:background="@color/colorWhite">
 
-    <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    <ScrollView android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="@dimen/_16dp"
-        android:orientation="vertical">
-        
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" 
-            android:text="@string/normal_information"
-            android:textSize="@dimen/_10sp"
-            android:textColor="@color/colorPrimaryDark" />
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/_1dp"
-            android:layout_marginBottom="@dimen/_5dp"
-            android:background="@color/colorGrayLight"/>
-
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/title"
-            android:textSize="@dimen/_9sp"
-            android:layout_marginTop="@dimen/_5dp"/>
-
-        <EditText
-            android:selectAllOnFocus="true"
-            android:singleLine="true"
-            android:maxLines="1"
-            android:paddingLeft="@dimen/_5dp"
-            android:id="@+id/edt_title"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/_30dp"
-            android:textSize="@dimen/_9sp"
-            android:background="@drawable/custom_border_gray_backgroud_default" />
-
-        <RadioGroup
-            android:layout_height="wrap_content"
-            android:layout_width="match_parent"
-            android:weightSum="2"
-            android:orientation="horizontal">
-
-            <RadioButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="@dimen/_10sp"
-                android:text="@string/house_for_sale"
-                android:id="@+id/rdo_for_sale"
-                android:layout_weight="1"
-                android:checked="true"/>
-
-
-            <RadioButton
-                android:layout_weight="1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="@dimen/_10sp"
-                android:text="@string/rent_house"
-                android:id="@+id/rdo_rent"/>
-
-        </RadioGroup>
+        android:overScrollMode="never"
+        android:scrollbars="none"
+        android:paddingLeft="@dimen/_16dp"
+        android:paddingRight="@dimen/_16dp"
+        android:paddingTop="@dimen/_8dp"
+        android:paddingBottom="@dimen/_8dp"
+        android:id="@+id/scroll_view"
+        android:layout_above="@+id/btn_next_to">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:weightSum="2">
+            android:orientation="vertical">
 
-            <LinearLayout
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical"
-                android:layout_marginRight="@dimen/_15dp">
+                android:text="@string/normal_information"
+                android:textSize="@dimen/_10sp"
+                android:textColor="@color/colorMain" />
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_1dp"
+                android:layout_marginBottom="@dimen/_5dp"
+                android:background="@color/colorGrayLight"/>
 
-                <TextView
+
+            <TextView
+                android:textColor="@color/colorGrayDark"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/title"
+                android:textSize="@dimen/_9sp"
+                android:layout_marginTop="@dimen/_5dp"/>
+
+            <EditText
+                android:inputType="textNoSuggestions"
+                android:selectAllOnFocus="true"
+                android:singleLine="true"
+                android:maxLines="1"
+                android:paddingLeft="@dimen/_5dp"
+                android:id="@+id/edt_title"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_30dp"
+                android:textSize="@dimen/_9sp"
+                android:background="@drawable/custom_border_gray_backgroud_default" />
+
+            <RadioGroup
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:weightSum="2"
+                android:orientation="horizontal">
+
+                <RadioButton
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:text="@string/architecture"
-                    android:textSize="@dimen/_9sp"
-                    android:layout_marginTop="@dimen/_5dp"/>
-
-                <TextView
-                    android:paddingTop="@dimen/_5dp"
-                    android:paddingLeft="@dimen/_5dp"
-                    android:id="@+id/txv_architecture"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/_30dp"
-                    android:textSize="@dimen/_9sp"
-                    android:background="@drawable/custom_border_gray_backgroud_default"
-                    android:inputType="none"/>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/_5dp"
-                android:layout_weight="1"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_5dp"
-                    android:text="@string/type_product"
-                    android:textSize="@dimen/_9sp" />
-
-                <TextView
-                    android:id="@+id/txv_type"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/_30dp"
-                    android:background="@drawable/custom_border_gray_backgroud_default"
-                    android:inputType="none"
-                    android:paddingLeft="@dimen/_5dp"
-                    android:paddingTop="@dimen/_5dp"
-                    android:textSize="@dimen/_9sp" />
-
-            </LinearLayout>
+                    android:textSize="@dimen/_10sp"
+                    android:text="@string/house_for_sale"
+                    android:id="@+id/rdo_for_sale"
+                    android:layout_weight="1"
+                    android:checked="true"/>
 
 
-        </LinearLayout>
+                <RadioButton
+                    android:layout_weight="1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/_10sp"
+                    android:text="@string/rent_house"
+                    android:id="@+id/rdo_rent"/>
 
-
-
-
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/address_information"
-            android:textSize="@dimen/_10sp"
-            android:textColor="@color/colorPrimaryDark"
-            android:layout_marginTop="@dimen/_10dp"/>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/_1dp"
-            android:layout_marginBottom="@dimen/_5dp"
-            android:background="@color/colorGrayLight"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/province_city"
-            android:textSize="@dimen/_9sp"
-            android:layout_marginTop="@dimen/_5dp"/>
-
-        <TextView
-            android:paddingTop="@dimen/_5dp"
-            android:paddingLeft="@dimen/_5dp"
-            android:id="@+id/txv_city"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/_30dp"
-            android:textSize="@dimen/_9sp"
-            android:background="@drawable/custom_border_gray_backgroud_default" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/district"
-            android:textSize="@dimen/_9sp"
-            android:layout_marginTop="@dimen/_5dp"/>
-
-        <TextView
-            android:paddingTop="@dimen/_5dp"
-            android:paddingLeft="@dimen/_5dp"
-            android:id="@+id/txv_district"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/_30dp"
-            android:textSize="@dimen/_9sp"
-            android:background="@drawable/custom_border_gray_backgroud_default" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/address"
-            android:textSize="@dimen/_10sp"
-            android:layout_marginTop="@dimen/_5dp"/>
-
-        <EditText
-            android:selectAllOnFocus="true"
-            android:singleLine="true"
-            android:maxLines="1"
-            android:paddingLeft="@dimen/_5dp"
-            android:id="@+id/edt_address"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/_30dp"
-            android:textSize="@dimen/_9sp"
-            android:background="@drawable/custom_border_gray_backgroud_default" />
-
-        <TextView
-            android:singleLine="true"
-            android:maxLines="1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/detail_information"
-            android:textSize="@dimen/_10sp"
-            android:textColor="@color/colorPrimaryDark"
-            android:layout_marginTop="@dimen/_10dp"/>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/_1dp"
-            android:layout_marginBottom="@dimen/_5dp"
-            android:background="@color/colorGrayLight"/>
-
-        <LinearLayout
-            android:layout_marginTop="@dimen/_10dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_weight="2">
+            </RadioGroup>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical"
-                android:layout_marginRight="@dimen/_10dp">
+                android:orientation="horizontal"
+                android:weightSum="2">
 
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:layout_marginRight="@dimen/_15dp">
 
                     <TextView
+                        android:textColor="@color/colorGrayDark"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/price"
+                        android:layout_height="match_parent"
+                        android:text="@string/architecture"
                         android:textSize="@dimen/_9sp"
                         android:layout_marginTop="@dimen/_5dp"/>
 
                     <TextView
-                        android:visibility="gone"
-                        android:layout_width="wrap_content"
+                        android:textColor="@color/colorGrayDark"
+                        android:paddingTop="@dimen/_5dp"
+                        android:paddingLeft="@dimen/_5dp"
+                        android:id="@+id/txv_architecture"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_30dp"
+                        android:textSize="@dimen/_9sp"
+                        android:background="@drawable/custom_border_gray_backgroud_gray"
+                        android:inputType="none"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/_5dp"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:textColor="@color/colorGrayDark"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textSize="@dimen/_10sp"
-                        android:text="@string/for_one_month"
                         android:layout_marginTop="@dimen/_5dp"
-                        android:id="@+id/txv_a_month"/>
+                        android:text="@string/type_product"
+                        android:textSize="@dimen/_9sp" />
+
+                    <TextView
+                        android:textColor="@color/colorGrayDark"
+                        android:id="@+id/txv_type"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_30dp"
+                        android:background="@drawable/custom_border_gray_backgroud_gray"
+                        android:inputType="none"
+                        android:paddingLeft="@dimen/_5dp"
+                        android:paddingTop="@dimen/_5dp"
+                        android:textSize="@dimen/_9sp" />
 
                 </LinearLayout>
 
 
-                <EditText
-                    android:singleLine="true"
-                    android:maxLines="1"
-                    android:paddingStart="@dimen/_5dp"
-                    android:paddingRight="@dimen/_5dp"
-                    android:id="@+id/edt_price"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/_30dp"
-                    android:textSize="@dimen/_9sp"
-                    android:background="@drawable/custom_border_gray_backgroud_default"
-                    android:inputType="number"/>
-
             </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
+            <TextView
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical"
-                android:layout_marginLeft="@dimen/_10dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/area"
-                    android:textSize="@dimen/_9sp"
-                    android:layout_marginTop="@dimen/_5dp"/>
-
-                <EditText
-                    android:singleLine="true"
-                    android:maxLines="1"
-                    android:paddingStart="@dimen/_5dp"
-                    android:paddingRight="@dimen/_5dp"
-                    android:id="@+id/edt_area"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/_30dp"
-                    android:textSize="@dimen/_9sp"
-                    android:background="@drawable/custom_border_gray_backgroud_default"
-                    android:inputType="numberDecimal"/>
-
-            </LinearLayout>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_weight="2">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical"
-                android:layout_marginRight="@dimen/_10dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/quality_bedrooms"
-                    android:textSize="@dimen/_10sp"
-                    android:layout_marginTop="@dimen/_5dp"/>
-
-                <EditText
-                    android:singleLine="true"
-                    android:maxLines="1"
-                    android:paddingLeft="@dimen/_5dp"
-                    android:paddingRight="@dimen/_5dp"
-                    android:id="@+id/edt_bedrooms"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/_30dp"
-                    android:textSize="@dimen/_9sp"
-                    android:background="@drawable/custom_border_gray_backgroud_default"
-                    android:inputType="number"/>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical"
-                android:layout_marginLeft="@dimen/_10dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/quality_bathrooms"
-                    android:textSize="@dimen/_9sp"
-                    android:layout_marginTop="@dimen/_5dp"/>
-
-                <EditText
-                    android:singleLine="true"
-                    android:maxLines="1"
-                    android:paddingLeft="@dimen/_5dp"
-                    android:paddingRight="@dimen/_5dp"
-                    android:id="@+id/edt_bathrooms"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/_30dp"
-                    android:textSize="@dimen/_9sp"
-                    android:background="@drawable/custom_border_gray_backgroud_default"
-                    android:inputType="number"/>
-
-            </LinearLayout>
-
-        </LinearLayout>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/amenities"
-            android:textSize="@dimen/_9sp"
-            android:layout_marginTop="@dimen/_5dp"/>
-
-        <TextView
-            android:maxLines="2"
-            android:paddingTop="@dimen/_5dp"
-            android:paddingLeft="@dimen/_5dp"
-            android:id="@+id/txv_amenities"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/_65dp"
-            android:textSize="@dimen/_9sp"
-            android:background="@drawable/custom_border_gray_backgroud_default" />
-
-        <LinearLayout
-            android:layout_marginTop="@dimen/_20dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:paddingLeft="@dimen/_1dp">
-
-            <Button
-                android:layout_marginRight="@dimen/_15dp"
-                android:layout_weight="1"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/_40dp"
-                android:minHeight="@dimen/_0dp"
-                android:background="@drawable/custom_btn_main"
-                android:text="@string/save_temp"
-                android:id="@+id/btn_save_temp"
+                android:text="@string/address_information"
                 android:textSize="@dimen/_10sp"
-                android:layout_marginBottom="@dimen/_2dp"/>
+                android:textColor="@color/colorMain"
+                android:layout_marginTop="@dimen/_25dp"/>
 
-            <Button
-                android:layout_weight="1"
+            <View
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/_40dp"
-                android:minHeight="@dimen/_0dp"
-                android:background="@drawable/custom_btn_main"
-                android:text="@string/next_to"
-                android:id="@+id/btn_next_to"
+                android:layout_height="@dimen/_1dp"
+                android:layout_marginBottom="@dimen/_5dp"
+                android:background="@color/colorGrayLight"/>
+
+            <TextView
+                android:textColor="@color/colorGrayDark"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/province_city"
+                android:textSize="@dimen/_9sp"
+                android:layout_marginTop="@dimen/_5dp"/>
+
+            <TextView
+                android:textColor="@color/colorGrayDark"
+                android:paddingTop="@dimen/_5dp"
+                android:paddingLeft="@dimen/_5dp"
+                android:id="@+id/txv_city"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_30dp"
+                android:textSize="@dimen/_9sp"
+                android:background="@drawable/custom_border_gray_backgroud_gray" />
+
+            <TextView
+                android:textColor="@color/colorGrayDark"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/district"
+                android:textSize="@dimen/_9sp"
+                android:layout_marginTop="@dimen/_5dp"/>
+
+            <TextView
+                android:textColor="@color/colorGrayDark"
+                android:paddingTop="@dimen/_5dp"
+                android:paddingLeft="@dimen/_5dp"
+                android:id="@+id/txv_district"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_30dp"
+                android:textSize="@dimen/_9sp"
+                android:background="@drawable/custom_border_gray_backgroud_gray" />
+
+            <TextView
+                android:textColor="@color/colorGrayDark"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/address"
                 android:textSize="@dimen/_10sp"
-                android:layout_marginLeft="@dimen/_15dp"/>
+                android:layout_marginTop="@dimen/_5dp"/>
+
+            <EditText
+                android:inputType="textNoSuggestions"
+                android:textColor="@color/colorGrayDark"
+                android:selectAllOnFocus="true"
+                android:singleLine="true"
+                android:maxLines="1"
+                android:paddingLeft="@dimen/_5dp"
+                android:id="@+id/edt_address"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_30dp"
+                android:textSize="@dimen/_9sp"
+                android:background="@drawable/custom_border_gray_backgroud_default" />
+
+            <TextView
+                android:singleLine="true"
+                android:maxLines="1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/detail_information"
+                android:textSize="@dimen/_10sp"
+                android:textColor="@color/colorMain"
+                android:layout_marginTop="@dimen/_25dp"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_1dp"
+                android:layout_marginBottom="@dimen/_5dp"
+                android:background="@color/colorGrayLight"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_weight="2">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:layout_marginRight="@dimen/_10dp">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:textColor="@color/colorGrayDark"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/price"
+                            android:textSize="@dimen/_9sp"
+                            android:layout_marginTop="@dimen/_5dp"/>
+
+                        <TextView
+                            android:textColor="@color/colorGrayDark"
+                            android:visibility="gone"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="@dimen/_10sp"
+                            android:text="@string/for_one_month"
+                            android:layout_marginTop="@dimen/_5dp"
+                            android:id="@+id/txv_a_month"/>
+
+                    </LinearLayout>
+
+
+                    <EditText
+                        android:textColor="@color/colorGrayDark"
+                        android:singleLine="true"
+                        android:maxLines="1"
+                        android:paddingStart="@dimen/_5dp"
+                        android:paddingRight="@dimen/_5dp"
+                        android:id="@+id/edt_price"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_30dp"
+                        android:textSize="@dimen/_9sp"
+                        android:background="@drawable/custom_border_gray_backgroud_default"
+                        android:inputType="number"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:layout_marginLeft="@dimen/_10dp">
+
+                    <TextView
+                        android:textColor="@color/colorGrayDark"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/area"
+                        android:textSize="@dimen/_9sp"
+                        android:layout_marginTop="@dimen/_5dp"/>
+
+                    <EditText
+                        android:textColor="@color/colorGrayDark"
+                        android:singleLine="true"
+                        android:maxLines="1"
+                        android:paddingStart="@dimen/_5dp"
+                        android:paddingRight="@dimen/_5dp"
+                        android:id="@+id/edt_area"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_30dp"
+                        android:textSize="@dimen/_9sp"
+                        android:background="@drawable/custom_border_gray_backgroud_default"
+                        android:inputType="numberDecimal"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_weight="2">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:layout_marginRight="@dimen/_10dp">
+
+                    <TextView
+                        android:textColor="@color/colorGrayDark"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/quality_bedrooms"
+                        android:textSize="@dimen/_10sp"
+                        android:layout_marginTop="@dimen/_5dp"/>
+
+                    <EditText
+                        android:textColor="@color/colorGrayDark"
+                        android:singleLine="true"
+                        android:maxLines="1"
+                        android:paddingLeft="@dimen/_5dp"
+                        android:paddingRight="@dimen/_5dp"
+                        android:id="@+id/edt_bedrooms"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_30dp"
+                        android:textSize="@dimen/_9sp"
+                        android:background="@drawable/custom_border_gray_backgroud_default"
+                        android:inputType="number"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:layout_marginLeft="@dimen/_10dp">
+
+                    <TextView
+                        android:textColor="@color/colorGrayDark"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/quality_bathrooms"
+                        android:textSize="@dimen/_9sp"
+                        android:layout_marginTop="@dimen/_5dp"/>
+
+                    <EditText
+                        android:textColor="@color/colorGrayDark"
+                        android:singleLine="true"
+                        android:maxLines="1"
+                        android:paddingLeft="@dimen/_5dp"
+                        android:paddingRight="@dimen/_5dp"
+                        android:id="@+id/edt_bathrooms"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_30dp"
+                        android:textSize="@dimen/_9sp"
+                        android:background="@drawable/custom_border_gray_backgroud_default"
+                        android:inputType="number"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <TextView
+                android:textColor="@color/colorGrayDark"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/amenities"
+                android:textSize="@dimen/_9sp"
+                android:layout_marginTop="@dimen/_5dp"/>
+
+            <TextView
+                android:textColor="@color/colorGrayDark"
+                android:maxLines="2"
+                android:paddingTop="@dimen/_5dp"
+                android:paddingLeft="@dimen/_5dp"
+                android:id="@+id/txv_amenities"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_65dp"
+                android:textSize="@dimen/_9sp"
+                android:background="@drawable/custom_border_gray_backgroud_gray" />
 
         </LinearLayout>
 
-    </LinearLayout>
+    </ScrollView>
 
-</ScrollView>
+    <Button
+        android:layout_alignParentBottom="true"
+        android:textColor="@color/colorWhite"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_40dp"
+        android:minHeight="@dimen/_0dp"
+        android:background="@color/colorPink"
+        android:text="@string/next_to"
+        android:id="@+id/btn_next_to"
+        android:textSize="@dimen/_10sp" />
+
+</RelativeLayout>
+
 

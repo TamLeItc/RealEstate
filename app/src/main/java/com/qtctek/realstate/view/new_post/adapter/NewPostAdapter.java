@@ -44,18 +44,4 @@ public class NewPostAdapter extends FragmentStatePagerAdapter {
     public int getCount() {
         return 5;
     }
-
-    @Nullable
-    @Override
-    public CharSequence getPageTitle(int position) {
-        String title = "";
-        switch (position){
-            case 0: title = "Thông tin hình ảnh"; break;
-            case 1: title = "Thông tin căn nhà"; break;
-            case 2: title = "Thông tin mô tả"; break;
-            case 3: title = "Vị trí căn nhà"; break;
-            case 4: title = "Đăng tin"; break;
-        }
-        return title;
-    }
 }

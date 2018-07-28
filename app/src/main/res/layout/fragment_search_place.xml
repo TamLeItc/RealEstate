@@ -7,7 +7,6 @@
     android:orientation="vertical"
     xmlns:tools="http://schemas.android.com/tools">
 
-
     <LinearLayout
         android:padding="@dimen/_8dp"
         android:id="@+id/search_layout"
@@ -49,7 +48,8 @@
                 android:singleLine="true"
                 android:textSize="@dimen/_10sp"
                 android:textColor="@color/colorGrayDark"
-                android:textCursorDrawable="@drawable/custom_text_cursor_dialog" />
+                android:textCursorDrawable="@drawable/custom_text_cursor_dialog"
+                android:inputType="textNoSuggestions"/>
 
             <ImageView
                 android:visibility="gone"

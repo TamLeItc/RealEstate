@@ -2,10 +2,8 @@ package com.qtctek.realstate.view.new_post.images_information;
 
 import android.Manifest;
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.ClipData;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -22,15 +20,16 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.Toast;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.qtctek.realstate.R;
 import com.qtctek.realstate.dto.Photo;
@@ -54,10 +53,12 @@ public class ImagesInformationFragment extends Fragment implements ViewHandleMod
 
     private View mView;
 
-    private Button mBtnSelectImage;
-    private Button mBtnSelectAvartar;
+    public RelativeLayout rlViewLarge;
+    public ImageView imvViewLarge;
+    private ImageView mImvCancelViewLarge;
+    private TextView mTxvSelectImage;
+    private TextView mTxvSelectAvartar;
     private Button mBtnNext;
-    private Button mBtnSaveTemp;
     public static ProgressBar PROGRESSBAR;
     private RecyclerView mRecyclerView;
     public static ImageView IMV_AVARTAR;
@@ -66,7 +67,7 @@ public class ImagesInformationFragment extends Fragment implements ViewHandleMod
     public static ArrayList<Photo> ARR_PHOTO = new ArrayList<>();
     public static int FILE_NAME = 1;
 
-    private boolean mIsSaveTemp;
+    public boolean isSaveTemp;
     private int mPosition = 0;
     private int mQualityImageUploaded;
     private boolean mIsPickAvartar = false;
@@ -87,18 +88,20 @@ public class ImagesInformationFragment extends Fragment implements ViewHandleMod
     }
 
     private void initViews() {
-        this.mBtnSelectImage = mView.findViewById(R.id.btn_select_image);
-        this.mBtnSelectAvartar = mView.findViewById(R.id.btn_select_avartar);
+        this.mTxvSelectImage = mView.findViewById(R.id.txv_select_image);
+        this.mTxvSelectAvartar = mView.findViewById(R.id.txv_select_avartar);
         this.mBtnNext = mView.findViewById(R.id.btn_next_to);
-        this.mBtnSaveTemp = mView.findViewById(R.id.btn_save_temp);
         this.mRecyclerView = mView.findViewById(R.id.recycler_view);
         IMV_AVARTAR = mView.findViewById(R.id.imv_avartar);
         this.PROGRESSBAR = mView.findViewById(R.id.progress_bar);
+        this.rlViewLarge = mView.findViewById(R.id.rl_view_large);
+        this.mImvCancelViewLarge = mView.findViewById(R.id.imv_cancel_view_large);
+        this.imvViewLarge = mView.findViewById(R.id.imv_view_large);
 
-        this.mBtnSelectImage.setOnClickListener(this);
+        this.mImvCancelViewLarge.setOnClickListener(this);
+        this.mTxvSelectImage.setOnClickListener(this);
         this.mBtnNext.setOnClickListener(this);
-        this.mBtnSelectAvartar.setOnClickListener(this);
-        this.mBtnSaveTemp.setOnClickListener(this);
+        this.mTxvSelectAvartar.setOnClickListener(this);
     }
 
     private void handleStart(){
@@ -111,7 +114,7 @@ public class ImagesInformationFragment extends Fragment implements ViewHandleMod
         this.mRecyclerView.setAdapter(IMAGE_ADAPTER);
 
         try{
-            String url = MainActivity.WEB_SERVER + "/images/" + NewPostActivity.PRODUCT.getThumbnail();
+            String url = MainActivity.WEB_SERVER + "/images/" + ((NewPostActivity)getActivity()).product.getThumbnail();
             PROGRESSBAR.setVisibility(View.VISIBLE);
             Picasso.with(getContext()).load(url).into(IMV_AVARTAR, new Callback() {
                 @Override
@@ -174,8 +177,8 @@ public class ImagesInformationFragment extends Fragment implements ViewHandleMod
 
         mPath = getRealPathFromURI(getContext(), mUri);
 
-        String fileName = NewPostActivity.PRODUCT.getId() + "_avartar.jpg";
-        new PresenterNewPost(this).handlePostImage(NewPostActivity.PRODUCT.getId(),
+        String fileName = ((NewPostActivity)getActivity()).product.getId() + "_avartar.jpg";
+        new PresenterNewPost(this).handlePostImage(((NewPostActivity)getActivity()).product.getId(),
                 fileName, mPath, "thumbnail");
     }
 
@@ -189,8 +192,8 @@ public class ImagesInformationFragment extends Fragment implements ViewHandleMod
         Uri uri = ARR_PHOTO.get(mQualityImageUploaded).getUri();
         String path = getRealPathFromURI(getContext(), uri);
 
-        String fileName = NewPostActivity.PRODUCT.getId() + "_" + (FILE_NAME++) + ".jpg";
-        new PresenterNewPost(this).handlePostImage(NewPostActivity.PRODUCT.getId(),
+        String fileName = ((NewPostActivity)getActivity()).product.getId() + "_" + (FILE_NAME++) + ".jpg";
+        new PresenterNewPost(this).handlePostImage(((NewPostActivity)getActivity()).product.getId(),
                 fileName, path, "image_detail");
     }
 
@@ -241,29 +244,33 @@ public class ImagesInformationFragment extends Fragment implements ViewHandleMod
         }
     }
 
+    private void handelCancelViewLarge(){
+        Animation animation = AnimationUtils.loadAnimation(getContext(), R.anim.zoom_100_to_0);
+        this.rlViewLarge.startAnimation(animation);
+
+    }
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.btn_select_image:
+            case R.id.txv_select_image:
                 handleSelectImages();
                 break;
-            case R.id.btn_select_avartar:
+            case R.id.txv_select_avartar:
                 handleSelectAvartar();
                 break;
             case R.id.btn_next_to:
-                this.mIsSaveTemp = false;
-                mQualityImageUploaded = 0;
-                handleSave();
+                this.isSaveTemp = false;
+                handleSaveImageInformation();
                 break;
-            case R.id.btn_save_temp:
-                mQualityImageUploaded = 0;
-                this.mIsSaveTemp = true;
-                handleSave();
+            case R.id.imv_cancel_view_large:
+                handelCancelViewLarge();
                 break;
         }
     }
 
-    private void handleSave(){
+    public void handleSaveImageInformation(){
+        mQualityImageUploaded = 0;
         if(mIsPickImage && !mIsPickAvartar){
             if (mIsPickImage) {
                 ((NewPostActivity)getActivity()).dialogHelper.show();
@@ -275,11 +282,9 @@ public class ImagesInformationFragment extends Fragment implements ViewHandleMod
             uploadAvartar();
         }
         else{
-            if(!mIsSaveTemp){
+            if(!isSaveTemp){
                 ViewPager viewPager = getActivity().findViewById(R.id.view_pager);
                 viewPager.setCurrentItem(1);
-                ((NewPostActivity)getActivity()).setCurrentStateNumberProgressBar(
-                        ((NewPostActivity) getActivity()).viewPaper.getCurrentItem());
             }
         }
     }
@@ -302,12 +307,12 @@ public class ImagesInformationFragment extends Fragment implements ViewHandleMod
                     uploadImages();
                 }
                 else{
-                    ((NewPostActivity)getActivity()).toastHelper.toast("Lưu thành công", ToastHelper.LENGTH_SHORT);
-                    if(!mIsSaveTemp){
+                    if(!isSaveTemp){
                         ViewPager viewPager = getActivity().findViewById(R.id.view_pager);
                         viewPager.setCurrentItem(1);
-                        ((NewPostActivity)getActivity()).setCurrentStateNumberProgressBar(
-                                ((NewPostActivity) getActivity()).viewPaper.getCurrentItem());
+                    }
+                    else{
+                        ((NewPostActivity)getActivity()).toastHelper.toast("Lưu thành công", ToastHelper.LENGTH_SHORT);
                     }
 
                 }
@@ -320,13 +325,12 @@ public class ImagesInformationFragment extends Fragment implements ViewHandleMod
                 if (!status) {
                     ((NewPostActivity)getActivity()).toastHelper.toast("Lỗi lưu dữ liệu", ToastHelper.LENGTH_SHORT);
                 } else {
-                    ((NewPostActivity)getActivity()).toastHelper.toast("Lưu thành công", ToastHelper.LENGTH_SHORT);
-
-                    if(!mIsSaveTemp){
+                    if(!isSaveTemp){
                         ViewPager viewPager = getActivity().findViewById(R.id.view_pager);
                         viewPager.setCurrentItem(1);
-                        ((NewPostActivity)getActivity()).setCurrentStateNumberProgressBar(
-                                ((NewPostActivity) getActivity()).viewPaper.getCurrentItem());
+                    }
+                    else{
+                        ((NewPostActivity)getActivity()).toastHelper.toast("Lưu thành công", ToastHelper.LENGTH_SHORT);
                     }
                 }
                 mIsPickImage = false;
@@ -428,4 +432,5 @@ public class ImagesInformationFragment extends Fragment implements ViewHandleMod
 
         super.onDestroyView();
     }
+
 }

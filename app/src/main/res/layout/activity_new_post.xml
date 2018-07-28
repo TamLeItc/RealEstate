@@ -27,20 +27,15 @@
                 android:background="?attr/selectableItemBackground"/>
 
             <TextView
-                android:layout_marginLeft="@dimen/_10dp"
-                android:layout_marginRight="@dimen/_10dp"
                 android:id="@+id/txv_toolbar_title"
-                android:maxLines="1"
-                android:ellipsize="end"
-                android:textSize="@dimen/_12sp"
-                android:text="@string/post"
-                android:gravity="center"
-                android:textColor="@color/colorGrayDark"
                 android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/_10dp"
+                android:layout_toRightOf="@+id/imv_back"
+                android:textColor="@color/colorGrayDark"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_toRightOf="@+id/imv_back"
-                android:layout_toLeftOf="@+id/imv_next"/>
+                android:text="@string/new_post_image"
+                android:textSize="@dimen/_12sp"  />
 
             <ImageView
                 android:layout_centerVertical="true"
@@ -55,34 +50,6 @@
 
 
     </android.support.v7.widget.Toolbar>
-
-    <com.kofigyan.stateprogressbar.StateProgressBar
-        android:layout_margin="@dimen/_5dp"
-        android:id="@+id/progress_bar_state"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:spb_stateTextSize="@dimen/_8sp"
-        app:spb_stateDescriptionSize="@dimen/_9sp"
-        app:spb_stateLineThickness="@dimen/_3dp"
-        app:spb_stateSize="@dimen/_5dp"
-        app:spb_currentStateNumber="one"
-        app:spb_maxStateNumber="five"
-        app:spb_stateBackgroundColor="#BDBDBD"
-        app:spb_stateForegroundColor="@color/colorPrimaryDark"
-        app:spb_stateNumberBackgroundColor="@color/colorGray"
-        app:spb_stateNumberForegroundColor="#eeeeee"
-        app:spb_currentStateDescriptionColor="@color/colorGrayDark"
-        app:spb_stateDescriptionColor="@color/colorGray"
-        app:spb_animateToCurrentProgressState="true"
-        app:spb_checkStateCompleted="true"/>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/_1dp"
-        android:background="@color/colorGrayLight"
-        android:layout_marginBottom="@dimen/_8dp"
-        android:layout_marginLeft="@dimen/_8dp"
-        android:layout_marginRight="@dimen/_8dp"/>
 
     <LinearLayout
         android:layout_width="match_parent"

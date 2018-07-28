@@ -163,9 +163,9 @@ public class UserControlActivity extends AppCompatActivity implements AlertHelpe
         popupMenu.getMenuInflater().inflate(R.menu.popup_menu_user_control, popupMenu.getMenu());
 
         Menu menu = popupMenu.getMenu();
-        MenuItem menuItemUpdateUser = menu.findItem(R.id.control_update_information);
-        MenuItem menuItemLogout = menu.findItem(R.id.control_logout);
-        MenuItem menuItemLogin = menu.findItem(R.id.control_login);
+        MenuItem menuItemUpdateUser = menu.findItem(R.id.action_update_information);
+        MenuItem menuItemLogout = menu.findItem(R.id.action_logout);
+        MenuItem menuItemLogin = menu.findItem(R.id.action_login);
 
         if(MainActivity.USER.getId() == User.USER_NULL){
             menuItemLogout.setVisible(false);
@@ -181,21 +181,21 @@ public class UserControlActivity extends AppCompatActivity implements AlertHelpe
             public boolean onMenuItemClick(MenuItem item) {
                 Intent intent;
                 switch (item.getItemId()){
-                    case R.id.control_home:
+                    case R.id.action_home:
                         finish();
                         break;
-                    case R.id.control_update_information:
+                    case R.id.action_update_information:
                         intent = new Intent(UserControlActivity.this, UserActionActivity.class);
                         intent.putExtra("option", "update_user");
                         startActivity(intent);
                         finish();
                         break;
-                    case R.id.control_login:
+                    case R.id.action_login:
                         intent = new Intent(UserControlActivity.this, UserActionActivity.class);
                         startActivity(intent);
                         finish();
                         break;
-                    case R.id.control_logout:
+                    case R.id.action_logout:
                         alertHelper.alert("Xác nhận", "Bạn có chắc chắn muốn đăng xuất", false,
                                 "Xác nhận", "Hủy bỏ", Constant.LOGOUT);
                         break;

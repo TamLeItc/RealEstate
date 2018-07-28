@@ -7,4 +7,7 @@
     <item android:id="@+id/action_manage_user"
         android:title="@string/account_manage"/>
 
+    <item android:id="@+id/action_save_temp"
+        android:title="@string/save_temp"/>
+
 </menu>

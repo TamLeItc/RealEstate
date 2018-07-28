@@ -499,7 +499,7 @@ public class RegisterFragment extends Fragment implements View.OnClickListener, 
                     this.mEdtPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
                 }
                 else{
-                    this.mEdtPassword.setInputType(InputType.TYPE_CLASS_TEXT);
+                    this.mEdtPassword.setInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
                 }
                 break;
             case R.id.swt_confirm_password:
@@ -507,7 +507,7 @@ public class RegisterFragment extends Fragment implements View.OnClickListener, 
                     this.mEdtConfirmPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
                 }
                 else{
-                    this.mEdtConfirmPassword.setInputType(InputType.TYPE_CLASS_TEXT);
+                    this.mEdtConfirmPassword.setInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
                 }
                 break;
         }

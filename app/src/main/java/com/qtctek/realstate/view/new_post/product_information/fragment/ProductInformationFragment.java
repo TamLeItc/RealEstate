@@ -1,7 +1,6 @@
 package com.qtctek.realstate.view.new_post.product_information.fragment;
 
 import android.app.Dialog;
-import android.app.FragmentTransaction;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
@@ -22,7 +21,6 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.qtctek.realstate.R;
 import com.qtctek.realstate.dto.Category;
@@ -58,17 +56,16 @@ public class ProductInformationFragment extends Fragment implements View.OnClick
     private TextView mTxvAmenities;
     private Button mBtnNextTo;
     private Dialog mDialog;
-    private Button mBtnSaveTemp;
 
     private PresenterGetData mPresenterGetData;
 
     private View mView;
 
     private String mCategory;
+    public boolean isSaveTemp;
+    private boolean isEdited = false;
 
     private ArrayList<Category> mArrCategory;
-
-    private boolean mIsSaveTemp;
 
     @Nullable
     @Override
@@ -99,7 +96,6 @@ public class ProductInformationFragment extends Fragment implements View.OnClick
         this.mBtnNextTo = mView.findViewById(R.id.btn_next_to);
         this.mRdoForSale = mView.findViewById(R.id.rdo_for_sale);
         this.mRdoRent = mView.findViewById(R.id.rdo_rent);
-        this.mBtnSaveTemp = mView.findViewById(R.id.btn_save_temp);
         this.mEdtTitle = mView.findViewById(R.id.edt_title);
         this.mTxvAMonth = mView.findViewById(R.id.txv_a_month);
 
@@ -110,35 +106,45 @@ public class ProductInformationFragment extends Fragment implements View.OnClick
         this.mTxvProvinceCity.setOnClickListener(this);
         this.mTxvDistrict.setOnClickListener(this);
         this.mEdtAddress.setOnKeyListener(this);
+        this.mEdtPrices.setOnKeyListener(this);
+        this.mEdtBathrooms.setOnKeyListener(this);
+        this.mEdtBedrooms.setOnKeyListener(this);
         this.mEdtTitle.setOnKeyListener(this);
-        this.mBtnSaveTemp.setOnClickListener(this);
         this.mRdoForSale.setOnCheckedChangeListener(this);
     }
 
 
     private void handleStart(){
-        this.mTxvArchitecture.setText(NewPostActivity.PRODUCT.getArchitecture());
-        this.mTxvProvinceCity.setText(NewPostActivity.PRODUCT.getCity());
-        this.mTxvDistrict.setText(NewPostActivity.PRODUCT.getDistrict());
-        this.mEdtAddress.setText(NewPostActivity.PRODUCT.getAddress());
-        this.mEdtBathrooms.setText(NewPostActivity.PRODUCT.getBathroom() + "");
-        this.mEdtBedrooms.setText(NewPostActivity.PRODUCT.getBedroom() + "");
-        this.mEdtPrices.setText(NewPostActivity.PRODUCT.getPrice() + "");
-        this.mEdtArea.setText(NewPostActivity.PRODUCT.getArea() + "");
-        this.mTxvAmenities.setText(NewPostActivity.PRODUCT.getAmenities());
-        this.mTxvType.setText(NewPostActivity.PRODUCT.getType());
-        this.mEdtTitle.setText(NewPostActivity.PRODUCT.getTitle());
+        this.mTxvArchitecture.setText(((NewPostActivity)getActivity()).product.getArchitecture());
+        this.mTxvProvinceCity.setText(((NewPostActivity)getActivity()).product.getCity());
+        this.mTxvDistrict.setText(((NewPostActivity)getActivity()).product.getDistrict());
+        this.mEdtAddress.setText(((NewPostActivity)getActivity()).product.getAddress());
+        this.mEdtBathrooms.setText(((NewPostActivity)getActivity()).product.getBathroom() + "");
+        this.mEdtBedrooms.setText(((NewPostActivity)getActivity()).product.getBedroom() + "");
+        this.mEdtPrices.setText(((NewPostActivity)getActivity()).product.getPrice() + "");
+        this.mEdtArea.setText(((NewPostActivity)getActivity()).product.getArea() + "");
+        this.mTxvAmenities.setText(((NewPostActivity)getActivity()).product.getAmenities());
+        this.mTxvType.setText(((NewPostActivity)getActivity()).product.getType());
+        this.mEdtTitle.setText(((NewPostActivity)getActivity()).product.getTitle());
 
-        if(NewPostActivity.PRODUCT.getFormality().equals("yes")){
+        if(((NewPostActivity)getActivity()).product.getFormality().equals("yes")){
             mRdoForSale.setChecked(true);
         }
         else{
             mRdoRent.setChecked(true);
         }
-
+        isEdited = false;
     }
 
-    private void handleSaveProductInformation(){
+    public void handleSaveProductInformation(){
+
+        if(!isEdited){
+            if(!isSaveTemp){
+                ViewPager viewPager = getActivity().findViewById(R.id.view_pager);
+                viewPager.setCurrentItem(2);
+            }
+            return;
+        }
 
         if(this.mEdtBathrooms.getText().toString().trim().equals("")){
             this.mEdtBathrooms.setText("0");
@@ -155,23 +161,23 @@ public class ProductInformationFragment extends Fragment implements View.OnClick
         }
 
         try{
-            NewPostActivity.PRODUCT.setAddress(this.mEdtAddress.getText().toString().trim());
-            NewPostActivity.PRODUCT.setBathroom(Integer.parseInt(this.mEdtBathrooms.getText().toString().trim()));
-            NewPostActivity.PRODUCT.setBedroom(Integer.parseInt(this.mEdtBedrooms.getText().toString().trim()));
-            NewPostActivity.PRODUCT.setPrice(Long.valueOf(this.mEdtPrices.getText().toString().trim()));
-            NewPostActivity.PRODUCT.setArea(Float.parseFloat(this.mEdtArea.getText().toString().trim()));
-            NewPostActivity.PRODUCT.setAmenities(this.mTxvAmenities.getText().toString().trim());
-            NewPostActivity.PRODUCT.setTitle(this.mEdtTitle.getText().toString());
+            ((NewPostActivity)getActivity()).product.setAddress(this.mEdtAddress.getText().toString().trim());
+            ((NewPostActivity)getActivity()).product.setBathroom(Integer.parseInt(this.mEdtBathrooms.getText().toString().trim()));
+            ((NewPostActivity)getActivity()).product.setBedroom(Integer.parseInt(this.mEdtBedrooms.getText().toString().trim()));
+            ((NewPostActivity)getActivity()).product.setPrice(Long.valueOf(this.mEdtPrices.getText().toString().trim()));
+            ((NewPostActivity)getActivity()).product.setArea(Float.parseFloat(this.mEdtArea.getText().toString().trim()));
+            ((NewPostActivity)getActivity()).product.setAmenities(this.mTxvAmenities.getText().toString().trim());
+            ((NewPostActivity)getActivity()).product.setTitle(this.mEdtTitle.getText().toString());
 
             if(mRdoForSale.isChecked()){
-                NewPostActivity.PRODUCT.setFormality("yes");
+                ((NewPostActivity)getActivity()).product.setFormality("yes");
             }
             else{
-                NewPostActivity.PRODUCT.setFormality("no");
+                ((NewPostActivity)getActivity()).product.setFormality("no");
             }
 
             ((NewPostActivity)getActivity()).dialogHelper.show();
-            new PresenterNewPost(this).handleUpdateProductInformation(NewPostActivity.PRODUCT);
+            new PresenterNewPost(this).handleUpdateProductInformation(((NewPostActivity)getActivity()).product);
 
         }
         catch (Exception e){
@@ -182,7 +188,7 @@ public class ProductInformationFragment extends Fragment implements View.OnClick
 
     @Override
     public void onGetCityList(boolean status, final ArrayList<Place> mArrCity) {
-        PlaceAdapter placeAdapter = new PlaceAdapter( getContext(), mArrCity, NewPostActivity.PRODUCT.getCityId());
+        PlaceAdapter placeAdapter = new PlaceAdapter( getContext(), mArrCity, ((NewPostActivity)getActivity()).product.getCityId());
 
         mDialog.setContentView(R.layout.dialog_list);
 
@@ -205,10 +211,11 @@ public class ProductInformationFragment extends Fragment implements View.OnClick
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 mTxvProvinceCity.setText(mArrCity.get(position).getName());
-                NewPostActivity.PRODUCT.setCityId(mArrCity.get(position).getId());
+                ((NewPostActivity)getActivity()).product.setCityId(mArrCity.get(position).getId());
                 mTxvDistrict.setText("");
-                NewPostActivity.PRODUCT.setDistrictId(0);
+                ((NewPostActivity)getActivity()).product.setDistrictId(0);
 
+                isEdited = true;
                 mDialog.dismiss();
             }
         });
@@ -230,7 +237,7 @@ public class ProductInformationFragment extends Fragment implements View.OnClick
 
         ((NewPostActivity)getActivity()).dialogHelper.dismiss();
 
-        PlaceAdapter placeAdapter = new PlaceAdapter( getContext(), mArrDistrict, NewPostActivity.PRODUCT.getDistrictId());
+        PlaceAdapter placeAdapter = new PlaceAdapter( getContext(), mArrDistrict, ((NewPostActivity)getActivity()).product.getDistrictId());
 
         mDialog.setContentView(R.layout.dialog_list);
 
@@ -252,7 +259,8 @@ public class ProductInformationFragment extends Fragment implements View.OnClick
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 mTxvDistrict.setText(mArrDistrict.get(position).getName());
-                NewPostActivity.PRODUCT.setDistrictId(mArrDistrict.get(position).getId());
+                ((NewPostActivity)getActivity()).product.setDistrictId(mArrDistrict.get(position).getId());
+                isEdited = true;
                 mDialog.dismiss();
             }
         });
@@ -273,7 +281,7 @@ public class ProductInformationFragment extends Fragment implements View.OnClick
 
         if(isCity){
             for (int i = 0; i < mArrPlace.size(); i++){
-                if(NewPostActivity.PRODUCT.getCityId() == mArrPlace.get(i).getId()){
+                if(((NewPostActivity)getActivity()).product.getCityId() == mArrPlace.get(i).getId()){
                     location = i;
                     break;
                 }
@@ -281,7 +289,7 @@ public class ProductInformationFragment extends Fragment implements View.OnClick
         }
         else{
             for (int i = 0; i < mArrPlace.size(); i++){
-                if(NewPostActivity.PRODUCT.getDistrictId() == mArrPlace.get(i).getId()){
+                if(((NewPostActivity)getActivity()).product.getDistrictId() == mArrPlace.get(i).getId()){
                     location = i;
                     break;
                 }
@@ -356,6 +364,7 @@ public class ProductInformationFragment extends Fragment implements View.OnClick
         btnConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                isEdited = true;
                 mDialog.dismiss();
             }
         });
@@ -363,7 +372,6 @@ public class ProductInformationFragment extends Fragment implements View.OnClick
         lsv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
                 ImageView imvSelected = view.findViewById(R.id.imv_selected);
                 if(imvSelected.getVisibility() == View.VISIBLE){
                     imvSelected.setVisibility(View.GONE);
@@ -417,12 +425,12 @@ public class ProductInformationFragment extends Fragment implements View.OnClick
         if(this.mCategory.equals("type")){
             txvTitle.setText("Chọn loại nhà");
             categoriesProductAdapter = new CategoryAdapter(
-                    getContext(), mArrCategory, NewPostActivity.PRODUCT.getTypeId());
+                    getContext(), mArrCategory, ((NewPostActivity)getActivity()).product.getTypeId());
         }
         else if(this.mCategory.equals("architecture")){
             txvTitle.setText("Chọn kiểu nhà");
             categoriesProductAdapter = new CategoryAdapter(
-                    getContext(), mArrCategory, NewPostActivity.PRODUCT.getArchitectureId());
+                    getContext(), mArrCategory, ((NewPostActivity)getActivity()).product.getArchitectureId());
         }
 
         ListView lsv = mDialog.findViewById(R.id.lsv_item);
@@ -443,14 +451,14 @@ public class ProductInformationFragment extends Fragment implements View.OnClick
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if(mCategory.equals("type")){
                     mTxvType.setText(mArrCategory.get(position).getName());
-                    NewPostActivity.PRODUCT.setTypeId(mArrCategory.get(position).getId());
-                    mDialog.dismiss();
+                    ((NewPostActivity)getActivity()).product.setTypeId(mArrCategory.get(position).getId());
                 }
                 else if(mCategory.equals("architecture")){
                     mTxvArchitecture.setText(mArrCategory.get(position).getName());
-                    NewPostActivity.PRODUCT.setArchitectureId(mArrCategory.get(position).getId());
-                    mDialog.dismiss();
+                    ((NewPostActivity)getActivity()).product.setArchitectureId(mArrCategory.get(position).getId());
                 }
+                isEdited = true;
+                mDialog.dismiss();
             }
         });
 
@@ -471,12 +479,13 @@ public class ProductInformationFragment extends Fragment implements View.OnClick
     public void onUpdateProductInformation(boolean status) {
         ((NewPostActivity)getActivity()).dialogHelper.dismiss();
         if(status){
-            ((NewPostActivity)getActivity()).toastHelper.toast("Lưu thành công", ToastHelper.LENGTH_SHORT);
-            if(!mIsSaveTemp){
+            isEdited = false;
+            if(!isSaveTemp){
                 ViewPager viewPager = getActivity().findViewById(R.id.view_pager);
                 viewPager.setCurrentItem(2);
-                ((NewPostActivity)getActivity()).setCurrentStateNumberProgressBar(
-                        ((NewPostActivity) getActivity()).viewPaper.getCurrentItem());
+            }
+            else{
+                ((NewPostActivity)getActivity()).toastHelper.toast("Lưu thành công", ToastHelper.LENGTH_SHORT);
             }
         }
         else{
@@ -528,24 +537,18 @@ public class ProductInformationFragment extends Fragment implements View.OnClick
                 break;
             case R.id.txv_district:
                 ((NewPostActivity)getActivity()).dialogHelper.show();
-                mPresenterGetData.handleGetDistrict(NewPostActivity.PRODUCT.getCityId());
+                mPresenterGetData.handleGetDistrict(((NewPostActivity)getActivity()).product.getCityId());
                 break;
             case R.id.btn_next_to:
-                mIsSaveTemp = false;
+                isSaveTemp = false;
                 handleSaveProductInformation();
                 break;
-            case R.id.btn_save_temp:
-                mIsSaveTemp = true;
-                handleSaveProductInformation();
-                break;
-
         }
     }
 
 
     @Override
     public boolean onKey(View v, int keyCode, KeyEvent event) {
-
         switch (v.getId()){
             case R.id.edt_address:
                 EditText edt = (EditText) v;
@@ -564,7 +567,7 @@ public class ProductInformationFragment extends Fragment implements View.OnClick
                 }
                 break;
         }
-
+        this.isEdited = true;
         return false;
     }
 
@@ -576,6 +579,7 @@ public class ProductInformationFragment extends Fragment implements View.OnClick
         else{
             this.mTxvAMonth.setVisibility(View.VISIBLE);
         }
+        this.isEdited = true;
     }
 
     @Override

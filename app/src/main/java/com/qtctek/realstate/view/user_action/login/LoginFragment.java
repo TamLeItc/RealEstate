@@ -234,7 +234,7 @@ public class LoginFragment extends Fragment implements ViewHandleLogin, View.OnC
                     this.mEdtPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
                 }
                 else{
-                    this.mEdtPassword.setInputType(InputType.TYPE_CLASS_TEXT);
+                    this.mEdtPassword.setInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
                 }
                 break;
         }

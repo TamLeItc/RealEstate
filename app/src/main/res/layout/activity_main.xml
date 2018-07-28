@@ -25,6 +25,7 @@
         app:itemTextColor="@color/colorGrayDark"
         app:itemIconTint="@color/colorGrayDark"
         android:scrollbars="none"
-        android:overScrollMode="never"/>
+        android:overScrollMode="never"
+        android:background="@color/colorWhite"/>
 
 </android.support.v4.widget.DrawerLayout>

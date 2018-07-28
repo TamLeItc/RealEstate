@@ -142,8 +142,8 @@ public class UpdateUserFragment extends Fragment implements View.OnClickListener
             this.mRdoOther.setChecked(true);
         }
 
-        this.mEdtEmail.setBackground(getResources().getDrawable(R.drawable.custom_border_gray_bakcgroud_gray));
-        this.mEdtUsername.setBackground(getResources().getDrawable(R.drawable.custom_border_gray_bakcgroud_gray));
+        this.mEdtEmail.setBackground(getResources().getDrawable(R.drawable.custom_border_gray_backgroud_gray));
+        this.mEdtUsername.setBackground(getResources().getDrawable(R.drawable.custom_border_gray_backgroud_gray));
 
     }
 
@@ -392,7 +392,7 @@ public class UpdateUserFragment extends Fragment implements View.OnClickListener
                     this.mEdtNowPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
                 }
                 else{
-                    this.mEdtNowPassword.setInputType(InputType.TYPE_CLASS_TEXT);
+                    this.mEdtNowPassword.setInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
                 }
                 break;
             case R.id.swt_password:
@@ -400,7 +400,7 @@ public class UpdateUserFragment extends Fragment implements View.OnClickListener
                     this.mEdtNewPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
                 }
                 else{
-                    this.mEdtNewPassword.setInputType(InputType.TYPE_CLASS_TEXT);
+                    this.mEdtNewPassword.setInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
                 }
                 break;
             case R.id.swt_confirm_password:
@@ -408,7 +408,7 @@ public class UpdateUserFragment extends Fragment implements View.OnClickListener
                     this.mEdtConfirmPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
                 }
                 else{
-                    this.mEdtConfirmPassword.setInputType(InputType.TYPE_CLASS_TEXT);
+                    this.mEdtConfirmPassword.setInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
                 }
                 break;
         }
