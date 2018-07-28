@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.text.InputType;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,6 +34,7 @@ import com.qtctek.realstate.common.general.send_gmail.GMailSender;
 import com.qtctek.realstate.helper.AlertHelper;
 import com.qtctek.realstate.helper.ToastHelper;
 import com.qtctek.realstate.presenter.user_action.register.PresenterRegister;
+import com.qtctek.realstate.view.post_news.activity.MainActivity;
 import com.qtctek.realstate.view.user_action.activity.UserActionActivity;
 
 import java.util.Calendar;
@@ -398,6 +400,8 @@ public class RegisterFragment extends Fragment implements View.OnClickListener, 
         Button btnConfirm = dialog.findViewById(R.id.btn_confirm);
         Button btnCancel = dialog.findViewById(R.id.btn_cancel);
 
+        updateDatePicker();
+
         btnConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -413,8 +417,20 @@ public class RegisterFragment extends Fragment implements View.OnClickListener, 
             }
         });
 
-
         dialog.show();
+    }
+
+    private void updateDatePicker(){
+        String[] birthDate = this.mTxvBirthDay.getText().toString().split("/");
+        if(birthDate.length != 3){
+            return;
+        }
+
+        try{
+            this.mDpkBirthDay.updateDate(Integer.parseInt(birthDate[2]), Integer.parseInt(birthDate[1]), Integer.parseInt(birthDate[0]));
+        }
+        catch (Exception e){}
+
     }
 
     @Override

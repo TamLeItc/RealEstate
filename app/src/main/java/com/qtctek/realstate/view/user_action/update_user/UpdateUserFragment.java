@@ -318,6 +318,8 @@ public class UpdateUserFragment extends Fragment implements View.OnClickListener
         Button mBtnConfirm = dialog.findViewById(R.id.btn_confirm);
         Button mBtnCancel = dialog.findViewById(R.id.btn_cancel);
 
+        updateDatePicker();
+
         mBtnConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -336,6 +338,18 @@ public class UpdateUserFragment extends Fragment implements View.OnClickListener
         dialog.show();
     }
 
+    private void updateDatePicker(){
+        String[] birthDate = this.mTxvBirthDay.getText().toString().split("/");
+        if(birthDate.length != 3){
+            return;
+        }
+
+        try{
+            this.mDpkBirthDay.updateDate(Integer.parseInt(birthDate[2]), Integer.parseInt(birthDate[1]), Integer.parseInt(birthDate[0]));
+        }
+        catch (Exception e){}
+
+    }
 
     @Override
     public void onFocusChange(View v, boolean hasFocus) {

@@ -45,7 +45,7 @@
                 android:background="@drawable/custom_border_gray_backgroud_default"
                 android:gravity="top|left"
                 android:inputType="textMultiLine|textNoSuggestions"
-                android:padding="@dimen/_5dp"
+                android:padding="@dimen/_8dp"
                 android:scrollbars="vertical"
                 android:textSize="@dimen/_10sp" />
 

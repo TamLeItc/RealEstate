@@ -35,6 +35,7 @@ import com.qtctek.realstate.view.new_post.product_information.adapter.AmenityAda
 import com.qtctek.realstate.view.new_post.product_information.adapter.CategoryAdapter;
 import com.qtctek.realstate.view.new_post.product_information.adapter.PlaceAdapter;
 
+import java.security.Key;
 import java.util.ArrayList;
 
 public class ProductInformationFragment extends Fragment implements View.OnClickListener, ViewHandleModelGetData,
@@ -295,7 +296,6 @@ public class ProductInformationFragment extends Fragment implements View.OnClick
                 }
             }
         }
-        Log.d("ttt", location + "");
 
         return location;
     }
@@ -553,7 +553,7 @@ public class ProductInformationFragment extends Fragment implements View.OnClick
             case R.id.edt_address:
                 EditText edt = (EditText) v;
                 if(edt.getText().toString().length() >= 100){
-                    if(keyCode >= 8 && keyCode <= 16 || keyCode >= 29 && keyCode <= 54){
+                    if(keyCode >= 7 && keyCode <= 16 || keyCode >= 29 && keyCode <= 54){
                         return true;
                     }
                 }
@@ -561,7 +561,7 @@ public class ProductInformationFragment extends Fragment implements View.OnClick
             case R.id.edt_title:
                 EditText edt1 = (EditText) v;
                 if(edt1.getText().toString().length() >= 200){
-                    if(keyCode >= 8 && keyCode <= 16 || keyCode >= 29 && keyCode <= 54){
+                    if(keyCode >= 7 && keyCode <= 16 || keyCode >= 29 && keyCode <= 54){
                         return true;
                     }
                 }

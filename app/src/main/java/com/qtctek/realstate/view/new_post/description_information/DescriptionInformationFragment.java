@@ -97,7 +97,7 @@ public class DescriptionInformationFragment extends Fragment implements View.OnC
         if(qualityCharacter >= 2000){
             this.mEdtQualityCharacter.setText("0");
 
-            if(keyCode >= 8 && keyCode <= 16 || keyCode >= 29 && keyCode <= 54){
+            if(keyCode >= 7 && keyCode <= 16 || keyCode >= 29 && keyCode <= 54){
                 return true;
             }
 

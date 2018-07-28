@@ -44,7 +44,8 @@
             android:layout_marginBottom="@dimen/_20dp"
             android:background="@drawable/custom_border_gray_backgroud_default"
             android:inputType="textEmailAddress"
-            android:paddingLeft="@dimen/_5dp"
+            android:paddingLeft="@dimen/_8dp"
+            android:paddingRight="@dimen/_8dp"
             android:textSize="@dimen/_10sp" />
 
         <TextView
@@ -74,7 +75,8 @@
             android:layout_below="@+id/txv_password"
             android:background="@drawable/custom_border_gray_backgroud_default"
             android:inputType="textPassword"
-            android:paddingLeft="@dimen/_5dp"
+            android:paddingLeft="@dimen/_8dp"
+            android:paddingRight="@dimen/_8dp"
             android:textSize="@dimen/_10sp" />
 
         <CheckBox

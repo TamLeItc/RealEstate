@@ -121,8 +121,8 @@ public class MainActivity extends AppCompatActivity
         dialogHelper = new DialogHelper(this);
         keyboardHelper = new KeyboardHelper(this);
 
-        handleInternetReceiver();
-        createNetworkConnectionFailedDialog();
+//        handleInternetReceiver();
+//        createNetworkConnectionFailedDialog();
 
         handleCreateAuthFragment();
         initViews();
