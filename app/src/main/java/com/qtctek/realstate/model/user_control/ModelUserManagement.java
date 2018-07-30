@@ -61,7 +61,7 @@ public class ModelUserManagement {
                     .url(url)
                     .get()
                     .build();
-            Log.d("ttt", url + "");
+
 
             try {
                 Response response = okHttpClient.newCall(request).execute();

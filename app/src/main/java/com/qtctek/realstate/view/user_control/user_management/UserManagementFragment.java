@@ -11,8 +11,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.PopupMenu;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.qtctek.realstate.R;
@@ -28,7 +30,7 @@ import com.qtctek.realstate.view.user_control.interfaces.ManagementFilterCallbac
 import java.util.ArrayList;
 
 public class UserManagementFragment extends Fragment implements ViewHandleUserManagement, AbsListView.OnScrollListener, AdapterView.OnItemClickListener,
-        AlertHelper.AlertHelperCallback, ManagementFilterCallback {
+        AlertHelper.AlertHelperCallback, ManagementFilterCallback, View.OnClickListener {
 
     private View mView;
 
@@ -37,6 +39,8 @@ public class UserManagementFragment extends Fragment implements ViewHandleUserMa
 
     private ListView mLsvUsers;
     private TextView mTxvInformation;
+    private RelativeLayout mRlItemUser;
+    private ImageView mImvUp;
 
     private PresenterUserManagement mPresenterUserManagement;
     private int mPositionClick = 0;
@@ -64,9 +68,11 @@ public class UserManagementFragment extends Fragment implements ViewHandleUserMa
     private void initViews(){
         this.mLsvUsers = mView.findViewById(R.id.lsv_user);
         this.mTxvInformation = mView.findViewById(R.id.txv_information);
+        this.mImvUp = mView.findViewById(R.id.imv_up);
 
         this.mLsvUsers.setOnScrollListener(this);
         this.mLsvUsers.setOnItemClickListener(this);
+        this.mImvUp.setOnClickListener(this);
     }
 
     private void handleStart(){
@@ -92,6 +98,11 @@ public class UserManagementFragment extends Fragment implements ViewHandleUserMa
 
         if(mArrUser.size() > 0){
             this.mTxvInformation.setVisibility(View.GONE);
+
+            if(((UserControlActivity)getActivity()).isFilter){
+                mLsvUsers.smoothScrollToPosition(0);
+                ((UserControlActivity)getActivity()).isFilter = false;
+            }
         }
         else{
             this.mTxvInformation.setVisibility(View.VISIBLE);
@@ -153,6 +164,12 @@ public class UserManagementFragment extends Fragment implements ViewHandleUserMa
 
     @Override
     public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+        if(firstVisibleItem > 5){
+            this.mImvUp.setVisibility(View.VISIBLE);
+        }
+        else{
+            this.mImvUp.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -164,6 +181,9 @@ public class UserManagementFragment extends Fragment implements ViewHandleUserMa
 
         PopupMenu popupMenu = new PopupMenu(getContext(), view);
         popupMenu.getMenuInflater().inflate(R.menu.popup_menu_for_user_management, popupMenu.getMenu());
+
+        this.mRlItemUser = view.findViewById(R.id.rl_item_user);
+        mRlItemUser.setBackground(getResources().getDrawable(R.drawable.custom_border_normal));
 
         MenuItem menuItem = popupMenu.getMenu().getItem(0);
         if(this.mArrUser.get(position).getStatus().equals("no")){
@@ -196,6 +216,14 @@ public class UserManagementFragment extends Fragment implements ViewHandleUserMa
                 return true;
             }
         });
+
+        popupMenu.setOnDismissListener(new PopupMenu.OnDismissListener() {
+            @Override
+            public void onDismiss(PopupMenu menu) {
+                mRlItemUser.setBackground(getResources().getDrawable(R.color.colorWhite));
+            }
+        });
+
         popupMenu.show();
     }
 
@@ -219,5 +247,10 @@ public class UserManagementFragment extends Fragment implements ViewHandleUserMa
 
         ((UserControlActivity)getActivity()).dialogHelper.show();
         this.mPresenterUserManagement.handleGetUserList(0, 20, ((UserControlActivity)getActivity()).userStatus);
+    }
+
+    @Override
+    public void onClick(View v) {
+        mLsvUsers.smoothScrollToPosition(0);
     }
 }

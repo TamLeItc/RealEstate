@@ -15,7 +15,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/txv_name"
-            android:text="Tên:Lê Văn Tâm"
+            android:text="Tên"
             android:textSize="@dimen/_10sp"
             android:maxLines="1"
             android:ellipsize="end"
@@ -26,7 +26,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/txv_role"
             android:layout_alignParentRight="true"
-            android:text="Admin"
+            android:text="Level"
             android:textColor="@color/colorAdmin"
             android:textSize="@dimen/_10sp"/>
 
@@ -45,7 +45,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/txv_phone_number"
-            android:text="SDT: 0969396459"
+            android:text="SDT"
             android:layout_below="@+id/txv_name"
             android:maxLines="1"
             android:ellipsize="end"
@@ -54,7 +54,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Email: itcdeveloper14@gmail.com"
+            android:text="Email"
             android:layout_below="@+id/txv_phone_number"
             android:id="@+id/txv_email_address"
             android:maxLines="1"

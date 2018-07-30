@@ -289,6 +289,15 @@ public class ImagesInformationFragment extends Fragment implements ViewHandleMod
         }
     }
 
+    public boolean checkSavedInformation(){
+        if(mIsPickImage || mIsPickAvartar){
+            return false;
+        }
+        else{
+            return true;
+        }
+    }
+
     @Override
     public void onInsertBlankPost(boolean status, int postId) {
 

@@ -29,10 +29,10 @@
             android:id="@+id/txv_price"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="2,2 tỷ"
             android:textColor="@color/colorMain"
             android:textSize="@dimen/_12sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:text="@string/price"/>
 
         <TextView
             android:maxLines="1"
@@ -54,10 +54,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/txv_area"
-            android:text="72 m2"
             android:textSize="@dimen/_10sp"
             android:layout_alignParentRight="true"
-            android:textColor="@color/colorMain" />
+            android:textColor="@color/colorMain"
+            android:text="@string/area"/>
 
         <TextView
             android:id="@+id/txv_status"
@@ -68,7 +68,8 @@
             android:layout_alignParentRight="true"
             android:layout_marginRight="@dimen/_3dp"
             android:textSize="@dimen/_9sp"
-            android:layout_marginTop="@dimen/_5dp"/>
+            android:layout_marginTop="@dimen/_5dp"
+            android:text="Trạng thái"/>
 
         <TextView
             android:layout_alignParentLeft="true"
@@ -79,7 +80,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/txv_district_province_city"
-            android:text="Bình Thạnh, TP Hồ Chí Minh"
+            android:text="Quận/Huyện, Tỉnh/Thành phố"
             android:textSize="@dimen/_9sp"
             android:layout_marginTop="@dimen/_5dp"
             android:layout_below="@+id/txv_area" />
@@ -91,7 +92,7 @@
             android:maxLines="1"
             android:ellipsize="end"
             android:textSize="@dimen/_9sp"
-            android:text="Ngày đăng: 20/05/2018"
+            android:text="Ngày đăng:"
             android:layout_below="@+id/txv_district_province_city"
             />
 

@@ -58,6 +58,7 @@ public class UserControlActivity extends AppCompatActivity implements AlertHelpe
     public int positionFragment = 0;
     public boolean isRequireAccountManagement = false;
     private boolean mDoubleBackToExitPressedOnce = false;
+    public boolean isFilter = false;
 
     public String productFormality = "%";
     public String productStatus = "%";
@@ -266,6 +267,7 @@ public class UserControlActivity extends AppCompatActivity implements AlertHelpe
                     userStatus = "yes";
                 }
 
+                isFilter = true;
                 userFilterCallback.onFilter();
                 dialog.dismiss();
             }
@@ -311,6 +313,8 @@ public class UserControlActivity extends AppCompatActivity implements AlertHelpe
                 else{
                     productFormality = "no";
                 }
+
+                isFilter = true;
                 postFilterCallback.onFilter();
                 dialog.dismiss();
             }

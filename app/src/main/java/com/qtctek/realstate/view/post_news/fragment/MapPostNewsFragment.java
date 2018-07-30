@@ -2,10 +2,9 @@ package com.qtctek.realstate.view.post_news.fragment;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.location.GpsStatus;
 import android.location.Location;
 import android.location.LocationManager;
@@ -13,7 +12,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
-import android.support.annotation.ColorInt;
 import android.support.annotation.ColorRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -27,7 +25,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
@@ -92,10 +89,9 @@ public class MapPostNewsFragment extends Fragment implements OnMapReadyCallback,
     private PresenterPostNews mPresenterPostNews = new PresenterPostNews(this);
 
     public ArrayList<Product> arrProduct = new ArrayList<>();
-    private ArrayList<Marker> mArrMarket = new ArrayList<>();
 
     public Marker lastMarkerClicked = null;
-    private Product mLastProductClicked = null;
+    public Product mLastProductClicked = null;
 
     private int mMinZoom = 10;
     private int mSecondZoom = 15;
@@ -259,14 +255,14 @@ public class MapPostNewsFragment extends Fragment implements OnMapReadyCallback,
             this.mTxvInformation.setVisibility(View.VISIBLE);
             this.mTxvInformation.setText(getActivity().getResources().getText(R.string.no_data_here));
 
-            removeAllMarker();
+            mMap.clear();
         }
 
         this.mLlQualityPost.setVisibility(View.VISIBLE);
         this.mTxvQualityPost.setText(arrPost.size() + "");
 
         handlePostList(arrPost);
-        createMarkerClicked(this.lastMarkerClicked, this.mLastProductClicked);
+
     }
 
     public void resetLastClick() {
@@ -274,17 +270,6 @@ public class MapPostNewsFragment extends Fragment implements OnMapReadyCallback,
         this.mLastProductClicked = null;
     }
 
-    private void removeAllMarker() {
-        for (int i = 0; i < mArrMarket.size(); i++) {
-            Marker marker = mArrMarket.get(i);
-            try {
-                marker.remove();
-            }
-            catch (java.lang.NullPointerException e){
-
-            }
-        }
-    }
 
     @Override
     public void handlePostListError(String error) {
@@ -338,7 +323,9 @@ public class MapPostNewsFragment extends Fragment implements OnMapReadyCallback,
 
     public void handlePostList(ArrayList<Product> arrPost) {
 
-        removeAllMarker();
+        Log.d("ttt", "ttt");
+
+        mMap.clear();
 
         ArrayList arrayList = new ArrayList();
         for (int i = 0; i < arrPost.size(); i++) {
@@ -353,7 +340,6 @@ public class MapPostNewsFragment extends Fragment implements OnMapReadyCallback,
 
         ListPostNewsFragment.POST_ADAPTER.notifyDataSetChanged();
 
-        this.mArrMarket.clear();
         for (int i = 0; i < arrPost.size(); i++) {
 
             Product product = arrProduct.get(i);
@@ -364,13 +350,13 @@ public class MapPostNewsFragment extends Fragment implements OnMapReadyCallback,
             String strShortPrice = AppUtils.getStringPrice(product.getPrice(), AppUtils.SHORT_PRICE);
 
             if (arrProduct.get(i).getFormality().equals("no")) {
-                this.mArrMarket.add(createMarker(latLng, i, R.color.colorGreen, strShortPrice));
+                createMarker(latLng, i, R.color.colorGreen, strShortPrice);
             } else {
-                this.mArrMarket.add(createMarker(latLng, i, R.color.colorMain, strShortPrice));
+                createMarker(latLng, i, R.color.colorMain, strShortPrice);
             }
-
-            handleLastMarkerClick();
         }
+
+        handleMarkerClicked(lastMarkerClicked, mLastProductClicked);
     }
 
     private void setSavedForList(ArrayList<Product> arrProduct) {
@@ -407,25 +393,36 @@ public class MapPostNewsFragment extends Fragment implements OnMapReadyCallback,
         return false;
     }
 
-    private Marker createMarker(LatLng latLng, int positionInArr, @ColorRes int color, String message) {
+    private Marker createMarker(LatLng latLng, int positionInArr, @ColorRes int color, String infor) {
 
-        if(positionInArr > arrProduct.size() - 1){
+        if(positionInArr > arrProduct.size() - 1 || positionInArr < 0){
             return null;
         }
 
+        IconGenerator iconGenerator = getIconMarker(infor, arrProduct.get(positionInArr), color);
+        Marker marker = mMap.addMarker(new MarkerOptions()
+                .position(latLng)
+                .snippet(positionInArr + "")
+                .icon(BitmapDescriptorFactory.fromBitmap(iconGenerator.makeIcon()))
+                .anchor(iconGenerator.getAnchorU(), iconGenerator.getAnchorV()));
+
+        return marker;
+    }
+
+    private IconGenerator getIconMarker(String infor, Product product, @ColorRes int color){
         View view = LayoutInflater.from(getContext()).inflate(R.layout.item_post_map, null);
         ImageView imvFavorite = view.findViewById(R.id.imv_favorite);
         TextView txvPrice = view.findViewById(R.id.txv_price);
 
-        txvPrice.setText(message);
+        txvPrice.setText(infor);
 
-        if(this.arrProduct.get(positionInArr).getIsSaved()){
+        if(product.getIsSaved()){
             imvFavorite.setVisibility(View.VISIBLE);
         }
         else{
 
 
-            if(isNew(arrProduct.get(positionInArr).getDateUpload())){
+            if(isNew(product.getDateUpload())){
                 imvFavorite.setVisibility(View.VISIBLE);
                 imvFavorite.setImageResource(R.drawable.icon_fiber_new_black_24dp);
             }
@@ -438,19 +435,14 @@ public class MapPostNewsFragment extends Fragment implements OnMapReadyCallback,
             }
         }
 
+
         IconGenerator iconFactory = new IconGenerator(getContext());
         iconFactory.setContentView(view);
         iconFactory.setColor(ContextCompat.getColor(getContext(), color));
         iconFactory.setTextAppearance(R.style.iconGenText);
         iconFactory.setContentPadding(0, 0, 0, 0);
 
-        Marker marker = mMap.addMarker(new MarkerOptions()
-                .position(latLng)
-                .snippet(positionInArr + "")
-                .icon(BitmapDescriptorFactory.fromBitmap(iconFactory.makeIcon(message)))
-                .anchor(iconFactory.getAnchorU(), iconFactory.getAnchorV()));
-
-        return marker;
+        return iconFactory;
     }
 
     private void handleGetData(String option) {
@@ -472,14 +464,16 @@ public class MapPostNewsFragment extends Fragment implements OnMapReadyCallback,
     @Override
     public boolean onMarkerClick(Marker marker) {
 
-        POSITION = Integer.parseInt(marker.getSnippet());
-        marker.setSnippet(POSITION + "");
+        try {
+            POSITION = Integer.parseInt(marker.getSnippet());
+        }
+        catch (Exception e){}
 
         ((MainActivity) getActivity()).disPlayPostItemFragment();
 
         try {
 
-            createMarkerClicked(marker, arrProduct.get(POSITION));
+            handleMarkerClicked(marker, arrProduct.get(POSITION));
 
         } catch (java.lang.IndexOutOfBoundsException e) {
 
@@ -489,52 +483,78 @@ public class MapPostNewsFragment extends Fragment implements OnMapReadyCallback,
         return true;
     }
 
-    private void createMarkerClicked(Marker marker, Product product) {
-        try {
+    private void handleMarkerClicked(Marker marker, Product product) {
+            if(lastMarkerClicked == null || mLastProductClicked == null){
+                lastMarkerClicked = marker;
+                mLastProductClicked = product;
+            }
+            else{
+                int color;
+                if (mLastProductClicked.getFormality().equals("no")) {
+                    color = R.color.colorGreen;
+                } else {
+                    color = R.color.colorMain;
+                }
+                String strShortPrice = AppUtils.getStringPrice(mLastProductClicked.getPrice(), AppUtils.SHORT_PRICE);
+                IconGenerator iconGenerator = getIconMarker(strShortPrice, mLastProductClicked, color);
 
-            LatLng latLng = this.lastMarkerClicked.getPosition();
-            int lastPositionProductClickId = Integer.parseInt(this.lastMarkerClicked.getSnippet());
-            String strShortPrice = AppUtils.getStringPrice(mLastProductClicked.getPrice(), AppUtils.SHORT_PRICE);
-            this.lastMarkerClicked.remove();
+                try {
+                    lastMarkerClicked.setIcon(BitmapDescriptorFactory.fromBitmap(iconGenerator.makeIcon()));
+                }
+                catch (Exception e){
 
-            if (arrProduct.get(lastPositionProductClickId).getFormality().equals("no")) {
-                this.mArrMarket.add(createMarker(latLng, lastPositionProductClickId, R.color.colorGreen, strShortPrice));
-            } else {
-                this.mArrMarket.add(createMarker(latLng, lastPositionProductClickId, R.color.colorMain, strShortPrice));
+                }
+
+
+
             }
 
-            this.lastMarkerClicked = marker;
-            this.mLastProductClicked = product;
+            //marker clicked
+            if(marker != null && product != null){
+                String strShortPrice = AppUtils.getStringPrice(product.getPrice(), AppUtils.SHORT_PRICE);
+                IconGenerator iconGenerator = getIconMarker(strShortPrice, product, R.color.colorMainLight);
+
+                try {
+                    marker.setIcon(BitmapDescriptorFactory.fromBitmap(iconGenerator.makeIcon()));
+                    lastMarkerClicked = marker;
+                }
+                catch (Exception e){
+                    int position = findLocationProduct(product.getId());
+
+                    lastMarkerClicked = mMap.addMarker(new MarkerOptions()
+                            .position(marker.getPosition())
+                            .snippet(position + "")
+                            .icon(BitmapDescriptorFactory.fromBitmap(iconGenerator.makeIcon()))
+                            .anchor(iconGenerator.getAnchorU(), iconGenerator.getAnchorV()));
+
+                    if(position == arrProduct.size()){
+                        arrProduct.add(position, product);
+                    }
+                }
 
 
-        } catch (java.lang.NullPointerException e) {
-            this.lastMarkerClicked = marker;
-            this.mLastProductClicked = product;
-        } catch (java.lang.IndexOutOfBoundsException e) {
 
-        }
-
-        handleLastMarkerClick();
+                mLastProductClicked = product;
+            }
     }
 
-    private void handleLastMarkerClick() {
-        try {
-            LatLng latLng = this.lastMarkerClicked.getPosition();
-            int positionInArr = Integer.parseInt(this.lastMarkerClicked.getSnippet());
-            String strShortPrice = AppUtils.getStringPrice(mLastProductClicked.getPrice(), AppUtils.SHORT_PRICE);
-            this.lastMarkerClicked.remove();
-            this.mArrMarket.add(createMarker(latLng, positionInArr, R.color.colorMainLight, strShortPrice));
-        } catch (java.lang.NullPointerException e) {
+    private int findLocationProduct(int idProduct){
+        for(int i = 0; i < arrProduct.size(); i++){
+            if(arrProduct.get(i).getId() == idProduct){
+                return i;
+            }
         }
+        return arrProduct.size();
     }
-
 
     @Override
     public void onCameraIdle() {
 
         if (mMap.getCameraPosition().zoom <= mMinZoom) {
-            removeAllMarker();
+
+            mMap.clear();
             arrProduct.clear();
+
 
             this.mLlQualityPost.setVisibility(View.GONE);
             this.mTxvInformation.setVisibility(View.VISIBLE);
@@ -555,7 +575,7 @@ public class MapPostNewsFragment extends Fragment implements OnMapReadyCallback,
         if (mMap.getCameraPosition().zoom >= mSecondZoom) {
             handleGetData("list");
         } else {
-            removeAllMarker();
+            mMap.clear();
             arrProduct.clear();
 
             handleGetData("count");

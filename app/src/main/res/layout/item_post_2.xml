@@ -73,7 +73,8 @@
                         android:layout_height="wrap_content"
                         android:textColor="@color/colorWhite"
                         android:textSize="@dimen/_13sp"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        android:text="@string/price"/>
 
                     <TextView
                         android:layout_width="wrap_content"

@@ -123,7 +123,6 @@
                                     android:id="@+id/txv_price"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="2,2 tỷ"
                                     android:textColor="@color/colorRed"
                                     android:textSize="@dimen/_14sp"
                                     android:textStyle="bold" />
@@ -144,7 +143,7 @@
                                     android:layout_height="wrap_content"
                                     android:textColor="@color/colorPrimaryDark"
                                     android:layout_below="@+id/txv_price"
-                                    android:textSize="@dimen/_8sp"/>
+                                    android:textSize="@dimen/_9sp"/>
 
                             </RelativeLayout>
 
@@ -166,7 +165,6 @@
                                         android:id="@+id/txv_bedroom"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:text="1"
                                         android:maxLines="1"
                                         android:ellipsize="end"
                                         android:textColor="@color/colorPrimaryDark"
@@ -200,7 +198,6 @@
                                         android:id="@+id/txv_bathroom"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:text="1"
                                         android:maxLines="1"
                                         android:ellipsize="end"
                                         android:textColor="@color/colorPrimaryDark"
@@ -234,7 +231,6 @@
                                         android:id="@+id/txv_area"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:text="55.55"
                                         android:maxLines="1"
                                         android:ellipsize="end"
                                         android:textColor="@color/colorPrimaryDark"
@@ -264,7 +260,6 @@
                             android:layout_marginTop="@dimen/_2dp"
                             android:ellipsize="end"
                             android:maxLines="1"
-                            android:text="192/29 đường S1, phường Tây thạnh"
                             android:textColor="@color/colorPrimaryDark"
                             android:textSize="@dimen/_9sp" />
 
@@ -276,7 +271,6 @@
                             android:layout_marginBottom="@dimen/_2dp"
                             android:ellipsize="end"
                             android:maxLines="1"
-                            android:text="Bình Thạnh, TP Hồ Chí Minh"
                             android:textColor="@color/colorPrimaryDark"
                             android:textSize="@dimen/_9sp" />
 
@@ -292,7 +286,6 @@
 
                         <TextView
                             android:layout_toRightOf="@id/txv_name_date_upload"
-                            android:text="12-07-2018"
                             android:textColor="@color/colorPrimaryDark"
                             android:textSize="@dimen/_9sp"
                             android:layout_below="@+id/txv_district_province_city"
@@ -305,10 +298,20 @@
 
                 </LinearLayout>
 
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/product_description"
+                    android:textColor="@color/colorMain"
+                    android:textSize="@dimen/_11sp"
+                    android:layout_marginTop="@dimen/_16dp"
+                    android:layout_marginLeft="@dimen/_8dp"
+                    android:layout_marginBottom="@dimen/_4dp"/>
 
                 <LinearLayout
-                    android:layout_marginTop="@dimen/_16dp"
-                    android:layout_margin="@dimen/_8dp"
+                    android:layout_marginLeft="@dimen/_8dp"
+                    android:layout_marginRight="@dimen/_8dp"
+                    android:layout_marginBottom="@dimen/_8dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/custom_card_product_detail"
@@ -319,13 +322,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/product_description"
-                            android:textColor="@color/colorMain"
-                            android:textSize="@dimen/_11sp" />
 
                         <TextView
                             android:id="@+id/txv_title"
@@ -380,30 +376,30 @@
                     </LinearLayout>
                 </LinearLayout>
 
-
+                <TextView
+                    android:id="@+id/txv_contact_information"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/_4dp"
+                    android:layout_marginTop="@dimen/_10dp"
+                    android:layout_marginLeft="@dimen/_8dp"
+                    android:text="@string/contact_information"
+                    android:textColor="@color/colorMain"
+                    android:textSize="@dimen/_11sp" />
 
                 <RelativeLayout
-                    android:layout_margin="@dimen/_8dp"
+                    android:layout_marginLeft="@dimen/_8dp"
+                    android:layout_marginRight="@dimen/_8dp"
+                    android:layout_marginBottom="@dimen/_8dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
                     android:background="@drawable/custom_card_product_detail"
                     android:padding="@dimen/_8dp">
-
-                    <TextView
-                        android:id="@+id/txv_contact_information"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/_5dp"
-                        android:text="@string/contact_information"
-                        android:textColor="@color/colorMain"
-                        android:textSize="@dimen/_11sp" />
 
                     <ImageView
                         android:id="@+id/imv_profile"
                         android:layout_width="@dimen/_20dp"
                         android:layout_height="@dimen/_20dp"
-                        android:layout_below="@+id/txv_contact_information"
                         android:src="@drawable/icon_contacts_black_24dp" />
 
                     <TextView
@@ -411,7 +407,6 @@
                         android:id="@+id/txv_contact_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_below="@+id/txv_contact_information"
                         android:layout_marginLeft="@dimen/_10dp"
                         android:layout_toRightOf="@+id/imv_number_phone"
                         android:ellipsize="end"
@@ -462,29 +457,33 @@
 
                 </RelativeLayout>
 
-                <RelativeLayout
+                <TextView
+                    android:id="@+id/title_detail"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/product_feature"
+                    android:textColor="@color/colorMain"
+                    android:textSize="@dimen/_11sp"
+                    android:layout_marginTop="@dimen/_8dp"
+                    android:layout_marginLeft="@dimen/_8dp"
+                    android:layout_marginBottom="@dimen/_4dp"/>
 
+                <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
+                    android:layout_marginLeft="@dimen/_8dp"
+                    android:layout_marginRight="@dimen/_8dp"
+                    android:layout_marginBottom="@dimen/_8dp"
                     android:background="@drawable/custom_card_product_detail"
                     android:orientation="vertical"
                     android:padding="@dimen/_8dp">
 
-                    <TextView
-                        android:id="@+id/title_detail"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/product_feature"
-                        android:textColor="@color/colorMain"
-                        android:textSize="@dimen/_11sp" />
 
                     <TextView
                         android:textColor="@color/colorPrimaryDark"
                         android:id="@+id/txv_name_architecture"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_below="@+id/title_detail"
                         android:layout_marginTop="@dimen/_5dp"
                         android:text="@string/architecture"
                         android:textSize="@dimen/_9sp" />
@@ -494,7 +493,6 @@
                         android:id="@+id/txv_architecture"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_below="@+id/title_detail"
                         android:layout_marginTop="@dimen/_5dp"
                         android:layout_toRightOf="@id/txv_name_architecture"
                         android:textSize="@dimen/_9sp" />
@@ -570,10 +568,19 @@
             android:src="@drawable/icon_favorite_border_white_24dp"
             android:background="?attr/selectableItemBackground"
             android:clickable="true"
+            android:layout_toLeftOf="@id/imb_mail"/>
+
+        <ImageButton
+            android:id="@+id/imb_mail"
+            android:layout_width="@dimen/_40dp"
+            android:layout_height="@dimen/_40dp"
+            android:src="@drawable/icon_mail_outline_white_24dp"
+            android:background="?attr/selectableItemBackground"
+            android:clickable="true"
             android:layout_toLeftOf="@id/imb_call"/>
 
         <ImageButton
-            android:padding="@dimen/_15dp"
+            android:layout_marginLeft="@dimen/_5dp"
             android:layout_alignParentRight="true"
             android:id="@+id/imb_call"
             android:layout_width="@dimen/_40dp"

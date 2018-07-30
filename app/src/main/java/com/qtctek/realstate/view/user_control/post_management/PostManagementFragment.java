@@ -4,12 +4,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.PopupMenu;
 import android.widget.RelativeLayout;
@@ -21,6 +23,7 @@ import com.qtctek.realstate.dto.Product;
 import com.qtctek.realstate.helper.AlertHelper;
 import com.qtctek.realstate.helper.ToastHelper;
 import com.qtctek.realstate.presenter.user_control.post_management.PresenterPostManagement;
+import com.qtctek.realstate.view.new_post.activity.NewPostActivity;
 import com.qtctek.realstate.view.post_detail.activity.PostDetailActivity;
 import com.qtctek.realstate.view.user_control.activity.UserControlActivity;
 import com.qtctek.realstate.view.user_control.interfaces.ManagementFilterCallback;
@@ -28,13 +31,14 @@ import com.qtctek.realstate.view.user_control.interfaces.ManagementFilterCallbac
 import java.util.ArrayList;
 
 public class PostManagementFragment extends Fragment implements ViewHandlePostManagement, AbsListView.OnScrollListener, AdapterView.OnItemClickListener,
-        AlertHelper.AlertHelperCallback, ManagementFilterCallback {
+        AlertHelper.AlertHelperCallback, ManagementFilterCallback, View.OnClickListener {
 
     private View mView;
 
     private ListView mLsvPost;
     private TextView mTxvInformation;
     private RelativeLayout mRlPostItem;
+    private ImageView mImvUp;
 
     private AdapterPostSale mAdapterListPostForAdmin;
     private ArrayList<Product> mArrProduct = new ArrayList<>();
@@ -64,9 +68,11 @@ public class PostManagementFragment extends Fragment implements ViewHandlePostMa
     private void initViews(){
         this.mLsvPost = mView.findViewById(R.id.lsv_posts);
         this.mTxvInformation = mView.findViewById(R.id.txv_information);
+        this.mImvUp = mView.findViewById(R.id.imv_up);
 
         this.mLsvPost.setOnScrollListener(this);
         this.mLsvPost.setOnItemClickListener(this);
+        this.mImvUp.setOnClickListener(this);
     }
 
     private void handleStart(){
@@ -96,6 +102,12 @@ public class PostManagementFragment extends Fragment implements ViewHandlePostMa
 
     @Override
     public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+        if(firstVisibleItem > 5){
+            this.mImvUp.setVisibility(View.VISIBLE);
+        }
+        else{
+            this.mImvUp.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -114,6 +126,11 @@ public class PostManagementFragment extends Fragment implements ViewHandlePostMa
 
         if(mArrProduct.size() > 0){
             this.mTxvInformation.setVisibility(View.GONE);
+
+            if(((UserControlActivity)getActivity()).isFilter){
+                mLsvPost.smoothScrollToPosition(0);
+                ((UserControlActivity)getActivity()).isFilter = false;
+            }
         }
         else{
             this.mTxvInformation.setText(getResources().getString(R.string.no_data));
@@ -248,5 +265,10 @@ public class PostManagementFragment extends Fragment implements ViewHandlePostMa
         ((UserControlActivity)getActivity()).dialogHelper.show();
         this.mPresenterPostManagement.handleGetPostListForAdmin(0, 20,
                 ((UserControlActivity)getActivity()).productFormality, ((UserControlActivity)getActivity()).productStatus);
+    }
+
+    @Override
+    public void onClick(View v) {
+        this.mLsvPost.smoothScrollToPosition(0);
     }
 }

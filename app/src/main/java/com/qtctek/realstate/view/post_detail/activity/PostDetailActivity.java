@@ -85,6 +85,7 @@ public class PostDetailActivity extends AppCompatActivity implements ViewHandleP
     private ImageButton mImvMore;
     private ImageButton mImbSave;
     private ImageButton mImbCall;
+    private ImageButton mImbMail;
     private LinearLayout mLlMore;
     private RelativeLayout mRlOption ;
     private ExpandableLayout mExpandableLayout;
@@ -165,6 +166,7 @@ public class PostDetailActivity extends AppCompatActivity implements ViewHandleP
         this.mTxvFormality = findViewById(R.id.txv_formality);
         this.mRlOption = findViewById(R.id.rl_option);
         this.mRlSlide = findViewById(R.id.rl_slide);
+        this.mImbMail = findViewById(R.id.imb_mail);
 
         this.mBtnMapView.setOnClickListener(this);
         this.mBtnImageView.setOnClickListener(this);
@@ -174,6 +176,7 @@ public class PostDetailActivity extends AppCompatActivity implements ViewHandleP
         this.mImvBack.setOnClickListener(this);
         this.mImbCall.setOnClickListener(this);
         this.mImbSave.setOnClickListener(this);
+        this.mImbMail.setOnClickListener(this);
         this.mScrollView.getViewTreeObserver().addOnScrollChangedListener(this);
     }
 
@@ -328,7 +331,15 @@ public class PostDetailActivity extends AppCompatActivity implements ViewHandleP
 
         alertHelper.setCallback(this);
         alertHelper.alert("Xác nhận", "Bạn có muốn gọi điện thoại tới số " + numberPhone + " không?",
-                true, "Xác nhận", "Hủy bỏ", Constant.INIT_PERMISSION);
+                true, "Xác nhận", "Hủy bỏ", Constant.CALL_PHONE);
+
+    }
+
+    private void handleConfirmSendMail(String mail){
+
+        alertHelper.setCallback(this);
+        alertHelper.alert("Xác nhận", "Bạn có muốn gửi tin nhắn tới " + mail + " không?",
+                true, "Xác nhận", "Hủy bỏ", Constant.SEND_MAIL);
 
     }
 
@@ -349,6 +360,9 @@ public class PostDetailActivity extends AppCompatActivity implements ViewHandleP
             case R.id.imv_back:
                 mMap.clear();
                 finish();
+                break;
+            case R.id.imb_mail:
+                handleConfirmSendMail(this.mTxvContactEmail.getText().toString());
                 break;
             case R.id.imb_call:
                 handleConfirmCall(this.mTxvContactNumberPhone.getText().toString());
@@ -436,6 +450,7 @@ public class PostDetailActivity extends AppCompatActivity implements ViewHandleP
     }
 
     public void initPermission(){
+
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
             if(checkSelfPermission(Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED){
                 requestPermissions(new String[]{Manifest.permission.CALL_PHONE}, 1001);
@@ -472,6 +487,15 @@ public class PostDetailActivity extends AppCompatActivity implements ViewHandleP
         catch (Exception e){
             toastHelper.toast("Lỗi xử lí", ToastHelper.LENGTH_SHORT);
         }
+    }
+
+    private void handleSendMail(){
+        Intent intent = new Intent();
+        intent.setAction(Intent.ACTION_VIEW);
+        intent.setData(Uri.parse("mailto:" + this.mTxvContactEmail.getText().toString()));
+        intent.putExtra(Intent.EXTRA_SUBJECT, this.mTxvTitle.getText().toString());
+
+        startActivity(Intent.createChooser(intent, "Send a mail"));
     }
 
     @Override
@@ -558,6 +582,7 @@ public class PostDetailActivity extends AppCompatActivity implements ViewHandleP
         if(mScrollY < 625){
             this.mRlOption.setBackgroundResource(R.drawable.custom_for_product_detail);
             this.mImvBack.setImageResource(R.drawable.icon_arrow_left_white_24dp);
+            this.mImbMail.setImageResource(R.drawable.icon_mail_outline_white_24dp);
             this.mImbCall.setImageResource(R.drawable.icon_call_white_24dp);
 
             if(mProduct.getIsSaved()){
@@ -570,6 +595,7 @@ public class PostDetailActivity extends AppCompatActivity implements ViewHandleP
         else{
             this.mRlOption.setBackgroundColor(getResources().getColor(R.color.colorWhite));
             this.mImvBack.setImageResource(R.drawable.icon_arrow_left_black_24dp);
+            this.mImbMail.setImageResource(R.drawable.icon_mail_outline_black_24dp);
             this.mImbCall.setImageResource(R.drawable.icon_call_black_24dp);
 
             if(mProduct.getIsSaved()){
@@ -586,8 +612,11 @@ public class PostDetailActivity extends AppCompatActivity implements ViewHandleP
         if(option == Constant.HANDLE_ERROR){
             finish();
         }
-        else if(option == Constant.INIT_PERMISSION){
+        else if(option == Constant.CALL_PHONE){
             initPermission();
+        }
+        else if(option == Constant.SEND_MAIL){
+            handleSendMail();
         }
     }
 

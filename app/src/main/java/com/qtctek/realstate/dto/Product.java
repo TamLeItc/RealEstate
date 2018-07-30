@@ -45,15 +45,15 @@ public class Product {
         this.mMapLng = "";
         this.mAmenities = "";
         this.mCityId = 79;
-        this.mCity = "Hồ Chí Minh";
+        this.mCity = "";
         this.mDistrictId = 760;
-        this.mDistrict = "Quận 1";
-        this.mType = "Nhà chung cư";
+        this.mDistrict = "";
+        this.mType = "";
         this.mAmenities = "";
         this.mStatus = "1";
-        this.mArchitecture = "Kiểu cổ điển";
+        this.mArchitecture = "";
         this.mArchitectureId = 1;
-        this.mType = "Nhà chung cư";
+        this.mType = "";
         this.mTypeId = 1;
     }
 

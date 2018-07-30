@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.PopupMenu;
 import android.widget.RelativeLayout;
@@ -27,13 +28,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class SavedPostFragment extends Fragment implements ViewHandleSavedPost,
-        AbsListView.OnScrollListener, AdapterView.OnItemClickListener {
+        AbsListView.OnScrollListener, AdapterView.OnItemClickListener, View.OnClickListener {
 
     private View mView;
 
     private ListView mLsvSavedPost;
     private TextView mTxvInformation;
     private RelativeLayout mRlPostItem;
+    private ImageView mImvUp;
 
     private AdapterPostSale mAdapterListPost;
     private ArrayList<Product> mArrListProduct = new ArrayList<>();
@@ -62,9 +64,11 @@ public class SavedPostFragment extends Fragment implements ViewHandleSavedPost,
     private void initViews(){
         this.mLsvSavedPost = mView.findViewById(R.id.lsv_posts);
         this.mTxvInformation = mView.findViewById(R.id.txv_information);
+        this.mImvUp = mView.findViewById(R.id.imv_up);
 
         this.mLsvSavedPost.setOnScrollListener(this);
         this.mLsvSavedPost.setOnItemClickListener(this);
+        this.mImvUp.setOnClickListener(this);
     }
 
     private void handleStart(){
@@ -91,6 +95,12 @@ public class SavedPostFragment extends Fragment implements ViewHandleSavedPost,
 
     @Override
     public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+        if(firstVisibleItem > 5){
+            this.mImvUp.setVisibility(View.VISIBLE);
+        }
+        else{
+            this.mImvUp.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -203,5 +213,10 @@ public class SavedPostFragment extends Fragment implements ViewHandleSavedPost,
         this.mTxvInformation.setVisibility(View.VISIBLE);
 
         ((UserControlActivity)getActivity()).toastHelper.toast("Lỗi trong quá trình tải dữ liệu. Vui lòng thử lại sau!!!", ToastHelper.LENGTH_SHORT);
+    }
+
+    @Override
+    public void onClick(View v) {
+        this.mLsvSavedPost.smoothScrollToPosition(0);
     }
 }

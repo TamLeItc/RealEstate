@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.PopupMenu;
 import android.widget.RelativeLayout;
@@ -24,7 +25,7 @@ import com.qtctek.realstate.view.user_control.activity.UserControlActivity;
 
 import java.util.ArrayList;
 
-public class SavedSearchFragment extends Fragment implements ViewHandleSavedSearch, AdapterView.OnItemClickListener {
+public class SavedSearchFragment extends Fragment implements ViewHandleSavedSearch, AdapterView.OnItemClickListener, View.OnClickListener {
 
     private View mView;
 
@@ -106,7 +107,7 @@ public class SavedSearchFragment extends Fragment implements ViewHandleSavedSear
         mPositionClick = position;
         this.mRlSearchItem = view.findViewById(R.id.rl_item_1);
 
-        this.mRlSearchItem.setBackground(getResources().getDrawable(R.drawable.custom_border_normal));
+        mRlSearchItem.setBackground(getResources().getDrawable(R.drawable.custom_border_normal));
 
         popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             @Override
@@ -139,5 +140,9 @@ public class SavedSearchFragment extends Fragment implements ViewHandleSavedSear
 
     private void handleUpdateSavedSearch(){
         new PresenterSavedSearch(this).handleUpdateSavedSearchList(ListPostNewsFragment.LIST_SAVED_SEARCH, getContext());
+    }
+
+    @Override
+    public void onClick(View v) {
     }
 }

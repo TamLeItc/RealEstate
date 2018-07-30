@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.PopupMenu;
 import android.widget.RelativeLayout;
@@ -32,13 +33,14 @@ import java.util.ArrayList;
 
 public class PostedPostFragment extends Fragment implements ViewHandlePostedPost ,
         AbsListView.OnScrollListener, AdapterView.OnItemClickListener, AlertHelper.AlertHelperCallback,
-        ManagementFilterCallback{
+        ManagementFilterCallback, View.OnClickListener {
 
     private View mView;
 
     private ListView mLsvPostedPost;
     private TextView mTxvInformation;
     private RelativeLayout mRlPostItem;
+    private ImageView mImvUp;
 
     private AdapterPostSale mAdapterListPost;
     private ArrayList<Product> mArrProduct = new ArrayList<>();
@@ -68,9 +70,11 @@ public class PostedPostFragment extends Fragment implements ViewHandlePostedPost
     private void initViews(){
         this.mLsvPostedPost = mView.findViewById(R.id.lsv_posts);
         this.mTxvInformation = mView.findViewById(R.id.txv_information);
+        this.mImvUp = mView.findViewById(R.id.imv_up);
 
         this.mLsvPostedPost.setOnScrollListener(this);
         this.mLsvPostedPost.setOnItemClickListener(this);
+        this.mImvUp.setOnClickListener(this);
     }
 
     private void handleStart(){
@@ -102,6 +106,11 @@ public class PostedPostFragment extends Fragment implements ViewHandlePostedPost
 
         if(mArrProduct.size() > 0){
             this.mTxvInformation.setVisibility(View.GONE);
+
+            if(((UserControlActivity)getActivity()).isFilter){
+                mLsvPostedPost.smoothScrollToPosition(0);
+                ((UserControlActivity)getActivity()).isFilter = false;
+            }
         }
         else{
             this.mTxvInformation.setText(getResources().getString(R.string.no_data));
@@ -163,6 +172,12 @@ public class PostedPostFragment extends Fragment implements ViewHandlePostedPost
 
     @Override
     public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+        if(firstVisibleItem > 5){
+            this.mImvUp.setVisibility(View.VISIBLE);
+        }
+        else{
+            this.mImvUp.setVisibility(View.GONE);
+        }
     }
 
 
@@ -241,5 +256,10 @@ public class PostedPostFragment extends Fragment implements ViewHandlePostedPost
         ((UserControlActivity)getActivity()).dialogHelper.show();
         this.mPresenterPostedPost.handleGetListPostedPost(0, 20, MainActivity.USER.getEmail(),
                 ((UserControlActivity)getActivity()).productFormality, ((UserControlActivity)getActivity()).productStatus);
+    }
+
+    @Override
+    public void onClick(View v) {
+        mLsvPostedPost.smoothScrollToPosition(0);
     }
 }

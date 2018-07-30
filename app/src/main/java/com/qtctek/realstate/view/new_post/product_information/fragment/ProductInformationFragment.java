@@ -137,6 +137,15 @@ public class ProductInformationFragment extends Fragment implements View.OnClick
         isEdited = false;
     }
 
+    public boolean checkSavedInformation(){
+        if(isEdited){
+            return false;
+        }
+        else{
+            return true;
+        }
+    }
+
     public void handleSaveProductInformation(){
 
         if(!isEdited){
@@ -213,9 +222,9 @@ public class ProductInformationFragment extends Fragment implements View.OnClick
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 mTxvProvinceCity.setText(mArrCity.get(position).getName());
                 ((NewPostActivity)getActivity()).product.setCityId(mArrCity.get(position).getId());
-                mTxvDistrict.setText("");
-                ((NewPostActivity)getActivity()).product.setDistrictId(0);
 
+                ((NewPostActivity)getActivity()).product.setDistrictId(0);
+                mTxvDistrict.setText("");
                 isEdited = true;
                 mDialog.dismiss();
             }
@@ -364,7 +373,6 @@ public class ProductInformationFragment extends Fragment implements View.OnClick
         btnConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                isEdited = true;
                 mDialog.dismiss();
             }
         });
@@ -399,6 +407,7 @@ public class ProductInformationFragment extends Fragment implements View.OnClick
                         }
                     }
                 }
+                isEdited = true;
                 mTxvAmenities.setText( amenities);
             }
         });

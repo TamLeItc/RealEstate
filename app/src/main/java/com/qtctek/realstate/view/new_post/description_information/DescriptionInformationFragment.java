@@ -62,6 +62,15 @@ public class DescriptionInformationFragment extends Fragment implements View.OnC
         this.mEdtQualityCharacter.setText(text);
     }
 
+    public boolean checkSavedInformation(){
+        if(mIsEdited){
+            return false;
+        }
+        else{
+            return true;
+        }
+    }
+
     public void handleSaveDescriptionInformation(){
         if(!mIsEdited){
             if(!isSaveTemp) {

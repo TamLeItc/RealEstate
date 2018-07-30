@@ -18,4 +18,6 @@ public class Constant {
     public static final int EDIT = 1014;
     public static final int DENIED = 1015;
     public static final int LOGIN = 1016;
+    public static final int CALL_PHONE = 1017;
+    public static final int SEND_MAIL = 1018;
 }

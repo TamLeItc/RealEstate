@@ -43,6 +43,18 @@
         android:visibility="gone"
         android:textColor="@color/colorGrayDark"/>
 
+    <ImageView
+        android:background="?attr/selectableItemBackground"
+
+        android:id="@+id/imv_up"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/_10dp"
+        android:src="@drawable/icon_arrow_upward_black_24dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"/>
+
+
 </RelativeLayout>
 
 

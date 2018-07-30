@@ -147,12 +147,34 @@ public class NewPostActivity extends AppCompatActivity implements ViewHandleMode
     @Override
     public boolean onOptionsItemSelected(final MenuItem item) {
 
-        if(this.viewPaper.getCurrentItem() <= 4 && item.getItemId() != R.id.action_save_temp){
-
-            alertHelper.setCallback(this);
-            alertHelper.alert("", "Bạn chắc chắn thoát ra", false, "Xác nhận",
-                    "Hủy bỏ", Constant.OPTION_MENU_SELECTED);
-            mMenuItem = item;
+        mMenuItem = item;
+        if(this.viewPaper.getCurrentItem() <= 3 && item.getItemId() != R.id.action_save_temp){
+            boolean isSavedInformation = true;
+            switch (mCurrentPositionFragment){
+                case 0:
+                    isSavedInformation = ((ImagesInformationFragment) mCurrentFragment).checkSavedInformation();
+                    break;
+                case 1:
+                    isSavedInformation = ((ProductInformationFragment) mCurrentFragment).checkSavedInformation();
+                    break;
+                case 2:
+                    isSavedInformation = ((DescriptionInformationFragment) mCurrentFragment).checkSavedInformation();
+                    break;
+                case 3:
+                    isSavedInformation = ((MapInformationFragment) mCurrentFragment).checkSavedInformation();
+                    break;
+            }
+            if(isSavedInformation){
+                alertHelper.setCallback(this);
+                alertHelper.alert("Thêm bài đăng mới", "Bạn muốn thoát ra. Bài đăng của bạn sẽ" +
+                                " ở chế độ tạm lưu", false, "Xác nhận",
+                        "Hủy bỏ", Constant.OPTION_MENU_SELECTED);
+            }
+            else{
+                alertHelper.setCallback(this);
+                alertHelper.alert("Thêm bài đăng mới", "Bạn chưa lưu thông tin. Bạn muốn thoát ra", false, "Xác nhận",
+                        "Hủy bỏ", Constant.OPTION_MENU_SELECTED);
+            }
         }
         else{
             handleOptionItemSelected(item);
@@ -160,7 +182,6 @@ public class NewPostActivity extends AppCompatActivity implements ViewHandleMode
 
         return super.onOptionsItemSelected(item);
     }
-
 
     private void handleSaveTemp(){
         switch (mCurrentPositionFragment){

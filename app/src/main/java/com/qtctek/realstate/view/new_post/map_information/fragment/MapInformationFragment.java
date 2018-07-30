@@ -243,6 +243,15 @@ public class MapInformationFragment extends Fragment implements OnMapReadyCallba
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(mapLat, mapLng), 16));
     }
 
+    public boolean checkSavedInformation(){
+        if(mIsEditedLocation){
+            return false;
+        }
+        else{
+            return true;
+        }
+    }
+
     public void handleSaveMapInformation(){
 
         if(!mIsEditedLocation && (isSaveTemp || (!isSaveTemp && ((NewPostActivity)getActivity()).product.getStatus() == "3"))){
