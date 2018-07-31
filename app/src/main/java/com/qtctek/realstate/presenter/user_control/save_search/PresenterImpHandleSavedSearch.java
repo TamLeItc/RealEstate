@@ -4,6 +4,8 @@ public interface PresenterImpHandleSavedSearch {
 
     void onGetDataSavedSearchSuccessful(String data);
 
+    void onGetDataLastSearchSuccessful(String data);
+
     void onUpdateDataSavedSearchSuccessful();
 
 }

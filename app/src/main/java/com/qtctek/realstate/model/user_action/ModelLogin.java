@@ -6,6 +6,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.qtctek.realstate.common.AppUtils;
+import com.qtctek.realstate.common.general.Constant;
 import com.qtctek.realstate.presenter.user_action.login.PresenterImpHandleLogin;
 import com.qtctek.realstate.view.post_news.activity.MainActivity;
 
@@ -32,7 +33,7 @@ public class ModelLogin {
     }
 
     public void requireGetDataSaveLogin(Context context){
-        SharedPreferences sharedPreferences = context.getSharedPreferences(AppUtils.SHARED_PREFERENCES, context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = context.getSharedPreferences(Constant.SHARED_PREFERENCES, context.MODE_PRIVATE);
         String userName = sharedPreferences.getString(AppUtils.USERNAME, "");
         String password = sharedPreferences.getString(AppUtils.PASSWORD, "");
 
@@ -40,7 +41,7 @@ public class ModelLogin {
     }
 
     public void requireUpdateDataSaveLogin(String userName, String password, Context context){
-        SharedPreferences sharedPreferences = context.getSharedPreferences(AppUtils.SHARED_PREFERENCES, context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = context.getSharedPreferences(Constant.SHARED_PREFERENCES, context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(AppUtils.USERNAME, userName);
         editor.putString(AppUtils.PASSWORD, password);

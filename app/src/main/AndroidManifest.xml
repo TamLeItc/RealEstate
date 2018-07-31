@@ -24,7 +24,8 @@
         <activity
             android:name=".view.post_news.activity.MainActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait">
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -34,22 +35,27 @@
 
         </activity>
         <activity android:name=".view.user_action.activity.UserActionActivity"
-            android:windowSoftInputMode="adjustResize">
+            android:windowSoftInputMode="adjustResize"
+            android:screenOrientation="portrait">
 
         </activity>
-        <activity android:name=".view.user_control.activity.UserControlActivity">
+        <activity android:name=".view.user_control.activity.UserControlActivity"
+            android:screenOrientation="portrait">
 
         </activity>
-        <activity android:name=".view.new_post.activity.NewPostActivity">
+        <activity android:name=".view.new_post.activity.NewPostActivity"
+            android:screenOrientation="portrait">
 
         </activity>
 
-        <activity android:name=".view.post_detail.activity.PostDetailActivity">
+        <activity android:name=".view.post_detail.activity.PostDetailActivity"
+            android:screenOrientation="portrait">
 
         </activity>
 
         <activity android:name=".view.post_news.dialog.SearchFilterDialog"
-            android:theme="@style/Theme.Dialog">
+            android:theme="@style/Theme.Dialog"
+            android:screenOrientation="portrait">
         </activity>
 
         <meta-data

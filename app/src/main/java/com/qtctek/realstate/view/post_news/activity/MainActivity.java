@@ -1,5 +1,6 @@
 package com.qtctek.realstate.view.post_news.activity;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.Fragment;
@@ -16,6 +17,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -65,6 +67,7 @@ import net.cachapa.expandablelayout.ExpandableLayout;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, View.OnTouchListener, View.OnClickListener,
@@ -75,8 +78,6 @@ public class MainActivity extends AppCompatActivity
     public static User USER = new User();
 
     public static OnUserLogin ON_USER_LOGIN;
-
-    private PostFragment mPostFragment;
 
     public ViewPager viewPaper;
     private Toolbar mToolbar;
@@ -89,6 +90,7 @@ public class MainActivity extends AppCompatActivity
     public EditText edtSearch;
     public ExpandableLayout expandableLayoutProduct;
     public ExpandableLayout expandableLayoutSearch;
+    private ExpandableLayout expandableLayoutStart;
     private Fragment frgSearchPlace;
 
     public static Dialog NETWORK_CONNECTION_DIALOG;
@@ -98,6 +100,8 @@ public class MainActivity extends AppCompatActivity
     public KeyboardHelper keyboardHelper;
 
     //product
+    public Double mapLat = 0.0;
+    public Double mapLng = 0.0;
     public String minPrice = "000000";
     public String maxPrice = "999999999999";
     public String formality = "%";
@@ -107,7 +111,10 @@ public class MainActivity extends AppCompatActivity
     public int bedroom = 0;
 
     private boolean mDoubleBackToExitPressedOnce = false;
-    private int mOption = 0;
+    public int optionSort = 0;
+    public boolean isFirstOpenApp;
+    public boolean isEditSaved = false;
+    public MainAdapter mainAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -121,15 +128,15 @@ public class MainActivity extends AppCompatActivity
         dialogHelper = new DialogHelper(this);
         keyboardHelper = new KeyboardHelper(this);
 
-//        handleInternetReceiver();
-//        createNetworkConnectionFailedDialog();
+        handleInternetReceiver();
+        createNetworkConnectionFailedDialog();
 
+        handleGetSavedSearch();
         handleCreateAuthFragment();
         initViews();
         addToolbar();
         addNavigationView();
         addControl();
-        handleGetSavedSearch();
 
         ON_USER_LOGIN = this;
 
@@ -140,6 +147,7 @@ public class MainActivity extends AppCompatActivity
         this.registerReceiver(new NetworkConnectionReceiver(), intentFilter);
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     private void initViews() {
         viewPaper = (ViewPager) findViewById(R.id.view_pager);
         this.mToolbar = findViewById(R.id.toolbar);
@@ -150,6 +158,7 @@ public class MainActivity extends AppCompatActivity
         this.mTxvViewMode = findViewById(R.id.txv_view_mode);
         this.expandableLayoutProduct = findViewById(R.id.expandable_layout_product);
         this.expandableLayoutSearch = findViewById(R.id.expandable_layout_search);
+        this.expandableLayoutStart = findViewById(R.id.expandable_layout_start);
         this.edtSearch = findViewById(R.id.edt_search);
         this.mLlSaveSearch = findViewById(R.id.ll_save_search);
         this.frgSearchPlace = getFragmentManager().findFragmentById(R.id.frg_search_place);
@@ -178,16 +187,16 @@ public class MainActivity extends AppCompatActivity
 
     private void addControl() {
         FragmentManager manager = getSupportFragmentManager();
-        MainAdapter adapter = new MainAdapter(manager);
-        viewPaper.setAdapter(adapter);
+        mainAdapter = new MainAdapter(manager);
+        viewPaper.setAdapter(mainAdapter);
 
-        getSupportActionBar().setHomeAsUpIndicator(R.drawable.icon_menu_black_24dp);
+        Objects.requireNonNull(getSupportActionBar()).setHomeAsUpIndicator(R.drawable.icon_menu_black_24dp);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     private void addToolbar(){
         setSupportActionBar(this.mToolbar);
-        getSupportActionBar().setDisplayShowTitleEnabled(true);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayShowTitleEnabled(true);
 
         this.mToolbar.setTitleTextColor(getResources().getColor(R.color.colorPrimaryDark));
     }
@@ -195,6 +204,7 @@ public class MainActivity extends AppCompatActivity
     private void handleCreateAuthFragment(){
         final StartFragment startFragment = new StartFragment();
         android.app.FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+        fragmentTransaction.setCustomAnimations(R.animator.custom_frag_in, R.animator.custom_frg_out);
         fragmentTransaction.replace(R.id.fl_start, startFragment);
         fragmentTransaction.commit();
 
@@ -203,15 +213,14 @@ public class MainActivity extends AppCompatActivity
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                getFragmentManager().beginTransaction().remove(startFragment).commit();
-                flStart.setVisibility(View.GONE);
+                expandableLayoutStart.collapse();
             }
         }, 2000);
     }
 
     public void disPlayPostItemFragment(){
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        mPostFragment = new PostFragment();
+        PostFragment mPostFragment = new PostFragment();
         fragmentTransaction.replace(R.id.fl_item_post, mPostFragment);
         fragmentTransaction.commit();
 
@@ -222,7 +231,7 @@ public class MainActivity extends AppCompatActivity
         AlertDialog.Builder builder = new AlertDialog.Builder(this)
                 .setMessage("Không thể kết nối internet. Kiểm tra kết nối của bạn!!!")
                 .setCancelable(false);
-        this.NETWORK_CONNECTION_DIALOG = builder.create();
+        NETWORK_CONNECTION_DIALOG = builder.create();
     }
 
 
@@ -263,15 +272,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-        try{
-            if(mPostFragment != null){
-                FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                fragmentTransaction.remove(mPostFragment);
-                fragmentTransaction.commit();
-            }
-        }
-        catch (java.lang.NullPointerException e){}
-
+        expandableLayoutProduct.collapse();
 
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
@@ -291,7 +292,14 @@ public class MainActivity extends AppCompatActivity
 
             }
             else{
-                mOption = 0;
+
+                if(isEditSaved){
+                    MapPostNewsFragment mapPostNewsFragment = (MapPostNewsFragment) getSupportFragmentManager().getFragments().get(0);
+                    mapPostNewsFragment.loadMarker();
+
+                    isEditSaved = false;
+                }
+
                 viewPaper.setCurrentItem(0);
                 item.setTitle("List");
                 this.mLlViewMode.setVisibility(View.VISIBLE);
@@ -437,6 +445,7 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     public boolean onTouch(View v, MotionEvent event) {
         return true;
@@ -553,7 +562,7 @@ public class MainActivity extends AppCompatActivity
         arrOption.add("Diện tích tăng dần");
         arrOption.add("Diện tích giảm dần");
 
-        SortAdapter sortAdapter = new SortAdapter(this, arrOption, mOption);
+        SortAdapter sortAdapter = new SortAdapter(this, arrOption, optionSort);
 
         ListView lsv = dialog.findViewById(R.id.lsv_item);
         Button btnCancel = dialog.findViewById(R.id.btn_cancel);
@@ -569,9 +578,9 @@ public class MainActivity extends AppCompatActivity
         lsv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if(mOption != position){
+                if(optionSort != position){
                     dialogHelper.show();
-                    mOption = position;
+                    optionSort = position;
                     handleSort();
                     dialog.dismiss();
 
@@ -639,23 +648,23 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    private void handleSort(){
+    public synchronized void handleSort(){
 
         MapPostNewsFragment mapPostNewsFragment = (MapPostNewsFragment) getSupportFragmentManager().getFragments().get(0);
 
-        if(mOption == 0){
+        if(optionSort == 0){
             Collections.sort(mapPostNewsFragment.arrProduct, new ProductDateSort());
         }
-        else if(mOption == 1){
+        else if(optionSort == 1){
             Collections.sort(mapPostNewsFragment.arrProduct, new PriceProductIncreaseSort());
         }
-        else if(mOption == 2){
+        else if(optionSort == 2){
             Collections.sort(mapPostNewsFragment.arrProduct, new PriceProductDecreaseSort());
         }
-        else if(mOption == 3){
+        else if(optionSort == 3){
             Collections.sort(mapPostNewsFragment.arrProduct, new AreaProductIncreaseSort());
         }
-        else if(mOption == 4){
+        else if(optionSort == 4){
             Collections.sort(mapPostNewsFragment.arrProduct, new AreaProductDecreaseSort());
         }
         ListPostNewsFragment.POST_ADAPTER.notifyDataSetChanged();
@@ -666,14 +675,32 @@ public class MainActivity extends AppCompatActivity
         dialogHelper.dismiss();
     }
 
+    public void lastSearch(){
+        new PresenterSavedSearch(this).handleGetDataLastSearch(this);
+    }
+
     @Override
     public void onHandleDataSavedSearchSuccessful(ArrayList<Condition> lists) {
         ListPostNewsFragment.LIST_SAVED_SEARCH = lists;
+
+        isFirstOpenApp = ListPostNewsFragment.LIST_SAVED_SEARCH.size() == 0;
+
     }
 
     @Override
     public void onHandleDataSavedSearchError(String error) {
 
+    }
+
+    @Override
+    public void onHandleDataLastSearchSuccessful(Condition condition) {
+        if(condition.getArchitecture() != null){
+            MapPostNewsFragment.ON_EVENT_FROM_ACTIVITY.onHandleSearch(condition);
+        }
+        else{
+            MapPostNewsFragment mapPostNewsFragment = (MapPostNewsFragment) getSupportFragmentManager().getFragments().get(0);
+            mapPostNewsFragment.searchNearby();
+        }
     }
 
     @Override
@@ -704,6 +731,17 @@ public class MainActivity extends AppCompatActivity
 
     }
 
+    @Override
+    protected void onStop() {
+        MapPostNewsFragment mapPostNewsFragment = (MapPostNewsFragment)getSupportFragmentManager().getFragments().get(0);
+        Condition condition = new Condition(mapLat, mapLng, mapPostNewsFragment.mMap.getCameraPosition().zoom,
+                minPrice, maxPrice, formality, type, architecture, bathroom, bedroom, "last_search");
+
+        new PresenterSavedSearch(this).handleSaveLastSearch(condition, this);
+
+        super.onStop();
+    }
+
     class ProductDateSort implements Comparator<Product>{
         @Override
         public int compare(Product left, Product right) {
@@ -729,15 +767,7 @@ public class MainActivity extends AppCompatActivity
 
         @Override
         public int compare(Product left, Product right) {
-            if(left.getArea() < right.getArea()){
-                return -1;
-            }
-            else if (left.getArea() > right.getArea()){
-                return 1;
-            }
-            else{
-                return 0;
-            }
+            return Float.compare(left.getArea(), right.getArea());
         }
     }
 
@@ -745,15 +775,7 @@ public class MainActivity extends AppCompatActivity
 
         @Override
         public int compare(Product left, Product right) {
-            if(right.getArea() < left.getArea()){
-                return -1;
-            }
-            else if (right.getArea() > left.getArea()){
-                return 1;
-            }
-            else{
-                return 0;
-            }
+            return Float.compare(right.getArea(), left.getArea());
         }
     }
 }

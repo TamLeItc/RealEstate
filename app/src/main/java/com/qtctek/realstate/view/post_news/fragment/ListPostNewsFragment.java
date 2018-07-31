@@ -63,6 +63,7 @@ public class ListPostNewsFragment extends Fragment implements ViewHandleSavedPos
 
     @Override
     public void onHandleDataProductIdsSuccessful(HashMap<String, String> list) {
+        LIST_SAVED_PRODUCT_ID.clear();
         LIST_SAVED_PRODUCT_ID.putAll(list);
     }
 

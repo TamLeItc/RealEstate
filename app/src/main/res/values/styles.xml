@@ -31,7 +31,7 @@
 
 <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
-    <style name="Theme.Dialog" parent="@android:style/Theme.Holo.Dialog.NoActionBar">
+    <style name="Theme.Dialog" parent="@android:style/Theme.Holo.Light.Dialog.NoActionBar">
         <item name="android:backgroundDimEnabled">false</item>
         <item name="actionMenuTextColor">@color/colorGrayLight</item>
     </style>

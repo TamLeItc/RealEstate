@@ -4,7 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
 
-import com.qtctek.realstate.common.AppUtils;
+import com.qtctek.realstate.common.general.Constant;
 import com.qtctek.realstate.presenter.user_control.save_search.PresenterImpHandleSavedSearch;
 
 public class ModelSavedSearch {
@@ -16,20 +16,35 @@ public class ModelSavedSearch {
     }
 
     public void requireGetDataSavedSearch(Context context){
-        SharedPreferences sharedPreferences = context.getSharedPreferences(AppUtils.SHARED_PREFERENCES, context.MODE_PRIVATE);
-        String data = sharedPreferences.getString(AppUtils.SAVED_SEARCH_LIST, "");
+        SharedPreferences sharedPreferences = context.getSharedPreferences(Constant.SHARED_PREFERENCES, context.MODE_PRIVATE);
+        String data = sharedPreferences.getString(Constant.SAVED_SEARCH_LIST, "");
         mPresenterImpHandleSavedSearch.onGetDataSavedSearchSuccessful(data);
     }
 
-    public void requireUpdateDataProductIds(String data, Context context){
+    public void requireGetDataLastSearch(Context context){
+        SharedPreferences sharedPreferences = context.getSharedPreferences(Constant.SHARED_PREFERENCES, context.MODE_PRIVATE);
+        String data = sharedPreferences.getString(Constant.LAST_SEARCH, "");
+        mPresenterImpHandleSavedSearch.onGetDataLastSearchSuccessful(data);
+    }
 
-            SharedPreferences sharedPreferences = context.getSharedPreferences(AppUtils.SHARED_PREFERENCES, context.MODE_PRIVATE);
+    public void requireUpdateDataSavedSearch(String data, Context context){
+
+            SharedPreferences sharedPreferences = context.getSharedPreferences(Constant.SHARED_PREFERENCES, context.MODE_PRIVATE);
             SharedPreferences.Editor editor = sharedPreferences.edit();
 
-            editor.putString(AppUtils.SAVED_SEARCH_LIST, data);
+            editor.putString(Constant.SAVED_SEARCH_LIST, data);
             editor.commit();
 
             mPresenterImpHandleSavedSearch.onUpdateDataSavedSearchSuccessful();
+    }
+
+    public void requireUpdateDataLastSearch(String data, Context context){
+
+        SharedPreferences sharedPreferences = context.getSharedPreferences(Constant.SHARED_PREFERENCES, context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        editor.putString(Constant.LAST_SEARCH, data);
+        editor.commit();
     }
 
 }

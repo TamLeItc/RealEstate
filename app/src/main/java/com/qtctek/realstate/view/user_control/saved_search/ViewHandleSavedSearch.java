@@ -11,6 +11,8 @@ public interface ViewHandleSavedSearch {
 
     void onHandleDataSavedSearchError(String error);
 
+    void onHandleDataLastSearchSuccessful(Condition condition);
+
     void onHandleUpdateSavedSearchListSuccessful();
 
     void onHandleUpdateSavedSearchListError(String error);

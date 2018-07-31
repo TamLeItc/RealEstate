@@ -75,6 +75,11 @@ public class SavedSearchFragment extends Fragment implements ViewHandleSavedSear
     }
 
     @Override
+    public void onHandleDataLastSearchSuccessful(Condition condition) {
+
+    }
+
+    @Override
     public void onHandleUpdateSavedSearchListSuccessful() {
         ((UserControlActivity)getActivity()).dialogHelper.dismiss();
 

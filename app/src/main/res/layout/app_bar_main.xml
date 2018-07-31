@@ -12,11 +12,6 @@
         android:theme="@style/AppTheme.AppBarOverlay"
         android:orientation="vertical">
 
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/fl_start" />
-
         <include android:layout_height="match_parent"
             android:layout_marginTop="@dimen/_55dp"
             android:layout_width="match_parent"
@@ -49,6 +44,22 @@
                 android:textColor="@color/colorGrayDark"/>
 
         </android.support.v7.widget.Toolbar>
+
+        <net.cachapa.expandablelayout.ExpandableLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/expandable_layout_start"
+            app:el_duration="500"
+            app:el_parallax="0"
+            app:el_expanded="true">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/fl_start"
+                android:background="@color/colorRed"/>
+
+        </net.cachapa.expandablelayout.ExpandableLayout>
 
     </RelativeLayout>
 

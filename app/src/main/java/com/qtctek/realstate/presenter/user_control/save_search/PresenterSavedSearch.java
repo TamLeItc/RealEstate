@@ -25,13 +25,23 @@ public class PresenterSavedSearch implements PresenterImpHandleSavedSearch {
         this.mModelSavedSearch.requireGetDataSavedSearch(context);
     }
 
+    public void  handleGetDataLastSearch(Context context){
+        this.mModelSavedSearch.requireGetDataLastSearch(context);
+    }
+
     public void handleUpdateSavedSearchList(ArrayList<Condition> arrayList, Context context){
         Gson gson = new Gson();
         String data = gson.toJson(arrayList);
 
-        this.mModelSavedSearch.requireUpdateDataProductIds(data, context);
+        this.mModelSavedSearch.requireUpdateDataSavedSearch(data, context);
     }
 
+    public void handleSaveLastSearch(Condition condition, Context context){
+        Gson gson = new Gson();
+        String data = gson.toJson(condition);
+
+        this.mModelSavedSearch.requireUpdateDataLastSearch(data, context);
+    }
 
     @Override
     public void onGetDataSavedSearchSuccessful(String data) {
@@ -44,6 +54,19 @@ public class PresenterSavedSearch implements PresenterImpHandleSavedSearch {
             arrayList = gson.fromJson(data, type);
         }
         this.mViewHandleSavedSearch.onHandleDataSavedSearchSuccessful(arrayList);
+    }
+
+    @Override
+    public void onGetDataLastSearchSuccessful(String data) {
+        Condition condition = new Condition();
+
+        Gson gson = new Gson();
+        if(!data.isEmpty()){
+            Type type = new TypeToken<Condition>(){}.getType();
+            condition = gson.fromJson(data, type);
+        }
+
+        this.mViewHandleSavedSearch.onHandleDataLastSearchSuccessful(condition);
     }
 
 

@@ -19,7 +19,6 @@ import android.widget.Toast;
 import com.qtctek.realstate.R;
 import com.qtctek.realstate.common.AppUtils;
 import com.qtctek.realstate.dto.Product;
-import com.qtctek.realstate.dto.User;
 import com.qtctek.realstate.helper.ToastHelper;
 import com.qtctek.realstate.presenter.user_control.saved_post.PresenterSavedPost;
 import com.qtctek.realstate.view.post_news.activity.MainActivity;
@@ -183,10 +182,10 @@ public class PostFragment extends Fragment implements View.OnClickListener, View
         MapPostNewsFragment mapPostNewsFragment = (MapPostNewsFragment) ((MainActivity)getActivity()).getSupportFragmentManager().getFragments().get(0);
 
         if(mapPostNewsFragment.arrProduct.get(MapPostNewsFragment.POSITION).getIsSaved()){
-            this.IMB_SAVE.setImageResource(R.drawable.icon_favorite_red_24dp);
+            this.IMB_SAVE.setImageResource(R.drawable.icon_heart_red_border_white_24dp);
         }
         else{
-            this.IMB_SAVE.setImageResource(R.drawable.icon_favorite_border_white_24dp);
+            this.IMB_SAVE.setImageResource(R.drawable.icon_heart_gray_border_white_24dp);
         }
     }
 

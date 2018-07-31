@@ -421,12 +421,8 @@ public class NewPostActivity extends AppCompatActivity implements ViewHandleMode
 
     @Override
     public void onPageSelected(int position) {
-        if(position == 0){
-            this.mCurrentFragment = getSupportFragmentManager().getFragments().get(0);
-        }
-        else{
-            this.mCurrentFragment = getSupportFragmentManager().getFragments().get(1);
-        }
+        this.mCurrentFragment = mNewPostAdapter.getItem(position);
+
         mCurrentPositionFragment = position;
 
         switch (position){

@@ -4,7 +4,6 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
 import android.location.GpsStatus;
 import android.location.Location;
 import android.location.LocationManager;
@@ -18,7 +17,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,7 +49,6 @@ import com.qtctek.realstate.network.NetworkConnection;
 import com.qtctek.realstate.dto.Condition;
 import com.qtctek.realstate.dto.Product;
 import com.qtctek.realstate.presenter.post_news.PresenterPostNews;
-import com.qtctek.realstate.presenter.user_control.save_search.PresenterImpHandleSavedSearch;
 import com.qtctek.realstate.view.post_news.activity.MainActivity;
 import com.qtctek.realstate.view.post_news.interfaces.ViewHandlePostNews;
 import com.qtctek.realstate.view.post_news.interfaces.OnEventForMapPostNews;
@@ -60,13 +57,14 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Objects;
 
 import static android.content.Context.LOCATION_SERVICE;
 import static android.support.v4.content.ContextCompat.checkSelfPermission;
 
 public class MapPostNewsFragment extends Fragment implements OnMapReadyCallback, GoogleApiClient.OnConnectionFailedListener,
         GoogleApiClient.ConnectionCallbacks, OnEventForMapPostNews, ViewHandlePostNews, GoogleMap.OnMarkerClickListener,
-        GoogleMap.OnCameraIdleListener, PresenterImpHandleSavedSearch, AlertHelper.AlertHelperCallback {
+        GoogleMap.OnCameraIdleListener, AlertHelper.AlertHelperCallback {
 
     private View mView;
 
@@ -91,7 +89,7 @@ public class MapPostNewsFragment extends Fragment implements OnMapReadyCallback,
     public ArrayList<Product> arrProduct = new ArrayList<>();
 
     public Marker lastMarkerClicked = null;
-    public Product mLastProductClicked = null;
+    public Product lastProductClicked = null;
 
     private int mMinZoom = 10;
     private int mSecondZoom = 15;
@@ -100,31 +98,31 @@ public class MapPostNewsFragment extends Fragment implements OnMapReadyCallback,
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         mView = inflater.inflate(R.layout.fragment_map_post_news, container, false);
+
+        ON_EVENT_FROM_ACTIVITY = this;
 
         initViews();
         initSupportMapFragment();
 
         if (!checkGoogleService()) {
 
-            ((MainActivity)getActivity()).alertHelper.setCallback(this);
-            ((MainActivity)getActivity()).alertHelper.alert("Lỗi thiết bị","Thiết bị của bạn không hỗ trợ " +
+            ((MainActivity) Objects.requireNonNull(getActivity())).alertHelper.setCallback(this);
+            ((MainActivity) Objects.requireNonNull(getActivity())).alertHelper.alert("Lỗi thiết bị","Thiết bị của bạn không hỗ trợ " +
                     "dịch vụ Google Play",false, "OK", Constant.GOOGLE_PLAY_SERVICE_NOT_FOUND);
 
         }
-        else{
+        else {
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    if (NetworkConnection.isNetworkConnected(getContext())) {
-                        searchNearby();
+                    if (NetworkConnection.isNetworkConnected(Objects.requireNonNull(getContext()))) {
+                        ((MainActivity) Objects.requireNonNull(getActivity())).lastSearch();
                     }
                 }
-            }, 2000);
+            }, 2500);
         }
-
-        ON_EVENT_FROM_ACTIVITY = this;
 
         return mView;
     }
@@ -158,7 +156,7 @@ public class MapPostNewsFragment extends Fragment implements OnMapReadyCallback,
 
     private void setUpLocationClientIfNeeded() {
         if (mGoogleApiClient == null) {
-            mGoogleApiClient = new GoogleApiClient.Builder(getContext())
+            mGoogleApiClient = new GoogleApiClient.Builder(Objects.requireNonNull(getContext()))
                     .addConnectionCallbacks(this)
                     .addOnConnectionFailedListener(this)
                     .addApi(LocationServices.API)
@@ -175,7 +173,8 @@ public class MapPostNewsFragment extends Fragment implements OnMapReadyCallback,
 
     //Kiểm tra xem GPS có đang bậc hay không
     private boolean isGpsOn() {
-        LocationManager manager = (LocationManager) getActivity().getSystemService(LOCATION_SERVICE);
+        LocationManager manager = (LocationManager) Objects.requireNonNull(getActivity()).getSystemService(LOCATION_SERVICE);
+        assert manager != null;
         return manager.isProviderEnabled(LocationManager.GPS_PROVIDER);
     }
 
@@ -234,8 +233,8 @@ public class MapPostNewsFragment extends Fragment implements OnMapReadyCallback,
         }
     }
 
-    private void searchNearby() {
-        ((MainActivity) getActivity()).alertHelper.setCallback(this);
+    public void searchNearby() {
+        ((MainActivity) Objects.requireNonNull(getActivity())).alertHelper.setCallback(this);
         ((MainActivity) getActivity()).alertHelper.alert("Tìm kiếm", "Bạn có muốn tìm kiếm gần" +
                         " vị trí hiện tại không", false, "OK", "Hủy bỏ",
                 Constant.NEAR_BY_SEARCH);
@@ -243,7 +242,6 @@ public class MapPostNewsFragment extends Fragment implements OnMapReadyCallback,
 
     @Override
     public void handlePostListSuccessful(ArrayList<Product> arrPost) {
-
         arrProduct.clear();
         if (arrPost.size() > 0) {
             ListPostNewsFragment.TXV_INFORMATION.setVisibility(View.GONE);
@@ -262,18 +260,16 @@ public class MapPostNewsFragment extends Fragment implements OnMapReadyCallback,
         this.mTxvQualityPost.setText(arrPost.size() + "");
 
         handlePostList(arrPost);
-
     }
 
     public void resetLastClick() {
         this.lastMarkerClicked = null;
-        this.mLastProductClicked = null;
+        this.lastProductClicked = null;
     }
 
 
     @Override
     public void handlePostListError(String error) {
-
         arrProduct.clear();
 
         ListPostNewsFragment.POST_ADAPTER.notifyDataSetChanged();
@@ -322,12 +318,7 @@ public class MapPostNewsFragment extends Fragment implements OnMapReadyCallback,
 
 
     public void handlePostList(ArrayList<Product> arrPost) {
-
-        Log.d("ttt", "ttt");
-
-        mMap.clear();
-
-        ArrayList arrayList = new ArrayList();
+        ArrayList<Product> arrayList = new ArrayList<>();
         for (int i = 0; i < arrPost.size(); i++) {
             arrayList.add(arrPost.get(i));
             if (i == arrProduct.size() - 1) {
@@ -337,29 +328,40 @@ public class MapPostNewsFragment extends Fragment implements OnMapReadyCallback,
 
         this.arrProduct.addAll(arrayList);
         setSavedForList(arrProduct);
+        ((MainActivity) Objects.requireNonNull(getActivity())).handleSort();
+        loadMarker();
 
         ListPostNewsFragment.POST_ADAPTER.notifyDataSetChanged();
+    }
 
-        for (int i = 0; i < arrPost.size(); i++) {
+    public synchronized void loadMarker(){
+        mMap.clear();
+
+        for (int i = 0; i < arrProduct.size(); i++) {
 
             Product product = arrProduct.get(i);
 
-            LatLng latLng = new LatLng(Double.parseDouble(product.getMapLat()),
-                    Double.parseDouble(product.getMapLng()));
+            if(lastProductClicked != null && product.getId() == lastProductClicked.getId()){
+                lastProductClicked = product;
+            }
+            else{
+                LatLng latLng = new LatLng(Double.parseDouble(product.getMapLat()),
+                        Double.parseDouble(product.getMapLng()));
 
-            String strShortPrice = AppUtils.getStringPrice(product.getPrice(), AppUtils.SHORT_PRICE);
+                String strShortPrice = AppUtils.getStringPrice(product.getPrice(), AppUtils.SHORT_PRICE);
 
-            if (arrProduct.get(i).getFormality().equals("no")) {
-                createMarker(latLng, i, R.color.colorGreen, strShortPrice);
-            } else {
-                createMarker(latLng, i, R.color.colorMain, strShortPrice);
+                if (arrProduct.get(i).getFormality().equals("no")) {
+                    createMarkerProduct(latLng, i, R.color.colorGreen, strShortPrice);
+                } else {
+                    createMarkerProduct(latLng, i, R.color.colorMain, strShortPrice);
+                }
             }
         }
 
-        handleMarkerClicked(lastMarkerClicked, mLastProductClicked);
+        handleMarkerClicked(lastMarkerClicked, lastProductClicked);
     }
 
-    private void setSavedForList(ArrayList<Product> arrProduct) {
+    private synchronized void setSavedForList(ArrayList<Product> arrProduct) {
         for (int i = 0; i < arrProduct.size(); i++) {
             for (String key : ListPostNewsFragment.LIST_SAVED_PRODUCT_ID.keySet()) {
                 if ((arrProduct.get(i).getId() + "").equals(key)) {
@@ -373,19 +375,16 @@ public class MapPostNewsFragment extends Fragment implements OnMapReadyCallback,
     private boolean isNew(String strDateUpload){
         String strToday = AppUtils.getCurrentDate();
 
+        @SuppressLint("SimpleDateFormat")
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+
         Date toDate;
         Date dateUpload;
         try {
             toDate = simpleDateFormat.parse(strToday);
             dateUpload = simpleDateFormat.parse(strDateUpload);
 
-            if(toDate.equals(dateUpload)){
-                return true;
-            }
-            else{
-                return false;
-            }
+            return toDate.equals(dateUpload);
 
         } catch (ParseException e) {
             e.printStackTrace();
@@ -393,38 +392,35 @@ public class MapPostNewsFragment extends Fragment implements OnMapReadyCallback,
         return false;
     }
 
-    private Marker createMarker(LatLng latLng, int positionInArr, @ColorRes int color, String infor) {
-
+    private void createMarkerProduct(LatLng latLng, int positionInArr, @ColorRes int color, String infor) {
         if(positionInArr > arrProduct.size() - 1 || positionInArr < 0){
-            return null;
+            return;
         }
 
         IconGenerator iconGenerator = getIconMarker(infor, arrProduct.get(positionInArr), color);
-        Marker marker = mMap.addMarker(new MarkerOptions()
+
+        mMap.addMarker(new MarkerOptions()
                 .position(latLng)
                 .snippet(positionInArr + "")
                 .icon(BitmapDescriptorFactory.fromBitmap(iconGenerator.makeIcon()))
                 .anchor(iconGenerator.getAnchorU(), iconGenerator.getAnchorV()));
-
-        return marker;
     }
 
-    private IconGenerator getIconMarker(String infor, Product product, @ColorRes int color){
+    private IconGenerator getIconMarker(String info, Product product, @ColorRes int color){
+        @SuppressLint("InflateParams")
         View view = LayoutInflater.from(getContext()).inflate(R.layout.item_post_map, null);
         ImageView imvFavorite = view.findViewById(R.id.imv_favorite);
         TextView txvPrice = view.findViewById(R.id.txv_price);
 
-        txvPrice.setText(infor);
+        txvPrice.setText(info);
 
         if(product.getIsSaved()){
             imvFavorite.setVisibility(View.VISIBLE);
         }
         else{
-
-
             if(isNew(product.getDateUpload())){
                 imvFavorite.setVisibility(View.VISIBLE);
-                imvFavorite.setImageResource(R.drawable.icon_fiber_new_black_24dp);
+                imvFavorite.setImageResource(R.drawable.icon_new_border_red_24dp);
             }
             else{
                 imvFavorite.setVisibility(View.GONE);
@@ -435,10 +431,9 @@ public class MapPostNewsFragment extends Fragment implements OnMapReadyCallback,
             }
         }
 
-
         IconGenerator iconFactory = new IconGenerator(getContext());
         iconFactory.setContentView(view);
-        iconFactory.setColor(ContextCompat.getColor(getContext(), color));
+        iconFactory.setColor(ContextCompat.getColor(Objects.requireNonNull(getContext()), color));
         iconFactory.setTextAppearance(R.style.iconGenText);
         iconFactory.setContentPadding(0, 0, 0, 0);
 
@@ -446,7 +441,6 @@ public class MapPostNewsFragment extends Fragment implements OnMapReadyCallback,
     }
 
     private void handleGetData(String option) {
-
         VisibleRegion visibleRegion = mMap.getProjection().getVisibleRegion();
         LatLng farRight = visibleRegion.farRight;
         LatLng farLeft = visibleRegion.farLeft;
@@ -456,6 +450,7 @@ public class MapPostNewsFragment extends Fragment implements OnMapReadyCallback,
         initSupportMapFragment();
 
         MainActivity main = ((MainActivity) getActivity());
+        assert main != null;
         mPresenterPostNews.handleGetPostList(option, main.bathroom, main.bedroom, main.minPrice + "",
                 main.maxPrice + "", main.formality, main.architecture, main.type, farRight, nearRight,
                 farLeft, nearLeft);
@@ -463,13 +458,12 @@ public class MapPostNewsFragment extends Fragment implements OnMapReadyCallback,
 
     @Override
     public boolean onMarkerClick(Marker marker) {
-
         try {
             POSITION = Integer.parseInt(marker.getSnippet());
         }
-        catch (Exception e){}
+        catch (Exception ignored){}
 
-        ((MainActivity) getActivity()).disPlayPostItemFragment();
+        ((MainActivity) Objects.requireNonNull(getActivity())).disPlayPostItemFragment();
 
         try {
 
@@ -484,29 +478,24 @@ public class MapPostNewsFragment extends Fragment implements OnMapReadyCallback,
     }
 
     private void handleMarkerClicked(Marker marker, Product product) {
-            if(lastMarkerClicked == null || mLastProductClicked == null){
+            if(lastMarkerClicked == null || lastProductClicked == null){
                 lastMarkerClicked = marker;
-                mLastProductClicked = product;
+                lastProductClicked = product;
             }
             else{
                 int color;
-                if (mLastProductClicked.getFormality().equals("no")) {
+                if (lastProductClicked.getFormality().equals("no")) {
                     color = R.color.colorGreen;
                 } else {
                     color = R.color.colorMain;
                 }
-                String strShortPrice = AppUtils.getStringPrice(mLastProductClicked.getPrice(), AppUtils.SHORT_PRICE);
-                IconGenerator iconGenerator = getIconMarker(strShortPrice, mLastProductClicked, color);
+                String strShortPrice = AppUtils.getStringPrice(lastProductClicked.getPrice(), AppUtils.SHORT_PRICE);
+                IconGenerator iconGenerator = getIconMarker(strShortPrice, lastProductClicked, color);
 
                 try {
                     lastMarkerClicked.setIcon(BitmapDescriptorFactory.fromBitmap(iconGenerator.makeIcon()));
                 }
-                catch (Exception e){
-
-                }
-
-
-
+                catch (Exception ignored){ }
             }
 
             //marker clicked
@@ -514,13 +503,13 @@ public class MapPostNewsFragment extends Fragment implements OnMapReadyCallback,
                 String strShortPrice = AppUtils.getStringPrice(product.getPrice(), AppUtils.SHORT_PRICE);
                 IconGenerator iconGenerator = getIconMarker(strShortPrice, product, R.color.colorMainLight);
 
+                lastProductClicked = product;
                 try {
                     marker.setIcon(BitmapDescriptorFactory.fromBitmap(iconGenerator.makeIcon()));
                     lastMarkerClicked = marker;
                 }
                 catch (Exception e){
                     int position = findLocationProduct(product.getId());
-
                     lastMarkerClicked = mMap.addMarker(new MarkerOptions()
                             .position(marker.getPosition())
                             .snippet(position + "")
@@ -531,10 +520,6 @@ public class MapPostNewsFragment extends Fragment implements OnMapReadyCallback,
                         arrProduct.add(position, product);
                     }
                 }
-
-
-
-                mLastProductClicked = product;
             }
     }
 
@@ -550,15 +535,17 @@ public class MapPostNewsFragment extends Fragment implements OnMapReadyCallback,
     @Override
     public void onCameraIdle() {
 
+        ((MainActivity) Objects.requireNonNull(getActivity())).mapLat = mMap.getCameraPosition().target.latitude;
+        ((MainActivity)getActivity()).mapLng = mMap.getCameraPosition().target.longitude;
+
         if (mMap.getCameraPosition().zoom <= mMinZoom) {
 
             mMap.clear();
             arrProduct.clear();
 
-
             this.mLlQualityPost.setVisibility(View.GONE);
             this.mTxvInformation.setVisibility(View.VISIBLE);
-            this.mTxvInformation.setText(getContext().getResources().getString(R.string.please_zoom_to_view));
+            this.mTxvInformation.setText(Objects.requireNonNull(getContext()).getResources().getString(R.string.please_zoom_to_view));
 
             ListPostNewsFragment.TXV_INFORMATION.setVisibility(View.VISIBLE);
             ListPostNewsFragment.TXV_INFORMATION.setText(getContext().getResources().getString(R.string.please_zoom_to_view));
@@ -596,7 +583,7 @@ public class MapPostNewsFragment extends Fragment implements OnMapReadyCallback,
     public void onPlaceSelected(String address, LatLngBounds latLngs, Double lat, Double lng) {
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(lat, lng), mZoom));
 
-        ((MainActivity) getActivity()).edtSearch.setText(address);
+        ((MainActivity) Objects.requireNonNull(getActivity())).edtSearch.setText(address);
 
 
 //        try {
@@ -615,6 +602,9 @@ public class MapPostNewsFragment extends Fragment implements OnMapReadyCallback,
     @Override
     public void onChangeStatusSaveOfProduct(int position, boolean status) {
         this.arrProduct.get(position).setIsSaved(status);
+
+        handleMarkerClicked(lastMarkerClicked, lastProductClicked);
+
     }
 
     @Override
@@ -626,7 +616,7 @@ public class MapPostNewsFragment extends Fragment implements OnMapReadyCallback,
         }
 
         try {
-            ((MainActivity) getActivity()).formality = "yes";
+            ((MainActivity) Objects.requireNonNull(getActivity())).formality = "yes";
 
             initPermission();
         } catch (java.lang.NullPointerException e) {
@@ -643,7 +633,7 @@ public class MapPostNewsFragment extends Fragment implements OnMapReadyCallback,
         }
         try {
 
-            ((MainActivity) getActivity()).formality = "no";
+            ((MainActivity) Objects.requireNonNull(getActivity())).formality = "no";
 
             initPermission();
 
@@ -657,6 +647,7 @@ public class MapPostNewsFragment extends Fragment implements OnMapReadyCallback,
 
         MainActivity main = ((MainActivity) getActivity());
 
+        assert main != null;
         main.formality = condition.getFormality();
         main.type = condition.getType();
         main.architecture = condition.getArchitecture();
@@ -665,23 +656,13 @@ public class MapPostNewsFragment extends Fragment implements OnMapReadyCallback,
         main.bedroom = condition.getBedroom();
         main.bathroom = condition.getBathroom();
 
+        lastProductClicked = null;
+        lastMarkerClicked = null;
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(condition.getMapLat(), condition.getMapLng()), condition.getZoom()));
     }
 
-
-    @Override
-    public void onGetDataSavedSearchSuccessful(String data) {
-
-    }
-
-    @Override
-    public void onUpdateDataSavedSearchSuccessful() {
-
-    }
-
     private void alertGPSIsOff() {
-
-        ((MainActivity)getActivity()).alertHelper.alert("Lỗi", "Bạn chưa bận GPS. Vui lòng bật GPS để sử dụng chức năng này",
+        ((MainActivity) Objects.requireNonNull(getActivity())).alertHelper.alert("Lỗi", "Bạn chưa bận GPS. Vui lòng bật GPS để sử dụng chức năng này",
                 false, "Cài đặt", "Hủy bỏ", Constant.GPS_IS_OFF);
     }
 
@@ -689,7 +670,7 @@ public class MapPostNewsFragment extends Fragment implements OnMapReadyCallback,
         String[] permission = new String[]{Manifest.permission.ACCESS_COARSE_LOCATION,
                 Manifest.permission.ACCESS_FINE_LOCATION};
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED
+            if (checkSelfPermission(Objects.requireNonNull(getActivity()), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED
                     || checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 requestPermissions(permission, AppUtils.REQUEST_CODE_PERMISSION);
             } else {
@@ -721,7 +702,7 @@ public class MapPostNewsFragment extends Fragment implements OnMapReadyCallback,
             return;
         }
 
-        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(Objects.requireNonNull(getContext()), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
         }
         Location lastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
@@ -747,12 +728,10 @@ public class MapPostNewsFragment extends Fragment implements OnMapReadyCallback,
             }
         }
         else if(option == Constant.GOOGLE_PLAY_SERVICE_NOT_FOUND){
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                getActivity().finishAffinity();
-            }
+            Objects.requireNonNull(getActivity()).finishAffinity();
         }
         else if(option == Constant.GPS_IS_OFF){
-            String locationProviders = Settings.Secure.getString(getActivity().getContentResolver(), Settings.Secure.LOCATION_PROVIDERS_ALLOWED);
+            String locationProviders = Settings.Secure.getString(Objects.requireNonNull(getActivity()).getContentResolver(), Settings.Secure.LOCATION_PROVIDERS_ALLOWED);
             if (locationProviders == null || locationProviders.equals("")) {
                 startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
             } else {

@@ -6,7 +6,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.google.gson.Gson;
-import com.qtctek.realstate.common.AppUtils;
+import com.qtctek.realstate.common.general.Constant;
 import com.qtctek.realstate.presenter.user_control.saved_post.PresenterImpIHandleSavedPost;
 import com.qtctek.realstate.view.post_news.activity.MainActivity;
 
@@ -32,8 +32,8 @@ public class ModelSavedPost {
 
     public void requireDataProductIds( Context context){
         try {
-            SharedPreferences sharedPreferences = context.getSharedPreferences(AppUtils.SHARED_PREFERENCES, context.MODE_PRIVATE);
-            String data = sharedPreferences.getString(AppUtils.SAVED_PRODUCT_LIST, "");
+            SharedPreferences sharedPreferences = context.getSharedPreferences(Constant.SHARED_PREFERENCES, context.MODE_PRIVATE);
+            String data = sharedPreferences.getString(Constant.SAVED_PRODUCT_LIST, "");
             mPresenterImPHandleSavedPost.onGetDataProductIdsSuccessful(data);
         }
         catch (Exception e) {
@@ -43,10 +43,10 @@ public class ModelSavedPost {
 
     public void requireUpdateDataProductIds(String data, Context context){
         try {
-            SharedPreferences sharedPreferences = context.getSharedPreferences(AppUtils.SHARED_PREFERENCES, context.MODE_PRIVATE);
+            SharedPreferences sharedPreferences = context.getSharedPreferences(Constant.SHARED_PREFERENCES, context.MODE_PRIVATE);
             SharedPreferences.Editor editor = sharedPreferences.edit();
 
-            editor.putString(AppUtils.SAVED_PRODUCT_LIST, data);
+            editor.putString(Constant.SAVED_PRODUCT_LIST, data);
             editor.commit();
             mPresenterImPHandleSavedPost.onUpdateProductIdListSuccessful();
         } catch (Exception e) {

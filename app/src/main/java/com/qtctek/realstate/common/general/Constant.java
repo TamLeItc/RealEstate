@@ -2,6 +2,10 @@ package com.qtctek.realstate.common.general;
 
 public class Constant {
 
+    public static String SHARED_PREFERENCES = "shared_preferences";
+    public static String SAVED_PRODUCT_LIST = "saved_product_list";
+    public static String SAVED_SEARCH_LIST = "saved_search_list";
+    public static String LAST_SEARCH = "last_search";
     public static final int OPTION_MENU_SELECTED = 1001;
     public static final int INSERT_DATABASE = 1002;
     public static final int HANDLE_ERROR = 1003;

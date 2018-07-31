@@ -502,6 +502,25 @@
     <dimen name='_499dp'>1996px</dimen>
     <dimen name='_500dp'>2000px</dimen>
 
-
+    <dimen name="_6sp">24sp</dimen>
+    <dimen name="_7sp">28sp</dimen>
+    <dimen name="_8sp">32sp</dimen>
+    <dimen name="_9sp">36sp</dimen>
+    <dimen name="_10sp">40sp</dimen>
+    <dimen name="_11sp">44sp</dimen>
+    <dimen name="_12sp">48sp</dimen>
+    <dimen name="_13sp">52sp</dimen>
+    <dimen name="_14sp">56sp</dimen>
+    <dimen name="_15sp">60sp</dimen>
+    <dimen name="_16sp">64sp</dimen>
+    <dimen name="_17sp">68sp</dimen>
+    <dimen name="_18sp">72sp</dimen>
+    <dimen name="_19sp">76sp</dimen>
+    <dimen name="_20sp">80sp</dimen>
+    <dimen name="_21sp">84sp</dimen>
+    <dimen name="_22sp">88sp</dimen>
+    <dimen name="_23sp">92sp</dimen>
+    <dimen name="_24sp">96sp</dimen>
+    <dimen name="_25sp">100sp</dimen>
 
 </resources>

@@ -11,13 +11,10 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.qtctek.realstate.R;
 import com.qtctek.realstate.common.AppUtils;
 import com.qtctek.realstate.dto.Product;
-import com.qtctek.realstate.dto.User;
-import com.qtctek.realstate.helper.ToastHelper;
 import com.qtctek.realstate.presenter.user_control.saved_post.PresenterSavedPost;
 import com.qtctek.realstate.view.post_detail.activity.PostDetailActivity;
 import com.qtctek.realstate.view.post_news.activity.MainActivity;
@@ -29,8 +26,6 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-
-import static com.qtctek.realstate.view.post_news.activity.MainActivity.USER;
 
 public class PostAdapter extends BaseAdapter implements ViewHandleSavedPost {
 
@@ -109,6 +104,8 @@ public class PostAdapter extends BaseAdapter implements ViewHandleSavedPost {
             public void onClick(View v) {
                 mPositionClick = position;
                 mImbSave = finalViewHolder1.imbSave;
+                ((MainActivity)mContext).isEditSaved = true;
+
                 handleSave();
             }
         });
@@ -144,10 +141,10 @@ public class PostAdapter extends BaseAdapter implements ViewHandleSavedPost {
 
         viewHolder.txvPrice.setText(AppUtils.getStringPrice(product.getPrice(), AppUtils.LONG_PRICE));
         if(product.getIsSaved()){
-            viewHolder.imbSave.setImageResource(R.drawable.icon_favorite_red_24dp);
+            viewHolder.imbSave.setImageResource(R.drawable.icon_heart_red_border_white_24dp);
         }
         else{
-            viewHolder.imbSave.setImageResource(R.drawable.icon_favorite_border_white_24dp);
+            viewHolder.imbSave.setImageResource(R.drawable.icon_heart_gray_border_white_24dp);
         }
 
         if(product.getFormality().equals("no")){
@@ -185,10 +182,10 @@ public class PostAdapter extends BaseAdapter implements ViewHandleSavedPost {
     public void onHandleUpdateProductIdListSuccessful() {
         if(this.mArrListProduct.get(mPositionClick).getIsSaved()){
             mMapPostNewsFragment.arrProduct.get(mPositionClick).setIsSaved(false);
-            this.mImbSave.setImageResource(R.drawable.icon_favorite_border_white_24dp);
+            this.mImbSave.setImageResource(R.drawable.icon_heart_gray_border_white_24dp);
         }
         else{
-            this.mImbSave.setImageResource(R.drawable.icon_favorite_red_24dp);
+            this.mImbSave.setImageResource(R.drawable.icon_heart_red_border_white_24dp);
             mMapPostNewsFragment.arrProduct.get(mPositionClick).setIsSaved(true);
         }
     }

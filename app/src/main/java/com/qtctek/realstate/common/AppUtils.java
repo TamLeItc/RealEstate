@@ -19,9 +19,6 @@ public class AppUtils {
 
     public static int NOTIFICATION = 1;
 
-    public static String SHARED_PREFERENCES = "shared_preferences";
-    public static String SAVED_PRODUCT_LIST = "saved_product_list";
-    public static String SAVED_SEARCH_LIST = "saved_search_list";
     public static String USERNAME = "user_name";
     public static String PASSWORD = "password";
 
