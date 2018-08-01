@@ -79,10 +79,9 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="@dimen/_10sp"
+                        android:textSize="@dimen/_13sp"
                         android:layout_toRightOf="@id/txv_price"
                         android:textColor="@color/colorWhite"
-                        android:layout_marginTop="@dimen/_5dp"
                         android:text="@string/for_one_month"
                         android:id="@+id/txv_a_month"/>
 

@@ -37,7 +37,6 @@ import com.qtctek.realstate.common.AppUtils;
 import com.qtctek.realstate.common.general.Constant;
 import com.qtctek.realstate.dto.Photo;
 import com.qtctek.realstate.dto.Product;
-import com.qtctek.realstate.dto.User;
 import com.qtctek.realstate.helper.AlertHelper;
 import com.qtctek.realstate.helper.DialogHelper;
 import com.qtctek.realstate.helper.ToastHelper;
@@ -129,8 +128,8 @@ public class PostDetailActivity extends AppCompatActivity implements ViewHandleP
         dialogHelper.show();
 
         Intent intent = getIntent();
-        int idPost = intent.getIntExtra("product_id", 0);
-        this.mPosition = intent.getIntExtra("position", -1);
+        int idPost = intent.getIntExtra(Product.ID, 0);
+        this.mPosition = intent.getIntExtra(Constant.POSITION, -1);
 
         this.mPresenterPostDetail = new PresenterPostDetail(this);
         this.mPresenterPostDetail.handleGetDataProductDetail(idPost);
@@ -217,7 +216,7 @@ public class PostDetailActivity extends AppCompatActivity implements ViewHandleP
 
         String strPrice = AppUtils.getStringPrice(mProduct.getPrice(), AppUtils.LONG_PRICE);
 
-        if(mProduct.getFormality().equals("no")){
+        if(mProduct.getFormality().equals(Constant.NO)){
             if(!strPrice.equals(AppUtils.LONG_NEGOTIATE)){
                 this.mTxvAMonth.setVisibility(View.VISIBLE);
             }
@@ -244,10 +243,10 @@ public class PostDetailActivity extends AppCompatActivity implements ViewHandleP
 
     private String formatDate(String dt){
         try {
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat(Constant.YYYY_MM_DD);
             Date date = simpleDateFormat.parse(dt);
 
-            SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy");
+            SimpleDateFormat df = new SimpleDateFormat(Constant.DD_MM_YYYY);
             return df.format(date);
 
         } catch (ParseException e) {
@@ -263,7 +262,7 @@ public class PostDetailActivity extends AppCompatActivity implements ViewHandleP
         if(!mProduct.getThumbnail().equals("")){
             TextSliderView textSliderView = new TextSliderView(this);
 
-            String url = MainActivity.WEB_SERVER + "images/" + mProduct.getThumbnail();
+            String url = MainActivity.WEB_SERVER + MainActivity.IMAGE_URL_RELATIVE + mProduct.getThumbnail();
             textSliderView.image(url)
                     .setScaleType(BaseSliderView.ScaleType.CenterCrop);
             mSliderLayout.addSlider(textSliderView);
@@ -280,7 +279,7 @@ public class PostDetailActivity extends AppCompatActivity implements ViewHandleP
         for(int i = 0; i < arrPhoto.size(); i++){
             TextSliderView textSliderView = new TextSliderView(this);
 
-            String url = MainActivity.WEB_SERVER + "images/" + arrPhoto.get(i).getPhotoLink();
+            String url = MainActivity.WEB_SERVER + MainActivity.IMAGE_URL_RELATIVE + arrPhoto.get(i).getPhotoLink();
             textSliderView.image(url)
                     .setScaleType(BaseSliderView.ScaleType.CenterCrop);
 
@@ -297,7 +296,7 @@ public class PostDetailActivity extends AppCompatActivity implements ViewHandleP
         this.mProduct = product;
 
         Intent intent = getIntent();
-        boolean isSave = intent.getBooleanExtra("save", false);
+        boolean isSave = intent.getBooleanExtra(Constant.SAVE, false);
         if(isSave){
             this.mProduct.setIsSaved(true);
         }
@@ -322,24 +321,26 @@ public class PostDetailActivity extends AppCompatActivity implements ViewHandleP
         dialogHelper.dismiss();
 
         alertHelper.setCallback(this);
-        alertHelper.alert("Lỗi", "Lỗi xảy ra trong quá trình kết nối server. Vui lòng thử lại sau!!!",
-                false, "OK", Constant.HANDLE_ERROR);
+        alertHelper.alert(getResources().getString(R.string.error_connect), getResources().getString(R.string.error_connect_notification),
+                false, getResources().getString(R.string.ok), Constant.HANDLE_ERROR);
 
     }
 
     private void handleConfirmCall(String numberPhone){
 
         alertHelper.setCallback(this);
-        alertHelper.alert("Xác nhận", "Bạn có muốn gọi điện thoại tới số " + numberPhone + " không?",
-                true, "Xác nhận", "Hủy bỏ", Constant.CALL_PHONE);
+        alertHelper.alert(getResources().getString(R.string.call_phone), getResources().getString(R.string.call_phone_first)
+                        + numberPhone + getResources().getString(R.string.call_phone_second),
+                true, getResources().getString(R.string.ok), getResources().getString(R.string.cancel), Constant.CALL_PHONE);
 
     }
 
     private void handleConfirmSendMail(String mail){
 
         alertHelper.setCallback(this);
-        alertHelper.alert("Xác nhận", "Bạn có muốn gửi tin nhắn tới " + mail + " không?",
-                true, "Xác nhận", "Hủy bỏ", Constant.SEND_MAIL);
+        alertHelper.alert(getResources().getString(R.string.send_mail), getResources().getString(R.string.send_mail_first)
+                        + mail + getResources().getString(R.string.call_phone_second),
+                true, getResources().getString(R.string.ok), getResources().getString(R.string.cancel), Constant.SEND_MAIL);
 
     }
 
@@ -385,24 +386,19 @@ public class PostDetailActivity extends AppCompatActivity implements ViewHandleP
                 }
                 break;
             case R.id.imb_save:
-                if(MainActivity.USER.getLevel() != 3 && MainActivity.USER.getLevel() != User.USER_NULL){
-                    toastHelper.toast("User của bạn không thể sử dụng chức năng này", ToastHelper.LENGTH_SHORT);
-                }
-                else{
-                    if(mProduct.getIsSaved()){
-                        try{
-                            ListPostNewsFragment.LIST_SAVED_PRODUCT_ID.remove(mProduct.getId() + "");
-                            new PresenterSavedPost(this).handleUpdateDataProductIds(ListPostNewsFragment.LIST_SAVED_PRODUCT_ID, this);
-                        }
-                        catch (java.lang.NullPointerException e){
-                            toastHelper.toast("Lưu nhà lỗi", ToastHelper.LENGTH_SHORT);
-                        }
-
-                    }
-                    else{
-                        ListPostNewsFragment.LIST_SAVED_PRODUCT_ID.put(mProduct.getId() + "", mProduct.getId() + "");
+                if(mProduct.getIsSaved()){
+                    try{
+                        ListPostNewsFragment.LIST_SAVED_PRODUCT_ID.remove(mProduct.getId() + "");
                         new PresenterSavedPost(this).handleUpdateDataProductIds(ListPostNewsFragment.LIST_SAVED_PRODUCT_ID, this);
                     }
+                    catch (java.lang.NullPointerException e){
+                        toastHelper.toast(getResources().getString(R.string.error_save_data), ToastHelper.LENGTH_SHORT);
+                    }
+
+                }
+                else{
+                    ListPostNewsFragment.LIST_SAVED_PRODUCT_ID.put(mProduct.getId() + "", mProduct.getId() + "");
+                    new PresenterSavedPost(this).handleUpdateDataProductIds(ListPostNewsFragment.LIST_SAVED_PRODUCT_ID, this);
                 }
 
         }
@@ -411,7 +407,7 @@ public class PostDetailActivity extends AppCompatActivity implements ViewHandleP
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        mMap.getUiSettings().setScrollGesturesEnabled(false);
+
         try{
             LatLng latLng = new LatLng(Double.parseDouble(mProduct.getMapLat()), Double.parseDouble(mProduct.getMapLng()));
             mMap.addMarker(new MarkerOptions().position(latLng).title(mProduct.getMapLng()));
@@ -433,12 +429,12 @@ public class PostDetailActivity extends AppCompatActivity implements ViewHandleP
     @Override
     public void onBackPressed() {
         if (mDoubleBackToExitPressedOnce) {
-            super.onBackPressed();
-            return;
+            finish();
+            MapPostNewsFragment.ON_EVENT_FOR_MAP_POST_NEWS.exitApp();
         }
 
         this.mDoubleBackToExitPressedOnce = true;
-        toastHelper.toast("Ấn thêm lần nữa để thoát ra màn hình chính", ToastHelper.LENGTH_SHORT);
+        toastHelper.toast(getResources().getString(R.string.double_press_back_to_exit), ToastHelper.LENGTH_SHORT);
 
         new Handler().postDelayed(new Runnable() {
 
@@ -471,7 +467,7 @@ public class PostDetailActivity extends AppCompatActivity implements ViewHandleP
                 handleCallPhone();
             }
             else{
-                toastHelper.toast("Không cho phép ứng dụng thực hiện cuộc gọi!!!", ToastHelper.LENGTH_SHORT);
+                toastHelper.toast(getResources().getString(R.string.call_not_permission), ToastHelper.LENGTH_SHORT);
             }
         }
         else{
@@ -485,7 +481,7 @@ public class PostDetailActivity extends AppCompatActivity implements ViewHandleP
             startActivity(new Intent(Intent.ACTION_DIAL, Uri.parse(dial)));
         }
         catch (Exception e){
-            toastHelper.toast("Lỗi xử lí", ToastHelper.LENGTH_SHORT);
+            toastHelper.toast(getResources().getString(R.string.error_handle), ToastHelper.LENGTH_SHORT);
         }
     }
 
@@ -495,13 +491,15 @@ public class PostDetailActivity extends AppCompatActivity implements ViewHandleP
         intent.setData(Uri.parse("mailto:" + this.mTxvContactEmail.getText().toString()));
         intent.putExtra(Intent.EXTRA_SUBJECT, this.mTxvTitle.getText().toString());
 
-        startActivity(Intent.createChooser(intent, "Send a mail"));
+        startActivity(Intent.createChooser(intent, getResources().getString(R.string.send_a_mail)));
     }
 
     @Override
     protected void onStop() {
+
         mSliderLayout.stopAutoCycle();
         mMap.clear();
+
 
         //clear memory
         Runtime.getRuntime().gc();
@@ -523,7 +521,7 @@ public class PostDetailActivity extends AppCompatActivity implements ViewHandleP
     @Override
     public void onHandleUpdateProductIdListSuccessful() {
         if(mProduct.getIsSaved()){
-            Toast.makeText(this, "Bỏ lưu thành công", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getResources().getString(R.string.unsave_successful), Toast.LENGTH_SHORT).show();
             mProduct.setIsSaved(false);
 
             if(this.mScrollY < 625){
@@ -539,7 +537,7 @@ public class PostDetailActivity extends AppCompatActivity implements ViewHandleP
             catch (java.lang.NullPointerException e){}
         }
         else{
-            Toast.makeText(this, "Lưu thành công", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getResources().getString(R.string.save_data_successful), Toast.LENGTH_SHORT).show();
             mProduct.setIsSaved(true);
             this.mImbSave.setImageResource(R.drawable.icon_favorite_red_24dp);
             try {
@@ -549,7 +547,7 @@ public class PostDetailActivity extends AppCompatActivity implements ViewHandleP
         }
 
         if(this.mPosition != -1){
-            MapPostNewsFragment.ON_EVENT_FROM_ACTIVITY.onChangeStatusSaveOfProduct(this.mPosition, mProduct.getIsSaved());
+            MapPostNewsFragment.ON_EVENT_FOR_MAP_POST_NEWS.onChangeStatusSaveOfProduct(this.mPosition, mProduct.getIsSaved());
         }
         ListPostNewsFragment.POST_ADAPTER.notifyDataSetChanged();
     }
@@ -557,11 +555,11 @@ public class PostDetailActivity extends AppCompatActivity implements ViewHandleP
     @Override
     public void onHandleUpdateProductIdListError(String e) {
         if(mProduct.getIsSaved()){
-            toastHelper.toast("Bỏ lưu không thành công!!!", ToastHelper.LENGTH_SHORT);
+            toastHelper.toast(getResources().getString(R.string.unsave_failed), ToastHelper.LENGTH_SHORT);
             mProduct.setIsSaved(false);
         }
         else{
-            toastHelper.toast("Lưu không thành công!!!", ToastHelper.LENGTH_SHORT);
+            toastHelper.toast(getResources().getString(R.string.error_save_data), ToastHelper.LENGTH_SHORT);
             mProduct.setIsSaved(true);
         }
     }

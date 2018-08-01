@@ -1,6 +1,10 @@
 <resources>
+
+    <string name="google_api_key_value">AIzaSyAowoC2lTSVNGAJZkimZBlPuxPy0so5a_A</string>
+
     <string name="app_name">Aladin</string>
     <string name="sologan">Mua may - Bán tốt</string>
+
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_header_title">Android Studio</string>
@@ -9,7 +13,7 @@
     <string name="action_settings">Settings</string>
     <string name="text_button_item_product">Xem</string>
     <string name="text_edt_toolbar">Bạn tìm nhà ở đâu</string>
-    <string name="search_near_here">Tìm kiếm gần đây</string>
+    <string name="search_near_by">Tìm kiếm gần đây</string>
     <string name="saved_post">Tin rao đã lưu</string>
     <string name="saved_search">Tìm kiếm đã lưu</string>
     <string name="saved_search_short">T.kiếm đã lưu</string>
@@ -29,6 +33,7 @@
     <string name="show_password">Hiện mật khẩu</string>
     <string name="confirm_password">Xác nhận mật khẩu</string>
     <string name="confirm">Xác nhận</string>
+    <string name="ok">OK</string>
     <string name="get_password">Lấy lại mật khẩu</string>
     <string name="infor_get_password">Một mật khẩu mới sẽ được gửi tới email của bạn. Hãy cho chúng tôi biết email của bạn:</string>
     <string name="map">Map</string>
@@ -75,6 +80,12 @@
     <string name="add_picture">Thêm ảnh</string>
     <string name="add_new_product_successful">Bạn đã rao tin thành công. Chúng tôi sẽ xem xét và duyệt tin của bạn sớm nhất có thể. Xin cảm ơn!</string>
     <string name="add_new_post">Rao tin mới</string>
+    <string name="exit_add_new_post">Bạn muốn thoát?</string>
+    <string name="exit_add_new_post_without_save">Chưa lưu thông tin. Bạn muốn thoát ra</string>
+    <string name="error_connect_notification">Lỗi kết nối. Vui lòng thử lại sau!</string>
+    <string name="error_connect">Lỗi kết nối</string>
+    <string name="error_read_data_notification">Lỗi đọc dữ liệu. Vui lòng thử lại sau!</string>
+    <string name="error_read_data">Lỗi đọc dữ liệu</string>
     <string name="view_posted_product">Xem tin đã rao</string>
     <string name="login_width_facebook">Đăng nhập với facebook</string>
     <string name="login">Đăng nhập</string>
@@ -90,7 +101,6 @@
     <string name="filter_search">Lọc tìm kiếm</string>
     <string name="filter_list">Lọc danh sách</string>
     <string name="home">Trang chính</string>
-    <string name="logout">Đăng xuất</string>
     <string name="add_post">Rao tin</string>
     <string name="more_view">Hiển thị thêm</string>
     <string name="arrange_post_width">Sắp xếp tin rao theo</string>
@@ -129,12 +139,13 @@
     <string name="amenities">Tiện ích</string>
     <string name="disable_user">Khóa tài khoản</string>
     <string name="enable_user">Bỏ khóa tài khoản</string>
+    <string name="diabled_user">Tạm khóa</string>
     <string name="sex">Giới tính</string>
     <string name="male">Nam</string>
     <string name="female">Nữ</string>
     <string name="birthday">Ngày sinh</string>
     <string name="username">Tên đăng nhập</string>
-    <string name="other">Khác</string>
+    <string name="other_sex">Khác</string>
     <string name="architecture">Kiểu nhà</string>
     <string name="title">Tiêu đề</string>
     <string name="rent_house">Nhà thuê</string>
@@ -169,9 +180,88 @@
     <string name="new_post_description">Đăng tin - 3/4 Mô tả</string>
     <string name="new_post_location">Đăng tin - 4/4 Vị trí</string>
     <string name="new_post_finish">Đăng tin - Hoàn tất</string>
-
-    <string name="google_api_key_value">AIzaSyAowoC2lTSVNGAJZkimZBlPuxPy0so5a_A</string>
-
+    <string name="double_press_back_to_exit">Ấn thêm lần nữa để thoát khỏi ứng dụng</string>
+    <string name="save_data_successful">Lưu thành công</string>
+    <string name="error_save_data">Lỗi lưu dữ liệu</string>
+    <string name="error">Lỗi</string>
+    <string name="not_support_google_service">Thiết bị của bạn không hỗ trợ dịch vụ Google. Không thể mở app!</string>
+    <string name="not_location_selected_can_not_save">Bạn chưa chọn vị trí nhà. Không thể lưu!</string>
+    <string name="not_address_select_can_not_save">Chưa chọn quận/huyện. Không thể lưu!</string>
+    <string name="data_incorrect_format">Dữ liệu không chính xác. Vui lòng kiểm tra lại!</string>
+    <string name="select_architecture">Chọn kiểu nhà</string>
+    <string name="select_type">Chọn loại nhà</string>
+    <string name="select_amenities">Chọn tiện ích</string>
+    <string name="call_phone">Gọi điện thoại</string>
+    <string name="call_phone_first">"Bạn có muốn gọi điện thoại tới số "</string>
+    <string name="call_phone_second">" không?"</string>
+    <string name="send_mail">Gửi mail</string>
+    <string name="send_mail_first">"Bạn có muốn gửi tin nhắn tới "</string>
+    <string name="call_not_permission">Không cho phép thực hiện cuộc gọi</string>
+    <string name="error_handle">Lỗi xử lí</string>
+    <string name="send_a_mail">Gửi tin nhắn</string>
+    <string name="unsave_successful">Bỏ lưu thành công</string>
+    <string name="unsave_failed">Bỏ lưu không thành công!</string>
+    <string name="error_connect_internet_notification">Không thể kết nối internet. Kiểm tra kết nối của bạn!</string>
+    <string name="login_to_continue">Đăng nhập để tiếp tục</string>
+    <string name="exit_app">Thoát ứng dụng</string>
+    <string name="exit_app_notification">Bạn có chắc thoát khỏi ứng dụng!</string>
+    <string name="latest_news">Tin mới nhất</string>
+    <string name="price_increase">Giá tăng dần</string>
+    <string name="price_decrease">Giá giảm dần</string>
+    <string name="area_increase">Giá tăng dần</string>
+    <string name="area_decrease">Giá giảm dần</string>
+    <string name="billion">tỷ</string>
+    <string name="million">triệu</string>
+    <string name="search_near_by_notification">Bạn có muốn tìm kiếm quanh vị trí hiện tại không?</string>
+    <string name="gps_is_off_require_open">Bạn chưa bận GPS. Vui lòng bật GPS để sử dụng chức năng này</string>
+    <string name="setting">Cài đặt</string>
+    <string name="can_not_open_setting">Không thể mở cài đặt!</string>
+    <string name="please_enter_email">Vui lòng nhập email!</string>
+    <string name="please_enter_username_or_email">Vui lòng nhập email/tên đăng nhập!</string>
+    <string name="email_incorrect">Email không chính xác!</string>
+    <string name="reset_password_failed">Reset mật khẩu không thành công!</string>
+    <string name="account_not_exist">Tài khoản không tồn tại!</string>
+    <string name="reset_password_successful">Mật khẩu của bạn đã được reset. Vui lòng truy cập mail của bạn để xem mật khẩu mới</string>
+    <string name="please_enter_password">Vui lòng nhập mật khẩu!</string>
+    <string name="information_login_incorrect">Email/tên đăng nhập hoặc mật khẩu không chính xác!</string>
+    <string name="account_disable">Tài khoản của bạn bị tạm khóa. Vui lòng liên hệ với admin để được hỗ trợ!</string>
+    <string name="login_failed">Đăng nhập không thành công. Vui lòng thử lại sau!</string>
+    <string name="please_enter_username">Vui lòng nhập email!</string>
+    <string name="minimum_length_password">Mật khẩu phải có độ dài dài ít nhất 6 kí tự!</string>
+    <string name="maximum_length_password">Mật khẩu tối đa 20 kí tự!</string>
+    <string name="please_enter_confirm_password">Vui lòng nhập xác nhận mật khẩu!</string>
+    <string name="password_confirm_password_incorrect">Mật khẩu và xác nhận mật khẩu không giống nhau!</string>
+    <string name="please_enter_number_phone">Vui lòng nhập số điện thoại!</string>
+    <string name="number_phone_incorrect">Số điện thoại không chính xác!</string>
+    <string name="sign_up_failed">Đăng nhập không thành công. Vui lòng thử lại sau!</string>
+    <string name="confirm_code_incorrect">Mã xác nhận không chính xác!</string>
+    <string name="sign_up_account">Đăng kí tài khoản</string>
+    <string name="sign_up_successful">Đăng kí tài khoản thành công</string>
+    <string name="email_existed">Email đã được sử dụng cho một tài khoản khác. Vui lòng thử lại email khác!</string>
+    <string name="username_existed">Tên đăng nhập đã được sử dụng. Vui lòng thử lại tên khác!</string>
+    <string name="please_enter_now_password">Vui lòng nhập mật khẩu hiện tại!</string>
+    <string name="please_enter_new_password">Vui lòng nhập mật khẩu mới!</string>
+    <string name="update_account">Cập nhật tài khoản</string>
+    <string name="update_account_successful">Cập nhật tài khoản thành công</string>
+    <string name="now_password_incorrect">Mật khẩu hiện tại không chính xác. Vui lòng kiểm tra lại!</string>
+    <string name="update_account_failed">Cập nhật tài khoản không thành công. Vui lòng thử lại sau!</string>
+    <string name="log_out_notifaction">Bạn có chắc chắn muốn đăng xuất</string>
+    <string name="poster">Người đăng</string>
+    <string name="acronym_number_phone">SDT</string>
+    <string name="upload_date">Ngày đăng</string>
+    <string name="accept_post_successful">Duyệt bài thành công</string>
+    <string name="accept_post_failed">Duyệt bài không thành công!</string>
+    <string name="delete_successful">Xóa thành công</string>
+    <string name="delete_failed">Xóa không thành công</string>
+    <string name="delete_post">Xóa tin</string>
+    <string name="delete_post_notificaton">Bạn chắc chắc muốn xóa tin này</string>
+    <string name="accept_post">Duyệt tin</string>
+    <string name="accept_post_notification">Bạn có chắc muốn duyệt tin này</string>
+    <string name="name">Tên</string>
+    <string name="able_user_successful">Bỏ khóa tài khoản thành công</string>
+    <string name="disable_user_successful">Khóa tài khoản thành công</string>
+    <string name="update_status_user_error">Cập nhật trạng thái user thất bại</string>
+    <string name="permission_denied">Quyền user bị từ tối</string>
 
 
 </resources>

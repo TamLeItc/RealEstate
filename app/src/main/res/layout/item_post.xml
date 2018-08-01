@@ -49,22 +49,20 @@
                 android:ellipsize="end"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="@dimen/_11sp"
+                android:textSize="@dimen/_12sp"
                 android:layout_toRightOf="@id/txv_price"
                 android:text="@string/for_one_month"
                 android:textColor="@color/colorMain"
-                android:layout_marginTop="@dimen/_1dp"
                 android:id="@+id/txv_a_month"
                 android:layout_toLeftOf="@+id/txv_area"/>
 
             <TextView
                 android:layout_marginLeft="@dimen/_10dp"
-                android:layout_marginTop="@dimen/_2dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/txv_area"
                 android:text="Diện tích"
-                android:textSize="@dimen/_11sp"
+                android:textSize="@dimen/_12sp"
                 android:layout_alignParentRight="true"
                 android:textColor="@color/colorMain" />
             
@@ -114,7 +112,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/txv_title"
-                android:text="@string/address"
+                android:text="@string/title"
                 android:textSize="@dimen/_9sp"
                 android:layout_below="@+id/txv_rooms"
                 android:maxLines="2"

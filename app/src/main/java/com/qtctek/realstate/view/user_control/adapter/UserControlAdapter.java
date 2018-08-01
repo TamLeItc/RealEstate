@@ -116,43 +116,7 @@ public class UserControlAdapter extends FragmentStatePagerAdapter {
 
     private CharSequence handleGetPageTitle(int position){
         String title = "";
-        if(MainActivity.USER.getLevel() == 1){
-            switch (position){
-                case 0:
-                    title = "Tùy chọn";
-                    break;
-                case 1:
-                    title = "Quản lí tin";
-                    break;
-                case 2:
-                    title = "Quản lí User";
-                    break;
-            }
-        }
-        else if(MainActivity.USER.getLevel() == 3){
-            switch (position){
-                case 0:
-                    title = "Quản lí tin";
-                    break;
-                case 1:
-                    title = "Tin đã lưu";
-                    break;
-                case 2:
-                    title = "T.kiếm đã lưu";
-                    break;
-            }
-        }
-        else if(MainActivity.USER.getLevel() == 2){
-            switch (position){
-                case 0:
-                    title = "Tùy chọn";
-                    break;
-                case 1:
-                    title = "Quản lí tin";
-                    break;
-            }
-        }
-        else if(MainActivity.USER.getLevel() == User.USER_NULL){
+        if(MainActivity.USER.getLevel() == User.USER_NULL){
             switch (position){
                 case 0:
                     title = "Tin đã lưu";

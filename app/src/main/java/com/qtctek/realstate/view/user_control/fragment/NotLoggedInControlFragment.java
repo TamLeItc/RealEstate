@@ -10,7 +10,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 
 import com.qtctek.realstate.R;
@@ -29,7 +28,7 @@ public class NotLoggedInControlFragment extends Fragment implements View.OnClick
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        this.mView = inflater.inflate(R.layout.fragment_user_control, container, false);
+        this.mView = inflater.inflate(R.layout.fragment_saved_information, container, false);
 
         return mView;
     }

@@ -22,6 +22,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.qtctek.realstate.R;
+import com.qtctek.realstate.common.general.Constant;
 import com.qtctek.realstate.dto.User;
 import com.qtctek.realstate.common.general.HashMD5;
 import com.qtctek.realstate.helper.AlertHelper;
@@ -96,10 +97,11 @@ public class LoginFragment extends Fragment implements ViewHandleLogin, View.OnC
         String password = this.mEdtPassword.getText().toString().trim();
 
         if(email.equals("")){
-            ((UserActionActivity)getActivity()).toastHelper.toast("Vui lòng nhập email/tên đăng nhập", ToastHelper.LENGTH_SHORT);
+            ((UserActionActivity)getActivity()).toastHelper.toast(getResources().getString(R.string.please_enter_username_or_email), ToastHelper.LENGTH_SHORT);
+            this.mEdtPassword.setText("");
             this.mEdtEmail.requestFocus();
         } else if(password.equals("")){
-            ((UserActionActivity)getActivity()).toastHelper.toast("Vui lòng nhập mật khẩu", ToastHelper.LENGTH_SHORT);
+            ((UserActionActivity)getActivity()).toastHelper.toast(getResources().getString(R.string.please_enter_password), ToastHelper.LENGTH_SHORT);
             this.mEdtPassword.requestFocus();
         } else {
             ((UserActionActivity)getActivity()).dialogHelper.show();
@@ -111,7 +113,7 @@ public class LoginFragment extends Fragment implements ViewHandleLogin, View.OnC
     @Override
     public void onHandleCheckUserNotExists() {
         ((UserActionActivity)getActivity()).dialogHelper.dismiss();
-        ((UserActionActivity)getActivity()).toastHelper.toast("Email/tên đăng nhập hoặc mật khẩu không chính xác!!!", ToastHelper.LENGTH_SHORT);
+        ((UserActionActivity)getActivity()).toastHelper.toast(getResources().getString(R.string.information_login_incorrect), ToastHelper.LENGTH_SHORT);
         this.mEdtPassword.requestFocus();
         this.mEdtPassword.setText("");
 
@@ -120,10 +122,10 @@ public class LoginFragment extends Fragment implements ViewHandleLogin, View.OnC
     @Override
     public void onHandleCheckUserLoginSuccessful(User user) {
         ((UserActionActivity)getActivity()).dialogHelper.dismiss();
-        if(user.getStatus().equals("no")){
-            ((NewPostActivity)getActivity()).alertHelper.alert("Lỗi", "Tài khoản của bạn bị tạm" +
-                    " khóa. Vui lòng liên hệ với admin để được hỗ trợ", false, "Xác nhập",
-                    AlertHelper.ALERT_NO_ACTION);
+        if(user.getStatus().equals(Constant.NO)){
+            ((NewPostActivity)getActivity()).alertHelper.alert(getResources().getString(R.string.error),
+                    getResources().getString(R.string.account_disable), false,
+                    getResources().getString(R.string.ok), AlertHelper.ALERT_NO_ACTION);
         }
         else{
             MainActivity.USER = user;
@@ -158,8 +160,8 @@ public class LoginFragment extends Fragment implements ViewHandleLogin, View.OnC
 
         ((UserActionActivity)getActivity()).dialogHelper.dismiss();
 
-        ((UserActionActivity)getActivity()).alertHelper.alert("Lỗi", "Đăng nhập không thành công " +
-                        "vui lòng thử lại sau", false, "Xác nhập",
+        ((UserActionActivity)getActivity()).alertHelper.alert(getResources().getString(R.string.error),
+                getResources().getString(R.string.login_failed), false, getResources().getString(R.string.ok),
                 AlertHelper.ALERT_NO_ACTION);
     }
 
@@ -179,7 +181,7 @@ public class LoginFragment extends Fragment implements ViewHandleLogin, View.OnC
 
     @Override
     public void onGetDataSaveLoginError(String error) {
-        ((UserActionActivity)getActivity()).toastHelper.toast("Lỗi xử lí", ToastHelper.LENGTH_SHORT);
+        ((UserActionActivity)getActivity()).toastHelper.toast(getResources().getString(R.string.error_handle), ToastHelper.LENGTH_SHORT);
         this.mEdtEmail.setText("");
         this.mEdtPassword.setText("");
     }

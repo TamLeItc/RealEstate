@@ -27,7 +27,7 @@ public class LoggedInControlFragment extends Fragment implements View.OnClickLis
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        this.mView = inflater.inflate(R.layout.fragment_user_control, container, false);
+        this.mView = inflater.inflate(R.layout.fragment_saved_information, container, false);
 
         return mView;
     }

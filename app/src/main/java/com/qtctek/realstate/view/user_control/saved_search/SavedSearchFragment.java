@@ -9,7 +9,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.PopupMenu;
 import android.widget.RelativeLayout;
@@ -83,7 +82,7 @@ public class SavedSearchFragment extends Fragment implements ViewHandleSavedSear
     public void onHandleUpdateSavedSearchListSuccessful() {
         ((UserControlActivity)getActivity()).dialogHelper.dismiss();
 
-        ((UserControlActivity)getActivity()).toastHelper.toast("Xóa tìm kiếm thành công", ToastHelper.LENGTH_SHORT);
+        ((UserControlActivity)getActivity()).toastHelper.toast(getResources().getString(R.string.delete_successful), ToastHelper.LENGTH_SHORT);
         ListPostNewsFragment.LIST_SAVED_SEARCH.remove(mPositionClick);
 
         this.mSavedSearchAdapter.notifyDataSetChanged();
@@ -101,7 +100,7 @@ public class SavedSearchFragment extends Fragment implements ViewHandleSavedSear
     @Override
     public void onHandleUpdateSavedSearchListError(String error) {
         ((UserControlActivity)getActivity()).dialogHelper.dismiss();
-        ((UserControlActivity)getActivity()).toastHelper.toast("Xóa tìm kiếm không thành công", ToastHelper.LENGTH_SHORT);
+        ((UserControlActivity)getActivity()).toastHelper.toast(getResources().getString(R.string.delete_failed), ToastHelper.LENGTH_SHORT);
     }
 
     @Override
@@ -119,7 +118,7 @@ public class SavedSearchFragment extends Fragment implements ViewHandleSavedSear
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.action_view_detail:
-                        MapPostNewsFragment.ON_EVENT_FROM_ACTIVITY.onHandleSearch(ListPostNewsFragment.LIST_SAVED_SEARCH.get(position));
+                        MapPostNewsFragment.ON_EVENT_FOR_MAP_POST_NEWS.onHandleSearch(ListPostNewsFragment.LIST_SAVED_SEARCH.get(position));
                         getActivity().finish();
                         break;
                     case R.id.action_un_save:

@@ -14,9 +14,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.qtctek.realstate.R;
+import com.qtctek.realstate.common.general.Constant;
 import com.qtctek.realstate.helper.AlertHelper;
 import com.qtctek.realstate.helper.DialogHelper;
 import com.qtctek.realstate.helper.ToastHelper;
+import com.qtctek.realstate.view.post_news.fragment.MapPostNewsFragment;
 import com.qtctek.realstate.view.user_action.adapter.UserActionAdapter;
 import com.qtctek.realstate.view.user_control.activity.UserControlActivity;
 
@@ -84,8 +86,8 @@ public class UserActionActivity extends AppCompatActivity implements View.OnTouc
     private void getValueFromIntent(){
         try{
             Intent intent = getIntent();
-            String option = intent.getStringExtra("option");
-            if(option.equals("update_user")){
+            String option = intent.getStringExtra(Constant.OPTION);
+            if(option.equals(Constant.UPDATE_ACCOUNT_INFORMATION)){
                 mViewPager.setCurrentItem(3);
             }
         }
@@ -124,12 +126,12 @@ public class UserActionActivity extends AppCompatActivity implements View.OnTouc
     @Override
     public void onBackPressed() {
         if (mDoubleBackToExitPressedOnce) {
-            super.onBackPressed();
-            return;
+            finish();
+            MapPostNewsFragment.ON_EVENT_FOR_MAP_POST_NEWS.exitApp();
         }
 
         this.mDoubleBackToExitPressedOnce = true;
-        toastHelper.toast("Ấn thêm lần nữa để thoát ra màn hình chính", ToastHelper.LENGTH_SHORT);
+        toastHelper.toast(getResources().getString(R.string.double_press_back_to_exit), ToastHelper.LENGTH_SHORT);
 
         new Handler().postDelayed(new Runnable() {
 

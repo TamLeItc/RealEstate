@@ -2,10 +2,28 @@ package com.qtctek.realstate.common.general;
 
 public class Constant {
 
-    public static String SHARED_PREFERENCES = "shared_preferences";
-    public static String SAVED_PRODUCT_LIST = "saved_product_list";
-    public static String SAVED_SEARCH_LIST = "saved_search_list";
-    public static String LAST_SEARCH = "last_search";
+    public static final String FRAGMENT = "fragment";
+    public static final String IMAGE_EXTENSION = ".jpg";
+    public static final String SHARED_PREFERENCES = "shared_preferences";
+    public static final String SAVED_PRODUCT_LIST = "saved_product_list";
+    public static final String SAVED_SEARCH_LIST = "saved_search_list";
+    public static final String LAST_SEARCH = "last_search";
+    public static final String POSITION = "position";
+    public static final String YYYY_MM_DD = "yyyy-MM-dd";
+    public static final String DD_MM_YYYY = "dd-MM-yyyy";
+    public static final String MIN_PRICE = "min_price";
+    public static final String MAX_PRICE = "max_price";
+    public static final String PERCENT = "%";
+    public static final String YES = "yes";
+    public static final String NO = "no";
+    public static final String SAVE = "save";
+    public static final String OPTION = "option";
+    public static final String UPDATE_ACCOUNT_INFORMATION = "update_account_information";
+    public static final String EMAIL_EXISTED = "email_existed";
+    public static final String USERNAME_EXISTED = "username_existed";
+    public static final String NOW_PASSWORD_INCORRECT = "old_password_not_true";
+
+
     public static final int OPTION_MENU_SELECTED = 1001;
     public static final int INSERT_DATABASE = 1002;
     public static final int HANDLE_ERROR = 1003;

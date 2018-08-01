@@ -20,8 +20,10 @@ import android.widget.TextView;
 
 import com.qtctek.realstate.R;
 import com.qtctek.realstate.common.AppUtils;
+import com.qtctek.realstate.common.general.Constant;
 import com.qtctek.realstate.dto.Category;
 import com.qtctek.realstate.dto.Place;
+import com.qtctek.realstate.dto.Product;
 import com.qtctek.realstate.dto.Room;
 import com.qtctek.realstate.presenter.new_post.GetData.PresenterGetData;
 import com.qtctek.realstate.view.new_post.interfaces.ViewHandleModelGetData;
@@ -29,7 +31,9 @@ import com.qtctek.realstate.view.post_news.adapter.CategoryAdapter;
 import com.qtctek.realstate.view.post_news.adapter.QualityAdapter;
 import com.qtctek.realstate.view.post_news.interfaces.OnFromAdapter;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class SearchFilterDialog extends Activity implements View.OnClickListener, View.OnKeyListener, ViewHandleModelGetData,
         OnFromAdapter{
@@ -121,7 +125,7 @@ public class SearchFilterDialog extends Activity implements View.OnClickListener
     private void handleValueFromIntent(){
         Intent data = getIntent();
 
-        String formality = data.getStringExtra("formality");
+        String formality = data.getStringExtra(Product.FORMALITY);
         if(formality.equals("yes")){
             this.mChkForSale.setChecked(true);
         }
@@ -132,22 +136,23 @@ public class SearchFilterDialog extends Activity implements View.OnClickListener
             this.mChkRent.setChecked(true);
             this.mChkForSale.setChecked(true);
         }
-        String architecture = data.getStringExtra("architecture");
-        String type = data.getStringExtra("type");
-        String minPrice = data.getStringExtra("min_price");
-        String maxPrice = data.getStringExtra("max_price");
 
-        if(!architecture.equals("%")){
+        String architecture = data.getStringExtra(Product.ARCHITECTURE);
+        String type = data.getStringExtra(Product.TYPE);
+        String minPrice = data.getStringExtra(Constant.MIN_PRICE);
+        String maxPrice = data.getStringExtra(Constant.MAX_PRICE);
+
+        if(!architecture.equals(Constant.PERCENT)){
             this.mBtnResetArchitecture.setBackgroundResource(R.drawable.icon_close_black_24dp);
         }
         else{
-            architecture = "Tất cả";
+            architecture = getResources().getString(R.string.all);
         }
-        if(!type.equals("%")){
+        if(!type.equals(Constant.PERCENT)){
             this.mBtnResetType.setBackgroundResource(R.drawable.icon_close_black_24dp);
         }
         else{
-            type = "Tất cả";
+            type = getResources().getString(R.string.all);
         }
 
         StringBuilder stringBuilderMinPrice = new StringBuilder(minPrice);
@@ -196,26 +201,26 @@ public class SearchFilterDialog extends Activity implements View.OnClickListener
     private void handleSearch(){
         Intent intent = getIntent();
 
-        String formality = "%";
+        String formality = Constant.PERCENT;
         String architecture = this.mTxvArchitecture.getText().toString();
         String type = this.mTxvType.getText().toString();
 
         if(mChkForSale.isChecked() && !mChkRent.isChecked()){
-            formality = "yes";
+            formality = Constant.YES;;
         }
         else if(mChkRent.isChecked() && !mChkForSale.isChecked()){
-            formality = "no";
+            formality = Constant.NO;
         }
-        if(type.equals("Tất cả")){
-            type = "%";
+        if(type.equals(getResources().getString(R.string.all))){
+            type = Constant.PERCENT;
         }
-        if(architecture.equals("Tất cả")){
-            architecture = "%";
+        if(architecture.equals(getResources().getString(R.string.all))){
+            architecture = Constant.PERCENT;
         }
 
-        intent.putExtra("formality", formality);
-        intent.putExtra("architecture", architecture);
-        intent.putExtra("type", type);
+        intent.putExtra(Product.FORMALITY, formality);
+        intent.putExtra(Product.ARCHITECTURE, architecture);
+        intent.putExtra(Product.TYPE, type);
         intent.putExtra(AppUtils.QUALITY_BATHROOM, QUALITY_BATHROOM);
         intent.putExtra(AppUtils.QUALITY_BEDROOM, QUALITY_BEDROOM);
 
@@ -226,16 +231,16 @@ public class SearchFilterDialog extends Activity implements View.OnClickListener
         catch (java.lang.NumberFormatException e){
             minPrice = Long.valueOf(0);
         }
-        intent.putExtra("min_price", minPrice + "000000");
+        intent.putExtra(Constant.MIN_PRICE, minPrice + "000000");
 
         Long maxPrice;
         try {
             maxPrice = Long.valueOf(this.mEdtMaxPrice.getText().toString());
-            intent.putExtra("max_price", maxPrice + "000000");
+            intent.putExtra(Constant.MAX_PRICE, maxPrice + "000000");
         }
         catch (java.lang.NumberFormatException e){
             maxPrice = Long.valueOf(0);
-            intent.putExtra("max_price", "1000000000000000");
+            intent.putExtra(Constant.MAX_PRICE, "1000000000000000");
         }
         setResult(RESULT_OK, intent);
         finish();
@@ -251,21 +256,21 @@ public class SearchFilterDialog extends Activity implements View.OnClickListener
                 handleSearch();
                 break;
             case R.id.btn_reset_architecture:
-                this.mTxvArchitecture.setText("Tất cả");
+                this.mTxvArchitecture.setText(getResources().getString(R.string.all));
                 this.mBtnResetArchitecture.setBackgroundResource(R.drawable.icon_arrow_right_black_24dp);
                 break;
             case R.id.btn_reset_type:
-                this.mTxvType.setText("Tất cả");
+                this.mTxvType.setText(getResources().getString(R.string.all));
                 this.mBtnResetType.setBackgroundResource(R.drawable.icon_arrow_right_black_24dp);
                 break;
             case R.id.txv_architecture:
                 this.mLoadingDialog.show();
-                mCategory = "architecture";
+                mCategory = Product.ARCHITECTURE;
                 new PresenterGetData(this).handleGetCategoriesProduct("tbl_architecture", "architecture");
                 break;
             case R.id.txv_type:
                 this.mLoadingDialog.show();
-                mCategory = "type";
+                mCategory = Product.TYPE;
                 new PresenterGetData(this).handleGetCategoriesProduct("tbl_type", "type");
                 break;
             case R.id.txv_city:
@@ -329,10 +334,10 @@ public class SearchFilterDialog extends Activity implements View.OnClickListener
 
     private String getStringPrice(Long price){
         if(price >= 1000){
-            return (float)price / 1000 + " tỷ";
+            return (float)price / 1000 + " " + getResources().getString(R.string.billion);
         }
         else{
-            return price + " triệu";
+            return price + " " + getResources().getString(R.string.million);
         }
     }
 
@@ -366,7 +371,7 @@ public class SearchFilterDialog extends Activity implements View.OnClickListener
         lsv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if(mCategory.equals("architecture")){
+                if(mCategory.equals(Product.ARCHITECTURE)){
                     mTxvArchitecture.setText(mArrCategory.get(position).getName());
                     mBtnResetArchitecture.setBackgroundResource(R.drawable.icon_close_black_24dp);
                 }
@@ -383,9 +388,9 @@ public class SearchFilterDialog extends Activity implements View.OnClickListener
     }
 
     private int getPositionSelected(ArrayList<Category> mArrCategory){
-        if(mCategory.equals("architecture")){
+        if(mCategory.equals(Product.ARCHITECTURE)){
             String text = this.mTxvArchitecture.getText().toString();
-            if(text.equals("Tất cả")){
+            if(text.equals(getResources().getString(R.string.all))){
                 return -1;
             }
             else{
@@ -398,7 +403,7 @@ public class SearchFilterDialog extends Activity implements View.OnClickListener
         }
         else{
             String text = this.mTxvType.getText().toString();
-            if(text.equals("Tất cả")){
+            if(text.equals(getResources().getString(R.string.all))){
                 return -1;
             }
             else{

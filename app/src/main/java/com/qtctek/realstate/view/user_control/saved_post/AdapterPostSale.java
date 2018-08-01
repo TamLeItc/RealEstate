@@ -74,13 +74,13 @@ public class AdapterPostSale extends BaseAdapter {
         Product product = this.mArrProduct.get(position);
 
         viewHolder.txvArea.setText(product.getArea() + " m²");
-        viewHolder.txvRooms.setText(product.getBedroom() + " phòng ngủ, "
-                + product.getBathroom() + " phòng tắm");
+        viewHolder.txvRooms.setText(product.getBedroom() + " " + mContext.getResources().getString(R.string.bedroom) +", "
+                + product.getBathroom() + " " + mContext.getResources().getString(R.string.bathroom));
         viewHolder.txvTitle.setText(product.getTitle());
         viewHolder.txvAddress.setText(product.getDistrict() + ", "
                 + product.getCity());
 
-        String urlImage = MainActivity.WEB_SERVER + "images/" + product.getThumbnail();
+        String urlImage = MainActivity.WEB_SERVER + MainActivity.IMAGE_URL_RELATIVE + product.getThumbnail();
         final ViewHolder finalViewHolder = viewHolder;
         Picasso.with(mContext).load(urlImage).into(viewHolder.imvProductAvartar, new Callback() {
             @Override

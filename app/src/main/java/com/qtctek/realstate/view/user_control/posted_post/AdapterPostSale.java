@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.qtctek.realstate.R;
 import com.qtctek.realstate.common.AppUtils;
+import com.qtctek.realstate.common.general.Constant;
 import com.qtctek.realstate.dto.Product;
 import com.qtctek.realstate.view.post_news.activity.MainActivity;
 import com.squareup.picasso.Callback;
@@ -75,13 +76,13 @@ public class AdapterPostSale extends BaseAdapter {
         Product product = this.mArrProduct.get(position);
 
         viewHolder.txvArea.setText(product.getArea() + " m²");
-        viewHolder.txvRooms.setText(product.getBedroom() + " phòng ngủ, "
-                + product.getBathroom() + " phòng tắm");
+        viewHolder.txvRooms.setText(product.getBedroom() + " " + mContext.getResources().getString(R.string.bedroom) +" , "
+                + product.getBathroom() + " " + mContext.getResources().getString(R.string.bedroom));
         viewHolder.txvTitle.setText(product.getTitle());
         viewHolder.txvAddress.setText(product.getDistrict() + ", "
                 + product.getCity());
 
-        String urlImage = MainActivity.WEB_SERVER + "images/" + product.getThumbnail();
+        String urlImage = MainActivity.WEB_SERVER + MainActivity.IMAGE_URL_RELATIVE + product.getThumbnail();
         final ViewHolder finalViewHolder = viewHolder;
         Picasso.with(mContext).load(urlImage).into(viewHolder.imvProductAvartar, new Callback() {
             @Override
@@ -99,19 +100,19 @@ public class AdapterPostSale extends BaseAdapter {
         viewHolder.txvPrice.setText(AppUtils.getStringPrice(product.getPrice(), AppUtils.LONG_PRICE));
 
         if(product.getStatus().equals("1")){
-            viewHolder.txvStatus.setText("Tạm lưu");
+            viewHolder.txvStatus.setText(mContext.getResources().getString(R.string.save_temp));
             viewHolder.txvStatus.setTextColor(mContext.getResources().getColor(R.color.colorGrayDark));
         }
         else if(product.getStatus().equals("2")){
-            viewHolder.txvStatus.setText("Chờ duyệt");
+            viewHolder.txvStatus.setText(mContext.getResources().getString(R.string.pending));
             viewHolder.txvStatus.setTextColor(mContext.getResources().getColor(R.color.colorRed));
         }
         else if(product.getStatus().equals("3")){
-            viewHolder.txvStatus.setText("Đã đăng");
+            viewHolder.txvStatus.setText(mContext.getResources().getString(R.string.posted));
             viewHolder.txvStatus.setTextColor(mContext.getResources().getColor(R.color.colorGreen));
         }
 
-        if(product.getFormality().equals("no")){
+        if(product.getFormality().equals(Constant.NO)){
             viewHolder.txvAMonth.setVisibility(View.VISIBLE);
         }
         else{

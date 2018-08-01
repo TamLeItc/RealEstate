@@ -23,8 +23,10 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 
 import com.qtctek.realstate.R;
+import com.qtctek.realstate.common.general.Constant;
 import com.qtctek.realstate.dto.Category;
 import com.qtctek.realstate.dto.Place;
+import com.qtctek.realstate.dto.Product;
 import com.qtctek.realstate.helper.ToastHelper;
 import com.qtctek.realstate.presenter.new_post.GetData.PresenterGetData;
 import com.qtctek.realstate.view.new_post.interfaces.ViewHandleModelGetData;
@@ -166,7 +168,7 @@ public class ProductInformationFragment extends Fragment implements View.OnClick
             this.mEdtPrices.setText("0");
         }
         if(this.mTxvDistrict.getText().toString().trim().equals("")){
-            ((NewPostActivity)getActivity()).toastHelper.toast("Chưa chọn quận/huyện. Không thể lưu!!!", ToastHelper.LENGTH_SHORT);
+            ((NewPostActivity)getActivity()).toastHelper.toast(getResources().getString(R.string.not_address_select_can_not_save), ToastHelper.LENGTH_SHORT);
             return;
         }
 
@@ -191,7 +193,7 @@ public class ProductInformationFragment extends Fragment implements View.OnClick
 
         }
         catch (Exception e){
-            ((NewPostActivity)getActivity()).toastHelper.toast("Dữ liệu không chính xác. Xin vui kiểm tra lại!!!", ToastHelper.LENGTH_SHORT);
+            ((NewPostActivity)getActivity()).toastHelper.toast(getResources().getString(R.string.data_incorrect_format), ToastHelper.LENGTH_SHORT);
         }
 
     }
@@ -314,10 +316,10 @@ public class ProductInformationFragment extends Fragment implements View.OnClick
     public void onGetCategoriesProduct(boolean status, ArrayList<Category> arrCategory) {
         ((NewPostActivity)getActivity()).dialogHelper.dismiss();
         if(!status){
-            ((NewPostActivity)getActivity()).toastHelper.toast("Đọc dữ liệu thất bại. Xin vui lòng thử lại sau!!!", ToastHelper.LENGTH_SHORT);
+            ((NewPostActivity)getActivity()).toastHelper.toast(getResources().getString(R.string.error_read_data_notification), ToastHelper.LENGTH_SHORT);
             return;
         }
-        if(this.mCategory.equals("amenities")){
+        if(this.mCategory.equals(Product.AMENITIES)){
             handleDisplayCategoryAmenityProduct(arrCategory);
         }
         else{
@@ -353,7 +355,7 @@ public class ProductInformationFragment extends Fragment implements View.OnClick
         mDialog.setContentView(R.layout.dialog_list);
 
         TextView txvTitle = mDialog.findViewById(R.id.txv_title);
-        txvTitle.setText("Chọn tiện ích");
+        txvTitle.setText(getResources().getString(R.string.select_amenities));
 
         ListView lsv = mDialog.findViewById(R.id.lsv_item);
         lsv.setAdapter(amenityAdapter);
@@ -431,13 +433,13 @@ public class ProductInformationFragment extends Fragment implements View.OnClick
 
         mDialog.setContentView(R.layout.dialog_list);
         TextView txvTitle = mDialog.findViewById(R.id.txv_title);
-        if(this.mCategory.equals("type")){
-            txvTitle.setText("Chọn loại nhà");
+        if(this.mCategory.equals(Product.TYPE)){
+            txvTitle.setText(getResources().getString(R.string.select_type));
             categoriesProductAdapter = new CategoryAdapter(
                     getContext(), mArrCategory, ((NewPostActivity)getActivity()).product.getTypeId());
         }
-        else if(this.mCategory.equals("architecture")){
-            txvTitle.setText("Chọn kiểu nhà");
+        else if(this.mCategory.equals(Product.ARCHITECTURE)){
+            txvTitle.setText(getResources().getString(R.string.select_architecture));
             categoriesProductAdapter = new CategoryAdapter(
                     getContext(), mArrCategory, ((NewPostActivity)getActivity()).product.getArchitectureId());
         }
@@ -458,11 +460,11 @@ public class ProductInformationFragment extends Fragment implements View.OnClick
         lsv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if(mCategory.equals("type")){
+                if(mCategory.equals(Product.TYPE)){
                     mTxvType.setText(mArrCategory.get(position).getName());
                     ((NewPostActivity)getActivity()).product.setTypeId(mArrCategory.get(position).getId());
                 }
-                else if(mCategory.equals("architecture")){
+                else if(mCategory.equals(Product.ARCHITECTURE)){
                     mTxvArchitecture.setText(mArrCategory.get(position).getName());
                     ((NewPostActivity)getActivity()).product.setArchitectureId(mArrCategory.get(position).getId());
                 }
@@ -494,11 +496,11 @@ public class ProductInformationFragment extends Fragment implements View.OnClick
                 viewPager.setCurrentItem(2);
             }
             else{
-                ((NewPostActivity)getActivity()).toastHelper.toast("Lưu thành công", ToastHelper.LENGTH_SHORT);
+                ((NewPostActivity)getActivity()).toastHelper.toast(getResources().getString(R.string.save_data_successful), ToastHelper.LENGTH_SHORT);
             }
         }
         else{
-            ((NewPostActivity)getActivity()).toastHelper.toast("Lỗi lưu dữ liệu!!!", ToastHelper.LENGTH_SHORT);
+            ((NewPostActivity)getActivity()).toastHelper.toast(getResources().getString(R.string.error_save_data), ToastHelper.LENGTH_SHORT);
         }
     }
 
@@ -527,18 +529,18 @@ public class ProductInformationFragment extends Fragment implements View.OnClick
         switch (v.getId()){
             case R.id.txv_type:
                 ((NewPostActivity)getActivity()).dialogHelper.show();
-                mPresenterGetData.handleGetCategoriesProduct("tbl_type", "type");
-                this.mCategory = "type";
+                mPresenterGetData.handleGetCategoriesProduct(Product.TABLE_TYPE, Product.TYPE);
+                this.mCategory = Product.TYPE;
                 break;
             case R.id.txv_amenities:
                 ((NewPostActivity)getActivity()).dialogHelper.show();
-                mPresenterGetData.handleGetCategoriesProduct("tbl_amenities", "amenity");
-                this.mCategory = "amenities";
+                mPresenterGetData.handleGetCategoriesProduct(Product.TABLE_AMENITIES, Product.AMENITY);
+                this.mCategory = Product.AMENITIES;
                 break;
             case R.id.txv_architecture:
                 ((NewPostActivity)getActivity()).dialogHelper.show();
-                mPresenterGetData.handleGetCategoriesProduct("tbl_architecture", "architecture");
-                this.mCategory = "architecture";
+                mPresenterGetData.handleGetCategoriesProduct(Product.TABLE_ARCHITECTURE, Product.ARCHITECTURE);
+                this.mCategory = Product.ARCHITECTURE;
                 break;
             case R.id.txv_city:
                 ((NewPostActivity)getActivity()).dialogHelper.show();

@@ -17,4 +17,6 @@ public interface OnEventForMapPostNews {
 
     void onHandleSearch(Condition condition);
 
+    void exitApp();
+
 }

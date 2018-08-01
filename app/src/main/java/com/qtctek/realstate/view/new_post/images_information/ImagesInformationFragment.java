@@ -1,7 +1,6 @@
 package com.qtctek.realstate.view.new_post.images_information;
 
 import android.Manifest;
-import android.app.AlertDialog;
 import android.content.ClipData;
 import android.content.Context;
 import android.content.Intent;
@@ -32,7 +31,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.qtctek.realstate.R;
+import com.qtctek.realstate.common.general.Constant;
 import com.qtctek.realstate.dto.Photo;
+import com.qtctek.realstate.dto.Product;
 import com.qtctek.realstate.helper.ToastHelper;
 import com.qtctek.realstate.presenter.new_post.PresenterNewPost;
 import com.qtctek.realstate.view.new_post.interfaces.ViewHandleModelNewPost;
@@ -114,7 +115,7 @@ public class ImagesInformationFragment extends Fragment implements ViewHandleMod
         this.mRecyclerView.setAdapter(IMAGE_ADAPTER);
 
         try{
-            String url = MainActivity.WEB_SERVER + "/images/" + ((NewPostActivity)getActivity()).product.getThumbnail();
+            String url = MainActivity.WEB_SERVER + MainActivity.IMAGE_URL_RELATIVE + ((NewPostActivity)getActivity()).product.getThumbnail();
             PROGRESSBAR.setVisibility(View.VISIBLE);
             Picasso.with(getContext()).load(url).into(IMV_AVARTAR, new Callback() {
                 @Override
@@ -177,9 +178,9 @@ public class ImagesInformationFragment extends Fragment implements ViewHandleMod
 
         mPath = getRealPathFromURI(getContext(), mUri);
 
-        String fileName = ((NewPostActivity)getActivity()).product.getId() + "_avartar.jpg";
+        String fileName = ((NewPostActivity)getActivity()).product.getId() + Product.IMAGE_NAME;
         new PresenterNewPost(this).handlePostImage(((NewPostActivity)getActivity()).product.getId(),
-                fileName, mPath, "thumbnail");
+                fileName, mPath, Product.THUMBNAIL);
     }
 
     private void uploadImages() {
@@ -192,9 +193,9 @@ public class ImagesInformationFragment extends Fragment implements ViewHandleMod
         Uri uri = ARR_PHOTO.get(mQualityImageUploaded).getUri();
         String path = getRealPathFromURI(getContext(), uri);
 
-        String fileName = ((NewPostActivity)getActivity()).product.getId() + "_" + (FILE_NAME++) + ".jpg";
+        String fileName = ((NewPostActivity)getActivity()).product.getId() + "_" + (FILE_NAME++) + Constant.IMAGE_EXTENSION;
         new PresenterNewPost(this).handlePostImage(((NewPostActivity)getActivity()).product.getId(),
-                fileName, path, "image_detail");
+                fileName, path, Product.IMAGE_DETAIL);
     }
 
     @Override
@@ -225,7 +226,7 @@ public class ImagesInformationFragment extends Fragment implements ViewHandleMod
             intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
             intent.setAction(Intent.ACTION_GET_CONTENT);
             intent.setType("image/*");
-            startActivityForResult(Intent.createChooser(intent, "Chọn hình ảnh"), 101);
+            startActivityForResult(Intent.createChooser(intent, getResources().getString(R.string.select_picture)), 101);
         }
         else if(check == 0){
             requestPermissions(101);
@@ -308,7 +309,7 @@ public class ImagesInformationFragment extends Fragment implements ViewHandleMod
         if(mIsPickAvartar){
             ((NewPostActivity)getActivity()).dialogHelper.dismiss();
             if (!status) {
-                ((NewPostActivity)getActivity()).toastHelper.toast("Lỗi lưu dữ liệu", ToastHelper.LENGTH_SHORT);
+                ((NewPostActivity)getActivity()).toastHelper.toast(getResources().getString(R.string.error_save_data), ToastHelper.LENGTH_SHORT);
             } else {
                 mIsPickAvartar = false;
 
@@ -321,7 +322,7 @@ public class ImagesInformationFragment extends Fragment implements ViewHandleMod
                         viewPager.setCurrentItem(1);
                     }
                     else{
-                        ((NewPostActivity)getActivity()).toastHelper.toast("Lưu thành công", ToastHelper.LENGTH_SHORT);
+                        ((NewPostActivity)getActivity()).toastHelper.toast(getResources().getString(R.string.save_data_successful), ToastHelper.LENGTH_SHORT);
                     }
 
                 }
@@ -332,14 +333,14 @@ public class ImagesInformationFragment extends Fragment implements ViewHandleMod
             if(ARR_PHOTO.size() == mQualityImageUploaded){
                 ((NewPostActivity)getActivity()).dialogHelper.dismiss();
                 if (!status) {
-                    ((NewPostActivity)getActivity()).toastHelper.toast("Lỗi lưu dữ liệu", ToastHelper.LENGTH_SHORT);
+                    ((NewPostActivity)getActivity()).toastHelper.toast(getResources().getString(R.string.error_save_data), ToastHelper.LENGTH_SHORT);
                 } else {
                     if(!isSaveTemp){
                         ViewPager viewPager = getActivity().findViewById(R.id.view_pager);
                         viewPager.setCurrentItem(1);
                     }
                     else{
-                        ((NewPostActivity)getActivity()).toastHelper.toast("Lưu thành công", ToastHelper.LENGTH_SHORT);
+                        ((NewPostActivity)getActivity()).toastHelper.toast(getResources().getString(R.string.save_data_successful), ToastHelper.LENGTH_SHORT);
                     }
                 }
                 mIsPickImage = false;
@@ -418,7 +419,7 @@ public class ImagesInformationFragment extends Fragment implements ViewHandleMod
                 intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
                 intent.setAction(Intent.ACTION_GET_CONTENT);
                 intent.setType("image/*");
-                startActivityForResult(Intent.createChooser(intent, "Chọn hình ảnh"), 1001);
+                startActivityForResult(Intent.createChooser(intent, getResources().getString(R.string.select_picture)), 1001);
             }
         }
         else if(requestCode == 102){

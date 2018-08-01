@@ -1,6 +1,7 @@
 package com.qtctek.realstate.view.user_control.user_management;
 
 import android.content.Context;
+import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,9 +10,11 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.qtctek.realstate.R;
+import com.qtctek.realstate.common.general.Constant;
 import com.qtctek.realstate.dto.User;
 
 import java.util.ArrayList;
+import java.util.regex.Pattern;
 
 public class UserAdapter extends BaseAdapter {
 
@@ -63,8 +66,8 @@ public class UserAdapter extends BaseAdapter {
         if(user == null){
             return null;
         }
-        viewHolder.txvName.setText("Tên: " + user.getFullName());
-        viewHolder.txvNumberPhone.setText("SDT: " + user.getPhone());
+        viewHolder.txvName.setText(mContext.getResources().getString(R.string.name) + ": " + user.getFullName());
+        viewHolder.txvNumberPhone.setText(mContext.getResources().getString(R.string.acronym_number_phone) + "SDT: " + user.getPhone());
         viewHolder.txvEmail.setText("Email: " + user.getEmail());
         viewHolder.txvRole.setText(user.getType());
 
@@ -78,12 +81,12 @@ public class UserAdapter extends BaseAdapter {
             viewHolder.txvRole.setTextColor(mContext.getResources().getColor(R.color.colorUser));
         }
 
-        if(mArrLisUser.get(position).getStatus().equals("no")){
-            viewHolder.txvStatus.setText("Tạm khóa");
+        if(mArrLisUser.get(position).getStatus().equals(Constant.NO)){
+            viewHolder.txvStatus.setText(mContext.getResources().getString(R.string.not_active));
             viewHolder.txvStatus.setTextColor(mContext.getResources().getColor(R.color.colorRed));
         }
         else{
-            viewHolder.txvStatus.setText("Hoạt động");
+            viewHolder.txvStatus.setText(mContext.getResources().getString(R.string.active));
             viewHolder.txvStatus.setTextColor(mContext.getResources().getColor(R.color.colorGreen));
         }
 

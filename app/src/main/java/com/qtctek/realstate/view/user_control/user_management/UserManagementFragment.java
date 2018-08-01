@@ -117,27 +117,27 @@ public class UserManagementFragment extends Fragment implements ViewHandleUserMa
         ((UserControlActivity)getActivity()).dialogHelper.dismiss();
 
         ((UserControlActivity)getActivity()).alertHelper.setCallback(this);
-        ((UserControlActivity)getActivity()).alertHelper.alert("Lỗi",
-                "Đọc dữ liệu thất bại. Vui lòng thử lại sau", false,
-                "Xác nhận", Constant.HANDLE_ERROR);
+        ((UserControlActivity)getActivity()).alertHelper.alert(getResources().getString(R.string.error),
+                getResources().getString(R.string.error_read_data), false,
+                getResources().getString(R.string.ok), Constant.HANDLE_ERROR);
     }
 
     @Override
     public void onHandleUpdateStatusUserSuccessful() {
         ((UserControlActivity)getActivity()).dialogHelper.dismiss();
-        if(mArrUser.get(mPositionClick).getStatus().equals("no")){
+        if(mArrUser.get(mPositionClick).getStatus().equals(Constant.NO)){
             mUserAdapter.notifyDataSetChanged();
 
-            ((UserControlActivity)getActivity()).toastHelper.toast("Bỏ khóa tài khoản thành công", ToastHelper.LENGTH_SHORT);
+            ((UserControlActivity)getActivity()).toastHelper.toast(getResources().getString(R.string.able_user_successful), ToastHelper.LENGTH_SHORT);
 
-            mArrUser.get(mPositionClick).setStatus("yes");
+            mArrUser.get(mPositionClick).setStatus(Constant.YES);
         }
         else{
             mUserAdapter.notifyDataSetChanged();
 
-            ((UserControlActivity)getActivity()).toastHelper.toast("Khóa tài khoản thành công", ToastHelper.LENGTH_SHORT);
+            ((UserControlActivity)getActivity()).toastHelper.toast(getResources().getString(R.string.disable_user_successful), ToastHelper.LENGTH_SHORT);
 
-            mArrUser.get(mPositionClick).setStatus("no");
+            mArrUser.get(mPositionClick).setStatus(Constant.NO);
         }
 
     }
@@ -147,7 +147,7 @@ public class UserManagementFragment extends Fragment implements ViewHandleUserMa
 
         ((UserControlActivity)getActivity()).dialogHelper.dismiss();
 
-        ((UserControlActivity)getActivity()).toastHelper.toast("Cập nhật trạng thái user thất bại", ToastHelper.LENGTH_SHORT);
+        ((UserControlActivity)getActivity()).toastHelper.toast(R.string.update_status_user_error, ToastHelper.LENGTH_SHORT);
     }
 
 
@@ -202,9 +202,8 @@ public class UserManagementFragment extends Fragment implements ViewHandleUserMa
                 switch (item.getItemId()){
                     case R.id.action_update_status:
                         if(mArrUser.get(mPositionClick).getLevel() == 1){
-                            ((UserControlActivity)getActivity()).alertHelper.alert("Lỗi",
-                                    "Bạn không thể thực thay đổi trạng thái môt" +
-                                            " user có quyền \"Admin\"", true, "Xác nhận",
+                            ((UserControlActivity)getActivity()).alertHelper.alert(getResources().getString(R.string.error),
+                                    getResources().getString(R.string.permission_denied), true, getResources().getString(R.string.ok),
                                     Constant.DENIED);
                         }
                         else{

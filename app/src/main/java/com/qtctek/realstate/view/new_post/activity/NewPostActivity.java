@@ -9,14 +9,12 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.qtctek.realstate.R;
 import com.qtctek.realstate.common.AppUtils;
@@ -37,6 +35,7 @@ import com.qtctek.realstate.view.new_post.product_information.fragment.ProductIn
 import com.qtctek.realstate.view.post_detail.interfaces.ViewHandlePostDetail;
 import com.qtctek.realstate.view.post_news.activity.MainActivity;
 import com.qtctek.realstate.view.new_post.images_information.ImagesInformationFragment;
+import com.qtctek.realstate.view.post_news.fragment.MapPostNewsFragment;
 import com.qtctek.realstate.view.user_control.activity.UserControlActivity;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
@@ -115,7 +114,7 @@ public class NewPostActivity extends AppCompatActivity implements ViewHandleMode
 
         Intent intent = getIntent();
 
-        int productId = intent.getIntExtra("post_id", -1);
+        int productId = intent.getIntExtra(Product.ID, -1);
         if(productId != -1){
             IS_UPDATE = true;
         }
@@ -166,14 +165,15 @@ public class NewPostActivity extends AppCompatActivity implements ViewHandleMode
             }
             if(isSavedInformation){
                 alertHelper.setCallback(this);
-                alertHelper.alert("Thêm bài đăng mới", "Bạn muốn thoát ra. Bài đăng của bạn sẽ" +
-                                " ở chế độ tạm lưu", false, "Xác nhận",
-                        "Hủy bỏ", Constant.OPTION_MENU_SELECTED);
+                alertHelper.alert(getResources().getString(R.string.add_new_post), getResources().getString(R.string.exit_add_new_post),
+                        false, getResources().getString(R.string.ok) ,getResources().getString(R.string.cancel),
+                        Constant.OPTION_MENU_SELECTED);
             }
             else{
                 alertHelper.setCallback(this);
-                alertHelper.alert("Thêm bài đăng mới", "Bạn chưa lưu thông tin. Bạn muốn thoát ra", false, "Xác nhận",
-                        "Hủy bỏ", Constant.OPTION_MENU_SELECTED);
+                alertHelper.alert(getResources().getString(R.string.add_new_post), getResources().getString(R.string.exit_add_new_post_without_save),
+                        false, getResources().getString(R.string.ok), getResources().getString(R.string.cancel),
+                        Constant.OPTION_MENU_SELECTED);
             }
         }
         else{
@@ -226,8 +226,8 @@ public class NewPostActivity extends AppCompatActivity implements ViewHandleMode
         if(!status){
 
             alertHelper.setCallback(this);
-            alertHelper.alert("Lỗi", "Có lỗi xảy ra trong kết nối. Xin thử lại sau!!!", false,
-                    "Xác nhận", Constant.INSERT_DATABASE);
+            alertHelper.alert(getResources().getString(R.string.error_connect), getResources().getString(R.string.error_connect_notification), false,
+                    getResources().getString(R.string.ok), Constant.INSERT_DATABASE);
         }
         else{
             product = new Product();
@@ -311,7 +311,7 @@ public class NewPostActivity extends AppCompatActivity implements ViewHandleMode
 
         ImagesInformationFragment.PROGRESSBAR.setVisibility(View.VISIBLE);
 
-        String url = MainActivity.WEB_SERVER + "images/" + product.getThumbnail();
+        String url = MainActivity.WEB_SERVER + MainActivity.IMAGE_URL_RELATIVE + product.getThumbnail();
 
         if(url.equals("")){
             ImagesInformationFragment.PROGRESSBAR.setVisibility(View.GONE);
@@ -338,20 +338,20 @@ public class NewPostActivity extends AppCompatActivity implements ViewHandleMode
         dialogHelper.dismiss();
 
         alertHelper.setCallback(this);
-        alertHelper.alert("Lỗi", "Có lỗi xảy ra trong quá trình đọc dữ liệu. Xin thử lại sau!!!",
-                false, "Xác nhận", Constant.HANDLE_ERROR);
+        alertHelper.alert(getResources().getString(R.string.error_read_data), getResources().getString(R.string.error_read_data_notification),
+                false, getResources().getString(R.string.ok), Constant.HANDLE_ERROR);
     }
 
 
     @Override
     public void onBackPressed() {
         if (mDoubleBackToExitPressedOnce) {
-            super.onBackPressed();
-            return;
+            finish();
+            MapPostNewsFragment.ON_EVENT_FOR_MAP_POST_NEWS.exitApp();
         }
 
         this.mDoubleBackToExitPressedOnce = true;
-        Toast.makeText(this, "Ấn thêm lần nữa để thoát ra màn hình chính", Toast.LENGTH_SHORT).show();
+        toastHelper.toast(getResources().getString(R.string.double_press_back_to_exit), ToastHelper.LENGTH_SHORT);
 
         new Handler().postDelayed(new Runnable() {
 

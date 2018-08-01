@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import com.qtctek.realstate.R;
 import com.qtctek.realstate.common.AppUtils;
+import com.qtctek.realstate.common.general.Constant;
 import com.qtctek.realstate.dto.Product;
 import com.qtctek.realstate.helper.ToastHelper;
 import com.qtctek.realstate.presenter.user_control.saved_post.PresenterSavedPost;
@@ -66,7 +67,7 @@ public class PostFragment extends Fragment implements View.OnClickListener, View
         }
         catch (Exception e){
             removeFragment();
-            ((MainActivity)getActivity()).toastHelper.toast("Lỗi xử lí", ToastHelper.LENGTH_SHORT);
+            ((MainActivity)getActivity()).toastHelper.toast(getResources().getString(R.string.error_handle), ToastHelper.LENGTH_SHORT);
         }
 
         return this.mView;
@@ -115,7 +116,7 @@ public class PostFragment extends Fragment implements View.OnClickListener, View
         this.mTxvArea.setText(mProduct.getArea() + "");
         this.mTxvAddress.setText(this.mProduct.getAddress());
 
-        String urlImage = MainActivity.WEB_SERVER + "images/" + mProduct.getThumbnail();
+        String urlImage = MainActivity.WEB_SERVER + MainActivity.IMAGE_URL_RELATIVE + mProduct.getThumbnail();
         Picasso.with(getContext()).load(urlImage).into(this.mImvProduct, new Callback() {
             @Override
             public void onSuccess() {
@@ -133,7 +134,7 @@ public class PostFragment extends Fragment implements View.OnClickListener, View
         this.mTxvPrice.setText(AppUtils.getStringPrice(mProduct.getPrice(), AppUtils.LONG_PRICE));
         this.mTxvAddress.setText(mProduct.getAddress());
 
-        if(mProduct.getFormality().equals("no")){
+        if(mProduct.getFormality().equals(Constant.NO)){
             this.mTxvAMonth.setVisibility(View.VISIBLE);
         }
         else{
@@ -157,9 +158,9 @@ public class PostFragment extends Fragment implements View.OnClickListener, View
                 break;
             case R.id.rl_item:
                 Intent intent = new Intent(getContext(), PostDetailActivity.class);
-                intent.putExtra("product_id", mProduct.getId());
-                intent.putExtra("save", mProduct.getIsSaved());
-                intent.putExtra("position", MapPostNewsFragment.POSITION);
+                intent.putExtra(Product.ID, mProduct.getId());
+                intent.putExtra(Constant.SAVE, mProduct.getIsSaved());
+                intent.putExtra(Constant.POSITION, MapPostNewsFragment.POSITION);
                 startActivity(intent);
                 break;
             case R.id.imb_save:
@@ -215,7 +216,7 @@ public class PostFragment extends Fragment implements View.OnClickListener, View
 
     @Override
     public void onHandleUpdateProductIdListError(String e) {
-        Toast.makeText(getContext(), "Thực hiện thất bại", Toast.LENGTH_SHORT);
+        Toast.makeText(getContext(), getResources().getString(R.string.error_save_data), Toast.LENGTH_SHORT);
     }
 
     @Override

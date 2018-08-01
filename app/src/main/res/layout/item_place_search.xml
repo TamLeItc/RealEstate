@@ -11,8 +11,8 @@
 
     <ImageView
         android:id="@+id/imv_image"
-        android:layout_width="22dp"
-        android:layout_height="22dp"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
         android:src="@drawable/icon_navigation_black_24dp"
         android:layout_marginLeft="10dp"
         android:layout_centerVertical="true"

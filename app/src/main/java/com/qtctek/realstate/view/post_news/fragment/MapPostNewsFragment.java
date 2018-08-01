@@ -36,6 +36,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.VisibleRegion;
@@ -71,7 +72,7 @@ public class MapPostNewsFragment extends Fragment implements OnMapReadyCallback,
     private final long mUpdateInterval = 5000;
     private final long mFastestInterval = 5000;
 
-    public static OnEventForMapPostNews ON_EVENT_FROM_ACTIVITY;
+    public static OnEventForMapPostNews ON_EVENT_FOR_MAP_POST_NEWS;
     public static int POSITION;
 
     private GoogleApiClient mGoogleApiClient;
@@ -101,7 +102,7 @@ public class MapPostNewsFragment extends Fragment implements OnMapReadyCallback,
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         mView = inflater.inflate(R.layout.fragment_map_post_news, container, false);
 
-        ON_EVENT_FROM_ACTIVITY = this;
+        ON_EVENT_FOR_MAP_POST_NEWS = this;
 
         initViews();
         initSupportMapFragment();
@@ -109,8 +110,9 @@ public class MapPostNewsFragment extends Fragment implements OnMapReadyCallback,
         if (!checkGoogleService()) {
 
             ((MainActivity) Objects.requireNonNull(getActivity())).alertHelper.setCallback(this);
-            ((MainActivity) Objects.requireNonNull(getActivity())).alertHelper.alert("Lỗi thiết bị","Thiết bị của bạn không hỗ trợ " +
-                    "dịch vụ Google Play",false, "OK", Constant.GOOGLE_PLAY_SERVICE_NOT_FOUND);
+            ((MainActivity) Objects.requireNonNull(getActivity())).alertHelper.alert(getResources().getString(R.string.error),
+                    getResources().getString(R.string.not_support_google_service),false,
+                    getResources().getString(R.string.ok), Constant.GOOGLE_PLAY_SERVICE_NOT_FOUND);
 
         }
         else {
@@ -208,20 +210,13 @@ public class MapPostNewsFragment extends Fragment implements OnMapReadyCallback,
 
     }
 
-    @Override
-    public void onDestroy() {
-        if (mGoogleApiClient != null && mGoogleApiClient.isConnected()) {
-            mGoogleApiClient.disconnect();
-            mGoogleApiClient = null;
-        }
-        mMap.clear();
-        super.onDestroy();
-    }
-
     @SuppressLint("MissingPermission")
     @Override
     public void onMapReady(GoogleMap googleMap) {
+
         mMap = googleMap;
+        mMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(getContext(), R.raw.map_style_json));
+        mMap.getUiSettings().setRotateGesturesEnabled(false);
 
         mMap.setOnMarkerClickListener(this);
         mMap.setOnCameraIdleListener(this);
@@ -235,8 +230,9 @@ public class MapPostNewsFragment extends Fragment implements OnMapReadyCallback,
 
     public void searchNearby() {
         ((MainActivity) Objects.requireNonNull(getActivity())).alertHelper.setCallback(this);
-        ((MainActivity) getActivity()).alertHelper.alert("Tìm kiếm", "Bạn có muốn tìm kiếm gần" +
-                        " vị trí hiện tại không", false, "OK", "Hủy bỏ",
+        ((MainActivity) getActivity()).alertHelper.alert(getResources().getString(R.string.search),
+                getResources().getString(R.string.search_near_by_notification), false,
+                getResources().getString(R.string.ok), getResources().getString(R.string.cancel),
                 Constant.NEAR_BY_SEARCH);
     }
 
@@ -337,12 +333,14 @@ public class MapPostNewsFragment extends Fragment implements OnMapReadyCallback,
     public synchronized void loadMarker(){
         mMap.clear();
 
+        boolean isExist = false;
         for (int i = 0; i < arrProduct.size(); i++) {
 
             Product product = arrProduct.get(i);
 
             if(lastProductClicked != null && product.getId() == lastProductClicked.getId()){
                 lastProductClicked = product;
+                isExist = true;
             }
             else{
                 LatLng latLng = new LatLng(Double.parseDouble(product.getMapLat()),
@@ -350,7 +348,7 @@ public class MapPostNewsFragment extends Fragment implements OnMapReadyCallback,
 
                 String strShortPrice = AppUtils.getStringPrice(product.getPrice(), AppUtils.SHORT_PRICE);
 
-                if (arrProduct.get(i).getFormality().equals("no")) {
+                if (arrProduct.get(i).getFormality().equals(Constant.NO)) {
                     createMarkerProduct(latLng, i, R.color.colorGreen, strShortPrice);
                 } else {
                     createMarkerProduct(latLng, i, R.color.colorMain, strShortPrice);
@@ -358,7 +356,13 @@ public class MapPostNewsFragment extends Fragment implements OnMapReadyCallback,
             }
         }
 
-        handleMarkerClicked(lastMarkerClicked, lastProductClicked);
+        if(!isExist){
+            lastMarkerClicked = null;
+            lastProductClicked = null;
+        }
+        else{
+            handleMarkerClicked(lastMarkerClicked, lastProductClicked);
+        }
     }
 
     private synchronized void setSavedForList(ArrayList<Product> arrProduct) {
@@ -376,7 +380,7 @@ public class MapPostNewsFragment extends Fragment implements OnMapReadyCallback,
         String strToday = AppUtils.getCurrentDate();
 
         @SuppressLint("SimpleDateFormat")
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(Constant.YYYY_MM_DD);
 
         Date toDate;
         Date dateUpload;
@@ -471,7 +475,7 @@ public class MapPostNewsFragment extends Fragment implements OnMapReadyCallback,
 
         } catch (java.lang.IndexOutOfBoundsException e) {
 
-            ((MainActivity)getActivity()).toastHelper.toast("Lỗi xử lí", ToastHelper.LENGTH_SHORT);
+            ((MainActivity)getActivity()).toastHelper.toast(getResources().getString(R.string.error_handle), ToastHelper.LENGTH_SHORT);
         }
 
         return true;
@@ -616,11 +620,11 @@ public class MapPostNewsFragment extends Fragment implements OnMapReadyCallback,
         }
 
         try {
-            ((MainActivity) Objects.requireNonNull(getActivity())).formality = "yes";
+            ((MainActivity) Objects.requireNonNull(getActivity())).formality = Constant.YES;
 
             initPermission();
         } catch (java.lang.NullPointerException e) {
-            ((MainActivity)getActivity()).toastHelper.toast("Lỗi xử lí", ToastHelper.LENGTH_SHORT);
+            ((MainActivity)getActivity()).toastHelper.toast(getResources().getString(R.string.error_handle), ToastHelper.LENGTH_SHORT);
         }
     }
 
@@ -633,12 +637,12 @@ public class MapPostNewsFragment extends Fragment implements OnMapReadyCallback,
         }
         try {
 
-            ((MainActivity) Objects.requireNonNull(getActivity())).formality = "no";
+            ((MainActivity) Objects.requireNonNull(getActivity())).formality = Constant.NO;
 
             initPermission();
 
         } catch (java.lang.NullPointerException e) {
-            ((MainActivity)getActivity()).toastHelper.toast("Lỗi xử lí", ToastHelper.LENGTH_SHORT);
+            ((MainActivity)getActivity()).toastHelper.toast(getResources().getString(R.string.error_handle), ToastHelper.LENGTH_SHORT);
         }
     }
 
@@ -661,9 +665,20 @@ public class MapPostNewsFragment extends Fragment implements OnMapReadyCallback,
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(condition.getMapLat(), condition.getMapLng()), condition.getZoom()));
     }
 
+    @Override
+    public void exitApp() {
+        if (mGoogleApiClient != null) {
+            mGoogleApiClient.disconnect();
+        }
+
+        Runtime.getRuntime().gc();
+        getActivity().finish();
+    }
+
     private void alertGPSIsOff() {
-        ((MainActivity) Objects.requireNonNull(getActivity())).alertHelper.alert("Lỗi", "Bạn chưa bận GPS. Vui lòng bật GPS để sử dụng chức năng này",
-                false, "Cài đặt", "Hủy bỏ", Constant.GPS_IS_OFF);
+        ((MainActivity) Objects.requireNonNull(getActivity())).alertHelper.alert(getResources().getString(R.string.error),
+                getResources().getString(R.string.gps_is_off_require_open),
+                false, getResources().getString(R.string.setting), getResources().getString(R.string.cancel), Constant.GPS_IS_OFF);
     }
 
     public void initPermission() {
@@ -735,7 +750,7 @@ public class MapPostNewsFragment extends Fragment implements OnMapReadyCallback,
             if (locationProviders == null || locationProviders.equals("")) {
                 startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
             } else {
-                ((MainActivity)getActivity()).toastHelper.toast("Không thể mở cài đặt", ToastHelper.LENGTH_SHORT);
+                ((MainActivity)getActivity()).toastHelper.toast(getResources().getString(R.string.can_not_open_setting), ToastHelper.LENGTH_SHORT);
             }
         }
     }

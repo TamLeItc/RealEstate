@@ -146,14 +146,14 @@ public class PostManagementFragment extends Fragment implements ViewHandlePostMa
 
         ((UserControlActivity)getActivity()).dialogHelper.dismiss();
 
-        ((UserControlActivity)getActivity()).toastHelper.toast("Đọc dữ liệu thất bại. Vui lòng thử lại sau", ToastHelper.LENGTH_SHORT);
+        ((UserControlActivity)getActivity()).toastHelper.toast(getResources().getString(R.string.error_read_data), ToastHelper.LENGTH_SHORT);
     }
 
     @Override
     public void onAcceptPostSuccessful() {
         ((UserControlActivity)getActivity()).dialogHelper.dismiss();
 
-        ((UserControlActivity)getActivity()).toastHelper.toast("Duyệt bài thành công", ToastHelper.LENGTH_SHORT);
+        ((UserControlActivity)getActivity()).toastHelper.toast(getResources().getString(R.string.accept_post_successful), ToastHelper.LENGTH_SHORT);
 
         mArrProduct.get(mPositionClick).setStatus("3");
         mAdapterListPostForAdmin.notifyDataSetChanged();
@@ -163,20 +163,22 @@ public class PostManagementFragment extends Fragment implements ViewHandlePostMa
     public void onAcceptPostError(String error) {
         ((UserControlActivity)getActivity()).dialogHelper.dismiss();
 
-        ((UserControlActivity)getActivity()).toastHelper.toast("Duyệt bài không thành công", ToastHelper.LENGTH_SHORT);
+        ((UserControlActivity)getActivity()).toastHelper.toast(getResources().getString(R.string.accept_post_failed), ToastHelper.LENGTH_SHORT);
     }
 
     @Override
     public void onDeletePostSuccessful() {
 
         ((UserControlActivity)getActivity()).dialogHelper.dismiss();
-        ((UserControlActivity)getActivity()).toastHelper.toast("Xóa bài thành công", ToastHelper.LENGTH_SHORT);
+        ((UserControlActivity)getActivity()).toastHelper.toast(getResources().getString(R.string.delete_successful), ToastHelper.LENGTH_SHORT);
 
         mArrProduct.remove(mPositionClick);
         mAdapterListPostForAdmin.notifyDataSetChanged();
 
-        this.mTxvInformation.setText(getResources().getString(R.string.no_data));
-        this.mTxvInformation.setVisibility(View.VISIBLE);
+        if(mArrProduct.size() == 0){
+            this.mTxvInformation.setText(getResources().getString(R.string.no_data));
+            this.mTxvInformation.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
@@ -184,7 +186,7 @@ public class PostManagementFragment extends Fragment implements ViewHandlePostMa
 
         ((UserControlActivity)getActivity()).dialogHelper.dismiss();
 
-        ((UserControlActivity)getActivity()).toastHelper.toast("Xóa bài không thành công", ToastHelper.LENGTH_SHORT);
+        ((UserControlActivity)getActivity()).toastHelper.toast(R.string.delete_failed, ToastHelper.LENGTH_SHORT);
     }
 
     @Override
@@ -209,18 +211,18 @@ public class PostManagementFragment extends Fragment implements ViewHandlePostMa
                 switch (item.getItemId()) {
                     case R.id.action_view_detail:
                         Intent intent = new Intent(getActivity(), PostDetailActivity.class);
-                        intent.putExtra("product_id", mArrProduct.get(mPositionClick).getId());
+                        intent.putExtra(Product.ID, mArrProduct.get(mPositionClick).getId());
                         startActivity(intent);
                         break;
                     case R.id.action_accept_post:
-                        ((UserControlActivity)getActivity()).alertHelper.alert("Xác nhận",
-                                "Bạn chắc chắc muốn duyệt bài đăng này", false,
-                                "Xác nhận", "Hủy bỏ", Constant.ACCEPT);
+                        ((UserControlActivity)getActivity()).alertHelper.alert(getResources().getString(R.string.delete_post),
+                                getResources().getString(R.string.delete_post_notificaton), false,
+                                getResources().getString(R.string.ok), getResources().getString(R.string.cancel), Constant.ACCEPT);
                         break;
                     case R.id.action_delete_post:
-                        ((UserControlActivity)getActivity()).alertHelper.alert("Xác nhận",
-                                "Bạn chắc chắc muốn duyệt bài đăng này", false,
-                                "Xác nhận", "Hủy bỏ", Constant.DELETE);
+                        ((UserControlActivity)getActivity()).alertHelper.alert(getResources().getString(R.string.accept_post),
+                                getResources().getString(R.string.accept_post_notification), false,
+                                getResources().getString(R.string.ok), getResources().getString(R.string.cancel), Constant.DELETE);
                         break;
 
                 }

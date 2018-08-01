@@ -149,9 +149,10 @@
 
             <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/_200dp"
+                android:layout_height="@dimen/_220dp"
                 android:layout_gravity="bottom"
-                android:id="@+id/fl_item_post" />
+                android:id="@+id/fl_item_post"
+                />
 
 
         </net.cachapa.expandablelayout.ExpandableLayout>

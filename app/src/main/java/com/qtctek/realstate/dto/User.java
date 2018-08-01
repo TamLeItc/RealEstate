@@ -2,7 +2,11 @@ package com.qtctek.realstate.dto;
 
 public class User {
 
-    public static int USER_NULL = -1001;
+    public static final int USER_NULL = -1001;
+
+    public static final String FEMALE = "Nữ";
+    public static final String MALE = "Nam";
+    public static final String OTHER_SEX = "Khác";
 
     private int mId = USER_NULL;
     private String mFullName;

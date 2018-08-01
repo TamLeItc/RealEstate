@@ -29,6 +29,7 @@ import com.qtctek.realstate.helper.AlertHelper;
 import com.qtctek.realstate.helper.DialogHelper;
 import com.qtctek.realstate.helper.ToastHelper;
 import com.qtctek.realstate.view.post_news.activity.MainActivity;
+import com.qtctek.realstate.view.post_news.fragment.MapPostNewsFragment;
 import com.qtctek.realstate.view.user_action.activity.UserActionActivity;
 import com.qtctek.realstate.view.user_control.adapter.PostFilterAdapter;
 import com.qtctek.realstate.view.user_control.adapter.UserFilterAdapter;
@@ -104,7 +105,7 @@ public class UserControlActivity extends AppCompatActivity implements AlertHelpe
     private void handleValueFromIntent(){
         try{
             Intent intent = getIntent();
-            positionFragment = intent.getIntExtra("fragment", 0);
+            positionFragment = intent.getIntExtra(Constant.FRAGMENT, 0);
 
             if(positionFragment == 0){
                 this.isRequireAccountManagement = true;
@@ -187,7 +188,7 @@ public class UserControlActivity extends AppCompatActivity implements AlertHelpe
                         break;
                     case R.id.action_update_information:
                         intent = new Intent(UserControlActivity.this, UserActionActivity.class);
-                        intent.putExtra("option", "update_user");
+                        intent.putExtra(Constant.OPTION, Constant.UPDATE_ACCOUNT_INFORMATION);
                         startActivity(intent);
                         finish();
                         break;
@@ -197,8 +198,8 @@ public class UserControlActivity extends AppCompatActivity implements AlertHelpe
                         finish();
                         break;
                     case R.id.action_logout:
-                        alertHelper.alert("Xác nhận", "Bạn có chắc chắn muốn đăng xuất", false,
-                                "Xác nhận", "Hủy bỏ", Constant.LOGOUT);
+                        alertHelper.alert(getResources().getString(R.string.log_out), getResources().getString(R.string.log_out_notifaction), false,
+                                getResources().getString(R.string.ok), getResources().getString(R.string.cancel), Constant.LOGOUT);
                         break;
                 }
 
@@ -361,12 +362,12 @@ public class UserControlActivity extends AppCompatActivity implements AlertHelpe
     @Override
     public void onBackPressed() {
         if (mDoubleBackToExitPressedOnce) {
-            super.onBackPressed();
-            return;
+            finish();
+            MapPostNewsFragment.ON_EVENT_FOR_MAP_POST_NEWS.exitApp();
         }
 
         this.mDoubleBackToExitPressedOnce = true;
-        toastHelper.toast("Ấn thêm lần nữa để thoát ra màn hình chính", ToastHelper.LENGTH_SHORT);
+        toastHelper.toast(getResources().getString(R.string.double_press_back_to_exit), ToastHelper.LENGTH_SHORT);
 
         new Handler().postDelayed(new Runnable() {
 

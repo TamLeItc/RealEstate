@@ -143,7 +143,7 @@ public class SearchPlaceFragment extends Fragment implements PlaceAutocompleteAd
                     PROGRESS_BAR_SEARCH_PLACE.setVisibility(View.VISIBLE);
                     mAdapter.getFilter().filter(s.toString());
                 } else if (!mGoogleApiClient.isConnected()) {
-                    ((NewPostActivity)getActivity()).toastHelper.toast("Lỗi kết nối!!!", ToastHelper.LENGTH_SHORT);
+                    ((NewPostActivity)getActivity()).toastHelper.toast(getResources().getString(R.string.error_connect), ToastHelper.LENGTH_SHORT);
                     removeFragment();
                 }
             }
@@ -175,14 +175,14 @@ public class SearchPlaceFragment extends Fragment implements PlaceAutocompleteAd
                 break;
             case R.id.ll_for_rent:
                 ((MainActivity)getActivity()).viewPaper.setCurrentItem(0);
-                MapPostNewsFragment.ON_EVENT_FROM_ACTIVITY.onNearBySearchForRent();
+                MapPostNewsFragment.ON_EVENT_FOR_MAP_POST_NEWS.onNearBySearchForRent();
 
                 ((NewPostActivity)getActivity()).keyboardHelper.hideKeyboard(edtSearch);
                 mapInformationFragment.flSearch.setVisibility(View.GONE);
                 break;
             case R.id.ll_for_sale:
                 ((MainActivity)getActivity()).viewPaper.setCurrentItem(0);
-                MapPostNewsFragment.ON_EVENT_FROM_ACTIVITY.onNearBySearchForSale();
+                MapPostNewsFragment.ON_EVENT_FOR_MAP_POST_NEWS.onNearBySearchForSale();
 
                 ((NewPostActivity)getActivity()).keyboardHelper.hideKeyboard(edtSearch);
                 mapInformationFragment.flSearch.setVisibility(View.GONE);

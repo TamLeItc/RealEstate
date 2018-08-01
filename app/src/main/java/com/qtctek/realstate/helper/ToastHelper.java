@@ -1,6 +1,7 @@
 package com.qtctek.realstate.helper;
 
 import android.content.Context;
+import android.support.annotation.StringRes;
 import android.view.Gravity;
 import android.widget.Toast;
 
@@ -18,5 +19,9 @@ public class ToastHelper {
 
     public void toast(String message, int duration){
         Toast.makeText(mContext, message, duration).show();
+    }
+    public void toast(@StringRes int idMes, int duration){
+        Toast.makeText(mContext, mContext.getResources().getString(idMes
+        ), duration).show();
     }
 }

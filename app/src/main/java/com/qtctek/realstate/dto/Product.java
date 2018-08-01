@@ -1,6 +1,36 @@
 package com.qtctek.realstate.dto;
 
+import com.qtctek.realstate.common.general.Constant;
+import com.qtctek.realstate.presenter.user_action.update_user.PresenterUpdateUser;
+
 public class Product {
+
+    public static final String ID = "id";
+    public static final String FORMALITY = "formality";
+    public static final String TITLE = "title";
+    public static final String THUMBNAIL = "thumbnail";
+    public static final String PRICE = "price";
+    public static final String DATE_UPLOAD = "date_upload";
+    public static final String AREA = "area";
+    public static final String BATHROOM = "bathroom";
+    public static final String BEDROOM = "bedroom";
+    public static final String DESCRIPTION = "description";
+    public static final String MAP_LAT = "map_lat";
+    public static final String MAP_LNG = "map_lng";
+    public static final String AMENITIES = "amenities";
+    public static final String AMENITY = "amenity";
+    public static final String ADDRESS = "address";
+    public static final String CITY = "city";
+    public static final String DISTRICT = "district";
+    public static final String TYPE = "type";
+    public static final String ARCHITECTURE = "architecture";
+    public static final String IMAGE_NAME = "avartar" + Constant.IMAGE_EXTENSION;
+    public static final String IMAGE_DETAIL = "image_detail";
+
+    public static final String TABLE_TYPE = "tbl_type";
+    public static final String TABLE_AMENITIES = "tbl_amenities";
+    public static final String TABLE_ARCHITECTURE = "tbl_architecture";
+
     private int mId;
     private String mFormality;
     private String mTitle;

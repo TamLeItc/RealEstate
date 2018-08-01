@@ -146,11 +146,11 @@ public class DescriptionInformationFragment extends Fragment implements View.OnC
 
             }
             else{
-                ((NewPostActivity)getActivity()).toastHelper.toast("Lưu thành công", ToastHelper.LENGTH_SHORT);
+                ((NewPostActivity)getActivity()).toastHelper.toast(getResources().getString(R.string.save_data_successful), ToastHelper.LENGTH_SHORT);
             }
         }
         else{
-            ((NewPostActivity)getActivity()).toastHelper.toast("Lỗi lưu dữ liệu", ToastHelper.LENGTH_SHORT);
+            ((NewPostActivity)getActivity()).toastHelper.toast(getResources().getString(R.string.error_save_data), ToastHelper.LENGTH_SHORT);
         }
     }
 

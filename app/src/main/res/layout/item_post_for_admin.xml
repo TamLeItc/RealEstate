@@ -41,20 +41,18 @@
             android:layout_marginRight="@dimen/_10dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="@dimen/_10sp"
+            android:textSize="@dimen/_12sp"
             android:layout_toRightOf="@id/txv_price"
             android:text="@string/for_one_month"
             android:textColor="@color/colorMain"
-            android:layout_marginTop="@dimen/_3dp"
             android:id="@+id/txv_a_month"
             android:layout_toLeftOf="@+id/txv_area"/>
 
         <TextView
-            android:layout_marginTop="@dimen/_2dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/txv_area"
-            android:textSize="@dimen/_10sp"
+            android:textSize="@dimen/_12sp"
             android:layout_alignParentRight="true"
             android:textColor="@color/colorMain"
             android:text="@string/area"/>

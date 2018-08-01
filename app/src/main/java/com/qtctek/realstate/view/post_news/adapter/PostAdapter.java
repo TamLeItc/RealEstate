@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.qtctek.realstate.R;
 import com.qtctek.realstate.common.AppUtils;
+import com.qtctek.realstate.common.general.Constant;
 import com.qtctek.realstate.dto.Product;
 import com.qtctek.realstate.presenter.user_control.saved_post.PresenterSavedPost;
 import com.qtctek.realstate.view.post_detail.activity.PostDetailActivity;
@@ -92,9 +93,9 @@ public class PostAdapter extends BaseAdapter implements ViewHandleSavedPost {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(mContext, PostDetailActivity.class);
-                intent.putExtra("product_id", mArrListProduct.get(position).getId());
-                intent.putExtra("save", mArrListProduct.get(position).getIsSaved());
-                intent.putExtra("position", position);
+                intent.putExtra(Product.ID, mArrListProduct.get(position).getId());
+                intent.putExtra(Constant.SAVE, mArrListProduct.get(position).getIsSaved());
+                intent.putExtra(Constant.POSITION, position);
                 mContext.startActivity(intent);
             }
         });
@@ -124,7 +125,7 @@ public class PostAdapter extends BaseAdapter implements ViewHandleSavedPost {
         String districtProvinceCity =product.getDistrict() + ", " + product.getCity();
         viewHolder.txvDistrictProvinceCity.setText(districtProvinceCity);
 
-        String urlImage = MainActivity.WEB_SERVER + "images/" + product.getThumbnail();
+        String urlImage = MainActivity.WEB_SERVER + MainActivity.IMAGE_URL_RELATIVE + product.getThumbnail();
         final ViewHolder finalViewHolder = viewHolder;
         Picasso.with(mContext).load(urlImage).into(viewHolder.imvProductAvartar, new Callback() {
             @Override
@@ -147,7 +148,7 @@ public class PostAdapter extends BaseAdapter implements ViewHandleSavedPost {
             viewHolder.imbSave.setImageResource(R.drawable.icon_heart_gray_border_white_24dp);
         }
 
-        if(product.getFormality().equals("no")){
+        if(product.getFormality().equals(Constant.NO)){
             viewHolder.txvAMonth.setVisibility(View.VISIBLE);
         }
         else{

@@ -61,11 +61,11 @@ public class ForgotPasswordFragment extends Fragment implements View.OnClickList
 
     private void handleForgotPassword(){
         if(this.mEdtEmail.getText().toString().trim().equals("")){
-            ((UserActionActivity)getActivity()).toastHelper.toast("Vui lòng nhập email", ToastHelper.LENGTH_SHORT);
+            ((UserActionActivity)getActivity()).toastHelper.toast(getResources().getString(R.string.please_enter_email), ToastHelper.LENGTH_SHORT);
             this.mEdtEmail.requestFocus();
         }
         else if(!FormatPattern.checkEmail(this.mEdtEmail.getText().toString().trim())){
-            ((UserActionActivity)getActivity()).toastHelper.toast("Email không chính xác", ToastHelper.LENGTH_SHORT);
+            ((UserActionActivity)getActivity()).toastHelper.toast(getResources().getString(R.string.email_incorrect), ToastHelper.LENGTH_SHORT);
             this.mEdtEmail.requestFocus();
         }
         else{
@@ -104,7 +104,7 @@ public class ForgotPasswordFragment extends Fragment implements View.OnClickList
     @Override
     public void onCheckExistEmail(String message) {
         ((UserActionActivity)getActivity()).dialogHelper.dismiss();
-        if(message.equals("email_existed")){
+        if(message.equals(Constant.EMAIL_EXISTED)){
             String mNewPassword = RandomString.getSaltString();
             if(sendConfirmCodeToGMail(mNewPassword)){
                 mPresenterForgotPassword.handleResetPassword(this.mEdtEmail.getText().toString().trim(),
@@ -112,17 +112,17 @@ public class ForgotPasswordFragment extends Fragment implements View.OnClickList
             }
             else{
                 ((UserActionActivity)getActivity()).alertHelper.setCallback(this);
-                ((UserActionActivity)getActivity()).alertHelper.alert("Quên mật khẩu",
-                        "Reset mật khẩu thất bại",
-                        false, "Xác nhận", AlertHelper.ALERT_NO_ACTION);
+                ((UserActionActivity)getActivity()).alertHelper.alert(getResources().getString(R.string.forgot_password),
+                        getResources().getString(R.string.reset_password_failed),
+                        false, getResources().getString(R.string.ok), AlertHelper.ALERT_NO_ACTION);
             }
 
         }
         else{
             ((UserActionActivity)getActivity()).alertHelper.setCallback(this);
-            ((UserActionActivity)getActivity()).alertHelper.alert("Quên mật khẩu",
-                    "Tài khoản không tồn tại. Vui lòng kiểm tra lại!!!",
-                    false, "Xác nhận", AlertHelper.ALERT_NO_ACTION);
+            ((UserActionActivity)getActivity()).alertHelper.alert(getResources().getString(R.string.forgot_password),
+                    getResources().getString(R.string.account_not_exist),
+                    false, getResources().getString(R.string.ok), AlertHelper.ALERT_NO_ACTION);
         }
     }
 
@@ -130,18 +130,18 @@ public class ForgotPasswordFragment extends Fragment implements View.OnClickList
     public void onConnectServerError(String s) {
         ((UserActionActivity)getActivity()).dialogHelper.dismiss();
         ((UserActionActivity)getActivity()).alertHelper.setCallback(this);
-        ((UserActionActivity)getActivity()).alertHelper.alert("Quên mật khẩu",
-                "Kết nối server thất bại. Kiểm tra kết nối của bạn!!!",
-                false, "Xác nhận", AlertHelper.ALERT_NO_ACTION);
+        ((UserActionActivity)getActivity()).alertHelper.alert(getResources().getString(R.string.forgot_password),
+                getResources().getString(R.string.error_connect_notification),
+                false, getResources().getString(R.string.ok), AlertHelper.ALERT_NO_ACTION);
     }
 
     @Override
     public void onResetPasswordSuccessful() {
         ((UserActionActivity)getActivity()).dialogHelper.dismiss();
         ((UserActionActivity)getActivity()).alertHelper.setCallback(this);
-        ((UserActionActivity)getActivity()).alertHelper.alert("Quên mật khẩu",
-                "Mật khẩu của bạn đã được reset. Vui lòng truy cập mail của bạn để xem mật khẩu mới.",
-                false, "Xác nhận", Constant.HANDLE_SUCCESSFUL);
+        ((UserActionActivity)getActivity()).alertHelper.alert(getResources().getString(R.string.forgot_password),
+                getResources().getString(R.string.reset_password_successful),
+                false, getResources().getString(R.string.ok), Constant.HANDLE_SUCCESSFUL);
 
     }
 
@@ -151,9 +151,9 @@ public class ForgotPasswordFragment extends Fragment implements View.OnClickList
         ((UserActionActivity)getActivity()).dialogHelper.dismiss();
 
         ((UserActionActivity)getActivity()).alertHelper.setCallback(this);
-        ((UserActionActivity)getActivity()).alertHelper.alert("Lỗi",
-                "Không thể reset mật khẩu",
-                false, "Xác nhận", AlertHelper.ALERT_NO_ACTION);
+        ((UserActionActivity)getActivity()).alertHelper.alert(getResources().getString(R.string.error),
+                getResources().getString(R.string.reset_password_failed),
+                false, getResources().getString(R.string.ok), AlertHelper.ALERT_NO_ACTION);
     }
 
     @Override

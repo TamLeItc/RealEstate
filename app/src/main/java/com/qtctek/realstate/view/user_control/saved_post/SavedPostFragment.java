@@ -120,7 +120,7 @@ public class SavedPostFragment extends Fragment implements ViewHandleSavedPost,
                 switch (item.getItemId()) {
                     case R.id.action_view_detail:
                         Intent intent = new Intent(getActivity(), PostDetailActivity.class);
-                        intent.putExtra("product_id", mArrListProduct.get(mPositionClick).getId());
+                        intent.putExtra(Product.ID, mArrListProduct.get(mPositionClick).getId());
                         startActivity(intent);
                         break;
                     case R.id.action_un_save:
@@ -173,7 +173,7 @@ public class SavedPostFragment extends Fragment implements ViewHandleSavedPost,
         this.mArrListProduct.remove(mPositionClick);
         mAdapterListPost.notifyDataSetChanged();
 
-        ((UserControlActivity)getActivity()).toastHelper.toast("Bỏ lưu thành công", ToastHelper.LENGTH_SHORT);
+        ((UserControlActivity)getActivity()).toastHelper.toast(R.string.unsave_successful, ToastHelper.LENGTH_SHORT);
 
         if(mArrListProduct.size() > 0){
             this.mTxvInformation.setVisibility(View.GONE);
@@ -188,7 +188,7 @@ public class SavedPostFragment extends Fragment implements ViewHandleSavedPost,
     public void onHandleUpdateProductIdListError(String e) {
         ((UserControlActivity)getActivity()).dialogHelper.dismiss();
 
-        ((UserControlActivity)getActivity()).toastHelper.toast("Bỏ lưu không thành công", ToastHelper.LENGTH_SHORT);
+        ((UserControlActivity)getActivity()).toastHelper.toast(R.string.unsave_failed, ToastHelper.LENGTH_SHORT);
     }
 
     @Override
@@ -212,7 +212,7 @@ public class SavedPostFragment extends Fragment implements ViewHandleSavedPost,
         this.mTxvInformation.setText(getResources().getString(R.string.load_data_error));
         this.mTxvInformation.setVisibility(View.VISIBLE);
 
-        ((UserControlActivity)getActivity()).toastHelper.toast("Lỗi trong quá trình tải dữ liệu. Vui lòng thử lại sau!!!", ToastHelper.LENGTH_SHORT);
+        ((UserControlActivity)getActivity()).toastHelper.toast(getResources().getString(R.string.load_data_error), ToastHelper.LENGTH_SHORT);
     }
 
     @Override

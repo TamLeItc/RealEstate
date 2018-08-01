@@ -25,10 +25,11 @@
 
 
         <EditText
+            android:inputType="textNoSuggestions"
             android:selectAllOnFocus="true"
             android:singleLine="true"
-            android:paddingLeft="@dimen/_5dp"
-            android:paddingRight="@dimen/_5dp"
+            android:paddingLeft="@dimen/_8dp"
+            android:paddingRight="@dimen/_8dp"
             android:id="@+id/edt_full_name"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_35dp"
@@ -80,7 +81,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="@dimen/_10sp"
-                        android:text="@string/other"
+                        android:text="@string/other_sex"
                         android:id="@+id/rdo_other"
                         android:checked="true"/>
 
@@ -123,7 +124,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="@dimen/_5dp">
+            android:layout_marginTop="@dimen/_8dp">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -158,8 +159,8 @@
             android:selectAllOnFocus="true"
             android:singleLine="true"
             android:inputType="textEmailAddress"
-            android:paddingLeft="@dimen/_5dp"
-            android:paddingRight="@dimen/_5dp"
+            android:paddingLeft="@dimen/_8dp"
+            android:paddingRight="@dimen/_8dp"
             android:textSize="@dimen/_10sp"
             android:id="@+id/edt_email_address"
             android:layout_width="match_parent"
@@ -169,7 +170,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="@dimen/_5dp">
+            android:layout_marginTop="@dimen/_8dp">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -203,9 +204,9 @@
         <EditText
             android:selectAllOnFocus="true"
             android:singleLine="true"
-            android:inputType="textEmailAddress"
-            android:paddingLeft="@dimen/_5dp"
-            android:paddingRight="@dimen/_5dp"
+            android:inputType="textEmailAddress|textNoSuggestions"
+            android:paddingLeft="@dimen/_8dp"
+            android:paddingRight="@dimen/_8dp"
             android:textSize="@dimen/_10sp"
             android:id="@+id/edt_username"
             android:layout_width="match_parent"
@@ -214,11 +215,12 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="@dimen/_5dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_8dp"
             android:id="@+id/ll_now_password">
 
             <TextView
+                android:layout_gravity="bottom"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/now_password"
@@ -226,6 +228,7 @@
                 android:id="@+id/txv_now_password"/>
 
             <TextView
+                android:layout_gravity="bottom"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="("
@@ -233,6 +236,7 @@
                 android:layout_marginLeft="@dimen/_5dp"/>
 
             <TextView
+                android:layout_gravity="bottom"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="*"
@@ -244,7 +248,7 @@
                 android:layout_height="wrap_content"
                 android:text=")"
                 android:textSize="@dimen/_10sp"
-                />
+                android:layout_gravity="bottom"/>
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -263,8 +267,8 @@
         <EditText
             android:selectAllOnFocus="true"
             android:inputType="textPassword"
-            android:paddingLeft="@dimen/_5dp"
-            android:paddingRight="@dimen/_5dp"
+            android:paddingLeft="@dimen/_8dp"
+            android:paddingRight="@dimen/_8dp"
             android:textSize="@dimen/_10sp"
             android:id="@+id/edt_now_password"
             android:layout_width="match_parent"
@@ -274,10 +278,11 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="@dimen/_5dp"
+            android:layout_marginTop="@dimen/_8dp"
             android:id="@+id/ll_password">
 
             <TextView
+                android:layout_gravity="bottom"
                 android:id="@+id/txv_password"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -285,6 +290,7 @@
                 android:textSize="@dimen/_10sp" />
 
             <TextView
+                android:layout_gravity="bottom"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="("
@@ -292,6 +298,7 @@
                 android:layout_marginLeft="@dimen/_5dp"/>
 
             <TextView
+                android:layout_gravity="bottom"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="*"
@@ -303,7 +310,7 @@
                 android:layout_height="wrap_content"
                 android:text=")"
                 android:textSize="@dimen/_10sp"
-                />
+                android:layout_gravity="bottom"/>
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -322,8 +329,8 @@
         <EditText
             android:selectAllOnFocus="true"
             android:inputType="textPassword"
-            android:paddingLeft="@dimen/_5dp"
-            android:paddingRight="@dimen/_5dp"
+            android:paddingLeft="@dimen/_8dp"
+            android:paddingRight="@dimen/_8dp"
             android:textSize="@dimen/_10sp"
             android:id="@+id/edt_password"
             android:layout_width="match_parent"
@@ -333,15 +340,17 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="@dimen/_5dp">
+            android:layout_marginTop="@dimen/_8dp">
 
             <TextView
+                android:layout_gravity="bottom"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/confirm_password"
                 android:textSize="@dimen/_10sp" />
 
             <TextView
+                android:layout_gravity="bottom"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="("
@@ -349,6 +358,7 @@
                 android:layout_marginLeft="@dimen/_5dp"/>
 
             <TextView
+                android:layout_gravity="bottom"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="*"
@@ -360,7 +370,7 @@
                 android:layout_height="wrap_content"
                 android:text=")"
                 android:textSize="@dimen/_10sp"
-                />
+                android:layout_gravity="bottom"/>
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -380,8 +390,8 @@
             android:selectAllOnFocus="true"
             android:singleLine="true"
             android:inputType="textPassword"
-            android:paddingLeft="@dimen/_5dp"
-            android:paddingRight="@dimen/_5dp"
+            android:paddingLeft="@dimen/_8dp"
+            android:paddingRight="@dimen/_8dp"
             android:textSize="@dimen/_10sp"
             android:id="@+id/edt_confirm_password"
             android:layout_width="match_parent"
@@ -391,7 +401,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="@dimen/_5dp">
+            android:layout_marginTop="@dimen/_8dp">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -427,7 +437,8 @@
             android:inputType="number"
             android:singleLine="true"
             android:ellipsize="end"
-            android:paddingLeft="@dimen/_5dp"
+            android:paddingLeft="@dimen/_8dp"
+            android:paddingRight="@dimen/_8dp"
             android:textSize="@dimen/_10sp"
             android:id="@+id/edt_phone_number"
             android:layout_width="match_parent"
@@ -439,9 +450,10 @@
             android:layout_height="wrap_content"
             android:text="@string/address"
             android:textSize="@dimen/_10sp"
-            android:layout_marginTop="@dimen/_5dp"/>
+            android:layout_marginTop="@dimen/_8dp"/>
 
         <EditText
+            android:inputType="textNoSuggestions"
             android:selectAllOnFocus="true"
             android:singleLine="true"
             android:paddingLeft="@dimen/_5dp"

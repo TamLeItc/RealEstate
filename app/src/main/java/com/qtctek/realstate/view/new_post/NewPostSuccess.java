@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.qtctek.realstate.R;
+import com.qtctek.realstate.common.general.Constant;
 import com.qtctek.realstate.view.new_post.activity.NewPostActivity;
 import com.qtctek.realstate.view.user_control.activity.UserControlActivity;
 
@@ -49,7 +50,7 @@ public class NewPostSuccess extends Fragment implements View.OnClickListener {
                 break;
             case R.id.btn_posted_post:
                 Intent intent1 = new Intent(getContext(), UserControlActivity.class);
-                intent1.putExtra("fragment", 1);
+                intent1.putExtra(Constant.FRAGMENT, 1);
                 startActivity(intent1);
                 getActivity().finish();
         }

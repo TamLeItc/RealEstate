@@ -3,6 +3,7 @@ package com.qtctek.realstate.view.new_post.images_information;
 import android.content.Context;
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,7 +46,8 @@ public class ImageAdapter extends  RecyclerView.Adapter<ImageAdapter.ViewHolder>
 
         Photo photo = mArrPhoto.get(position);
         if (!photo.getIsUpload()) {
-            String url = MainActivity.WEB_SERVER + "/images/" + this.mArrPhoto.get(position).getPhotoLink();
+            String url = MainActivity.WEB_SERVER + MainActivity.IMAGE_URL_RELATIVE + this.mArrPhoto.get(position).getPhotoLink();
+            Log.d("ttt", url);
             Picasso.with(mContext).load(url).into(holder.imvImage);
 
             holder.btnDelete.setOnClickListener(new View.OnClickListener() {

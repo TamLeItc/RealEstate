@@ -15,7 +15,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
-import android.widget.TextView;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
@@ -27,6 +26,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.qtctek.realstate.R;
@@ -75,8 +75,9 @@ public class MapInformationFragment extends Fragment implements OnMapReadyCallba
 
         if (!checkGoogleService()) {
             ((NewPostActivity)getActivity()).alertHelper.setCallback(this);
-            ((NewPostActivity)getActivity()).alertHelper.alert("Lỗi thiết bị","Thiết bị của bạn không hỗ trợ " +
-                    "dịch vụ Google Play",false, "OK", Constant.GOOGLE_PLAY_SERVICE_NOT_FOUND);
+            ((NewPostActivity)getActivity()).alertHelper.alert(getResources().getString(R.string.error),
+                    getResources().getString(R.string.not_support_google_service),false,
+                    getResources().getString(R.string.ok), Constant.GOOGLE_PLAY_SERVICE_NOT_FOUND);
 
         }
 
@@ -187,6 +188,7 @@ public class MapInformationFragment extends Fragment implements OnMapReadyCallba
     public void onMapReady(GoogleMap googleMap) {
 
         mMap = googleMap;
+        mMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(getContext(), R.raw.map_style_json));
 
         this.mMapLat = ((NewPostActivity)getActivity()).product.getMapLat();
         this.mMapLng = ((NewPostActivity)getActivity()).product.getMapLng();
@@ -217,7 +219,7 @@ public class MapInformationFragment extends Fragment implements OnMapReadyCallba
                 mMapLat = location[0].trim();
                 mMapLng = location[1].trim();
 
-                mMarker = mMap.addMarker(new MarkerOptions().position(latLng).title("Nhà bán tại đây"));
+                mMarker = mMap.addMarker(new MarkerOptions().position(latLng));
 
                 mIsEditedLocation = true;
             }
@@ -282,7 +284,7 @@ public class MapInformationFragment extends Fragment implements OnMapReadyCallba
                 isSaveTemp = false;
                 mMap.clear();
                 if(this.mMapLat.equals("")){
-                    ((NewPostActivity)getActivity()).toastHelper.toast("Bạn chưa chọn vị trí nhà. Không thể đăng!!!", ToastHelper.LENGTH_SHORT);
+                    ((NewPostActivity)getActivity()).toastHelper.toast(getResources().getString(R.string.not_location_selected_can_not_save), ToastHelper.LENGTH_SHORT);
                 }
                 else{
                     handleSaveMapInformation();
@@ -327,7 +329,7 @@ public class MapInformationFragment extends Fragment implements OnMapReadyCallba
             if(isSaveTemp){
                 mMarker.remove();
                 mMarker = mMap.addMarker(new MarkerOptions().position(new LatLng(Double.parseDouble(mMapLat), Double.parseDouble(mMapLng))).title("Nhà bán tại đây"));
-                ((NewPostActivity)getActivity()).toastHelper.toast("Lưu thành công", ToastHelper.LENGTH_SHORT);
+                ((NewPostActivity)getActivity()).toastHelper.toast(getResources().getString(R.string.save_data_successful), ToastHelper.LENGTH_SHORT);
             }
             else{
                 mMap.clear();
@@ -337,7 +339,7 @@ public class MapInformationFragment extends Fragment implements OnMapReadyCallba
             mIsEditedLocation = false;
         }
         else{
-            ((NewPostActivity)getActivity()).toastHelper.toast("Lỗi lưu dữ liệu!!!", ToastHelper.LENGTH_SHORT);
+            ((NewPostActivity)getActivity()).toastHelper.toast(getResources().getString(R.string.error_save_data), ToastHelper.LENGTH_SHORT);
         }
     }
 

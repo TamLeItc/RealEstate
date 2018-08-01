@@ -8,7 +8,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.text.InputType;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,7 +33,6 @@ import com.qtctek.realstate.common.general.send_gmail.GMailSender;
 import com.qtctek.realstate.helper.AlertHelper;
 import com.qtctek.realstate.helper.ToastHelper;
 import com.qtctek.realstate.presenter.user_action.register.PresenterRegister;
-import com.qtctek.realstate.view.post_news.activity.MainActivity;
 import com.qtctek.realstate.view.user_action.activity.UserActionActivity;
 
 import java.util.Calendar;
@@ -132,7 +130,7 @@ public class RegisterFragment extends Fragment implements View.OnClickListener, 
 
 
         if(TextUtils.isEmpty(email)){
-            ((UserActionActivity)getActivity()).toastHelper.toast("Vui lòng nhập email!!!!!!", ToastHelper.LENGTH_SHORT);
+            ((UserActionActivity)getActivity()).toastHelper.toast(getResources().getString(R.string.please_enter_email), ToastHelper.LENGTH_SHORT);
             this.mEdtEmail.requestFocus();
             mEdtConfirmPassword.setText("");
             mEdtPassword.setText("");
@@ -140,7 +138,7 @@ public class RegisterFragment extends Fragment implements View.OnClickListener, 
             this.mEdtEmail.setBackground(getResources().getDrawable(R.drawable.custom_border_red_backgroud_white));
         }
         else if(!FormatPattern.checkEmail(email)){
-            ((UserActionActivity)getActivity()).toastHelper.toast("Email không chính xác!!!", ToastHelper.LENGTH_SHORT);
+            ((UserActionActivity)getActivity()).toastHelper.toast(getResources().getString(R.string.email_incorrect), ToastHelper.LENGTH_SHORT);
             this.mEdtEmail.requestFocus();
             mEdtConfirmPassword.setText("");
             mEdtPassword.setText("");
@@ -148,7 +146,7 @@ public class RegisterFragment extends Fragment implements View.OnClickListener, 
             this.mEdtEmail.setBackground(getResources().getDrawable(R.drawable.custom_border_red_backgroud_white));
         }
         else if(TextUtils.isEmpty(username)){
-            ((UserActionActivity)getActivity()).toastHelper.toast("Vui lòng nhập tên đăng nhập!!!", ToastHelper.LENGTH_SHORT);
+            ((UserActionActivity)getActivity()).toastHelper.toast(getResources().getString(R.string.please_enter_username), ToastHelper.LENGTH_SHORT);
             this.mEdtUsername.requestFocus();
             mEdtConfirmPassword.setText("");
             mEdtPassword.setText("");
@@ -156,7 +154,7 @@ public class RegisterFragment extends Fragment implements View.OnClickListener, 
             this.mEdtUsername.setBackground(getResources().getDrawable(R.drawable.custom_border_red_backgroud_white));
         }
         else if(TextUtils.isEmpty(password)){
-            ((UserActionActivity)getActivity()).toastHelper.toast("Vui lòng nhập mật khẩu!!!", ToastHelper.LENGTH_SHORT);
+            ((UserActionActivity)getActivity()).toastHelper.toast(getResources().getString(R.string.please_enter_password), ToastHelper.LENGTH_SHORT);
             this.mEdtPassword.requestFocus();
             mEdtConfirmPassword.setText("");
             mEdtPassword.setText("");
@@ -164,7 +162,7 @@ public class RegisterFragment extends Fragment implements View.OnClickListener, 
             this.mEdtPassword.setBackground(getResources().getDrawable(R.drawable.custom_border_red_backgroud_white));
         }
         else if(password.length() < 6){
-            ((UserActionActivity)getActivity()).toastHelper.toast("Mật khẩu phải có độ dài dài ít nhất 6 kí tự!!!", ToastHelper.LENGTH_SHORT);
+            ((UserActionActivity)getActivity()).toastHelper.toast(getResources().getString(R.string.minimum_length_password), ToastHelper.LENGTH_SHORT);
             this.mEdtPassword.requestFocus();
             mEdtConfirmPassword.setText("");
             mEdtPassword.setText("");
@@ -172,7 +170,7 @@ public class RegisterFragment extends Fragment implements View.OnClickListener, 
             this.mEdtPassword.setBackground(getResources().getDrawable(R.drawable.custom_border_red_backgroud_white));
         }
         else if(password.length() > 20){
-            ((UserActionActivity)getActivity()).toastHelper.toast("Mật khẩu tối đa 20 kí tự!!!", ToastHelper.LENGTH_SHORT);
+            ((UserActionActivity)getActivity()).toastHelper.toast(getResources().getString(R.string.maximum_length_password), ToastHelper.LENGTH_SHORT);
             this.mEdtPassword.requestFocus();
             mEdtConfirmPassword.setText("");
             mEdtPassword.setText("");
@@ -180,7 +178,7 @@ public class RegisterFragment extends Fragment implements View.OnClickListener, 
             this.mEdtPassword.setBackground(getResources().getDrawable(R.drawable.custom_border_red_backgroud_white));
         }
         else if(TextUtils.isEmpty(confirmPassword)){
-            ((UserActionActivity)getActivity()).toastHelper.toast("Vui lòng xác nhận mật khẩu!!!", ToastHelper.LENGTH_SHORT);
+            ((UserActionActivity)getActivity()).toastHelper.toast(getResources().getString(R.string.please_enter_confirm_password), ToastHelper.LENGTH_SHORT);
             this.mEdtConfirmPassword.requestFocus();
             mEdtConfirmPassword.setText("");
             mEdtPassword.setText("");
@@ -188,7 +186,7 @@ public class RegisterFragment extends Fragment implements View.OnClickListener, 
             this.mEdtConfirmPassword.setBackground(getResources().getDrawable(R.drawable.custom_border_red_backgroud_white));
         }
         else if(!password.equals(confirmPassword)){
-            ((UserActionActivity)getActivity()).toastHelper.toast("Mật khẩu và xác nhận mật khẩu không giống nhau!!!", ToastHelper.LENGTH_SHORT);
+            ((UserActionActivity)getActivity()).toastHelper.toast(getResources().getString(R.string.password_confirm_password_incorrect), ToastHelper.LENGTH_SHORT);
             this.mEdtConfirmPassword.requestFocus();
             mEdtConfirmPassword.setText("");
             mEdtPassword.setText("");
@@ -196,7 +194,7 @@ public class RegisterFragment extends Fragment implements View.OnClickListener, 
             this.mEdtConfirmPassword.setBackground(getResources().getDrawable(R.drawable.custom_border_red_backgroud_white));
         }
         else if(TextUtils.isEmpty(phoneNumber)){
-            ((UserActionActivity)getActivity()).toastHelper.toast("Vui lòng nhập số điện thoại!!!", ToastHelper.LENGTH_SHORT);
+            ((UserActionActivity)getActivity()).toastHelper.toast(getResources().getString(R.string.please_enter_number_phone), ToastHelper.LENGTH_SHORT);
             this.mEdtPhoneNumber.requestFocus();
             mEdtConfirmPassword.setText("");
             mEdtPassword.setText("");
@@ -204,7 +202,7 @@ public class RegisterFragment extends Fragment implements View.OnClickListener, 
             this.mEdtPhoneNumber.setBackground(getResources().getDrawable(R.drawable.custom_border_red_backgroud_white));
         }
         else if(!FormatPattern.checkNumberPhone(phoneNumber)){
-            ((UserActionActivity)getActivity()).toastHelper.toast("Số điện thoại không hợp lệ!!!", ToastHelper.LENGTH_SHORT);
+            ((UserActionActivity)getActivity()).toastHelper.toast(getResources().getString(R.string.number_phone_incorrect), ToastHelper.LENGTH_SHORT);
             this.mEdtPhoneNumber.requestFocus();
             mEdtConfirmPassword.setText("");
             mEdtPassword.setText("");
@@ -255,8 +253,9 @@ public class RegisterFragment extends Fragment implements View.OnClickListener, 
 
         if(!sendConfirmCodeToGMail()){
             ((UserActionActivity)getActivity()).alertHelper.setCallback(this);
-            ((UserActionActivity)getActivity()).alertHelper.alert("Lỗi", "Đăng kí tài khoản " +
-                    "không thành công. Vui lòng thử lại sau", false, "Xác nhận", AlertHelper.ALERT_NO_ACTION);
+            ((UserActionActivity)getActivity()).alertHelper.alert(getResources().getString(R.string.error),
+                    getResources().getString(R.string.sign_up_failed), false,
+                    getResources().getString(R.string.ok), AlertHelper.ALERT_NO_ACTION);
         }
         else{
         }
@@ -284,13 +283,13 @@ public class RegisterFragment extends Fragment implements View.OnClickListener, 
 
                     String sex;
                     if(mRdoFemale.isChecked()){
-                        sex = "Nữ";
+                        sex = getResources().getString(R.string.female);
                     }
                     else if(mRdoMale.isChecked()){
-                        sex = "Nam";
+                        sex = getResources().getString(R.string.male);
                     }
                     else{
-                        sex = "Khác";
+                        sex = getResources().getString(R.string.other_sex);
                     }
 
                     String birthday = mTxvBirthDay.getText().toString().trim();
@@ -308,8 +307,9 @@ public class RegisterFragment extends Fragment implements View.OnClickListener, 
                 }
                 else{
                     mLoadingDialog.dismiss();
-                    ((UserActionActivity)getActivity()).alertHelper.alert("Lỗi", "Mã xác nhận không" +
-                            " chính xác!!!", false, "Xác nhận", AlertHelper.ALERT_NO_ACTION);
+                    ((UserActionActivity)getActivity()).alertHelper.alert(getResources().getString(R.string.error),
+                            getResources().getString(R.string.confirm_code_incorrect), false,
+                            getResources().getString(R.string.ok), AlertHelper.ALERT_NO_ACTION);
                 }
             }
         });
@@ -324,8 +324,9 @@ public class RegisterFragment extends Fragment implements View.OnClickListener, 
         mDialog.dismiss();
 
         ((UserActionActivity)getActivity()).alertHelper.setCallback(this);
-        ((UserActionActivity)getActivity()).alertHelper.alert("Đăng kí tài khoản", "Đăng kí tài khoản thành công. " +
-                "Mời đăng nhập để sử dụng dịch vụ", false, "Xác nhận", Constant.HANDLE_SUCCESSFUL);
+        ((UserActionActivity)getActivity()).alertHelper.alert(getResources().getString(R.string.sign_up_account),
+                getResources().getString(R.string.sign_up_successful), false,
+                getResources().getString(R.string.ok), Constant.HANDLE_SUCCESSFUL);
     }
 
     @Override
@@ -334,8 +335,9 @@ public class RegisterFragment extends Fragment implements View.OnClickListener, 
         mLoadingDialog.dismiss();
 
         ((UserActionActivity)getActivity()).alertHelper.setCallback(this);
-        ((UserActionActivity)getActivity()).alertHelper.alert("Lỗi", "Đăng kí tài khoản không " +
-                "thành công. Vui lòng thử lại sau!!!", false, "Xác nhận",
+        ((UserActionActivity)getActivity()).alertHelper.alert(getResources().getString(R.string.error),
+                getResources().getString(R.string.sign_up_failed), false,
+                getResources().getString(R.string.ok),
                 Constant.HANDLE_SUCCESSFUL);
 
     }
@@ -343,17 +345,17 @@ public class RegisterFragment extends Fragment implements View.OnClickListener, 
     @Override
     public void onCheckExistEmail(String message) {
         mLoadingDialog.dismiss();
-        if(message.equals("email_existed") || message.equals("username_existed")){
+        if(message.equals(Constant.EMAIL_EXISTED) || message.equals(Constant.USERNAME_EXISTED)){
             String stMessage;
-            if(message.equals("email_existed")){
-                stMessage = "Email đã được sử dụng cho một tài khoản khác. Vui lòng thử lại email khác!!!";
+            if(message.equals(Constant.EMAIL_EXISTED)){
+                stMessage = getResources().getString(R.string.email_existed);
             }
             else{
-                stMessage = "Tên đăng nhập đã được sử dụng. Vui lòng thử lại tên khác!!!";
+                stMessage = getResources().getString(R.string.username_existed);
             }
 
             ((UserActionActivity)getActivity()).alertHelper.setCallback(this);
-            ((UserActionActivity)getActivity()).alertHelper.alert("Lỗi", stMessage, false, "Xác nhận",
+            ((UserActionActivity)getActivity()).alertHelper.alert(getResources().getString(R.string.error), stMessage, false, "Xác nhận",
                     Constant.EXISTED);
 
         }
@@ -368,8 +370,8 @@ public class RegisterFragment extends Fragment implements View.OnClickListener, 
         this.mLoadingDialog.dismiss();
 
         ((UserActionActivity)getActivity()).alertHelper.setCallback(this);
-        ((UserActionActivity)getActivity()).alertHelper.alert("Lỗi", "Kết nối server thất bại. Vui" +
-                        " lòng thử lại sau", false, "Xác nhận",
+        ((UserActionActivity)getActivity()).alertHelper.alert(getResources().getString(R.string.error_connect),
+                getResources().getString(R.string.error_connect_notification), false, "Xác nhận",
                 Constant.EXISTED);
     }
 
@@ -437,7 +439,6 @@ public class RegisterFragment extends Fragment implements View.OnClickListener, 
     public void onDestroyView() {
 
         Runtime.getRuntime().gc();
-        System.gc();
 
         super.onDestroyView();
     }
@@ -464,7 +465,7 @@ public class RegisterFragment extends Fragment implements View.OnClickListener, 
 
         switch (v.getId()){
             case R.id.edt_username:
-                if(this.mEdtUsername.getText().toString().equals("")){
+                if(this.mEdtUsername.getText().toString().trim().equals("")){
                     this.mEdtUsername.setBackground(getResources().getDrawable(R.drawable.custom_border_red_backgroud_white));
                 }
                 else{

@@ -3,8 +3,10 @@ package com.qtctek.realstate.view.user_control.posted_post;
 ;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -52,7 +54,7 @@ public class PostedPostFragment extends Fragment implements ViewHandlePostedPost
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         mView = inflater.inflate(R.layout.fragment_posted_post_saved_post, container, false);
 
         ((UserControlActivity)getActivity()).postFilterCallback = this;
@@ -126,14 +128,14 @@ public class PostedPostFragment extends Fragment implements ViewHandlePostedPost
 
         ((UserControlActivity)getActivity()).dialogHelper.dismiss();
 
-        ((UserControlActivity)getActivity()).toastHelper.toast("Tải dữ liệu thất bại", ToastHelper.LENGTH_SHORT);
+        ((UserControlActivity)getActivity()).toastHelper.toast(R.string.load_data_error, ToastHelper.LENGTH_SHORT);
     }
 
     @Override
     public void onDeletePostSuccessful() {
 
         ((UserControlActivity)getActivity()).dialogHelper.dismiss();
-        ((UserControlActivity)getActivity()).toastHelper.toast("Xóa bài thành công", ToastHelper.LENGTH_SHORT);
+        ((UserControlActivity)getActivity()).toastHelper.toast(R.string.delete_successful, ToastHelper.LENGTH_SHORT);
         mArrProduct.remove(mPositionClick);
         mAdapterListPost.notifyDataSetChanged();
 
@@ -153,7 +155,7 @@ public class PostedPostFragment extends Fragment implements ViewHandlePostedPost
 
         ((UserControlActivity)getActivity()).dialogHelper.dismiss();
 
-        ((UserControlActivity)getActivity()).toastHelper.toast("Xóa bài không thành công", ToastHelper.LENGTH_SHORT);
+        ((UserControlActivity)getActivity()).toastHelper.toast(R.string.delete_failed, ToastHelper.LENGTH_SHORT);
     }
 
 
@@ -199,19 +201,20 @@ public class PostedPostFragment extends Fragment implements ViewHandlePostedPost
                 switch (item.getItemId()){
                     case R.id.action_view_detail:
                         Intent intent = new Intent(getActivity(), PostDetailActivity.class);
-                        intent.putExtra("product_id", mArrProduct.get(mPositionClick).getId());
+                        intent.putExtra(Product.ID, mArrProduct.get(mPositionClick).getId());
                         startActivity(intent);
                         break;
                     case R.id.action_edit_post:
 
-                        ((UserControlActivity)getActivity()).alertHelper.alert("Xác nhận",
-                                getActivity().getResources().getString(R.string.confirm_edit_product), false, "Xác nhận",
-                                "Hủy bỏ", Constant.EDIT);
+                        ((UserControlActivity)getActivity()).alertHelper.alert(getResources().getString(R.string.information),
+                                getActivity().getResources().getString(R.string.confirm_edit_product), false,
+                                getResources().getString(R.string.ok),
+                                getResources().getString(R.string.cancel), Constant.EDIT);
                         break;
                     case R.id.action_delete_post:
-                        ((UserControlActivity)getActivity()).alertHelper.alert("Xác nhận",
-                                "Bạn có chắc chắn xóa bài đăng này", false, "Xác nhận",
-                                "Hủy bỏ", Constant.DELETE);
+                        ((UserControlActivity)getActivity()).alertHelper.alert(getResources().getString(R.string.delete_post),
+                                getResources().getString(R.string.delete_post_notificaton), false, getResources().getString(R.string.ok),
+                                getResources().getString(R.string.cancel), Constant.DELETE);
                         break;
                 }
                 return true;
@@ -237,7 +240,7 @@ public class PostedPostFragment extends Fragment implements ViewHandlePostedPost
         }
         else if(option == Constant.EDIT){
             Intent intent1 = new Intent(getActivity(), NewPostActivity.class);
-            intent1.putExtra("post_id", mArrProduct.get(mPositionClick).getId());
+            intent1.putExtra(Product.ID, mArrProduct.get(mPositionClick).getId());
             startActivity(intent1);
             getActivity().finish();
         }

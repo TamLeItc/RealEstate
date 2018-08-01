@@ -23,6 +23,7 @@ import android.widget.TextView;
 
 import com.qtctek.realstate.R;
 import com.qtctek.realstate.common.AppUtils;
+import com.qtctek.realstate.common.general.Constant;
 import com.qtctek.realstate.dto.User;
 import com.qtctek.realstate.common.general.FormatPattern;
 import com.qtctek.realstate.common.general.HashMD5;
@@ -155,13 +156,13 @@ public class UpdateUserFragment extends Fragment implements View.OnClickListener
 
         String sex;
         if(mRdoFemale.isChecked()){
-            sex = "Nữ";
+            sex = getResources().getString(R.string.female);
         }
         else if(mRdoMale.isChecked()){
-            sex = "Nam";
+            sex = getResources().getString(R.string.male);
         }
         else{
-            sex = "Khác";
+            sex = getResources().getString(R.string.other_sex);
         }
 
         String birthday = mTxvBirthDay.getText().toString().trim();
@@ -176,7 +177,7 @@ public class UpdateUserFragment extends Fragment implements View.OnClickListener
 
 
         if(TextUtils.isEmpty(nowPassword)){
-            ((UserActionActivity)getActivity()).toastHelper.toast("Vui lòng nhập mật khẩu hiện tại!!!", ToastHelper.LENGTH_SHORT);
+            ((UserActionActivity)getActivity()).toastHelper.toast(getResources().getString(R.string.please_enter_now_password), ToastHelper.LENGTH_SHORT);
             this.mEdtNowPassword.requestFocus();
             mEdtConfirmPassword.setText("");
             mEdtNewPassword.setText("");
@@ -185,7 +186,7 @@ public class UpdateUserFragment extends Fragment implements View.OnClickListener
             this.mEdtNowPassword.setBackground(getResources().getDrawable(R.drawable.custom_border_red_backgroud_white));
         }
         else if(TextUtils.isEmpty(password)){
-            ((UserActionActivity)getActivity()).toastHelper.toast("Vui lòng nhập mật khẩu mới!!!", ToastHelper.LENGTH_SHORT);
+            ((UserActionActivity)getActivity()).toastHelper.toast(getResources().getString(R.string.please_enter_new_password), ToastHelper.LENGTH_SHORT);
             this.mEdtNewPassword.requestFocus();
             mEdtConfirmPassword.setText("");
             mEdtNewPassword.setText("");
@@ -194,7 +195,7 @@ public class UpdateUserFragment extends Fragment implements View.OnClickListener
             this.mEdtNewPassword.setBackground(getResources().getDrawable(R.drawable.custom_border_red_backgroud_white));
         }
         else if(password.length() < 6){
-            ((UserActionActivity)getActivity()).toastHelper.toast("Mật khẩu phải có độ dài ít nhất 6 kí tự!!!", ToastHelper.LENGTH_SHORT);
+            ((UserActionActivity)getActivity()).toastHelper.toast(getResources().getString(R.string.minimum_length_password), ToastHelper.LENGTH_SHORT);
             this.mEdtNewPassword.requestFocus();
             mEdtConfirmPassword.setText("");
             mEdtNewPassword.setText("");
@@ -203,7 +204,7 @@ public class UpdateUserFragment extends Fragment implements View.OnClickListener
             this.mEdtNewPassword.setBackground(getResources().getDrawable(R.drawable.custom_border_red_backgroud_white));
         }
         else if(password.length() > 20){
-            ((UserActionActivity)getActivity()).toastHelper.toast("Mật khẩu tối đa 20 kí tự!!!", ToastHelper.LENGTH_SHORT);
+            ((UserActionActivity)getActivity()).toastHelper.toast(getResources().getString(R.string.maximum_length_password), ToastHelper.LENGTH_SHORT);
             this.mEdtNewPassword.requestFocus();
             mEdtConfirmPassword.setText("");
             mEdtNewPassword.setText("");
@@ -212,7 +213,7 @@ public class UpdateUserFragment extends Fragment implements View.OnClickListener
             this.mEdtNewPassword.setBackground(getResources().getDrawable(R.drawable.custom_border_red_backgroud_white));
         }
         else if(mEdtConfirmPassword.getText().toString().equals("")){
-            ((UserActionActivity)getActivity()).toastHelper.toast("Vui lòng nhập xác nhận mật khẩu!!!", ToastHelper.LENGTH_SHORT);
+            ((UserActionActivity)getActivity()).toastHelper.toast(getResources().getString(R.string.please_enter_confirm_password), ToastHelper.LENGTH_SHORT);
             this.mEdtConfirmPassword.requestFocus();
             mEdtConfirmPassword.setText("");
             mEdtNewPassword.setText("");
@@ -221,7 +222,7 @@ public class UpdateUserFragment extends Fragment implements View.OnClickListener
             this.mEdtConfirmPassword.setBackground(getResources().getDrawable(R.drawable.custom_border_red_backgroud_white));
         }
         else if(!mEdtConfirmPassword.getText().toString().equals(password)){
-            ((UserActionActivity)getActivity()).toastHelper.toast("Mật khẩu và xác nhận mật khẩu không giống nhau!!!", ToastHelper.LENGTH_SHORT);
+            ((UserActionActivity)getActivity()).toastHelper.toast(getResources().getString(R.string.password_confirm_password_incorrect), ToastHelper.LENGTH_SHORT);
             this.mEdtConfirmPassword.requestFocus();
             mEdtConfirmPassword.setText("");
             mEdtNewPassword.setText("");
@@ -230,7 +231,7 @@ public class UpdateUserFragment extends Fragment implements View.OnClickListener
             this.mEdtConfirmPassword.setBackground(getResources().getDrawable(R.drawable.custom_border_red_backgroud_white));
         }
         else if(TextUtils.isEmpty(phoneNumber)){
-            ((UserActionActivity)getActivity()).toastHelper.toast("Vui lòng nhập số điện thoại!!!", ToastHelper.LENGTH_SHORT);
+            ((UserActionActivity)getActivity()).toastHelper.toast(getResources().getString(R.string.please_enter_number_phone), ToastHelper.LENGTH_SHORT);
             this.mEdtPhoneNumber.requestFocus();
             mEdtConfirmPassword.setText("");
             mEdtNewPassword.setText("");
@@ -239,7 +240,7 @@ public class UpdateUserFragment extends Fragment implements View.OnClickListener
             this.mEdtPhoneNumber.setBackground(getResources().getDrawable(R.drawable.custom_border_red_backgroud_white));
         }
         else if(!FormatPattern.checkNumberPhone(phoneNumber)){
-            ((UserActionActivity)getActivity()).toastHelper.toast("Số điện thoại không hợp lệ!!!", ToastHelper.LENGTH_SHORT);
+            ((UserActionActivity)getActivity()).toastHelper.toast(getResources().getString(R.string.number_phone_incorrect), ToastHelper.LENGTH_SHORT);
             this.mEdtPhoneNumber.requestFocus();
             mEdtConfirmPassword.setText("");
             mEdtNewPassword.setText("");
@@ -267,23 +268,23 @@ public class UpdateUserFragment extends Fragment implements View.OnClickListener
 
         this.mLoadingDialog.dismiss();
 
-        ((UserActionActivity) Objects.requireNonNull(getActivity())).getAlertHelper().alert("Cập nhật tài khoản",
-                "Cập nhật tài khoản thành công!!!",
+        ((UserActionActivity) Objects.requireNonNull(getActivity())).getAlertHelper().alert(getResources().getString(R.string.update_account),
+                getResources().getString(R.string.update_account_successful),
                 false, "OK", AlertHelper.ALERT_NO_ACTION);
     }
 
     @Override
     public void onUpdateUserError(String error) {
 
-        if(error.equals("old_password_not_true")){
-            ((UserActionActivity) Objects.requireNonNull(getActivity())).getAlertHelper().alert("Cập nhật tài khoản",
-                    "Mật khẩu hiện tại không chính xác. Vui lòng kiểm tra lại!!!",
-                    false, "OK", AlertHelper.ALERT_NO_ACTION);
+        if(error.equals(Constant.NOW_PASSWORD_INCORRECT)){
+            ((UserActionActivity) Objects.requireNonNull(getActivity())).getAlertHelper().alert(getResources().getString(R.string.error),
+                    getResources().getString(R.string.now_password_incorrect),
+                    false, getResources().getString(R.string.ok), AlertHelper.ALERT_NO_ACTION);
         }
         else{
-            ((UserActionActivity) Objects.requireNonNull(getActivity())).getAlertHelper().alert("Cập nhật tài khoản",
-                    "Cập nhật tài khoản không thành công. Vui lòng thử lại sau!!!",
-                    false, "OK", AlertHelper.ALERT_NO_ACTION);
+            ((UserActionActivity) Objects.requireNonNull(getActivity())).getAlertHelper().alert(getResources().getString(R.string.error),
+                    getResources().getString(R.string.update_account_failed),
+                    false, getResources().getString(R.string.ok), AlertHelper.ALERT_NO_ACTION);
         }
 
         this.mLoadingDialog.dismiss();

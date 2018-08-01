@@ -74,6 +74,7 @@ public class MainActivity extends AppCompatActivity
         OnUserLogin, ViewHandleSavedSearch, AlertHelper.AlertHelperCallback {
 
     public static String WEB_SERVER;
+    public static String IMAGE_URL_RELATIVE;
 
     public static User USER = new User();
 
@@ -122,14 +123,15 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
 
         WEB_SERVER = Environments.DOMAIN;
+        IMAGE_URL_RELATIVE = Environments.IMAGE_URL_RELATIVE;
 
         toastHelper = new ToastHelper(this);
         alertHelper = new AlertHelper(this);
         dialogHelper = new DialogHelper(this);
         keyboardHelper = new KeyboardHelper(this);
 
-        handleInternetReceiver();
-        createNetworkConnectionFailedDialog();
+//        handleInternetReceiver();
+//        createNetworkConnectionFailedDialog();
 
         handleGetSavedSearch();
         handleCreateAuthFragment();
@@ -229,7 +231,7 @@ public class MainActivity extends AppCompatActivity
 
     private void createNetworkConnectionFailedDialog(){
         AlertDialog.Builder builder = new AlertDialog.Builder(this)
-                .setMessage("Không thể kết nối internet. Kiểm tra kết nối của bạn!!!")
+                .setMessage(getResources().getString(R.string.error_connect_internet_notification))
                 .setCancelable(false);
         NETWORK_CONNECTION_DIALOG = builder.create();
     }
@@ -243,7 +245,7 @@ public class MainActivity extends AppCompatActivity
         }
 
         this.mDoubleBackToExitPressedOnce = true;
-        toastHelper.toast("Ấn thêm lần nữa để thoát khỏi ứng dụng!!!", ToastHelper.LENGTH_SHORT);
+        toastHelper.toast(getResources().getString(R.string.double_press_back_to_exit), ToastHelper.LENGTH_SHORT);
 
         new Handler().postDelayed(new Runnable() {
 
@@ -309,13 +311,13 @@ public class MainActivity extends AppCompatActivity
         }
         else if (id == R.id.action_search){
             Intent intent = new Intent(MainActivity.this, SearchFilterDialog.class);
-            intent.putExtra("formality", formality);
-            intent.putExtra("architecture", architecture);
-            intent.putExtra("type", type);
+            intent.putExtra(Product.FORMALITY, formality);
+            intent.putExtra(Product.ARCHITECTURE, architecture);
+            intent.putExtra(Product.TYPE, type);
             intent.putExtra(AppUtils.QUALITY_BATHROOM, bathroom);
             intent.putExtra(AppUtils.QUALITY_BEDROOM, bedroom);
-            intent.putExtra("min_price", minPrice);
-            intent.putExtra("max_price", maxPrice);
+            intent.putExtra(Constant.MIN_PRICE, minPrice);
+            intent.putExtra(Constant.MAX_PRICE, maxPrice);
 
             startActivityForResult(intent, 1001);
         }
@@ -330,17 +332,17 @@ public class MainActivity extends AppCompatActivity
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(requestCode == 1001 && resultCode == RESULT_OK && data != null){
 
-            this.formality = data.getStringExtra("formality");
-            this.architecture = data.getStringExtra("architecture");
-            this.type = data.getStringExtra("type");
+            this.formality = data.getStringExtra(Product.FORMALITY);
+            this.architecture = data.getStringExtra(Product.ARCHITECTURE);
+            this.type = data.getStringExtra(Product.TYPE);
             this.bathroom = data.getIntExtra(AppUtils.QUALITY_BATHROOM, 0);
             this.bedroom = data.getIntExtra(AppUtils.QUALITY_BEDROOM, 0);
-            this.minPrice = data.getStringExtra("min_price");
-            this.maxPrice = data.getStringExtra("max_price");
+            this.minPrice = data.getStringExtra(Constant.MIN_PRICE);
+            this.maxPrice = data.getStringExtra(Constant.MAX_PRICE);
 
             MapPostNewsFragment mapPostNewsFragment = (MapPostNewsFragment) getSupportFragmentManager().getFragments().get(0);
 
-            MapPostNewsFragment.ON_EVENT_FROM_ACTIVITY.onDataFilter();
+            MapPostNewsFragment.ON_EVENT_FOR_MAP_POST_NEWS.onDataFilter();
             viewPaper.setCurrentItem(0);
 
             mapPostNewsFragment.resetLastClick();
@@ -359,43 +361,43 @@ public class MainActivity extends AppCompatActivity
         if(id == R.id.nav_new_post){
             if(USER.getLevel() == User.USER_NULL){
                 alertHelper.setCallback(this);
-                alertHelper.alert("Xác nhận", "Hãy đăng nhập để sử dụng chức năng này", false,
-                        "Xác nhận", "Hủy bỏ", Constant.LOGIN);
+                alertHelper.alert(getResources().getString(R.string.error), getResources().getString(R.string.login_to_continue), false,
+                        getResources().getString(R.string.ok), getResources().getString(R.string.cancel), Constant.LOGIN);
             }
             else{
                 Intent intent = new Intent(MainActivity.this, NewPostActivity.class);
-                intent.putExtra("post_id", -1);
+                intent.putExtra(Product.ID, -1);
                 startActivity(intent);
             }
         }
         if(id == R.id.nav_post_management){
             Intent intent = new Intent(MainActivity.this, UserControlActivity.class);
-            intent.putExtra("fragment", 1);
+            intent.putExtra(Constant.FRAGMENT, 1);
             startActivity(intent);
         }
         else if(id == R.id.nav_user_management){
             Intent intent = new Intent(MainActivity.this, UserControlActivity.class);
-            intent.putExtra("fragment", 2);
+            intent.putExtra(Constant.FRAGMENT, 2);
             startActivity(intent);
         }
         else if(id == R.id.nav_posted_post){
             Intent intent = new Intent(MainActivity.this, UserControlActivity.class);
-            intent.putExtra("fragment", 1);
+            intent.putExtra(Constant.FRAGMENT, 1);
             startActivity(intent);
         }
         else if (id == R.id.nav_saved_post) {
             Intent intent = new Intent(MainActivity.this, UserControlActivity.class);
             if(USER.getLevel() == User.USER_NULL){
-                intent.putExtra("fragment", 0);
+                intent.putExtra(Constant.FRAGMENT, 0);
             }
             else if(USER.getLevel() == 1){
-                intent.putExtra("fragment", 3);
+                intent.putExtra(Constant.FRAGMENT, 3);
             }
             else if(USER.getLevel() == 2){
-                intent.putExtra("fragment", 2);
+                intent.putExtra(Constant.FRAGMENT, 2);
             }
             else{
-                intent.putExtra("fragment", 2);
+                intent.putExtra(Constant.FRAGMENT, 2);
             }
             startActivity(intent);
 
@@ -403,22 +405,22 @@ public class MainActivity extends AppCompatActivity
         else if(id == R.id.nav_saved_search){
             Intent intent = new Intent(MainActivity.this, UserControlActivity.class);
             if(USER.getLevel() == User.USER_NULL){
-                intent.putExtra("fragment", 1);
+                intent.putExtra(Constant.FRAGMENT, 1);
             }
             else if(USER.getLevel() == 1){
-                intent.putExtra("fragment", 4);
+                intent.putExtra(Constant.FRAGMENT, 4);
             }
             else if(USER.getLevel() == 2){
-                intent.putExtra("fragment", 3);
+                intent.putExtra(Constant.FRAGMENT, 3);
             }
             else{
-                intent.putExtra("fragment", 3);
+                intent.putExtra(Constant.FRAGMENT, 3);
             }
             startActivity(intent);
         }
         else if (id == R.id.nav_account_manage) {
             Intent intent = new Intent(MainActivity.this, UserControlActivity.class);
-            intent.putExtra("fragment", 0);
+            intent.putExtra(Constant.FRAGMENT, 0);
             startActivity(intent);
         }
         else if(id == R.id.nav_login){
@@ -428,8 +430,8 @@ public class MainActivity extends AppCompatActivity
         else if(id == R.id.nav_logout){
 
             alertHelper.setCallback(this);
-            alertHelper.alert("Xác nhận", "Bạn có chắc chắn muốn đăng xuất", false,
-                    "Xác nhận", "Hủy bỏ", Constant.LOGOUT);
+            alertHelper.alert(getResources().getString(R.string.log_out), getResources().getString(R.string.log_out_notifaction), false,
+                    getResources().getString(R.string.ok), getResources().getString(R.string.cancel), Constant.LOGOUT);
         }
         else if (id == R.id.nav_introduction) {
             toastHelper.toast("Chức năng đang được phát triển, vui lòng quay lại sau. Xin cảm ơn!!!", ToastHelper.LENGTH_SHORT);
@@ -556,11 +558,11 @@ public class MainActivity extends AppCompatActivity
         dialog.setContentView(R.layout.dialog_sort);
 
         ArrayList<String> arrOption = new ArrayList<>();
-        arrOption.add("Tin mới nhất");
-        arrOption.add("Giá tăng dần");
-        arrOption.add("Giá giảm dần");
-        arrOption.add("Diện tích tăng dần");
-        arrOption.add("Diện tích giảm dần");
+        arrOption.add(getResources().getString(R.string.latest_news));
+        arrOption.add(getResources().getString(R.string.price_increase));
+        arrOption.add(getResources().getString(R.string.price_decrease));
+        arrOption.add(getResources().getString(R.string.area_increase));
+        arrOption.add(getResources().getString(R.string.area_decrease));
 
         SortAdapter sortAdapter = new SortAdapter(this, arrOption, optionSort);
 
@@ -695,7 +697,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onHandleDataLastSearchSuccessful(Condition condition) {
         if(condition.getArchitecture() != null){
-            MapPostNewsFragment.ON_EVENT_FROM_ACTIVITY.onHandleSearch(condition);
+            MapPostNewsFragment.ON_EVENT_FOR_MAP_POST_NEWS.onHandleSearch(condition);
         }
         else{
             MapPostNewsFragment mapPostNewsFragment = (MapPostNewsFragment) getSupportFragmentManager().getFragments().get(0);
@@ -705,7 +707,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onHandleUpdateSavedSearchListSuccessful() {
-        toastHelper.toast("Lưu thành công", ToastHelper.LENGTH_SHORT);
+        toastHelper.toast(getResources().getString(R.string.save_data_successful), ToastHelper.LENGTH_SHORT);
     }
 
     @Override
@@ -735,7 +737,7 @@ public class MainActivity extends AppCompatActivity
     protected void onStop() {
         MapPostNewsFragment mapPostNewsFragment = (MapPostNewsFragment)getSupportFragmentManager().getFragments().get(0);
         Condition condition = new Condition(mapLat, mapLng, mapPostNewsFragment.mMap.getCameraPosition().zoom,
-                minPrice, maxPrice, formality, type, architecture, bathroom, bedroom, "last_search");
+                minPrice, maxPrice, formality, type, architecture, bathroom, bedroom, Constant.LAST_SEARCH);
 
         new PresenterSavedSearch(this).handleSaveLastSearch(condition, this);
 

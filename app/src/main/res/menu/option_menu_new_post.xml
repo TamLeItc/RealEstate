@@ -8,6 +8,6 @@
         android:title="@string/account_manage"/>
 
     <item android:id="@+id/action_save_temp"
-        android:title="@string/save_temp"/>
+        android:title="@string/save"/>
 
 </menu>

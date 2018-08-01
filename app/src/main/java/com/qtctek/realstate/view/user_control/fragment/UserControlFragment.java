@@ -13,7 +13,6 @@ import android.widget.TextView;
 
 import com.qtctek.realstate.R;
 import com.qtctek.realstate.common.general.Constant;
-import com.qtctek.realstate.dto.User;
 import com.qtctek.realstate.helper.AlertHelper;
 import com.qtctek.realstate.helper.ToastHelper;
 import com.qtctek.realstate.view.new_post.activity.NewPostActivity;
@@ -41,7 +40,7 @@ public class UserControlFragment extends Fragment implements View.OnClickListene
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        this.mView = inflater.inflate(R.layout.fragment_option_user_system_control, container, false);
+        this.mView = inflater.inflate(R.layout.fragment_user_control, container, false);
 
         return this.mView;
     }
@@ -144,14 +143,14 @@ public class UserControlFragment extends Fragment implements View.OnClickListene
                 break;
             case R.id.txv_update_information:
                 Intent intent1 = new Intent(getActivity(), UserActionActivity.class);
-                intent1.putExtra("option", "update_user");
+                intent1.putExtra(Constant.OPTION, Constant.UPDATE_ACCOUNT_INFORMATION);
                 startActivity(intent1);
                 getActivity().finish();
                 break;
             case R.id.txv_logout:
                 ((UserControlActivity)getActivity()).alertHelper.setCallback(this);
-                ((UserControlActivity)getActivity()).alertHelper.alert("Xác nhận", "Bạn có chắc chắn muốn đăng xuất", false,
-                        "Xác nhận", "Hủy bỏ", Constant.LOGOUT);
+                ((UserControlActivity)getActivity()).alertHelper.alert(getResources().getString(R.string.log_out), getResources().getString(R.string.log_out_notifaction), false,
+                        getResources().getString(R.string.ok), getResources().getString(R.string.cancel), Constant.LOGOUT);
                 break;
         }
     }
