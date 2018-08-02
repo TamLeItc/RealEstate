@@ -1,24 +1,24 @@
 package com.qtctek.realstate.view.user_action.update_user;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.text.InputType;
 import android.text.TextUtils;
+import android.text.style.UnderlineSpan;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioButton;
-import android.widget.Switch;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.qtctek.realstate.R;
@@ -30,14 +30,14 @@ import com.qtctek.realstate.common.general.HashMD5;
 import com.qtctek.realstate.helper.AlertHelper;
 import com.qtctek.realstate.helper.ToastHelper;
 import com.qtctek.realstate.presenter.user_action.update_user.PresenterUpdateUser;
+import com.qtctek.realstate.view.post_news.activity.MainActivity;
 import com.qtctek.realstate.view.user_action.activity.UserActionActivity;
-
-import java.util.Calendar;
-import java.util.Objects;
 
 import static com.qtctek.realstate.view.post_news.activity.MainActivity.USER;
 
-public class UpdateUserFragment extends Fragment implements View.OnClickListener, ViewHandleUpdateUser, View.OnFocusChangeListener, View.OnKeyListener, CompoundButton.OnCheckedChangeListener {
+public class UpdateUserFragment extends Fragment implements View.OnClickListener, ViewHandleUpdateUser, View.OnFocusChangeListener, View.OnKeyListener {
+
+    private UserActionActivity mActivity;
 
     private View mView;
 
@@ -55,16 +55,23 @@ public class UpdateUserFragment extends Fragment implements View.OnClickListener
     private EditText mEdtUsername;
     private ImageView mImvCalendar;
     private DatePicker mDpkBirthDay;
-    private TextView mTxvNowPassword;
     private EditText mEdtNowPassword;
     private TextView mTxvNewPassword;
-    private Switch mSwtNowPassword;
-    private Switch mSwtNewPassword;
-    private Switch mSwtConfirmPassword;
+    private ImageView mImvShowNowPassword;
+    private ImageView mImvShowNewPassword;
+    private ImageView mImvShowConfirmNewPassword;
+    private RelativeLayout mRlNowPassword;
+    private RelativeLayout mRlNewPassowrd;
+    private RelativeLayout mRlConfirmNewPassword;
 
     private Dialog mLoadingDialog;
 
     private PresenterUpdateUser mPresenterUpdate;
+
+    private boolean mIsShowNowPassword = false;
+    private boolean mIsShowNewPassword = false;
+    private boolean mIsShowConfirmNewPassword = false;
+    private String mFullName;
 
     @Nullable
     @Override
@@ -72,18 +79,23 @@ public class UpdateUserFragment extends Fragment implements View.OnClickListener
         this.mView = inflater.inflate(R.layout.fragment_register, container, false);
 
         try{
+
+            this.mActivity = (UserActionActivity)getActivity();
+
             initViews();
             createLoadingDialog();
             handleStart();
         }
-        catch (java.lang.NullPointerException e){}
+        catch (java.lang.NullPointerException ignored){}
         return this.mView;
     }
 
     private void initViews(){
         this.mEdtName = mView.findViewById(R.id.edt_full_name);
         this.mEdtEmail = mView.findViewById(R.id.edt_email_address);
+        this.mEdtNowPassword = mView.findViewById(R.id.edt_now_password);
         this.mEdtNewPassword = mView.findViewById(R.id.edt_password);
+        this.mTxvNewPassword = mView.findViewById(R.id.txv_password);
         this.mEdtConfirmPassword = mView.findViewById(R.id.edt_confirm_password);
         this.mEdtPhoneNumber = mView.findViewById(R.id.edt_phone_number);
         this.mBtnConfirm = mView.findViewById(R.id.btn_confirm);
@@ -94,14 +106,14 @@ public class UpdateUserFragment extends Fragment implements View.OnClickListener
         this.mImvCalendar = mView.findViewById(R.id.imv_calendar);
         this.mEdtUsername = mView.findViewById(R.id.edt_username);
         this.mRdoOther = mView.findViewById(R.id.rdo_other);
-        this.mTxvNewPassword = mView.findViewById(R.id.txv_password);
-        this.mTxvNowPassword = mView.findViewById(R.id.txv_now_password);
-        this.mEdtNowPassword = mView.findViewById(R.id.edt_now_password);
-        this.mSwtNowPassword = mView.findViewById(R.id.swt_now_password);
-        this.mSwtNewPassword = mView.findViewById(R.id.swt_password);
-        this.mSwtConfirmPassword = mView.findViewById(R.id.swt_confirm_password);
+        this.mImvShowNowPassword = mView.findViewById(R.id.imv_show_now_password);
+        this.mImvShowNewPassword = mView.findViewById(R.id.imv_show_password);
+        this.mImvShowConfirmNewPassword = mView.findViewById(R.id.imv_show_confirm_password);
+        this.mRlNowPassword = mView.findViewById(R.id.rl_now_password);
+        this.mRlNewPassowrd = mView.findViewById(R.id.rl_password);
+        this.mRlConfirmNewPassword = mView.findViewById(R.id.rl_confirm_password);
 
-        this.mTxvNewPassword.setText(getActivity().getResources().getString(R.string.new_password));
+        this.mTxvNewPassword.setText(mActivity.getResources().getString(R.string.new_password));
 
         this.mBtnConfirm.setOnClickListener(this);
         this.mImvCalendar.setOnClickListener(this);
@@ -110,21 +122,21 @@ public class UpdateUserFragment extends Fragment implements View.OnClickListener
         this.mEdtEmail.setFocusable(false);
 
         this.mBtnConfirm.setOnClickListener(this);
+        this.mImvShowNowPassword.setOnClickListener(this);
+        this.mImvShowNewPassword.setOnClickListener(this);
+        this.mImvShowConfirmNewPassword.setOnClickListener(this);
 
         this.mEdtNowPassword.setOnKeyListener(this);
         this.mEdtNewPassword.setOnKeyListener(this);
         this.mEdtConfirmPassword.setOnKeyListener(this);
         this.mEdtPhoneNumber.setOnKeyListener(this);
-
-        this.mSwtNowPassword.setOnCheckedChangeListener(this);
-        this.mSwtNewPassword.setOnCheckedChangeListener(this);
-        this.mSwtConfirmPassword.setOnCheckedChangeListener(this);
     }
 
 
     private void handleStart(){
         this.mPresenterUpdate = new PresenterUpdateUser(this);
 
+        mFullName = USER.getFullName();
         this.mEdtName.setText(USER.getFullName());
         this.mEdtAddress.setText(USER.getAddress());
         this.mEdtUsername.setText(USER.getUsername());
@@ -133,18 +145,23 @@ public class UpdateUserFragment extends Fragment implements View.OnClickListener
         this.mTxvBirthDay.setText(USER.getBirthDay());
 
         String sex = USER.getSex();
-        if(sex.equals("Nam")){
-            this.mRdoMale.setChecked(true);
-        }
-        else if(sex.equals("Nữ")){
-            this.mRdoFemale.setChecked(true);
-        }
-        else{
-            this.mRdoOther.setChecked(true);
+
+        switch (sex) {
+            case "Nam":
+                this.mRdoMale.setChecked(true);
+                break;
+            case "Nữ":
+                this.mRdoFemale.setChecked(true);
+                break;
+            default:
+                this.mRdoOther.setChecked(true);
+                break;
         }
 
         this.mEdtEmail.setBackground(getResources().getDrawable(R.drawable.custom_border_gray_backgroud_gray));
         this.mEdtUsername.setBackground(getResources().getDrawable(R.drawable.custom_border_gray_backgroud_gray));
+        this.mEdtUsername.setTextColor(getResources().getColor(R.color.colorGray));
+        this.mEdtEmail.setTextColor(getResources().getColor(R.color.colorGray));
 
     }
 
@@ -177,76 +194,76 @@ public class UpdateUserFragment extends Fragment implements View.OnClickListener
 
 
         if(TextUtils.isEmpty(nowPassword)){
-            ((UserActionActivity)getActivity()).toastHelper.toast(getResources().getString(R.string.please_enter_now_password), ToastHelper.LENGTH_SHORT);
+            mActivity.getToastHelper().toast(R.string.please_enter_now_password, ToastHelper.LENGTH_SHORT);
             this.mEdtNowPassword.requestFocus();
             mEdtConfirmPassword.setText("");
             mEdtNewPassword.setText("");
             mEdtNowPassword.setText("");
 
-            this.mEdtNowPassword.setBackground(getResources().getDrawable(R.drawable.custom_border_red_backgroud_white));
+            this.mRlNowPassword.setBackground(getResources().getDrawable(R.drawable.custom_border_red_backgroud_gray));
         }
         else if(TextUtils.isEmpty(password)){
-            ((UserActionActivity)getActivity()).toastHelper.toast(getResources().getString(R.string.please_enter_new_password), ToastHelper.LENGTH_SHORT);
+            mActivity.getToastHelper().toast(R.string.please_enter_new_password, ToastHelper.LENGTH_SHORT);
             this.mEdtNewPassword.requestFocus();
             mEdtConfirmPassword.setText("");
             mEdtNewPassword.setText("");
             mEdtNowPassword.setText("");
 
-            this.mEdtNewPassword.setBackground(getResources().getDrawable(R.drawable.custom_border_red_backgroud_white));
+            this.mRlNewPassowrd.setBackground(getResources().getDrawable(R.drawable.custom_border_red_backgroud_gray));
         }
         else if(password.length() < 6){
-            ((UserActionActivity)getActivity()).toastHelper.toast(getResources().getString(R.string.minimum_length_password), ToastHelper.LENGTH_SHORT);
+            mActivity.getToastHelper().toast(R.string.minimum_length_password, ToastHelper.LENGTH_SHORT);
             this.mEdtNewPassword.requestFocus();
             mEdtConfirmPassword.setText("");
             mEdtNewPassword.setText("");
             mEdtNowPassword.setText("");
 
-            this.mEdtNewPassword.setBackground(getResources().getDrawable(R.drawable.custom_border_red_backgroud_white));
+            this.mRlNewPassowrd.setBackground(getResources().getDrawable(R.drawable.custom_border_red_backgroud_gray));
         }
         else if(password.length() > 20){
-            ((UserActionActivity)getActivity()).toastHelper.toast(getResources().getString(R.string.maximum_length_password), ToastHelper.LENGTH_SHORT);
+            mActivity.getToastHelper().toast(R.string.maximum_length_password, ToastHelper.LENGTH_SHORT);
             this.mEdtNewPassword.requestFocus();
             mEdtConfirmPassword.setText("");
             mEdtNewPassword.setText("");
             mEdtNowPassword.setText("");
 
-            this.mEdtNewPassword.setBackground(getResources().getDrawable(R.drawable.custom_border_red_backgroud_white));
+            this.mRlNewPassowrd.setBackground(getResources().getDrawable(R.drawable.custom_border_red_backgroud_gray));
         }
         else if(mEdtConfirmPassword.getText().toString().equals("")){
-            ((UserActionActivity)getActivity()).toastHelper.toast(getResources().getString(R.string.please_enter_confirm_password), ToastHelper.LENGTH_SHORT);
+            mActivity.getToastHelper().toast(R.string.please_enter_confirm_password, ToastHelper.LENGTH_SHORT);
             this.mEdtConfirmPassword.requestFocus();
             mEdtConfirmPassword.setText("");
             mEdtNewPassword.setText("");
             mEdtNowPassword.setText("");
 
-            this.mEdtConfirmPassword.setBackground(getResources().getDrawable(R.drawable.custom_border_red_backgroud_white));
+            this.mRlConfirmNewPassword.setBackground(getResources().getDrawable(R.drawable.custom_border_red_backgroud_gray));
         }
         else if(!mEdtConfirmPassword.getText().toString().equals(password)){
-            ((UserActionActivity)getActivity()).toastHelper.toast(getResources().getString(R.string.password_confirm_password_incorrect), ToastHelper.LENGTH_SHORT);
+            mActivity.getToastHelper().toast(R.string.password_confirm_password_incorrect, ToastHelper.LENGTH_SHORT);
             this.mEdtConfirmPassword.requestFocus();
             mEdtConfirmPassword.setText("");
             mEdtNewPassword.setText("");
             mEdtNowPassword.setText("");
 
-            this.mEdtConfirmPassword.setBackground(getResources().getDrawable(R.drawable.custom_border_red_backgroud_white));
+            this.mRlConfirmNewPassword.setBackground(getResources().getDrawable(R.drawable.custom_border_red_backgroud_gray));
         }
         else if(TextUtils.isEmpty(phoneNumber)){
-            ((UserActionActivity)getActivity()).toastHelper.toast(getResources().getString(R.string.please_enter_number_phone), ToastHelper.LENGTH_SHORT);
+            mActivity.getToastHelper().toast(R.string.please_enter_number_phone, ToastHelper.LENGTH_SHORT);
             this.mEdtPhoneNumber.requestFocus();
             mEdtConfirmPassword.setText("");
             mEdtNewPassword.setText("");
             mEdtNowPassword.setText("");
 
-            this.mEdtPhoneNumber.setBackground(getResources().getDrawable(R.drawable.custom_border_red_backgroud_white));
+            this.mEdtPhoneNumber.setBackground(getResources().getDrawable(R.drawable.custom_border_red_backgroud_gray));
         }
         else if(!FormatPattern.checkNumberPhone(phoneNumber)){
-            ((UserActionActivity)getActivity()).toastHelper.toast(getResources().getString(R.string.number_phone_incorrect), ToastHelper.LENGTH_SHORT);
+            mActivity.getToastHelper().toast(R.string.number_phone_incorrect, ToastHelper.LENGTH_SHORT);
             this.mEdtPhoneNumber.requestFocus();
             mEdtConfirmPassword.setText("");
             mEdtNewPassword.setText("");
             mEdtNowPassword.setText("");
 
-            this.mEdtPhoneNumber.setBackground(getResources().getDrawable(R.drawable.custom_border_red_backgroud_white));
+            this.mEdtPhoneNumber.setBackground(getResources().getDrawable(R.drawable.custom_border_red_backgroud_gray));
         }
         else{
             mLoadingDialog.show();
@@ -257,7 +274,7 @@ public class UpdateUserFragment extends Fragment implements View.OnClickListener
     }
 
     private void createLoadingDialog(){
-        this.mLoadingDialog = new Dialog(getActivity());
+        this.mLoadingDialog = new Dialog(mActivity);
         this.mLoadingDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         this.mLoadingDialog.setContentView(R.layout.dialog_loading);
         this.mLoadingDialog.setCancelable(false);
@@ -268,23 +285,37 @@ public class UpdateUserFragment extends Fragment implements View.OnClickListener
 
         this.mLoadingDialog.dismiss();
 
-        ((UserActionActivity) Objects.requireNonNull(getActivity())).getAlertHelper().alert(getResources().getString(R.string.update_account),
-                getResources().getString(R.string.update_account_successful),
-                false, "OK", AlertHelper.ALERT_NO_ACTION);
+        mFullName = USER.getFullName();
+        MainActivity.USER.setFullName(this.mEdtName.getText().toString());
+        MainActivity.USER.setBirthDay(this.mTxvBirthDay.getText().toString());
+        MainActivity.USER.setPhone(this.mEdtPhoneNumber.getText().toString());
+        MainActivity.USER.setAddress(this.mEdtAddress.getText().toString());
+        String sex;
+        if(mRdoFemale.isChecked()){
+            sex = getResources().getString(R.string.female);
+        }
+        else if(mRdoMale.isChecked()){
+            sex = getResources().getString(R.string.male);
+        }
+        else{
+            sex = getResources().getString(R.string.other_sex);
+        }
+        MainActivity.USER.setSex(sex);
+
+        mActivity.getAlertHelper().alert(R.string.update_account,
+                R.string.update_account_successful, false, R.string.ok, AlertHelper.ALERT_NO_ACTION);
     }
 
     @Override
     public void onUpdateUserError(String error) {
 
         if(error.equals(Constant.NOW_PASSWORD_INCORRECT)){
-            ((UserActionActivity) Objects.requireNonNull(getActivity())).getAlertHelper().alert(getResources().getString(R.string.error),
-                    getResources().getString(R.string.now_password_incorrect),
-                    false, getResources().getString(R.string.ok), AlertHelper.ALERT_NO_ACTION);
+            mActivity.getAlertHelper().alert(R.string.error,
+                    R.string.now_password_incorrect, false, R.string.ok, AlertHelper.ALERT_NO_ACTION);
         }
         else{
-            ((UserActionActivity) Objects.requireNonNull(getActivity())).getAlertHelper().alert(getResources().getString(R.string.error),
-                    getResources().getString(R.string.update_account_failed),
-                    false, getResources().getString(R.string.ok), AlertHelper.ALERT_NO_ACTION);
+            mActivity.getAlertHelper().alert(R.string.error,
+                    R.string.update_account_failed, false, R.string.ok, AlertHelper.ALERT_NO_ACTION);
         }
 
         this.mLoadingDialog.dismiss();
@@ -292,26 +323,8 @@ public class UpdateUserFragment extends Fragment implements View.OnClickListener
 
     }
 
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()){
-            case R.id.btn_confirm:
-                handleUpdateUser();
-                break;
-            case R.id.imv_calendar:
-                createDialogCalendar();
-                break;
-        }
-    }
-
     private void createDialogCalendar(){
-        Calendar calendar = Calendar.getInstance();
-        // Lấy ra năm - tháng - ngày hiện tại
-        int year = calendar.get(calendar.YEAR);
-        final int month = calendar.get(calendar.MONTH);
-        int day = calendar.get(calendar.DAY_OF_MONTH);
-
-        final Dialog dialog = new Dialog(getContext());
+        final Dialog dialog = new Dialog(mActivity);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.dialog_calendar);
 
@@ -346,16 +359,52 @@ public class UpdateUserFragment extends Fragment implements View.OnClickListener
         }
 
         try{
-            this.mDpkBirthDay.updateDate(Integer.parseInt(birthDate[2]), Integer.parseInt(birthDate[1]), Integer.parseInt(birthDate[0]));
+            //year-month-day
+            this.mDpkBirthDay.updateDate(Integer.parseInt(birthDate[2]), Integer.parseInt(birthDate[1]) - 1, Integer.parseInt(birthDate[0]));
         }
-        catch (Exception e){}
+        catch (Exception ignored){}
 
+    }
+
+    @Override
+    public void onStop() {
+        Intent intent = mActivity.getIntent();
+        intent.putExtra(Constant.UPDATE_ACCOUNT_INFORMATION, mFullName);
+        mActivity.setResult(Constant.UPDATE, intent);
+        super.onStop();
     }
 
     @Override
     public void onFocusChange(View v, boolean hasFocus) {
         if(!hasFocus){
-            AppUtils.hideKeyboard(getActivity());
+            AppUtils.hideKeyboard(mActivity);
+        }
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.btn_confirm:
+                handleUpdateUser();
+                break;
+            case R.id.imv_calendar:
+                createDialogCalendar();
+                break;
+            case R.id.imv_show_now_password:
+                mActivity.handleShowPassword(mImvShowNowPassword, mEdtNowPassword, mIsShowNowPassword);
+
+                mIsShowNowPassword = !mIsShowNowPassword;
+                break;
+            case R.id.imv_show_password:
+                mActivity.handleShowPassword(mImvShowNewPassword, mEdtNewPassword, mIsShowNewPassword);
+
+                mIsShowNewPassword = !mIsShowNewPassword;
+                break;
+            case R.id.imv_show_confirm_password:
+                mActivity.handleShowPassword(mImvShowConfirmNewPassword, mEdtConfirmPassword, mIsShowConfirmNewPassword);
+
+                mIsShowConfirmNewPassword = !mIsShowConfirmNewPassword;
+                break;
         }
     }
 
@@ -365,67 +414,38 @@ public class UpdateUserFragment extends Fragment implements View.OnClickListener
         switch (v.getId()){
             case R.id.edt_now_password:
                 if(this.mEdtNowPassword.getText().toString().trim().length() < 6 || this.mEdtNowPassword.getText().toString().trim().length() > 20){
-                    this.mEdtNowPassword.setBackground(getResources().getDrawable(R.drawable.custom_border_red_backgroud_white));
+                    this.mRlNowPassword.setBackground(getResources().getDrawable(R.drawable.custom_border_red_backgroud_gray));
                 }
                 else{
-                    this.mEdtNowPassword.setBackground(getResources().getDrawable(R.drawable.custom_border_gray_backgroud_default));
+                    this.mRlNowPassword.setBackground(getResources().getDrawable(R.drawable.custom_border_gray_backgroud_default));
                 }
                 break;
             case R.id.edt_password:
                 if(this.mEdtNewPassword.getText().toString().trim().length() < 6 || this.mEdtNewPassword.getText().toString().trim().length() > 20){
-                    this.mEdtNewPassword.setBackground(getResources().getDrawable(R.drawable.custom_border_red_backgroud_white));
+                    this.mRlNewPassowrd.setBackground(getResources().getDrawable(R.drawable.custom_border_red_backgroud_gray));
                 }
                 else{
-                    this.mEdtNewPassword.setBackground(getResources().getDrawable(R.drawable.custom_border_gray_backgroud_default));
+                    this.mRlNewPassowrd.setBackground(getResources().getDrawable(R.drawable.custom_border_gray_backgroud_default));
                 }
                 break;
             case R.id.edt_confirm_password:
                 if(!this.mEdtNewPassword.getText().toString().trim().equals(this.mEdtConfirmPassword.getText().toString().trim())){
-                    this.mEdtConfirmPassword.setBackground(getResources().getDrawable(R.drawable.custom_border_red_backgroud_white));
+                    this.mRlConfirmNewPassword.setBackground(getResources().getDrawable(R.drawable.custom_border_red_backgroud_gray));
                 }
                 else{
-                    this.mEdtConfirmPassword.setBackground(getResources().getDrawable(R.drawable.custom_border_gray_backgroud_default));
+                    this.mRlConfirmNewPassword.setBackground(getResources().getDrawable(R.drawable.custom_border_gray_backgroud_default));
                 }
                 break;
             case R.id.edt_phone_number:
                 if(!FormatPattern.checkNumberPhone(this.mEdtPhoneNumber.getText().toString().trim())){
-                    this.mEdtPhoneNumber.setBackground(getResources().getDrawable(R.drawable.custom_border_red_backgroud_white));
+                    this.mEdtPhoneNumber.setBackground(getResources().getDrawable(R.drawable.custom_border_red_backgroud_gray));
                 }
                 else{
                     this.mEdtPhoneNumber.setBackground(getResources().getDrawable(R.drawable.custom_border_gray_backgroud_default));
                 }
+                break;
         }
 
         return false;
-    }
-
-    @Override
-    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-        switch (buttonView.getId()){
-            case R.id.swt_now_password:
-                if(!isChecked){
-                    this.mEdtNowPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
-                }
-                else{
-                    this.mEdtNowPassword.setInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
-                }
-                break;
-            case R.id.swt_password:
-                if(!isChecked){
-                    this.mEdtNewPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
-                }
-                else{
-                    this.mEdtNewPassword.setInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
-                }
-                break;
-            case R.id.swt_confirm_password:
-                if(!isChecked){
-                    this.mEdtConfirmPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
-                }
-                else{
-                    this.mEdtConfirmPassword.setInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
-                }
-                break;
-        }
     }
 }

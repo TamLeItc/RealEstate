@@ -87,7 +87,7 @@ public class AdapterPostSale extends BaseAdapter {
                 + product.getCity());
         viewHolder.txvNamePoster.setText( mContext.getResources().getString(R.string.poster) + ": " + product.getUserFullName());
         viewHolder.txvPhoneNumberPoster.setText(mContext.getResources().getString(R.string.acronym_number_phone) + ":" + product.getUserPhone());
-        viewHolder.txvEmailPoster.setText("Email: " + product.getUserEmail());
+        viewHolder.txvEmailPoster.setText(mContext.getResources().getString(R.string.email) + ": " + product.getUserEmail());
 
         viewHolder.txvPostDate.setText(mContext.getResources().getString(R.string.upload_date) + ": " + formatDate(product.getDateUpload()));
 
@@ -114,7 +114,7 @@ public class AdapterPostSale extends BaseAdapter {
         }
         else if(product.getStatus().equals("2")){
             viewHolder.txvStatus.setText(mContext.getResources().getString(R.string.pending));
-            viewHolder.txvStatus.setTextColor(mContext.getResources().getColor(R.color.colorRed));
+            viewHolder.txvStatus.setTextColor(mContext.getResources().getColor(R.color.colorRedLight));
         }
         else if(product.getStatus().equals("3")){
             viewHolder.txvStatus.setText(mContext.getResources().getString(R.string.posted));

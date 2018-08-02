@@ -6,7 +6,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
-import android.text.InputType;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -14,13 +13,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
-import android.widget.Switch;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.qtctek.realstate.R;
@@ -35,10 +33,14 @@ import com.qtctek.realstate.helper.ToastHelper;
 import com.qtctek.realstate.presenter.user_action.register.PresenterRegister;
 import com.qtctek.realstate.view.user_action.activity.UserActionActivity;
 
+import java.time.ZonedDateTime;
 import java.util.Calendar;
+import java.util.Date;
 
 public class RegisterFragment extends Fragment implements View.OnClickListener, ViewHandleRegister,
-        AlertHelper.AlertHelperCallback, View.OnKeyListener, CompoundButton.OnCheckedChangeListener {
+        AlertHelper.AlertHelperCallback, View.OnKeyListener {
+
+    private UserActionActivity mActivity;
 
     private View mView;
 
@@ -47,25 +49,24 @@ public class RegisterFragment extends Fragment implements View.OnClickListener, 
     private EditText mEdtPassword;
     private EditText mEdtConfirmPassword;
     private EditText mEdtPhoneNumber;
-    private Button mBtnConfirm;
     private RadioButton mRdoMale;
     private RadioButton mRdoFemale;
-    private RadioButton mRdoOther;
     private TextView mTxvBirthDay;
     private EditText mEdtAddress;
     private EditText mEdtUsername;
-    private ImageView mImvCalendar;
     private DatePicker mDpkBirthDay;
-    private LinearLayout mLLOlPassword;
-    private EditText mEdtOldPassword;
-    private Switch mSwtPassword;
-    private Switch mSwtConfirmPassword;
+    private RelativeLayout mRlNowPassword;
+    private ImageView mImvShowPassword;
+    private ImageView mImvShowConfirmPassword;
+    private RelativeLayout mRlPassword;
+    private RelativeLayout mRlConfirmPassword;
 
     private Dialog mDialog;
-    private Dialog mLoadingDialog;
     private EditText mEdtConfirmCode;
 
     private String mConfirmCode = "";
+    private boolean mIsShowPassword = false;
+    private boolean mIsShowConfirmPassword = true;
 
     private PresenterRegister mPresenterRegister;
 
@@ -74,9 +75,10 @@ public class RegisterFragment extends Fragment implements View.OnClickListener, 
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         this.mView = inflater.inflate(R.layout.fragment_register, container, false);
 
-        handleStart();
+        mActivity = (UserActionActivity)getActivity();
+
         initViews();
-        createLoadingDialog();
+        handleStart();
 
         return this.mView;
     }
@@ -87,38 +89,46 @@ public class RegisterFragment extends Fragment implements View.OnClickListener, 
         this.mEdtPassword = mView.findViewById(R.id.edt_password);
         this.mEdtConfirmPassword = mView.findViewById(R.id.edt_confirm_password);
         this.mEdtPhoneNumber = mView.findViewById(R.id.edt_phone_number);
-        this.mBtnConfirm = mView.findViewById(R.id.btn_confirm);
+        Button mBtnConfirm = mView.findViewById(R.id.btn_confirm);
         this.mRdoFemale = mView.findViewById(R.id.rdo_female);
         this.mRdoMale = mView.findViewById(R.id.rdo_male);
-        this.mRdoOther = mView.findViewById(R.id.rdo_other);
+        RadioButton mRdoOther = mView.findViewById(R.id.rdo_other);
         this.mTxvBirthDay = mView.findViewById(R.id.txv_birthday);
         this.mEdtAddress = mView.findViewById(R.id.edt_address);
-        this.mImvCalendar = mView.findViewById(R.id.imv_calendar);
+        ImageView mImvCalendar = mView.findViewById(R.id.imv_calendar);
         this.mEdtUsername = mView.findViewById(R.id.edt_username);
-        this.mLLOlPassword = mView.findViewById(R.id.ll_now_password);
-        this.mEdtOldPassword = mView.findViewById(R.id.edt_now_password);
-        this.mSwtPassword = mView.findViewById(R.id.swt_password);
-        this.mSwtConfirmPassword = mView.findViewById(R.id.swt_confirm_password);
+        LinearLayout mLLNowPassword = mView.findViewById(R.id.ll_now_password);
+        this.mRlNowPassword = mView.findViewById(R.id.rl_now_password);
+        this.mImvShowPassword = mView.findViewById(R.id.imv_show_password);
+        this.mImvShowConfirmPassword = mView.findViewById(R.id.imv_show_confirm_password);
+        this.mRlPassword = mView.findViewById(R.id.rl_password);
+        this.mRlConfirmPassword = mView.findViewById(R.id.rl_confirm_password);
 
-        this.mLLOlPassword.setVisibility(View.GONE);
-        this.mEdtOldPassword.setVisibility(View.GONE);
+        mLLNowPassword.setVisibility(View.GONE);
+        this.mRlNowPassword.setVisibility(View.GONE);
 
-        this.mBtnConfirm.setOnClickListener(this);
-        this.mImvCalendar.setOnClickListener(this);
+        mBtnConfirm.setOnClickListener(this);
+        mImvCalendar.setOnClickListener(this);
 
         this.mEdtUsername.setOnKeyListener(this);
         this.mEdtEmail.setOnKeyListener(this);
         this.mEdtPassword.setOnKeyListener(this);
         this.mEdtConfirmPassword.setOnKeyListener(this);
         this.mEdtPhoneNumber.setOnKeyListener(this);
-
-        this.mSwtPassword.setOnCheckedChangeListener(this);
-        this.mSwtConfirmPassword.setOnCheckedChangeListener(this);
+        this.mImvShowPassword.setOnClickListener(this);
+        this.mImvShowConfirmPassword.setOnClickListener(this);
     }
 
 
     private void handleStart(){
         this.mPresenterRegister = new PresenterRegister(this);
+
+        Calendar calendar = Calendar.getInstance();
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+        int month = calendar.get(Calendar.MONTH);
+        int year = calendar.get(Calendar.YEAR);
+
+        this.mTxvBirthDay.setText(day + "/" + (month +1) + "/" + year);
     }
 
     private void handleRegister(){
@@ -128,98 +138,90 @@ public class RegisterFragment extends Fragment implements View.OnClickListener, 
         String confirmPassword = this.mEdtConfirmPassword.getText().toString().trim();
         String phoneNumber = this.mEdtPhoneNumber.getText().toString().trim();
 
-
         if(TextUtils.isEmpty(email)){
-            ((UserActionActivity)getActivity()).toastHelper.toast(getResources().getString(R.string.please_enter_email), ToastHelper.LENGTH_SHORT);
+            mActivity.getToastHelper().toast(R.string.please_enter_email, ToastHelper.LENGTH_SHORT);
             this.mEdtEmail.requestFocus();
             mEdtConfirmPassword.setText("");
             mEdtPassword.setText("");
 
-            this.mEdtEmail.setBackground(getResources().getDrawable(R.drawable.custom_border_red_backgroud_white));
+            this.mEdtEmail.setBackground(getResources().getDrawable(R.drawable.custom_border_red_backgroud_gray));
         }
         else if(!FormatPattern.checkEmail(email)){
-            ((UserActionActivity)getActivity()).toastHelper.toast(getResources().getString(R.string.email_incorrect), ToastHelper.LENGTH_SHORT);
+            mActivity.getToastHelper().toast(R.string.email_incorrect, ToastHelper.LENGTH_SHORT);
             this.mEdtEmail.requestFocus();
             mEdtConfirmPassword.setText("");
             mEdtPassword.setText("");
 
-            this.mEdtEmail.setBackground(getResources().getDrawable(R.drawable.custom_border_red_backgroud_white));
+            this.mEdtEmail.setBackground(getResources().getDrawable(R.drawable.custom_border_red_backgroud_gray));
         }
         else if(TextUtils.isEmpty(username)){
-            ((UserActionActivity)getActivity()).toastHelper.toast(getResources().getString(R.string.please_enter_username), ToastHelper.LENGTH_SHORT);
+            mActivity.getToastHelper().toast(R.string.please_enter_username, ToastHelper.LENGTH_SHORT);
             this.mEdtUsername.requestFocus();
             mEdtConfirmPassword.setText("");
             mEdtPassword.setText("");
 
-            this.mEdtUsername.setBackground(getResources().getDrawable(R.drawable.custom_border_red_backgroud_white));
+            this.mEdtUsername.setBackground(getResources().getDrawable(R.drawable.custom_border_red_backgroud_gray));
         }
         else if(TextUtils.isEmpty(password)){
-            ((UserActionActivity)getActivity()).toastHelper.toast(getResources().getString(R.string.please_enter_password), ToastHelper.LENGTH_SHORT);
+            mActivity.getToastHelper().toast(R.string.please_enter_password, ToastHelper.LENGTH_SHORT);
             this.mEdtPassword.requestFocus();
             mEdtConfirmPassword.setText("");
             mEdtPassword.setText("");
 
-            this.mEdtPassword.setBackground(getResources().getDrawable(R.drawable.custom_border_red_backgroud_white));
+            this.mRlNowPassword.setBackground(getResources().getDrawable(R.drawable.custom_border_red_backgroud_gray));
         }
         else if(password.length() < 6){
-            ((UserActionActivity)getActivity()).toastHelper.toast(getResources().getString(R.string.minimum_length_password), ToastHelper.LENGTH_SHORT);
+            mActivity.getToastHelper().toast(R.string.minimum_length_password, ToastHelper.LENGTH_SHORT);
             this.mEdtPassword.requestFocus();
             mEdtConfirmPassword.setText("");
             mEdtPassword.setText("");
 
-            this.mEdtPassword.setBackground(getResources().getDrawable(R.drawable.custom_border_red_backgroud_white));
+            this.mRlPassword.setBackground(getResources().getDrawable(R.drawable.custom_border_red_backgroud_gray));
         }
         else if(password.length() > 20){
-            ((UserActionActivity)getActivity()).toastHelper.toast(getResources().getString(R.string.maximum_length_password), ToastHelper.LENGTH_SHORT);
+            mActivity.getToastHelper().toast(R.string.maximum_length_password, ToastHelper.LENGTH_SHORT);
             this.mEdtPassword.requestFocus();
             mEdtConfirmPassword.setText("");
             mEdtPassword.setText("");
 
-            this.mEdtPassword.setBackground(getResources().getDrawable(R.drawable.custom_border_red_backgroud_white));
+            this.mRlPassword.setBackground(getResources().getDrawable(R.drawable.custom_border_red_backgroud_gray));
         }
         else if(TextUtils.isEmpty(confirmPassword)){
-            ((UserActionActivity)getActivity()).toastHelper.toast(getResources().getString(R.string.please_enter_confirm_password), ToastHelper.LENGTH_SHORT);
+            mActivity.getToastHelper().toast(R.string.please_enter_confirm_password, ToastHelper.LENGTH_SHORT);
             this.mEdtConfirmPassword.requestFocus();
             mEdtConfirmPassword.setText("");
             mEdtPassword.setText("");
 
-            this.mEdtConfirmPassword.setBackground(getResources().getDrawable(R.drawable.custom_border_red_backgroud_white));
+            this.mRlConfirmPassword.setBackground(getResources().getDrawable(R.drawable.custom_border_red_backgroud_gray));
         }
         else if(!password.equals(confirmPassword)){
-            ((UserActionActivity)getActivity()).toastHelper.toast(getResources().getString(R.string.password_confirm_password_incorrect), ToastHelper.LENGTH_SHORT);
+            mActivity.getToastHelper().toast(R.string.password_confirm_password_incorrect, ToastHelper.LENGTH_SHORT);
             this.mEdtConfirmPassword.requestFocus();
             mEdtConfirmPassword.setText("");
             mEdtPassword.setText("");
 
-            this.mEdtConfirmPassword.setBackground(getResources().getDrawable(R.drawable.custom_border_red_backgroud_white));
+            this.mRlConfirmPassword.setBackground(getResources().getDrawable(R.drawable.custom_border_red_backgroud_gray));
         }
         else if(TextUtils.isEmpty(phoneNumber)){
-            ((UserActionActivity)getActivity()).toastHelper.toast(getResources().getString(R.string.please_enter_number_phone), ToastHelper.LENGTH_SHORT);
+            mActivity.getToastHelper().toast(R.string.please_enter_number_phone, ToastHelper.LENGTH_SHORT);
             this.mEdtPhoneNumber.requestFocus();
             mEdtConfirmPassword.setText("");
             mEdtPassword.setText("");
 
-            this.mEdtPhoneNumber.setBackground(getResources().getDrawable(R.drawable.custom_border_red_backgroud_white));
+            this.mEdtPhoneNumber.setBackground(getResources().getDrawable(R.drawable.custom_border_red_backgroud_gray));
         }
         else if(!FormatPattern.checkNumberPhone(phoneNumber)){
-            ((UserActionActivity)getActivity()).toastHelper.toast(getResources().getString(R.string.number_phone_incorrect), ToastHelper.LENGTH_SHORT);
+            mActivity.getToastHelper().toast(R.string.number_phone_incorrect, ToastHelper.LENGTH_SHORT);
             this.mEdtPhoneNumber.requestFocus();
             mEdtConfirmPassword.setText("");
             mEdtPassword.setText("");
 
-            this.mEdtPhoneNumber.setBackground(getResources().getDrawable(R.drawable.custom_border_red_backgroud_white));
+            this.mEdtPhoneNumber.setBackground(getResources().getDrawable(R.drawable.custom_border_red_backgroud_gray));
         }
         else{
-            mLoadingDialog.show();
+            mActivity.getDialogHelper().show();
             this.mPresenterRegister.handleCheckEmail(email, username);
         }
-    }
-
-    private void createLoadingDialog(){
-        this.mLoadingDialog = new Dialog(getActivity());
-        this.mLoadingDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        this.mLoadingDialog.setContentView(R.layout.dialog_loading);
-        this.mLoadingDialog.setCancelable(false);
     }
 
     private boolean sendConfirmCodeToGMail(){
@@ -240,10 +242,9 @@ public class RegisterFragment extends Fragment implements View.OnClickListener, 
 
     private void handleConfirmEmail(){
 
+        mActivity.getDialogHelper().show();
 
-        mLoadingDialog.show();
-
-        mDialog = new Dialog(getActivity());
+        mDialog = new Dialog(mActivity);
         mDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         mDialog.setCancelable(false);
         mDialog.setContentView(R.layout.dialog_confirm_email);
@@ -252,12 +253,10 @@ public class RegisterFragment extends Fragment implements View.OnClickListener, 
 
 
         if(!sendConfirmCodeToGMail()){
-            ((UserActionActivity)getActivity()).alertHelper.setCallback(this);
-            ((UserActionActivity)getActivity()).alertHelper.alert(getResources().getString(R.string.error),
-                    getResources().getString(R.string.sign_up_failed), false,
-                    getResources().getString(R.string.ok), AlertHelper.ALERT_NO_ACTION);
-        }
-        else{
+            mActivity.getAlertHelper().setCallback(this);
+            mActivity.getAlertHelper().alert(R.string.error, R.string.sign_up_failed, false,
+                    R.string.ok, AlertHelper.ALERT_NO_ACTION);
+            return;
         }
 
         Button btnCancel = mDialog.findViewById(R.id.btn_cancel);
@@ -268,12 +267,12 @@ public class RegisterFragment extends Fragment implements View.OnClickListener, 
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mLoadingDialog.dismiss();
+                mActivity.getDialogHelper().dismiss();
                 mDialog.dismiss();
             }
         });
 
-        ((UserActionActivity)getActivity()).alertHelper.setCallback(this);
+        mActivity.getAlertHelper().setCallback(this);
         btnConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -299,17 +298,16 @@ public class RegisterFragment extends Fragment implements View.OnClickListener, 
                     String phoneNumber = mEdtPhoneNumber.getText().toString().trim();
                     String address = mEdtAddress.getText().toString().trim();
 
-                    mLoadingDialog.show();
+                    mActivity.getDialogHelper().show();
                     User user = new User(name, sex, birthday, phoneNumber, email, address, username,
                             HashMD5.md5(password));
 
                     mPresenterRegister.handleRegister(user);
                 }
                 else{
-                    mLoadingDialog.dismiss();
-                    ((UserActionActivity)getActivity()).alertHelper.alert(getResources().getString(R.string.error),
-                            getResources().getString(R.string.confirm_code_incorrect), false,
-                            getResources().getString(R.string.ok), AlertHelper.ALERT_NO_ACTION);
+                    mActivity.getDialogHelper().dismiss();
+                    mActivity.getAlertHelper().alert(R.string.error, R.string.confirm_code_incorrect, false,
+                            R.string.ok, AlertHelper.ALERT_NO_ACTION);
                 }
             }
         });
@@ -320,31 +318,27 @@ public class RegisterFragment extends Fragment implements View.OnClickListener, 
     @Override
     public void onRegisterSuccessful() {
 
-        mLoadingDialog.dismiss();
+        mActivity.getDialogHelper().dismiss();
         mDialog.dismiss();
 
-        ((UserActionActivity)getActivity()).alertHelper.setCallback(this);
-        ((UserActionActivity)getActivity()).alertHelper.alert(getResources().getString(R.string.sign_up_account),
-                getResources().getString(R.string.sign_up_successful), false,
-                getResources().getString(R.string.ok), Constant.HANDLE_SUCCESSFUL);
+        mActivity.getAlertHelper().setCallback(this);
+        mActivity.getAlertHelper().alert(R.string.sign_up_account, R.string.sign_up_successful,
+                false, R.string.ok, Constant.HANDLE_SUCCESSFUL);
     }
 
     @Override
     public void onRegisterError(String error) {
+        mActivity.getDialogHelper().dismiss();
 
-        mLoadingDialog.dismiss();
-
-        ((UserActionActivity)getActivity()).alertHelper.setCallback(this);
-        ((UserActionActivity)getActivity()).alertHelper.alert(getResources().getString(R.string.error),
-                getResources().getString(R.string.sign_up_failed), false,
-                getResources().getString(R.string.ok),
-                Constant.HANDLE_SUCCESSFUL);
+        mActivity.getAlertHelper().setCallback(this);
+        mActivity.getAlertHelper().alert(R.string.error, R.string.sign_up_failed,
+                false, R.string.ok, Constant.HANDLE_SUCCESSFUL);
 
     }
 
     @Override
     public void onCheckExistEmail(String message) {
-        mLoadingDialog.dismiss();
+        mActivity.getDialogHelper().dismiss();
         if(message.equals(Constant.EMAIL_EXISTED) || message.equals(Constant.USERNAME_EXISTED)){
             String stMessage;
             if(message.equals(Constant.EMAIL_EXISTED)){
@@ -354,24 +348,24 @@ public class RegisterFragment extends Fragment implements View.OnClickListener, 
                 stMessage = getResources().getString(R.string.username_existed);
             }
 
-            ((UserActionActivity)getActivity()).alertHelper.setCallback(this);
-            ((UserActionActivity)getActivity()).alertHelper.alert(getResources().getString(R.string.error), stMessage, false, "Xác nhận",
+            mActivity.getAlertHelper().setCallback(this);
+            mActivity.getAlertHelper().alert(getResources().getString(R.string.error), stMessage, false, "Xác nhận",
                     Constant.EXISTED);
 
         }
         else{
-            this.mLoadingDialog.show();
+            this.mActivity.getDialogHelper().show();
             handleConfirmEmail();
         }
     }
 
     @Override
     public void onConnectServerError(String s) {
-        this.mLoadingDialog.dismiss();
+        this.mActivity.getDialogHelper().dismiss();
 
-        ((UserActionActivity)getActivity()).alertHelper.setCallback(this);
-        ((UserActionActivity)getActivity()).alertHelper.alert(getResources().getString(R.string.error_connect),
-                getResources().getString(R.string.error_connect_notification), false, "Xác nhận",
+        mActivity.getAlertHelper().setCallback(this);
+        mActivity.getAlertHelper().alert(R.string.error_connect,
+                R.string.error_connect_notification, false, R.string.ok,
                 Constant.EXISTED);
     }
 
@@ -384,17 +378,21 @@ public class RegisterFragment extends Fragment implements View.OnClickListener, 
             case R.id.imv_calendar:
                 createDialogCalendar();
                 break;
+            case R.id.imv_show_password:
+                mActivity.handleShowPassword(mImvShowPassword, mEdtPassword, mIsShowPassword);
+
+                mIsShowPassword = !mIsShowPassword;
+                break;
+            case R.id.imv_show_confirm_password:
+                mActivity.handleShowPassword(mImvShowConfirmPassword, mEdtConfirmPassword, mIsShowConfirmPassword);
+
+                mIsShowConfirmPassword = !mIsShowConfirmPassword;
+                break;
         }
     }
 
     private void createDialogCalendar(){
-        Calendar calendar = Calendar.getInstance();
-        // Lấy ra năm - tháng - ngày hiện tại
-        int year = calendar.get(calendar.YEAR);
-        final int month = calendar.get(calendar.MONTH);
-        int day = calendar.get(calendar.DAY_OF_MONTH);
-
-        final Dialog dialog = new Dialog(getContext());
+        final Dialog dialog = new Dialog(mActivity);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.dialog_calendar);
 
@@ -429,9 +427,10 @@ public class RegisterFragment extends Fragment implements View.OnClickListener, 
         }
 
         try{
-            this.mDpkBirthDay.updateDate(Integer.parseInt(birthDate[2]), Integer.parseInt(birthDate[1]), Integer.parseInt(birthDate[0]));
+            //year-month-day
+            this.mDpkBirthDay.updateDate(Integer.parseInt(birthDate[2]), Integer.parseInt(birthDate[1]) - 1, Integer.parseInt(birthDate[0]));
         }
-        catch (Exception e){}
+        catch (Exception ignored){}
 
     }
 
@@ -446,7 +445,7 @@ public class RegisterFragment extends Fragment implements View.OnClickListener, 
     @Override
     public void onPositiveButtonClick(int option) {
         if(option == Constant.HANDLE_SUCCESSFUL){
-            ViewPager viewPager = getActivity().findViewById(R.id.view_pager);
+            ViewPager viewPager = mActivity.findViewById(R.id.view_pager);
             viewPager.setCurrentItem(0);
         }
         else if(option == Constant.EXISTED){
@@ -466,7 +465,7 @@ public class RegisterFragment extends Fragment implements View.OnClickListener, 
         switch (v.getId()){
             case R.id.edt_username:
                 if(this.mEdtUsername.getText().toString().trim().equals("")){
-                    this.mEdtUsername.setBackground(getResources().getDrawable(R.drawable.custom_border_red_backgroud_white));
+                    this.mEdtUsername.setBackground(getResources().getDrawable(R.drawable.custom_border_red_backgroud_gray));
                 }
                 else{
                     this.mEdtUsername.setBackground(getResources().getDrawable(R.drawable.custom_border_gray_backgroud_default));
@@ -474,7 +473,7 @@ public class RegisterFragment extends Fragment implements View.OnClickListener, 
                 break;
             case R.id.edt_email_address:
                 if(!FormatPattern.checkEmail(this.mEdtEmail.getText().toString().trim())){
-                    this.mEdtEmail.setBackground(getResources().getDrawable(R.drawable.custom_border_red_backgroud_white));
+                    this.mEdtEmail.setBackground(getResources().getDrawable(R.drawable.custom_border_red_backgroud_gray));
                 }
                 else{
                     this.mEdtEmail.setBackground(getResources().getDrawable(R.drawable.custom_border_gray_backgroud_default));
@@ -482,51 +481,30 @@ public class RegisterFragment extends Fragment implements View.OnClickListener, 
                 break;
             case R.id.edt_password:
                 if(this.mEdtPassword.getText().toString().trim().length() < 6 || this.mEdtPassword.getText().toString().trim().length() > 20){
-                    this.mEdtPassword.setBackground(getResources().getDrawable(R.drawable.custom_border_red_backgroud_white));
+                    this.mRlPassword.setBackground(getResources().getDrawable(R.drawable.custom_border_red_backgroud_gray));
                 }
                 else{
-                    this.mEdtPassword.setBackground(getResources().getDrawable(R.drawable.custom_border_gray_backgroud_default));
+                    this.mRlPassword.setBackground(getResources().getDrawable(R.drawable.custom_border_gray_backgroud_default));
                 }
                 break;
             case R.id.edt_confirm_password:
                 if(!this.mEdtPassword.getText().toString().trim().equals(this.mEdtConfirmPassword.getText().toString().trim())){
-                    this.mEdtConfirmPassword.setBackground(getResources().getDrawable(R.drawable.custom_border_red_backgroud_white));
+                    this.mRlConfirmPassword.setBackground(getResources().getDrawable(R.drawable.custom_border_red_backgroud_gray));
                 }
                 else{
-                    this.mEdtConfirmPassword.setBackground(getResources().getDrawable(R.drawable.custom_border_gray_backgroud_default));
+                    this.mRlConfirmPassword.setBackground(getResources().getDrawable(R.drawable.custom_border_gray_backgroud_default));
                 }
                 break;
             case R.id.edt_phone_number:
                 if(!FormatPattern.checkNumberPhone(this.mEdtPhoneNumber.getText().toString().trim())){
-                    this.mEdtPhoneNumber.setBackground(getResources().getDrawable(R.drawable.custom_border_red_backgroud_white));
+                    this.mEdtPhoneNumber.setBackground(getResources().getDrawable(R.drawable.custom_border_red_backgroud_gray));
                 }
                 else{
                     this.mEdtPhoneNumber.setBackground(getResources().getDrawable(R.drawable.custom_border_gray_backgroud_default));
                 }
+                break;
         }
 
         return false;
-    }
-
-    @Override
-    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-        switch (buttonView.getId()){
-            case R.id.swt_password:
-                if(!isChecked){
-                    this.mEdtPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
-                }
-                else{
-                    this.mEdtPassword.setInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
-                }
-                break;
-            case R.id.swt_confirm_password:
-                if(!isChecked){
-                    this.mEdtConfirmPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
-                }
-                else{
-                    this.mEdtConfirmPassword.setInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
-                }
-                break;
-        }
     }
 }

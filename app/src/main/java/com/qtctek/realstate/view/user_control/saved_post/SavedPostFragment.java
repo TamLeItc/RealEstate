@@ -30,6 +30,8 @@ import java.util.HashMap;
 public class SavedPostFragment extends Fragment implements ViewHandleSavedPost,
         AbsListView.OnScrollListener, AdapterView.OnItemClickListener, View.OnClickListener {
 
+    private UserControlActivity mActivity;
+
     private View mView;
 
     private ListView mLsvSavedPost;
@@ -50,15 +52,11 @@ public class SavedPostFragment extends Fragment implements ViewHandleSavedPost,
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         mView = inflater.inflate(R.layout.fragment_posted_post_saved_post, container, false);
 
-        return mView;
-    }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
+        this.mActivity = (UserControlActivity)getActivity();
         initViews();
-
         handleStart();
+
+        return mView;
     }
 
     private void initViews(){
@@ -73,13 +71,13 @@ public class SavedPostFragment extends Fragment implements ViewHandleSavedPost,
 
     private void handleStart(){
 
-        ((UserControlActivity)getActivity()).dialogHelper.show();
+        mActivity.getDialogHelper().show();
 
         this.mPresenterSavedPost = new PresenterSavedPost(this);
 
         this.mPresenterSavedPost.handleGetSavedProductList(0, 20, getStrProductIdList(ListPostNewsFragment.LIST_SAVED_PRODUCT_ID));
 
-        this.mAdapterListPost = new AdapterPostSale(mArrListProduct, getActivity(), R.layout.item_post);
+        this.mAdapterListPost = new AdapterPostSale(mArrListProduct, mActivity, R.layout.item_post);
         this.mLsvSavedPost.setAdapter(this.mAdapterListPost);
     }
 
@@ -119,12 +117,12 @@ public class SavedPostFragment extends Fragment implements ViewHandleSavedPost,
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.action_view_detail:
-                        Intent intent = new Intent(getActivity(), PostDetailActivity.class);
+                        Intent intent = new Intent(mActivity, PostDetailActivity.class);
                         intent.putExtra(Product.ID, mArrListProduct.get(mPositionClick).getId());
                         startActivity(intent);
                         break;
                     case R.id.action_un_save:
-                        ((UserControlActivity)getActivity()).dialogHelper.show();
+                        mActivity.getDialogHelper().show();
                         String id = mArrListProduct.get(mPositionClick).getId() + "";
                         ListPostNewsFragment.LIST_SAVED_PRODUCT_ID.remove(id);
                         mPresenterSavedPost.handleUpdateDataProductIds(ListPostNewsFragment.LIST_SAVED_PRODUCT_ID, getContext());
@@ -169,11 +167,11 @@ public class SavedPostFragment extends Fragment implements ViewHandleSavedPost,
 
     @Override
     public void onHandleUpdateProductIdListSuccessful() {
-        ((UserControlActivity)getActivity()).dialogHelper.dismiss();
+        mActivity.getDialogHelper().dismiss();
         this.mArrListProduct.remove(mPositionClick);
         mAdapterListPost.notifyDataSetChanged();
 
-        ((UserControlActivity)getActivity()).toastHelper.toast(R.string.unsave_successful, ToastHelper.LENGTH_SHORT);
+        mActivity.getToastHelper().toast(R.string.unsave_successful, ToastHelper.LENGTH_SHORT);
 
         if(mArrListProduct.size() > 0){
             this.mTxvInformation.setVisibility(View.GONE);
@@ -186,14 +184,14 @@ public class SavedPostFragment extends Fragment implements ViewHandleSavedPost,
 
     @Override
     public void onHandleUpdateProductIdListError(String e) {
-        ((UserControlActivity)getActivity()).dialogHelper.dismiss();
+        mActivity.getDialogHelper().dismiss();
 
-        ((UserControlActivity)getActivity()).toastHelper.toast(R.string.unsave_failed, ToastHelper.LENGTH_SHORT);
+        mActivity.getToastHelper().toast(R.string.unsave_failed, ToastHelper.LENGTH_SHORT);
     }
 
     @Override
     public void onHandleSavedProductListSuccessful(ArrayList<Product> arrListProduct) {
-        ((UserControlActivity)getActivity()).dialogHelper.dismiss();
+        mActivity.getDialogHelper().dismiss();
         this.mArrListProduct.addAll(arrListProduct);
         this.mAdapterListPost.notifyDataSetChanged();
 
@@ -212,7 +210,7 @@ public class SavedPostFragment extends Fragment implements ViewHandleSavedPost,
         this.mTxvInformation.setText(getResources().getString(R.string.load_data_error));
         this.mTxvInformation.setVisibility(View.VISIBLE);
 
-        ((UserControlActivity)getActivity()).toastHelper.toast(getResources().getString(R.string.load_data_error), ToastHelper.LENGTH_SHORT);
+        mActivity.getToastHelper().toast(getResources().getString(R.string.load_data_error), ToastHelper.LENGTH_SHORT);
     }
 
     @Override

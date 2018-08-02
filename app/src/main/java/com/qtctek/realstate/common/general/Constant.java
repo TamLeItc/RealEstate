@@ -24,6 +24,7 @@ public class Constant {
     public static final String NOW_PASSWORD_INCORRECT = "old_password_not_true";
 
 
+    public static final int UPDATE = 1000;
     public static final int OPTION_MENU_SELECTED = 1001;
     public static final int INSERT_DATABASE = 1002;
     public static final int HANDLE_ERROR = 1003;

@@ -1,5 +1,6 @@
 package com.qtctek.realstate.view.user_control.fragment;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -9,6 +10,7 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.qtctek.realstate.R;
@@ -22,9 +24,12 @@ import com.qtctek.realstate.view.user_control.activity.UserControlActivity;
 
 public class UserControlFragment extends Fragment implements View.OnClickListener, AlertHelper.AlertHelperCallback {
 
+    private UserControlActivity mActivity;
+
     private View mView;
 
-    private TextView mTxvTitle;
+    public static TextView TXV_USER_NAME_TITLE;
+    public static TextView TXV_USER_NAME_LOGOUT;
     private TextView mTxvNewPost;
     private View mView1;
     private TextView mTxvPostedPost;
@@ -35,26 +40,23 @@ public class UserControlFragment extends Fragment implements View.OnClickListene
     private TextView mTxvIntroduction;
     private TextView mTxvFeedback;
     private TextView mTxvUpdateInformation;
-    private TextView mTxvLogout;
+    private LinearLayout mLlLogout;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         this.mView = inflater.inflate(R.layout.fragment_user_control, container, false);
 
+        this.mActivity = (UserControlActivity)getActivity();
+        initViews();
+        changeUserName();
+
         return this.mView;
     }
 
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
-        initViews();
-        handleStart();
-    }
-
     private void initViews(){
-        this.mTxvTitle = mView.findViewById(R.id.txv_title);
+        TXV_USER_NAME_TITLE = mView.findViewById(R.id.txv_user_name_title);
+        TXV_USER_NAME_LOGOUT = mView.findViewById(R.id.txv_user_name_logout);
         this.mTxvNewPost = mView.findViewById(R.id.txv_new_post);
         this.mView1 = mView.findViewById(R.id.view_1);
         this.mTxvPostedPost = mView.findViewById(R.id.txv_posted_post);
@@ -65,7 +67,7 @@ public class UserControlFragment extends Fragment implements View.OnClickListene
         this.mTxvIntroduction = mView.findViewById(R.id.txv_introduction);
         this.mTxvFeedback = mView.findViewById(R.id.txv_feedback);
         this.mTxvUpdateInformation = mView.findViewById(R.id.txv_update_information);
-        this.mTxvLogout = mView.findViewById(R.id.txv_logout);
+        this.mLlLogout = mView.findViewById(R.id.ll_logout);
 
         if(MainActivity.USER.getLevel() == 1){
             this.mTxvNewPost.setVisibility(View.GONE);
@@ -92,12 +94,13 @@ public class UserControlFragment extends Fragment implements View.OnClickListene
         this.mTxvSavedSearch.setOnClickListener(this);
         this.mTxvFeedback.setOnClickListener(this);
         this.mTxvIntroduction.setOnClickListener(this);
-        this.mTxvLogout.setOnClickListener(this);
+        this.mLlLogout.setOnClickListener(this);
     }
 
-    public void handleStart(){
-        this.mTxvTitle.append(MainActivity.USER.getFullName() + ",");
-        this.mTxvLogout.append(" (" + MainActivity.USER.getFullName() + ")");
+    @SuppressLint("SetTextI18n")
+    public void changeUserName(){
+        TXV_USER_NAME_TITLE.setText(MainActivity.USER.getFullName() + ",");
+        TXV_USER_NAME_LOGOUT.setText(" (" + MainActivity.USER.getFullName() + ")");
     }
 
 
@@ -138,18 +141,18 @@ public class UserControlFragment extends Fragment implements View.OnClickListene
                 break;
             case R.id.txv_introduction:
             case R.id.txv_feedback:
-                ((UserControlActivity)getActivity()).toastHelper.toast("Chức năng đang được phát triển." +
+                mActivity.getToastHelper().toast("Chức năng đang được phát triển." +
                         " Vui lòng quay lại sau", ToastHelper.LENGTH_SHORT);
                 break;
             case R.id.txv_update_information:
-                Intent intent1 = new Intent(getActivity(), UserActionActivity.class);
+                Intent intent1 = new Intent(mActivity, UserActionActivity.class);
                 intent1.putExtra(Constant.OPTION, Constant.UPDATE_ACCOUNT_INFORMATION);
                 startActivity(intent1);
-                getActivity().finish();
+                mActivity.finish();
                 break;
-            case R.id.txv_logout:
-                ((UserControlActivity)getActivity()).alertHelper.setCallback(this);
-                ((UserControlActivity)getActivity()).alertHelper.alert(getResources().getString(R.string.log_out), getResources().getString(R.string.log_out_notifaction), false,
+            case R.id.ll_logout:
+                mActivity.getAlertHelper().setCallback(this);
+                mActivity.getAlertHelper().alert(getResources().getString(R.string.log_out), getResources().getString(R.string.log_out_notifaction), false,
                         getResources().getString(R.string.ok), getResources().getString(R.string.cancel), Constant.LOGOUT);
                 break;
         }
@@ -161,7 +164,7 @@ public class UserControlFragment extends Fragment implements View.OnClickListene
             MainActivity.USER.clearData();
             Intent intent = new Intent(getActivity(), UserActionActivity.class);
             startActivity(intent);
-            getActivity().finish();
+            mActivity.finish();
         }
     }
 

@@ -262,6 +262,7 @@
     <string name="disable_user_successful">Khóa tài khoản thành công</string>
     <string name="update_status_user_error">Cập nhật trạng thái user thất bại</string>
     <string name="permission_denied">Quyền user bị từ tối</string>
+    <string name="email">Email</string>
 
 
 </resources>

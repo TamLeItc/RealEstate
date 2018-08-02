@@ -126,7 +126,7 @@
                 android:layout_below="@id/chk_rent"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="@dimen/_30dp"
-                android:background="@drawable/custom_btn_main"
+                android:background="@drawable/custom_btn_main_backgroud"
                 android:paddingLeft="@dimen/_20dp"
                 android:paddingRight="@dimen/_20dp"
                 android:text="@string/confirm"

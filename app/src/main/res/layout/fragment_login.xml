@@ -24,7 +24,7 @@
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="@dimen/_20dp"
             android:layout_marginTop="@dimen/_10dp"
-            android:background="@color/colorRed" />
+            android:background="@color/colorRedLight" />
 
         <TextView
             android:id="@+id/txv_email_address"
@@ -59,26 +59,38 @@
             android:textSize="@dimen/_10sp"
             android:textColor="@color/colorGrayDark"/>
 
-        <Switch
-            android:id="@+id/swt_show_password"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/edt_email_address"
-            android:layout_alignParentEnd="true"
-            android:textSize="@dimen/_9sp"
-            android:textColor="@color/colorGrayDark"/>
-
-        <EditText
-            android:selectAllOnFocus="true"
-            android:id="@+id/edt_password"
+        <RelativeLayout
+            android:orientation="horizontal"
+            android:id="@+id/ll_password"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/_40dp"
+            android:layout_height="wrap_content"
             android:layout_below="@+id/txv_password"
-            android:background="@drawable/custom_border_gray_backgroud_default"
-            android:inputType="textPassword"
-            android:paddingLeft="@dimen/_8dp"
-            android:paddingRight="@dimen/_8dp"
-            android:textSize="@dimen/_10sp" />
+            android:background="@drawable/custom_border_gray_backgroud_default">
+
+            <EditText
+                android:background="@null"
+                android:selectAllOnFocus="true"
+                android:id="@+id/edt_password"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_40dp"
+                android:inputType="textPassword"
+                android:paddingLeft="@dimen/_8dp"
+                android:paddingRight="@dimen/_8dp"
+                android:textSize="@dimen/_10sp"
+                android:layout_toLeftOf="@+id/imv_show_password"/>
+
+            <ImageView
+                android:padding="@dimen/_10dp"
+                android:layout_alignParentRight="true"
+                android:id="@+id/imv_show_password"
+                android:layout_width="@dimen/_40dp"
+                android:layout_height="@dimen/_40dp"
+                android:background="?attr/selectableItemBackground"
+                android:src="@drawable/icon_visibility_black_24dp"/>
+
+
+        </RelativeLayout>
+
 
         <CheckBox
             android:textColor="@color/colorGrayDark"
@@ -86,7 +98,7 @@
             android:id="@+id/chk_save_login"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/edt_password"
+            android:layout_below="@+id/ll_password"
             android:text="@string/save_login"
             android:textSize="@dimen/_9sp"/>
 
@@ -97,7 +109,7 @@
             android:id="@+id/txv_forgot_password"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/edt_password"
+            android:layout_below="@+id/ll_password"
             android:layout_alignParentEnd="true"
             android:text="@string/forgot_password" />
 
@@ -109,7 +121,7 @@
             android:layout_below="@+id/chk_save_login"
             android:layout_marginBottom="@dimen/_5dp"
             android:layout_marginTop="@dimen/_15dp"
-            android:background="@drawable/custom_btn_main"
+            android:background="@drawable/custom_btn_main_backgroud"
             android:text="@string/login"
             android:textColor="@color/colorGrayDark"
             android:textSize="@dimen/_9sp" />

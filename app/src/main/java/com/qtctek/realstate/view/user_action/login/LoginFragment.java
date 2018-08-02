@@ -1,25 +1,22 @@
 package com.qtctek.realstate.view.user_action.login;
 
-import android.app.AlertDialog;
-import android.app.Dialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
-import android.text.InputType;
+import android.text.style.UnderlineSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.Switch;
+import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.qtctek.realstate.R;
 import com.qtctek.realstate.common.general.Constant;
@@ -28,67 +25,64 @@ import com.qtctek.realstate.common.general.HashMD5;
 import com.qtctek.realstate.helper.AlertHelper;
 import com.qtctek.realstate.helper.ToastHelper;
 import com.qtctek.realstate.presenter.user_action.login.PresenterLogin;
-import com.qtctek.realstate.view.new_post.activity.NewPostActivity;
 import com.qtctek.realstate.view.post_news.activity.MainActivity;
 import com.qtctek.realstate.view.user_action.activity.UserActionActivity;
 import com.qtctek.realstate.view.user_control.activity.UserControlActivity;
 
+
 public class LoginFragment extends Fragment implements ViewHandleLogin, View.OnClickListener, CompoundButton.OnCheckedChangeListener {
+
+    private UserActionActivity mActivity;
 
     private View mView;
 
     private EditText mEdtEmail;
     private EditText mEdtPassword;
-    private Button mBtnConfirm;
+    private CheckBox mChkSaveLogin;
+    private ImageView mImvShowPassword;
     private TextView mTxvForgotPassword;
     private TextView mTxvRegister;
-    private CheckBox mChkSaveLogin;
-    private Switch mSwtShowPassword;
 
     private PresenterLogin mPresenterUserManager;
 
+    private boolean mIsShowPassword = false;
+
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         mView = inflater.inflate(R.layout.fragment_login, container, false);
 
+        this.mActivity = (UserActionActivity)getActivity();
+
         MainActivity.ON_USER_LOGIN.onUserLoginSuccessful();
-
-        return mView;
-    }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
         unitViews();
         handleStart();
 
+        return mView;
     }
 
     private void unitViews(){
         this.mEdtPassword = this.mView.findViewById(R.id.edt_password);
         this.mEdtEmail = this.mView.findViewById(R.id.edt_email_address);
-        this.mBtnConfirm = this.mView.findViewById(R.id.btn_login);
-        this.mTxvForgotPassword = this.mView.findViewById(R.id.txv_forgot_password);
-        this.mTxvRegister = this.mView.findViewById(R.id.txv_register_user);
         this.mChkSaveLogin = mView.findViewById(R.id.chk_save_login);
-        this.mSwtShowPassword = mView.findViewById(R.id.swt_show_password);
+
+        Button mBtnConfirm = this.mView.findViewById(R.id.btn_login);
+        mTxvForgotPassword = this.mView.findViewById(R.id.txv_forgot_password);
+        mTxvRegister = this.mView.findViewById(R.id.txv_register_user);
+        mImvShowPassword = this.mView.findViewById(R.id.imv_show_password);
 
 
-        this.mBtnConfirm.setOnClickListener(this);
-        this.mTxvForgotPassword.setOnClickListener(this);
-        this.mTxvRegister.setOnClickListener(this);
+        mBtnConfirm.setOnClickListener(this);
+        mTxvForgotPassword.setOnClickListener(this);
+        mTxvRegister.setOnClickListener(this);
         this.mChkSaveLogin.setOnCheckedChangeListener(this);
-        this.mSwtShowPassword.setOnCheckedChangeListener(this);
+        mImvShowPassword.setOnClickListener(this);
 
     }
 
     private void handleStart(){
-
         this.mPresenterUserManager = new PresenterLogin(this);
         mPresenterUserManager.handleGetDataSaveLogin(getContext());
-
     }
 
     private void handleLogin(){
@@ -97,14 +91,14 @@ public class LoginFragment extends Fragment implements ViewHandleLogin, View.OnC
         String password = this.mEdtPassword.getText().toString().trim();
 
         if(email.equals("")){
-            ((UserActionActivity)getActivity()).toastHelper.toast(getResources().getString(R.string.please_enter_username_or_email), ToastHelper.LENGTH_SHORT);
+            mActivity.getToastHelper().toast(R.string.please_enter_username_or_email, ToastHelper.LENGTH_SHORT);
             this.mEdtPassword.setText("");
             this.mEdtEmail.requestFocus();
         } else if(password.equals("")){
-            ((UserActionActivity)getActivity()).toastHelper.toast(getResources().getString(R.string.please_enter_password), ToastHelper.LENGTH_SHORT);
+            mActivity.getToastHelper().toast(R.string.please_enter_password, ToastHelper.LENGTH_SHORT);
             this.mEdtPassword.requestFocus();
         } else {
-            ((UserActionActivity)getActivity()).dialogHelper.show();
+            mActivity.getDialogHelper().show();
             String passwordMD5 = HashMD5.md5(password);
             this.mPresenterUserManager.handleCheckUserLogin(email, passwordMD5);
         }
@@ -112,20 +106,18 @@ public class LoginFragment extends Fragment implements ViewHandleLogin, View.OnC
 
     @Override
     public void onHandleCheckUserNotExists() {
-        ((UserActionActivity)getActivity()).dialogHelper.dismiss();
-        ((UserActionActivity)getActivity()).toastHelper.toast(getResources().getString(R.string.information_login_incorrect), ToastHelper.LENGTH_SHORT);
+        mActivity.getDialogHelper().dismiss();
+        mActivity.getToastHelper().toast(R.string.information_login_incorrect, ToastHelper.LENGTH_SHORT);
         this.mEdtPassword.requestFocus();
         this.mEdtPassword.setText("");
-
     }
 
     @Override
     public void onHandleCheckUserLoginSuccessful(User user) {
-        ((UserActionActivity)getActivity()).dialogHelper.dismiss();
+        mActivity.getDialogHelper().dismiss();
         if(user.getStatus().equals(Constant.NO)){
-            ((NewPostActivity)getActivity()).alertHelper.alert(getResources().getString(R.string.error),
-                    getResources().getString(R.string.account_disable), false,
-                    getResources().getString(R.string.ok), AlertHelper.ALERT_NO_ACTION);
+            mActivity.getAlertHelper().alert(R.string.error, R.string.account_disable,
+                    false, R.string.ok, AlertHelper.ALERT_NO_ACTION);
         }
         else{
             MainActivity.USER = user;
@@ -133,9 +125,9 @@ public class LoginFragment extends Fragment implements ViewHandleLogin, View.OnC
             handleSaveLogin();
 
             MainActivity.ON_USER_LOGIN.onUserLoginSuccessful();
-            Intent intent = new Intent(getActivity(), UserControlActivity.class);
+            Intent intent = new Intent(mActivity, UserControlActivity.class);
             startActivity(intent);
-            getActivity().finish();
+            mActivity.finish();
         }
     }
 
@@ -144,8 +136,8 @@ public class LoginFragment extends Fragment implements ViewHandleLogin, View.OnC
             mPresenterUserManager.handleUpdateDataSaveLogin("", "", getContext());
         }
         else{
-            String username = "";
-            if(MainActivity.USER.getUsername().equals(this.mEdtEmail.getText())){
+            String username;
+            if(MainActivity.USER.getUsername().equals(this.mEdtEmail.getText().toString())){
                 username = MainActivity.USER.getUsername();
             }
             else{
@@ -157,12 +149,10 @@ public class LoginFragment extends Fragment implements ViewHandleLogin, View.OnC
 
     @Override
     public void onHandleCheckUserLoginError(String error) {
+        mActivity.getDialogHelper().dismiss();
 
-        ((UserActionActivity)getActivity()).dialogHelper.dismiss();
-
-        ((UserActionActivity)getActivity()).alertHelper.alert(getResources().getString(R.string.error),
-                getResources().getString(R.string.login_failed), false, getResources().getString(R.string.ok),
-                AlertHelper.ALERT_NO_ACTION);
+        mActivity.getAlertHelper().alert(R.string.error,
+                R.string.login_failed, false, R.string.ok, AlertHelper.ALERT_NO_ACTION);
     }
 
     @Override
@@ -181,7 +171,7 @@ public class LoginFragment extends Fragment implements ViewHandleLogin, View.OnC
 
     @Override
     public void onGetDataSaveLoginError(String error) {
-        ((UserActionActivity)getActivity()).toastHelper.toast(getResources().getString(R.string.error_handle), ToastHelper.LENGTH_SHORT);
+        mActivity.getToastHelper().toast(R.string.error_handle, ToastHelper.LENGTH_SHORT);
         this.mEdtEmail.setText("");
         this.mEdtPassword.setText("");
     }
@@ -203,20 +193,40 @@ public class LoginFragment extends Fragment implements ViewHandleLogin, View.OnC
                 handleLogin();
                 break;
             case R.id.txv_register_user:
-                ViewPager viewPager = getActivity().findViewById(R.id.view_pager);
+                handleChangeColorClickTextView(mTxvRegister);
+                ViewPager viewPager = mActivity.findViewById(R.id.view_pager);
                 viewPager.setCurrentItem(1);
                 break;
             case R.id.txv_forgot_password:
-                ViewPager viewPager1 = getActivity().findViewById(R.id.view_pager);
+                handleChangeColorClickTextView(mTxvForgotPassword);
+                ViewPager viewPager1 = mActivity.findViewById(R.id.view_pager);
                 viewPager1.setCurrentItem(2);
                 break;
+            case R.id.imv_show_password:
+                handleShowPassword();
         }
+    }
+
+    public void handleChangeColorClickTextView(final TextView textView){
+        textView.setTextColor(getResources().getColor(R.color.colorBlack));
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                textView.setTextColor(getResources().getColor(R.color.colorGrayDark));
+            }
+        }, 50);
+    }
+
+    private void handleShowPassword(){
+        mActivity.handleShowPassword(mImvShowPassword, mEdtPassword, mIsShowPassword);
+
+        mIsShowPassword = !mIsShowPassword;
     }
 
     @Override
     public void onDestroyView() {
 
-        ((UserActionActivity)getActivity()).dialogHelper.dismiss();
+        mActivity.getDialogHelper().dismiss();
         Runtime.getRuntime().gc();
         System.gc();
 
@@ -229,14 +239,6 @@ public class LoginFragment extends Fragment implements ViewHandleLogin, View.OnC
             case R.id.chk_save_login:
                 if(!isChecked){
                     mPresenterUserManager.handleUpdateDataSaveLogin("", "", getContext());
-                }
-                break;
-            case R.id.swt_show_password:
-                if(!isChecked){
-                    this.mEdtPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
-                }
-                else{
-                    this.mEdtPassword.setInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
                 }
                 break;
         }

@@ -21,7 +21,6 @@ public class ModelUpdateUser {
     private PresenterImpHandleUpdateUser mPresenterImpHandleUpdateUser;
 
     private String mUrlUpdateUser = MainActivity.WEB_SERVER + "udpate_user.php";
-    private String mUrlGetInformationUser = MainActivity.WEB_SERVER + "get_information_user.php";
 
     public ModelUpdateUser(PresenterImpHandleUpdateUser presenterImpHandleUpdateUser){
         this.mPresenterImpHandleUpdateUser = presenterImpHandleUpdateUser;

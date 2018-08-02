@@ -1,6 +1,7 @@
 package com.qtctek.realstate.view.user_control.posted_post;
 
 ;
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -37,6 +38,8 @@ public class PostedPostFragment extends Fragment implements ViewHandlePostedPost
         AbsListView.OnScrollListener, AdapterView.OnItemClickListener, AlertHelper.AlertHelperCallback,
         ManagementFilterCallback, View.OnClickListener {
 
+    private UserControlActivity mActivity;
+
     private View mView;
 
     private ListView mLsvPostedPost;
@@ -57,16 +60,13 @@ public class PostedPostFragment extends Fragment implements ViewHandlePostedPost
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         mView = inflater.inflate(R.layout.fragment_posted_post_saved_post, container, false);
 
-        ((UserControlActivity)getActivity()).postFilterCallback = this;
-
-        return mView;
-    }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
+        this.mActivity = (UserControlActivity)getActivity();
         initViews();
         handleStart();
+
+        mActivity.postFilterCallback = this;
+
+        return mView;
     }
 
     private void initViews(){
@@ -81,11 +81,11 @@ public class PostedPostFragment extends Fragment implements ViewHandlePostedPost
 
     private void handleStart(){
 
-        ((UserControlActivity)getActivity()).dialogHelper.show();
+        mActivity.getDialogHelper().show();
 
         this.mPresenterPostedPost = new PresenterPostedPost(this);
         this.mPresenterPostedPost.handleGetListPostedPost(0, 20, MainActivity.USER.getEmail(),
-                ((UserControlActivity)getActivity()).productFormality, ((UserControlActivity)getActivity()).productStatus);
+                mActivity.productFormality, mActivity.productStatus);
 
         this.mAdapterListPost = new AdapterPostSale(mArrProduct, getActivity(), R.layout.item_post);
         this.mLsvPostedPost.setAdapter(this.mAdapterListPost);
@@ -96,7 +96,7 @@ public class PostedPostFragment extends Fragment implements ViewHandlePostedPost
     @Override
     public void onHandlePostListSuccessful(ArrayList<Product> arrListPost) {
 
-        ((UserControlActivity)getActivity()).dialogHelper.dismiss();
+        mActivity.getDialogHelper().dismiss();
 
         if(mIsFirstLoad){
             this.mArrProduct.clear();
@@ -109,9 +109,9 @@ public class PostedPostFragment extends Fragment implements ViewHandlePostedPost
         if(mArrProduct.size() > 0){
             this.mTxvInformation.setVisibility(View.GONE);
 
-            if(((UserControlActivity)getActivity()).isFilter){
+            if(mActivity.isFilter){
                 mLsvPostedPost.smoothScrollToPosition(0);
-                ((UserControlActivity)getActivity()).isFilter = false;
+                mActivity.isFilter = false;
             }
         }
         else{
@@ -126,16 +126,16 @@ public class PostedPostFragment extends Fragment implements ViewHandlePostedPost
         this.mTxvInformation.setText(getResources().getString(R.string.load_data_error));
         this.mTxvInformation.setVisibility(View.VISIBLE);
 
-        ((UserControlActivity)getActivity()).dialogHelper.dismiss();
+        mActivity.getDialogHelper().dismiss();
 
-        ((UserControlActivity)getActivity()).toastHelper.toast(R.string.load_data_error, ToastHelper.LENGTH_SHORT);
+        mActivity.getToastHelper().toast(R.string.load_data_error, ToastHelper.LENGTH_SHORT);
     }
 
     @Override
     public void onDeletePostSuccessful() {
 
-        ((UserControlActivity)getActivity()).dialogHelper.dismiss();
-        ((UserControlActivity)getActivity()).toastHelper.toast(R.string.delete_successful, ToastHelper.LENGTH_SHORT);
+        mActivity.getDialogHelper().dismiss();
+        mActivity.getToastHelper().toast(R.string.delete_successful, ToastHelper.LENGTH_SHORT);
         mArrProduct.remove(mPositionClick);
         mAdapterListPost.notifyDataSetChanged();
 
@@ -153,9 +153,9 @@ public class PostedPostFragment extends Fragment implements ViewHandlePostedPost
     public void onDeletePostError(String error) {
 
 
-        ((UserControlActivity)getActivity()).dialogHelper.dismiss();
+        mActivity.getDialogHelper().dismiss();
 
-        ((UserControlActivity)getActivity()).toastHelper.toast(R.string.delete_failed, ToastHelper.LENGTH_SHORT);
+        mActivity.getToastHelper().toast(R.string.delete_failed, ToastHelper.LENGTH_SHORT);
     }
 
 
@@ -165,9 +165,9 @@ public class PostedPostFragment extends Fragment implements ViewHandlePostedPost
                 && (mLsvPostedPost.getLastVisiblePosition() - mLsvPostedPost.getHeaderViewsCount() -
                 mLsvPostedPost.getFooterViewsCount()) >= (mAdapterListPost.getCount() - 1)) {
 
-            ((UserControlActivity)getActivity()).dialogHelper.show();
+            mActivity.getDialogHelper().show();
             this.mPresenterPostedPost.handleGetListPostedPost(this.mArrProduct.size(), 20, MainActivity.USER.getEmail(),
-                    ((UserControlActivity)getActivity()).productFormality, ((UserControlActivity)getActivity()).productStatus);
+                    mActivity.productFormality, mActivity.productStatus);
         }
 
     }
@@ -194,7 +194,7 @@ public class PostedPostFragment extends Fragment implements ViewHandlePostedPost
 
         mRlPostItem.setBackground(getResources().getDrawable(R.drawable.custom_border_normal));
 
-        ((UserControlActivity)getActivity()).alertHelper.setCallback(this);
+        mActivity.getAlertHelper().setCallback(this);
         popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
@@ -206,13 +206,13 @@ public class PostedPostFragment extends Fragment implements ViewHandlePostedPost
                         break;
                     case R.id.action_edit_post:
 
-                        ((UserControlActivity)getActivity()).alertHelper.alert(getResources().getString(R.string.information),
+                        mActivity.getAlertHelper().alert(getResources().getString(R.string.information),
                                 getActivity().getResources().getString(R.string.confirm_edit_product), false,
                                 getResources().getString(R.string.ok),
                                 getResources().getString(R.string.cancel), Constant.EDIT);
                         break;
                     case R.id.action_delete_post:
-                        ((UserControlActivity)getActivity()).alertHelper.alert(getResources().getString(R.string.delete_post),
+                        mActivity.getAlertHelper().alert(getResources().getString(R.string.delete_post),
                                 getResources().getString(R.string.delete_post_notificaton), false, getResources().getString(R.string.ok),
                                 getResources().getString(R.string.cancel), Constant.DELETE);
                         break;
@@ -256,9 +256,9 @@ public class PostedPostFragment extends Fragment implements ViewHandlePostedPost
 
         mIsFirstLoad = true;
 
-        ((UserControlActivity)getActivity()).dialogHelper.show();
+        mActivity.getDialogHelper().show();
         this.mPresenterPostedPost.handleGetListPostedPost(0, 20, MainActivity.USER.getEmail(),
-                ((UserControlActivity)getActivity()).productFormality, ((UserControlActivity)getActivity()).productStatus);
+                mActivity.productFormality, mActivity.productStatus);
     }
 
     @Override

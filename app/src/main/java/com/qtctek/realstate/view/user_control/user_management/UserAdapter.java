@@ -1,7 +1,7 @@
 package com.qtctek.realstate.view.user_control.user_management;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
-import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +14,6 @@ import com.qtctek.realstate.common.general.Constant;
 import com.qtctek.realstate.dto.User;
 
 import java.util.ArrayList;
-import java.util.regex.Pattern;
 
 public class UserAdapter extends BaseAdapter {
 
@@ -41,6 +40,7 @@ public class UserAdapter extends BaseAdapter {
         return position;
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
@@ -67,8 +67,8 @@ public class UserAdapter extends BaseAdapter {
             return null;
         }
         viewHolder.txvName.setText(mContext.getResources().getString(R.string.name) + ": " + user.getFullName());
-        viewHolder.txvNumberPhone.setText(mContext.getResources().getString(R.string.acronym_number_phone) + "SDT: " + user.getPhone());
-        viewHolder.txvEmail.setText("Email: " + user.getEmail());
+        viewHolder.txvNumberPhone.setText(mContext.getResources().getString(R.string.acronym_number_phone) + ": " + user.getPhone());
+        viewHolder.txvEmail.setText(mContext.getResources().getString(R.string.email)+ ": " + user.getEmail());
         viewHolder.txvRole.setText(user.getType());
 
         if(user.getLevel() == 1){
@@ -83,7 +83,7 @@ public class UserAdapter extends BaseAdapter {
 
         if(mArrLisUser.get(position).getStatus().equals(Constant.NO)){
             viewHolder.txvStatus.setText(mContext.getResources().getString(R.string.not_active));
-            viewHolder.txvStatus.setTextColor(mContext.getResources().getColor(R.color.colorRed));
+            viewHolder.txvStatus.setTextColor(mContext.getResources().getColor(R.color.colorRedLight));
         }
         else{
             viewHolder.txvStatus.setText(mContext.getResources().getString(R.string.active));

@@ -1,5 +1,6 @@
 package com.qtctek.realstate.view.user_action.activity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -8,8 +9,10 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.InputType;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -29,11 +32,11 @@ public class UserActionActivity extends AppCompatActivity implements View.OnTouc
     private ImageView mImvBack;
     private TextView mTxvToolbarTitle;
 
-    private boolean mDoubleBackToExitPressedOnce = false;
+    private AlertHelper alertHelper;
+    private ToastHelper toastHelper;
+    private DialogHelper dialogHelper;
 
-    public AlertHelper alertHelper;
-    public ToastHelper toastHelper;
-    public DialogHelper dialogHelper;
+    private boolean mDoubleBackToExitPressedOnce = false;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -59,6 +62,21 @@ public class UserActionActivity extends AppCompatActivity implements View.OnTouc
         return alertHelper;
     }
 
+    public ToastHelper getToastHelper() {
+        if(toastHelper == null){
+            toastHelper = new ToastHelper(this);
+        }
+        return toastHelper;
+    }
+
+    public DialogHelper getDialogHelper() {
+        if(dialogHelper == null){
+            dialogHelper = new DialogHelper(this);
+        }
+        return dialogHelper;
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
     private void initViews(){
         mViewPager = (ViewPager) findViewById(R.id.view_pager);
         this.mToolbar = findViewById(R.id.toolbar);
@@ -91,10 +109,11 @@ public class UserActionActivity extends AppCompatActivity implements View.OnTouc
                 mViewPager.setCurrentItem(3);
             }
         }
-        catch (Exception exp){
+        catch (Exception ignored){
         }
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     public boolean onTouch(View v, MotionEvent event) {
         return true;
@@ -131,7 +150,7 @@ public class UserActionActivity extends AppCompatActivity implements View.OnTouc
         }
 
         this.mDoubleBackToExitPressedOnce = true;
-        toastHelper.toast(getResources().getString(R.string.double_press_back_to_exit), ToastHelper.LENGTH_SHORT);
+        toastHelper.toast(R.string.double_press_back_to_exit, ToastHelper.LENGTH_SHORT);
 
         new Handler().postDelayed(new Runnable() {
 
@@ -179,5 +198,22 @@ public class UserActionActivity extends AppCompatActivity implements View.OnTouc
     @Override
     public void onPageScrollStateChanged(int state) {
 
+    }
+
+    public void handleShowPassword(ImageView imv, EditText edt, boolean parameter){
+        if(parameter){
+            edt.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+            moveCursorEnd(edt);
+            imv.setImageDrawable(getResources().getDrawable(R.drawable.icon_visibility_black_24dp));
+        }
+        else{
+            edt.setInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
+            moveCursorEnd(edt);
+            imv.setImageDrawable(getResources().getDrawable(R.drawable.icon_visibility_off_black_24dp));
+        }
+    }
+
+    public void moveCursorEnd(EditText edt){
+        edt.setSelection(edt.getText().length());
     }
 }

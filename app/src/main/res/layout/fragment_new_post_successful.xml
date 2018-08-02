@@ -27,7 +27,7 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/_40dp"
             android:minHeight="@dimen/_0dp"
-            android:background="@drawable/custom_btn_main"
+            android:background="@drawable/custom_btn_main_backgroud"
             android:text="@string/view_posted_product"
             android:textSize="@dimen/_8sp"
             android:layout_weight="1"
@@ -41,7 +41,7 @@
             android:layout_marginLeft="@dimen/_20dp"
             android:layout_marginTop="@dimen/_20dp"
             android:layout_weight="1"
-            android:background="@drawable/custom_btn_main"
+            android:background="@drawable/custom_btn_main_backgroud"
             android:text="@string/add_new_post"
             android:textSize="@dimen/_8sp" />
 

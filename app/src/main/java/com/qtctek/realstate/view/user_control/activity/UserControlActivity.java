@@ -35,6 +35,7 @@ import com.qtctek.realstate.view.user_control.adapter.PostFilterAdapter;
 import com.qtctek.realstate.view.user_control.adapter.UserFilterAdapter;
 import com.qtctek.realstate.view.user_control.fragment.NotLoggedInControlFragment;
 import com.qtctek.realstate.view.user_control.fragment.LoggedInControlFragment;
+import com.qtctek.realstate.view.user_control.fragment.UserControlFragment;
 import com.qtctek.realstate.view.user_control.interfaces.ManagementFilterCallback;
 
 import java.util.ArrayList;
@@ -47,9 +48,9 @@ public class UserControlActivity extends AppCompatActivity implements AlertHelpe
     private ImageView mImvFilter;
     public TextView txvToolbarTitle;
 
-    public AlertHelper alertHelper;
-    public ToastHelper toastHelper;
-    public DialogHelper dialogHelper;
+    private AlertHelper alertHelper;
+    private ToastHelper toastHelper;
+    private DialogHelper dialogHelper;
 
     public ManagementFilterCallback postFilterCallback;
 
@@ -83,6 +84,27 @@ public class UserControlActivity extends AppCompatActivity implements AlertHelpe
         addToolbar();
         handleValueFromIntent();
         handleStart();
+    }
+
+    public AlertHelper getAlertHelper() {
+        if(alertHelper == null){
+            alertHelper = new AlertHelper(this);
+        }
+        return alertHelper;
+    }
+
+    public ToastHelper getToastHelper() {
+        if(toastHelper == null){
+            toastHelper = new ToastHelper(this);
+        }
+        return toastHelper;
+    }
+
+    public DialogHelper getDialogHelper() {
+        if(dialogHelper == null){
+            dialogHelper = new DialogHelper(this);
+        }
+        return dialogHelper;
     }
 
     private void initViews(){
@@ -189,7 +211,7 @@ public class UserControlActivity extends AppCompatActivity implements AlertHelpe
                     case R.id.action_update_information:
                         intent = new Intent(UserControlActivity.this, UserActionActivity.class);
                         intent.putExtra(Constant.OPTION, Constant.UPDATE_ACCOUNT_INFORMATION);
-                        startActivity(intent);
+                        startActivityForResult(intent, Constant.UPDATE);
                         finish();
                         break;
                     case R.id.action_login:
@@ -403,5 +425,18 @@ public class UserControlActivity extends AppCompatActivity implements AlertHelpe
 
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(requestCode == Constant.UPDATE && resultCode == RESULT_OK && data != null){
+            String fullName = data.getStringExtra(Constant.UPDATE_ACCOUNT_INFORMATION);
 
+            if(UserControlFragment.TXV_USER_NAME_TITLE != null){
+                UserControlFragment.TXV_USER_NAME_TITLE.setText(fullName);
+            }
+            if(UserControlFragment.TXV_USER_NAME_LOGOUT != null){
+                UserControlFragment.TXV_USER_NAME_LOGOUT.setText(fullName);
+            }
+
+        }
+    }
 }

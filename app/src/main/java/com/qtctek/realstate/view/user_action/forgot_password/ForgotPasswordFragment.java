@@ -1,8 +1,5 @@
 package com.qtctek.realstate.view.user_action.forgot_password;
 
-import android.app.AlertDialog;
-import android.app.Dialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -11,10 +8,9 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
+
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.qtctek.realstate.R;
 import com.qtctek.realstate.common.general.Constant;
@@ -29,13 +25,16 @@ import com.qtctek.realstate.presenter.user_action.register.PresenterRegister;
 import com.qtctek.realstate.view.user_action.activity.UserActionActivity;
 import com.qtctek.realstate.view.user_action.register.ViewHandleRegister;
 
+import java.util.Objects;
+
 public class ForgotPasswordFragment extends Fragment implements View.OnClickListener, ViewHandleForgotPassword ,
         ViewHandleRegister, AlertHelper.AlertHelperCallback {
+
+    private UserActionActivity mActivity;
 
     private View mView;
 
     private EditText mEdtEmail;
-    private Button mBtnConfirm;
 
     private PresenterRegister mPresenterRegister;
     private PresenterForgotPassword mPresenterForgotPassword;
@@ -45,6 +44,8 @@ public class ForgotPasswordFragment extends Fragment implements View.OnClickList
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         this.mView = inflater.inflate(R.layout.fragment_forgot_password, container, false);
 
+        this.mActivity = (UserActionActivity) getActivity();
+
         initViews();
         this.mPresenterRegister = new PresenterRegister(this);
         this.mPresenterForgotPassword = new PresenterForgotPassword(this);
@@ -52,24 +53,29 @@ public class ForgotPasswordFragment extends Fragment implements View.OnClickList
         return this.mView;
     }
 
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+    }
+
     private void initViews(){
         this.mEdtEmail = mView.findViewById(R.id.edt_email_address);
-        this.mBtnConfirm = mView.findViewById(R.id.btn_confirm);
+        Button mBtnConfirm = mView.findViewById(R.id.btn_confirm);
 
-        this.mBtnConfirm.setOnClickListener(this);
+        mBtnConfirm.setOnClickListener(this);
     }
 
     private void handleForgotPassword(){
         if(this.mEdtEmail.getText().toString().trim().equals("")){
-            ((UserActionActivity)getActivity()).toastHelper.toast(getResources().getString(R.string.please_enter_email), ToastHelper.LENGTH_SHORT);
+            mActivity.getToastHelper().toast(R.string.please_enter_email, ToastHelper.LENGTH_SHORT);
             this.mEdtEmail.requestFocus();
         }
         else if(!FormatPattern.checkEmail(this.mEdtEmail.getText().toString().trim())){
-            ((UserActionActivity)getActivity()).toastHelper.toast(getResources().getString(R.string.email_incorrect), ToastHelper.LENGTH_SHORT);
+            mActivity.getToastHelper().toast(R.string.email_incorrect, ToastHelper.LENGTH_SHORT);
             this.mEdtEmail.requestFocus();
         }
         else{
-            ((UserActionActivity)getActivity()).dialogHelper.show();
+            mActivity.getDialogHelper().show();
             this.mPresenterRegister.handleCheckEmail(this.mEdtEmail.getText().toString().trim(), "");
         }
     }
@@ -80,8 +86,7 @@ public class ForgotPasswordFragment extends Fragment implements View.OnClickList
             public void run() {
                 try {
                     GMailSender gMailSender = new GMailSender();
-                    gMailSender.sendMail("Reset mật khẩu tài khoản Real Estate", "Mật khẩu tài" +
-                            "khoản Real Estate mới là: " + newPasswork, mEdtEmail.getText().toString().trim());
+                    gMailSender.sendMail("Reset mật khẩu tài khoản Real Estate", String.format("Mật khẩu tàikhoản Real Estate mới là: %s", newPasswork), mEdtEmail.getText().toString().trim());
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -103,7 +108,7 @@ public class ForgotPasswordFragment extends Fragment implements View.OnClickList
 
     @Override
     public void onCheckExistEmail(String message) {
-        ((UserActionActivity)getActivity()).dialogHelper.dismiss();
+        mActivity.getDialogHelper().dismiss();
         if(message.equals(Constant.EMAIL_EXISTED)){
             String mNewPassword = RandomString.getSaltString();
             if(sendConfirmCodeToGMail(mNewPassword)){
@@ -111,49 +116,44 @@ public class ForgotPasswordFragment extends Fragment implements View.OnClickList
                         HashMD5.md5(mNewPassword));
             }
             else{
-                ((UserActionActivity)getActivity()).alertHelper.setCallback(this);
-                ((UserActionActivity)getActivity()).alertHelper.alert(getResources().getString(R.string.forgot_password),
-                        getResources().getString(R.string.reset_password_failed),
-                        false, getResources().getString(R.string.ok), AlertHelper.ALERT_NO_ACTION);
+                mActivity.getAlertHelper().setCallback(this);
+                mActivity.getAlertHelper().alert(R.string.error, R.string.reset_password_failed,
+                        false, R.string.ok, AlertHelper.ALERT_NO_ACTION);
             }
 
         }
         else{
-            ((UserActionActivity)getActivity()).alertHelper.setCallback(this);
-            ((UserActionActivity)getActivity()).alertHelper.alert(getResources().getString(R.string.forgot_password),
-                    getResources().getString(R.string.account_not_exist),
-                    false, getResources().getString(R.string.ok), AlertHelper.ALERT_NO_ACTION);
+            mActivity.getAlertHelper().setCallback(this);
+            mActivity.getAlertHelper().alert(R.string.error, R.string.account_not_exist,
+                    false, R.string.ok, AlertHelper.ALERT_NO_ACTION);
         }
     }
 
     @Override
     public void onConnectServerError(String s) {
-        ((UserActionActivity)getActivity()).dialogHelper.dismiss();
-        ((UserActionActivity)getActivity()).alertHelper.setCallback(this);
-        ((UserActionActivity)getActivity()).alertHelper.alert(getResources().getString(R.string.forgot_password),
-                getResources().getString(R.string.error_connect_notification),
-                false, getResources().getString(R.string.ok), AlertHelper.ALERT_NO_ACTION);
+        mActivity.getDialogHelper().dismiss();
+        mActivity.getAlertHelper().setCallback(this);
+        mActivity.getAlertHelper().alert(R.string.error,
+                R.string.error_connect_notification, false, R.string.ok, AlertHelper.ALERT_NO_ACTION);
     }
 
     @Override
     public void onResetPasswordSuccessful() {
-        ((UserActionActivity)getActivity()).dialogHelper.dismiss();
-        ((UserActionActivity)getActivity()).alertHelper.setCallback(this);
-        ((UserActionActivity)getActivity()).alertHelper.alert(getResources().getString(R.string.forgot_password),
-                getResources().getString(R.string.reset_password_successful),
-                false, getResources().getString(R.string.ok), Constant.HANDLE_SUCCESSFUL);
+        mActivity.getDialogHelper().dismiss();
+        mActivity.getAlertHelper().setCallback(this);
+        mActivity.getAlertHelper().alert(R.string.error,
+                R.string.reset_password_successful, false, R.string.ok, Constant.HANDLE_SUCCESSFUL);
 
     }
 
     @Override
     public void onResetPasswordError() {
 
-        ((UserActionActivity)getActivity()).dialogHelper.dismiss();
+        mActivity.getDialogHelper().dismiss();
 
-        ((UserActionActivity)getActivity()).alertHelper.setCallback(this);
-        ((UserActionActivity)getActivity()).alertHelper.alert(getResources().getString(R.string.error),
-                getResources().getString(R.string.reset_password_failed),
-                false, getResources().getString(R.string.ok), AlertHelper.ALERT_NO_ACTION);
+        mActivity.getAlertHelper().setCallback(this);
+        mActivity.getAlertHelper().alert(R.string.error,
+                R.string.reset_password_failed, false, R.string.ok, AlertHelper.ALERT_NO_ACTION);
     }
 
     @Override
@@ -177,7 +177,7 @@ public class ForgotPasswordFragment extends Fragment implements View.OnClickList
     @Override
     public void onPositiveButtonClick(int option) {
         if(option == Constant.HANDLE_SUCCESSFUL){
-            ViewPager viewPager = getActivity().findViewById(R.id.view_pager);
+            ViewPager viewPager = mActivity.findViewById(R.id.view_pager);
             viewPager.setCurrentItem(0);
         }
     }

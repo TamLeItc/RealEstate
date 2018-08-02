@@ -151,7 +151,7 @@ public class MainActivity extends AppCompatActivity
 
     @SuppressLint("ClickableViewAccessibility")
     private void initViews() {
-        viewPaper = (ViewPager) findViewById(R.id.view_pager);
+        viewPaper = findViewById(R.id.view_pager);
         this.mToolbar = findViewById(R.id.toolbar);
         mLlProfile = findViewById(R.id.ll_profile);
         mLlSort = findViewById(R.id.ll_sort);
@@ -175,14 +175,14 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void addNavigationView(){
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, mToolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
 
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
     }
@@ -209,8 +209,6 @@ public class MainActivity extends AppCompatActivity
         fragmentTransaction.setCustomAnimations(R.animator.custom_frag_in, R.animator.custom_frg_out);
         fragmentTransaction.replace(R.id.fl_start, startFragment);
         fragmentTransaction.commit();
-
-        final FrameLayout flStart = findViewById(R.id.fl_start);
 
         new Handler().postDelayed(new Runnable() {
             @Override
@@ -255,13 +253,11 @@ public class MainActivity extends AppCompatActivity
             }
         }, 2000);
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         }
     }
-
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

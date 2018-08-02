@@ -50,13 +50,13 @@
 
             <item
                 android:id="@+id/nav_login"
-                android:icon="@drawable/ic_icon_login_black_24dp"
+                android:icon="@drawable/icon_icon_login_black_24dp"
                 android:title="@string/login"
                 android:visible="true" />
 
             <item
                 android:id="@+id/nav_logout"
-                android:icon="@drawable/ic_icon_logout_black_24dp"
+                android:icon="@drawable/icon_icon_logout_black_24dp"
                 android:title="@string/log_out"
                 android:visible="false" />
         </menu>

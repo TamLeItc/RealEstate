@@ -32,6 +32,8 @@ import java.util.ArrayList;
 public class UserManagementFragment extends Fragment implements ViewHandleUserManagement, AbsListView.OnScrollListener, AdapterView.OnItemClickListener,
         AlertHelper.AlertHelperCallback, ManagementFilterCallback, View.OnClickListener {
 
+    private UserControlActivity mActivity;
+
     private View mView;
 
     private ArrayList<User> mArrUser = new ArrayList<>();
@@ -52,7 +54,9 @@ public class UserManagementFragment extends Fragment implements ViewHandleUserMa
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         this.mView = inflater.inflate(R.layout.fragment_user_management, container, false);
 
-        ((UserControlActivity)getActivity()).userFilterCallback = this;
+        this.mActivity = (UserControlActivity)getActivity();
+
+        mActivity.userFilterCallback = this;
 
         return mView;
     }
@@ -76,12 +80,12 @@ public class UserManagementFragment extends Fragment implements ViewHandleUserMa
     }
 
     private void handleStart(){
-        ((UserControlActivity)getActivity()).dialogHelper.show();
+        mActivity.getDialogHelper().show();
 
         this.mUserAdapter = new UserAdapter(this.mArrUser, getContext());
         this.mLsvUsers.setAdapter(mUserAdapter);
         this.mPresenterUserManagement = new PresenterUserManagement(this);
-        this.mPresenterUserManagement.handleGetUserList(0, 20, ((UserControlActivity)getActivity()).userStatus);
+        this.mPresenterUserManagement.handleGetUserList(0, 20, mActivity.userStatus);
     }
 
     @Override
@@ -92,16 +96,16 @@ public class UserManagementFragment extends Fragment implements ViewHandleUserMa
             isFistLoad = false;
         }
 
-        ((UserControlActivity)getActivity()).dialogHelper.dismiss();
+        mActivity.getDialogHelper().dismiss();
         this.mArrUser.addAll(arrayListUser);
         this.mUserAdapter.notifyDataSetChanged();
 
         if(mArrUser.size() > 0){
             this.mTxvInformation.setVisibility(View.GONE);
 
-            if(((UserControlActivity)getActivity()).isFilter){
+            if(mActivity.isFilter){
                 mLsvUsers.smoothScrollToPosition(0);
-                ((UserControlActivity)getActivity()).isFilter = false;
+                mActivity.isFilter = false;
             }
         }
         else{
@@ -114,28 +118,28 @@ public class UserManagementFragment extends Fragment implements ViewHandleUserMa
     @Override
     public void onHandleUserListError(String error) {
 
-        ((UserControlActivity)getActivity()).dialogHelper.dismiss();
+        mActivity.getDialogHelper().dismiss();
 
-        ((UserControlActivity)getActivity()).alertHelper.setCallback(this);
-        ((UserControlActivity)getActivity()).alertHelper.alert(getResources().getString(R.string.error),
+        mActivity.getAlertHelper().setCallback(this);
+        mActivity.getAlertHelper().alert(getResources().getString(R.string.error),
                 getResources().getString(R.string.error_read_data), false,
                 getResources().getString(R.string.ok), Constant.HANDLE_ERROR);
     }
 
     @Override
     public void onHandleUpdateStatusUserSuccessful() {
-        ((UserControlActivity)getActivity()).dialogHelper.dismiss();
+        mActivity.getDialogHelper().dismiss();
         if(mArrUser.get(mPositionClick).getStatus().equals(Constant.NO)){
             mUserAdapter.notifyDataSetChanged();
 
-            ((UserControlActivity)getActivity()).toastHelper.toast(getResources().getString(R.string.able_user_successful), ToastHelper.LENGTH_SHORT);
+            mActivity.getToastHelper().toast(getResources().getString(R.string.able_user_successful), ToastHelper.LENGTH_SHORT);
 
             mArrUser.get(mPositionClick).setStatus(Constant.YES);
         }
         else{
             mUserAdapter.notifyDataSetChanged();
 
-            ((UserControlActivity)getActivity()).toastHelper.toast(getResources().getString(R.string.disable_user_successful), ToastHelper.LENGTH_SHORT);
+            mActivity.getToastHelper().toast(getResources().getString(R.string.disable_user_successful), ToastHelper.LENGTH_SHORT);
 
             mArrUser.get(mPositionClick).setStatus(Constant.NO);
         }
@@ -145,9 +149,9 @@ public class UserManagementFragment extends Fragment implements ViewHandleUserMa
     @Override
     public void onHandleUpdateStatusUserError(String error) {
 
-        ((UserControlActivity)getActivity()).dialogHelper.dismiss();
+        mActivity.getDialogHelper().dismiss();
 
-        ((UserControlActivity)getActivity()).toastHelper.toast(R.string.update_status_user_error, ToastHelper.LENGTH_SHORT);
+        mActivity.getToastHelper().toast(R.string.update_status_user_error, ToastHelper.LENGTH_SHORT);
     }
 
 
@@ -157,8 +161,8 @@ public class UserManagementFragment extends Fragment implements ViewHandleUserMa
                 && (mLsvUsers.getLastVisiblePosition() - mLsvUsers.getHeaderViewsCount() -
                 mLsvUsers.getFooterViewsCount()) >= (mUserAdapter.getCount() - 1)) {
 
-            ((UserControlActivity)getActivity()).dialogHelper.show();
-            this.mPresenterUserManagement.handleGetUserList(this.mArrUser.size(), 20, ((UserControlActivity)getActivity()).userStatus);
+            mActivity.getDialogHelper().show();
+            this.mPresenterUserManagement.handleGetUserList(this.mArrUser.size(), 20, mActivity.userStatus);
         }
     }
 
@@ -187,27 +191,27 @@ public class UserManagementFragment extends Fragment implements ViewHandleUserMa
 
         MenuItem menuItem = popupMenu.getMenu().getItem(0);
         if(this.mArrUser.get(position).getStatus().equals("no")){
-            menuItem.setTitle(getActivity().getResources().getString(R.string.enable_user));
+            menuItem.setTitle(mActivity.getResources().getString(R.string.enable_user));
         }
         else{
-            menuItem.setTitle(getActivity().getResources().getString(R.string.disable_user));
+            menuItem.setTitle(mActivity.getResources().getString(R.string.disable_user));
         }
 
         mPositionClick = position;
 
-        ((UserControlActivity)getActivity()).alertHelper.setCallback(this);
+        mActivity.getAlertHelper().setCallback(this);
         popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()){
                     case R.id.action_update_status:
                         if(mArrUser.get(mPositionClick).getLevel() == 1){
-                            ((UserControlActivity)getActivity()).alertHelper.alert(getResources().getString(R.string.error),
+                            mActivity.getAlertHelper().alert(getResources().getString(R.string.error),
                                     getResources().getString(R.string.permission_denied), true, getResources().getString(R.string.ok),
                                     Constant.DENIED);
                         }
                         else{
-                            ((UserControlActivity)getActivity()).dialogHelper.dismiss();
+                            mActivity.getDialogHelper().dismiss();
                             mPresenterUserManagement.handleUpdateStatusUser(mArrUser.get(mPositionClick).getId());
                             break;
                         }
@@ -244,8 +248,8 @@ public class UserManagementFragment extends Fragment implements ViewHandleUserMa
 
         isFistLoad = true;
 
-        ((UserControlActivity)getActivity()).dialogHelper.show();
-        this.mPresenterUserManagement.handleGetUserList(0, 20, ((UserControlActivity)getActivity()).userStatus);
+        mActivity.getDialogHelper().show();
+        this.mPresenterUserManagement.handleGetUserList(0, 20, mActivity.userStatus);
     }
 
     @Override

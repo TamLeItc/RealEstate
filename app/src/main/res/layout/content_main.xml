@@ -32,7 +32,8 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/_40dp"
             android:background="@color/colorWhite"
-            android:weightSum="3">
+            android:weightSum="3"
+            android:baselineAligned="false">
 
             <LinearLayout
                 android:id="@+id/ll_view_mode"
@@ -40,8 +41,7 @@
                 android:layout_height="@dimen/_40dp"
                 android:gravity="center"
                 android:layout_weight="1"
-                android:background="?attr/selectableItemBackground"
-                android:clickable="true"
+                android:background="@drawable/custom_view_background_main"
                 android:orientation="vertical">
 
                 <ImageView
@@ -66,14 +66,13 @@
                 android:layout_height="@dimen/_40dp"
                 android:gravity="center"
                 android:layout_weight="1"
-                android:background="?attr/selectableItemBackground"
-                android:clickable="true"
+                android:background="@drawable/custom_view_background_main"
                 android:orientation="vertical">
 
                 <ImageView
                     android:layout_width="@dimen/_20dp"
                     android:layout_height="@dimen/_20dp"
-                    android:src="@drawable/icon_account_box_black_24dp"/>
+                    android:src="@drawable/icon_account_box_black_24dp" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -90,9 +89,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/_50dp"
                 android:gravity="center"
-                android:background="?attr/selectableItemBackground"
-                android:clickable="true"
-                android:focusable="true"
+                android:background="@drawable/custom_view_background_main"
                 android:layout_weight="1"
                 android:orientation="vertical">
 
@@ -116,9 +113,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/_50dp"
                 android:gravity="center"
-                android:background="?attr/selectableItemBackground"
-                android:clickable="true"
-                android:focusable="true"
+                android:background="@drawable/custom_view_background_main"
                 android:layout_weight="1"
                 android:orientation="vertical">
 
@@ -156,8 +151,6 @@
 
 
         </net.cachapa.expandablelayout.ExpandableLayout>
-
-
 
     </FrameLayout>
 

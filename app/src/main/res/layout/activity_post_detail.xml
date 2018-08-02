@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/colorDefaultBackground">
+    android:background="@color/colorGrayVeryLight">
 
     <ScrollView
         android:id="@+id/scroll_view"
@@ -123,7 +123,7 @@
                                     android:id="@+id/txv_price"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:textColor="@color/colorRed"
+                                    android:textColor="@color/colorRedLight"
                                     android:textSize="@dimen/_14sp"
                                     android:textStyle="bold" />
 
@@ -133,7 +133,7 @@
                                     android:textSize="@dimen/_12sp"
                                     android:layout_toRightOf="@id/txv_price"
                                     android:text="@string/for_one_month"
-                                    android:textColor="@color/colorRed"
+                                    android:textColor="@color/colorRedLight"
                                     android:layout_marginTop="@dimen/_3dp"
                                     android:id="@+id/txv_a_month"/>
                                 

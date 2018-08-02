@@ -105,7 +105,7 @@ public class AdapterPostSale extends BaseAdapter {
         }
         else if(product.getStatus().equals("2")){
             viewHolder.txvStatus.setText(mContext.getResources().getString(R.string.pending));
-            viewHolder.txvStatus.setTextColor(mContext.getResources().getColor(R.color.colorRed));
+            viewHolder.txvStatus.setTextColor(mContext.getResources().getColor(R.color.colorRedLight));
         }
         else if(product.getStatus().equals("3")){
             viewHolder.txvStatus.setText(mContext.getResources().getString(R.string.posted));

@@ -2,7 +2,7 @@
 <resources>
     <color name="colorPrimary">#ffffff</color>
     <color name="colorPrimaryDark">#333333</color>
-    <color name="colorAccent">#2068A4</color>
+    <color name="colorAccent">#4b4b4b</color>
 
     <color name="colorMain">#2068A4</color>
     <color name="colorGreen">#258500</color>
@@ -28,7 +28,8 @@
     <color name="colorMonitor">#3e3e3e</color>
     <color name="colorUser">#5b5b5b</color>
     <color name="colorMainLight">#60b6ff</color>
-    <color name="colorRed">#ea4d40</color>
+    <color name="colorRed">#FF0000</color>
+    <color name="colorRedLight">#ea4d40</color>
     <color name="colorPink">#CA8A8B</color>
     <color name="colorPostNotActive">#fff6f6</color>
     <color name="colorPostActive">#f1f8ff</color>

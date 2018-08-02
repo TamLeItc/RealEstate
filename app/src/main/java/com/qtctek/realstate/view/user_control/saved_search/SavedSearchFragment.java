@@ -26,6 +26,8 @@ import java.util.ArrayList;
 
 public class SavedSearchFragment extends Fragment implements ViewHandleSavedSearch, AdapterView.OnItemClickListener, View.OnClickListener {
 
+    private UserControlActivity mActivity;
+
     private View mView;
 
     private ListView mLsvSavedSearch;
@@ -40,6 +42,7 @@ public class SavedSearchFragment extends Fragment implements ViewHandleSavedSear
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         this.mView = inflater.inflate(R.layout.fragment_saved_search, container,false);
 
+        this.mActivity = (UserControlActivity)getActivity();
         initViews();
 
         return mView;
@@ -80,9 +83,9 @@ public class SavedSearchFragment extends Fragment implements ViewHandleSavedSear
 
     @Override
     public void onHandleUpdateSavedSearchListSuccessful() {
-        ((UserControlActivity)getActivity()).dialogHelper.dismiss();
+        mActivity.getDialogHelper().dismiss();
 
-        ((UserControlActivity)getActivity()).toastHelper.toast(getResources().getString(R.string.delete_successful), ToastHelper.LENGTH_SHORT);
+        mActivity.getToastHelper().toast(getResources().getString(R.string.delete_successful), ToastHelper.LENGTH_SHORT);
         ListPostNewsFragment.LIST_SAVED_SEARCH.remove(mPositionClick);
 
         this.mSavedSearchAdapter.notifyDataSetChanged();
@@ -99,8 +102,8 @@ public class SavedSearchFragment extends Fragment implements ViewHandleSavedSear
 
     @Override
     public void onHandleUpdateSavedSearchListError(String error) {
-        ((UserControlActivity)getActivity()).dialogHelper.dismiss();
-        ((UserControlActivity)getActivity()).toastHelper.toast(getResources().getString(R.string.delete_failed), ToastHelper.LENGTH_SHORT);
+        mActivity.getDialogHelper().dismiss();
+        mActivity.getToastHelper().toast(getResources().getString(R.string.delete_failed), ToastHelper.LENGTH_SHORT);
     }
 
     @Override
@@ -119,10 +122,10 @@ public class SavedSearchFragment extends Fragment implements ViewHandleSavedSear
                 switch (item.getItemId()) {
                     case R.id.action_view_detail:
                         MapPostNewsFragment.ON_EVENT_FOR_MAP_POST_NEWS.onHandleSearch(ListPostNewsFragment.LIST_SAVED_SEARCH.get(position));
-                        getActivity().finish();
+                        mActivity.finish();
                         break;
                     case R.id.action_un_save:
-                        ((UserControlActivity)getActivity()).dialogHelper.show();
+                        mActivity.getDialogHelper().show();
                         handleUpdateSavedSearch();
                         break;
 

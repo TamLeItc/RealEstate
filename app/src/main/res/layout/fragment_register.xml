@@ -13,8 +13,7 @@
         android:orientation="vertical"
         android:paddingLeft="@dimen/_25dp"
         android:paddingRight="@dimen/_25dp"
-        android:paddingBottom="@dimen/_10dp"
-        android:paddingTop="@dimen/_10dp">
+        android:paddingBottom="@dimen/_10dp">
 
         <TextView
             android:layout_width="wrap_content"
@@ -32,7 +31,7 @@
             android:paddingRight="@dimen/_8dp"
             android:id="@+id/edt_full_name"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/_35dp"
+            android:layout_height="@dimen/_40dp"
             android:textSize="@dimen/_10sp"
             android:background="@drawable/custom_border_gray_backgroud_default" />
 
@@ -144,7 +143,7 @@
                 android:layout_height="wrap_content"
                 android:text="*"
                 android:textSize="@dimen/_10sp"
-                android:textColor="@color/colorRed"/>
+                android:textColor="@color/colorRedLight"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -190,7 +189,7 @@
                 android:layout_height="wrap_content"
                 android:text="*"
                 android:textSize="@dimen/_10sp"
-                android:textColor="@color/colorRed"/>
+                android:textColor="@color/colorRedLight"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -241,7 +240,7 @@
                 android:layout_height="wrap_content"
                 android:text="*"
                 android:textSize="@dimen/_10sp"
-                android:textColor="@color/colorRed"/>
+                android:textColor="@color/colorRedLight"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -250,30 +249,36 @@
                 android:textSize="@dimen/_10sp"
                 android:layout_gravity="bottom"/>
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <Switch
-                    android:id="@+id/swt_now_password"
-                    android:layout_alignParentRight="true"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-
-            </RelativeLayout>
-
         </LinearLayout>
 
-        <EditText
-            android:selectAllOnFocus="true"
-            android:inputType="textPassword"
-            android:paddingLeft="@dimen/_8dp"
-            android:paddingRight="@dimen/_8dp"
-            android:textSize="@dimen/_10sp"
-            android:id="@+id/edt_now_password"
+        <RelativeLayout
+            android:id="@+id/rl_now_password"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/_35dp"
-            android:background="@drawable/custom_border_gray_backgroud_default"/>
+            android:layout_height="wrap_content"
+            android:background="@drawable/custom_border_gray_backgroud_default">
+
+            <EditText
+                android:background="@null"
+                android:selectAllOnFocus="true"
+                android:inputType="textPassword"
+                android:paddingLeft="@dimen/_8dp"
+                android:paddingRight="@dimen/_8dp"
+                android:textSize="@dimen/_10sp"
+                android:id="@+id/edt_now_password"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_40dp"
+                android:layout_toLeftOf="@+id/imv_show_now_password" />
+
+            <ImageView
+                android:padding="@dimen/_10dp"
+                android:layout_alignParentRight="true"
+                android:id="@+id/imv_show_now_password"
+                android:layout_width="@dimen/_40dp"
+                android:layout_height="@dimen/_40dp"
+                android:background="?attr/selectableItemBackground"
+                android:src="@drawable/icon_visibility_black_24dp"/>
+
+        </RelativeLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -303,7 +308,7 @@
                 android:layout_height="wrap_content"
                 android:text="*"
                 android:textSize="@dimen/_10sp"
-                android:textColor="@color/colorRed"/>
+                android:textColor="@color/colorRedLight"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -312,30 +317,37 @@
                 android:textSize="@dimen/_10sp"
                 android:layout_gravity="bottom"/>
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <Switch
-                    android:id="@+id/swt_password"
-                    android:layout_alignParentRight="true"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-
-            </RelativeLayout>
 
         </LinearLayout>
 
-        <EditText
-            android:selectAllOnFocus="true"
-            android:inputType="textPassword"
-            android:paddingLeft="@dimen/_8dp"
-            android:paddingRight="@dimen/_8dp"
-            android:textSize="@dimen/_10sp"
-            android:id="@+id/edt_password"
+        <RelativeLayout
+            android:id="@+id/rl_password"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/_35dp"
-            android:background="@drawable/custom_border_gray_backgroud_default"/>
+            android:layout_height="wrap_content"
+            android:background="@drawable/custom_border_gray_backgroud_default">
+
+            <EditText
+                android:background="@null"
+                android:selectAllOnFocus="true"
+                android:inputType="textPassword"
+                android:paddingLeft="@dimen/_8dp"
+                android:paddingRight="@dimen/_8dp"
+                android:textSize="@dimen/_10sp"
+                android:id="@+id/edt_password"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_40dp"
+                android:layout_toLeftOf="@+id/imv_show_password"/>
+
+            <ImageView
+                android:padding="@dimen/_10dp"
+                android:layout_alignParentRight="true"
+                android:id="@+id/imv_show_password"
+                android:layout_width="@dimen/_40dp"
+                android:layout_height="@dimen/_40dp"
+                android:background="?attr/selectableItemBackground"
+                android:src="@drawable/icon_visibility_black_24dp"/>
+
+        </RelativeLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -363,7 +375,7 @@
                 android:layout_height="wrap_content"
                 android:text="*"
                 android:textSize="@dimen/_10sp"
-                android:textColor="@color/colorRed"/>
+                android:textColor="@color/colorRedLight"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -372,31 +384,37 @@
                 android:textSize="@dimen/_10sp"
                 android:layout_gravity="bottom"/>
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <Switch
-                    android:id="@+id/swt_confirm_password"
-                    android:layout_alignParentRight="true"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-
-            </RelativeLayout>
-
         </LinearLayout>
 
-        <EditText
-            android:selectAllOnFocus="true"
-            android:singleLine="true"
-            android:inputType="textPassword"
-            android:paddingLeft="@dimen/_8dp"
-            android:paddingRight="@dimen/_8dp"
-            android:textSize="@dimen/_10sp"
-            android:id="@+id/edt_confirm_password"
+        <RelativeLayout
+            android:id="@+id/rl_confirm_password"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/_35dp"
-            android:background="@drawable/custom_border_gray_backgroud_default"/>
+            android:layout_height="wrap_content"
+            android:background="@drawable/custom_border_gray_backgroud_default">
+
+            <EditText
+                android:background="@null"
+                android:selectAllOnFocus="true"
+                android:singleLine="true"
+                android:inputType="textPassword"
+                android:paddingLeft="@dimen/_8dp"
+                android:paddingRight="@dimen/_8dp"
+                android:textSize="@dimen/_10sp"
+                android:id="@+id/edt_confirm_password"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_40dp"
+                android:layout_toLeftOf="@+id/imv_show_confirm_password"/>
+
+            <ImageView
+                android:padding="@dimen/_10dp"
+                android:layout_alignParentRight="true"
+                android:id="@+id/imv_show_confirm_password"
+                android:layout_width="@dimen/_40dp"
+                android:layout_height="@dimen/_40dp"
+                android:background="?attr/selectableItemBackground"
+                android:src="@drawable/icon_visibility_black_24dp"/>
+
+        </RelativeLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -421,7 +439,7 @@
                 android:layout_height="wrap_content"
                 android:text="*"
                 android:textSize="@dimen/_10sp"
-                android:textColor="@color/colorRed"/>
+                android:textColor="@color/colorRedLight"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -442,7 +460,7 @@
             android:textSize="@dimen/_10sp"
             android:id="@+id/edt_phone_number"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/_35dp"
+            android:layout_height="@dimen/_40dp"
             android:background="@drawable/custom_border_gray_backgroud_default"/>
 
         <TextView
@@ -460,7 +478,7 @@
             android:textSize="@dimen/_10sp"
             android:id="@+id/edt_address"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/_35dp"
+            android:layout_height="@dimen/_40dp"
             android:background="@drawable/custom_border_gray_backgroud_default"/>
 
         <Button
@@ -469,7 +487,7 @@
             android:layout_marginTop="@dimen/_20dp"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_40dp"
-            android:background="@drawable/custom_btn_main"
+            android:background="@drawable/custom_btn_main_backgroud"
             android:text="@string/confirm"
             android:textSize="@dimen/_9sp"
             android:textColor="@color/colorPrimaryDark"/>

@@ -90,7 +90,8 @@
                 android:paddingLeft="@dimen/_5dp"
                 android:paddingTop="@dimen/_2dp"
                 android:textColor="@color/colorPrimaryDark"
-                android:textSize="@dimen/_12sp" />
+                android:textSize="@dimen/_12sp"
+                android:textCursorDrawable="@drawable/custom_text_cursor_dialog"/>
 
             <TextView
                 android:textColor="@color/colorGrayDark"
@@ -118,7 +119,8 @@
                 android:paddingLeft="@dimen/_5dp"
                 android:paddingTop="@dimen/_2dp"
                 android:textColor="@color/colorPrimaryDark"
-                android:textSize="@dimen/_12sp" />
+                android:textSize="@dimen/_12sp"
+                android:textCursorDrawable="@drawable/custom_text_cursor_dialog"/>
 
             <View
                 android:id="@+id/view_3"
@@ -279,7 +281,7 @@
                 android:layout_below="@id/recycler_view_bedroom"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="@dimen/_30dp"
-                android:background="@drawable/custom_btn_main"
+                android:background="@drawable/custom_btn_main_backgroud"
                 android:paddingLeft="@dimen/_20dp"
                 android:paddingRight="@dimen/_20dp"
                 android:text="@string/confirm"

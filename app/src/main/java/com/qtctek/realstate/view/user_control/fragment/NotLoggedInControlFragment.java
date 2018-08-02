@@ -18,6 +18,8 @@ import com.qtctek.realstate.view.user_control.adapter.UserControlAdapter;
 
 public class NotLoggedInControlFragment extends Fragment implements View.OnClickListener {
 
+    private UserControlActivity mActivity;
+
     private View mView;
 
     private ViewPager mViewPager;
@@ -30,24 +32,20 @@ public class NotLoggedInControlFragment extends Fragment implements View.OnClick
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         this.mView = inflater.inflate(R.layout.fragment_saved_information, container, false);
 
-        return mView;
-    }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
+        this.mActivity = (UserControlActivity)getActivity();
         initViews();
         addControl();
         addToolbar();
+
+        return mView;
     }
 
     private void initViews(){
         mViewPager = (ViewPager) mView.findViewById(R.id.view_pager);
         mTabLayout = (TabLayout) mView.findViewById(R.id.tab_layout);
-        this.mImvBack = ((UserControlActivity) getActivity()).findViewById(R.id.imv_back);
+        this.mImvBack = mActivity.findViewById(R.id.imv_back);
 
-        this.mToolbar = ((UserControlActivity)getActivity()).findViewById(R.id.toolbar);
+        this.mToolbar = mActivity.findViewById(R.id.toolbar);
         this.mImvBack.setOnClickListener(this);
     }
 
@@ -58,20 +56,20 @@ public class NotLoggedInControlFragment extends Fragment implements View.OnClick
         mTabLayout.setupWithViewPager(mViewPager);
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(mTabLayout));
 
-        mViewPager.setCurrentItem(((UserControlActivity)getActivity()).positionFragment);
+        mViewPager.setCurrentItem(mActivity.positionFragment);
 
     }
 
     private void addToolbar(){
-        ((UserControlActivity)getActivity()).setSupportActionBar(mToolbar);
-        ((UserControlActivity)getActivity()).getSupportActionBar().setDisplayShowTitleEnabled(false);
+        mActivity.setSupportActionBar(mToolbar);
+        mActivity.getSupportActionBar().setDisplayShowTitleEnabled(false);
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.imv_back:
-                getActivity().finish();
+                mActivity.finish();
                 break;
         }
     }

@@ -17,7 +17,7 @@ import okhttp3.Response;
 
 public class ModelRegister {
 
-    String mUrl = MainActivity.WEB_SERVER + "user_register.php";
+    private String mUrl = MainActivity.WEB_SERVER + "user_register.php";
 
     private PresenterImpHandleRegister mPresenterImpHandleRegister;
 

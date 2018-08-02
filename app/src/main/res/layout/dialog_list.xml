@@ -57,7 +57,7 @@
         android:layout_alignParentBottom="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/custom_btn_main"
+        android:background="@drawable/custom_btn_main_backgroud"
         android:text="@string/confirm"
         android:paddingRight="@dimen/_20dp"
         android:paddingLeft="@dimen/_20dp"
