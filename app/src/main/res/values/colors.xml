@@ -28,7 +28,6 @@
     <color name="colorMonitor">#3e3e3e</color>
     <color name="colorUser">#5b5b5b</color>
     <color name="colorMainLight">#60b6ff</color>
-    <color name="colorRed">#FF0000</color>
     <color name="colorRedLight">#ea4d40</color>
     <color name="colorPink">#CA8A8B</color>
     <color name="colorPostNotActive">#fff6f6</color>
@@ -36,5 +35,6 @@
     <color name="colorBtnMoreView">#10ffffff</color>
     <color name="colorBlueLight">#00D1FB</color>
     <color name="colorBlue">#00ABF9</color>
+    <color name="colorRed">#CD2213</color>
 
 </resources>

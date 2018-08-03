@@ -111,7 +111,8 @@
     <string name="confirm_code">Mã xác nhận</string>
     <string name="resend_code">Gửi lại mã</string>
     <string name="cancel">Hủy</string>
-    <string name="loading">Đang xử lí. Vui lòng đợi...</string>
+    <string name="processing">Đang xử lí. Vui lòng đợi…</string>
+    <string name="loading">Đang tải…</string>
     <string name="accept">Duyệt</string>
     <string name="delete">Xóa</string>
     <string name="edit">Sửa</string>

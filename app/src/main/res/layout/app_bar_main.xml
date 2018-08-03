@@ -76,8 +76,26 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/colorDefaultBackground"
-            android:name="com.qtctek.realstate.view.post_news.fragment.SearchPlaceFragment"
+            android:name="com.qtctek.aladin.view.post_news.fragment.SearchPlaceFragment"
             tools:layout="@layout/fragment_search_place" />
+
+    </net.cachapa.expandablelayout.ExpandableLayout>
+
+    <net.cachapa.expandablelayout.ExpandableLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/expandable_layout_filter"
+        app:el_duration="300"
+        app:el_expanded="false"
+        app:el_parallax="0">
+
+        <fragment
+            android:id="@+id/frg_filter"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/colorDefaultBackground"
+            android:name="com.qtctek.aladin.view.post_news.fragment.FilterFragment"
+            tools:layout="@layout/fragment_filter" />
 
     </net.cachapa.expandablelayout.ExpandableLayout>
 

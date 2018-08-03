@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.qtctek.realstate">
+    package="com.qtctek.aladin">
 
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
@@ -9,6 +9,9 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.CALL_PHONE"/>
+
+    <supports-screens
+        />
 
     <!--android:largeHeap="true"-->
     <application
@@ -51,11 +54,6 @@
         <activity android:name=".view.post_detail.activity.PostDetailActivity"
             android:screenOrientation="portrait">
 
-        </activity>
-
-        <activity android:name=".view.post_news.dialog.SearchFilterDialog"
-            android:theme="@style/Theme.Dialog"
-            android:screenOrientation="portrait">
         </activity>
 
         <meta-data

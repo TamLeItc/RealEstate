@@ -61,29 +61,6 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/ll_profile"
-                android:layout_width="wrap_content"
-                android:layout_height="@dimen/_40dp"
-                android:gravity="center"
-                android:layout_weight="1"
-                android:background="@drawable/custom_view_background_main"
-                android:orientation="vertical">
-
-                <ImageView
-                    android:layout_width="@dimen/_20dp"
-                    android:layout_height="@dimen/_20dp"
-                    android:src="@drawable/icon_account_box_black_24dp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/account"
-                    android:textColor="@color/colorPrimaryDark"
-                    android:textSize="@dimen/_7sp"/>
-
-            </LinearLayout>
-
-            <LinearLayout
                 android:visibility="gone"
                 android:id="@+id/ll_sort"
                 android:layout_width="wrap_content"
@@ -107,6 +84,31 @@
                     android:layout_marginBottom="@dimen/_10dp"/>
 
             </LinearLayout>
+
+
+            <LinearLayout
+                android:id="@+id/ll_profile"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/_40dp"
+                android:gravity="center"
+                android:layout_weight="1"
+                android:background="@drawable/custom_view_background_main"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="@dimen/_20dp"
+                    android:layout_height="@dimen/_20dp"
+                    android:src="@drawable/icon_account_box_black_24dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/account"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:textSize="@dimen/_7sp"/>
+
+            </LinearLayout>
+
 
             <LinearLayout
                 android:id="@+id/ll_save_search"

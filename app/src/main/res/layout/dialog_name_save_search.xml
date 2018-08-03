@@ -14,10 +14,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/saved_search_name"
-        android:textSize="@dimen/_10sp"
+        android:textSize="@dimen/_12sp"
         android:textColor="@color/colorGrayDark"/>
 
     <EditText
+        android:textColor="@color/colorGrayDark"
+        android:inputType="textNoSuggestions"
+        android:singleLine="true"
         android:maxLines="1"
         android:gravity="center_horizontal"
         android:id="@+id/edt_name_save_search"
@@ -37,6 +40,7 @@
         android:paddingRight="@dimen/_10dp">
 
         <Button
+            android:textColor="@color/colorGrayDark"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/_40dp"
             android:minHeight="@dimen/_0dp"
@@ -47,6 +51,7 @@
             android:layout_marginRight="@dimen/_20dp"/>
 
         <Button
+            android:textColor="@color/colorGrayDark"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/_40dp"
             android:minHeight="@dimen/_0dp"
