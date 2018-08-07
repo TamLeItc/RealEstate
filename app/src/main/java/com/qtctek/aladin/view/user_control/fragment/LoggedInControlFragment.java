@@ -1,5 +1,6 @@
 package com.qtctek.aladin.view.user_control.fragment;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -8,6 +9,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -17,7 +19,7 @@ import com.qtctek.aladin.view.post_news.activity.MainActivity;
 import com.qtctek.aladin.view.user_control.activity.UserControlActivity;
 import com.qtctek.aladin.view.user_control.adapter.UserControlAdapter;
 
-public class LoggedInControlFragment extends Fragment implements View.OnClickListener, ViewPager.OnPageChangeListener {
+public class LoggedInControlFragment extends Fragment implements View.OnClickListener, ViewPager.OnPageChangeListener, View.OnTouchListener {
 
     private UserControlActivity mActivity;
 
@@ -39,14 +41,16 @@ public class LoggedInControlFragment extends Fragment implements View.OnClickLis
         return mView;
     }
     
+    @SuppressLint("ClickableViewAccessibility")
     private void initViews(){
-        mViewPager = (ViewPager) mView.findViewById(R.id.view_pager);
-        mTabLayout = (TabLayout) mView.findViewById(R.id.tab_layout);
+        mViewPager = mView.findViewById(R.id.view_pager);
+        mTabLayout = mView.findViewById(R.id.tab_layout);
 
         this.mImvBack = mActivity.findViewById(R.id.imv_back);
 
         this.mImvBack.setOnClickListener(this);
         mViewPager.addOnPageChangeListener(this);
+        mViewPager.setOnTouchListener(this);
     }
 
     private void addControl() {
@@ -118,5 +122,11 @@ public class LoggedInControlFragment extends Fragment implements View.OnClickLis
     @Override
     public void onPageScrollStateChanged(int state) {
 
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    @Override
+    public boolean onTouch(View v, MotionEvent event) {
+        return true;
     }
 }

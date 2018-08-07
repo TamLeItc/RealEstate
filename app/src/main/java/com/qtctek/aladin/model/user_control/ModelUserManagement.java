@@ -3,6 +3,7 @@ package com.qtctek.aladin.model.user_control;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.qtctek.aladin.common.AppUtils;
 import com.qtctek.aladin.presenter.user_control.user_management.PresenterImpHandleUserManagement;
 import com.qtctek.aladin.view.post_news.activity.MainActivity;
 
@@ -17,8 +18,8 @@ import okhttp3.Response;
 
 public class ModelUserManagement {
 
-    private String mUrlGetUserList = MainActivity.WEB_SERVER + "get_list_user.php";
-    private String mUrlUpdateStatusUser = MainActivity.WEB_SERVER + "update_status_user.php";
+    private String mUrlGetUserList = MainActivity.WEB_SERVER + "?detect=19&";
+    private String mUrlUpdateStatusUser = MainActivity.WEB_SERVER + "?detect=20&";
 
     private PresenterImpHandleUserManagement mPresenterImpHandleUserManagement;
 
@@ -56,9 +57,12 @@ public class ModelUserManagement {
         @Override
         protected String doInBackground(String... strings) {
 
-            String url = strings[0] + "?limit=" + limit + "&start=" + start + "&status=" + status;
+            String url = strings[0] + "limit=" + limit + "&start=" + start + "&status=" + status;
             Request request = new Request.Builder()
                     .url(url)
+                    .addHeader(AppUtils.USERNAME, AppUtils.USERNAME_HEADER)
+                    .addHeader(AppUtils.PASSWORD, AppUtils.PASSWORD_HEADER)
+                    .addHeader(AppUtils.AUTHORIZATION, AppUtils.AUTHORIZATION_HEADER)
                     .get()
                     .build();
 
@@ -110,6 +114,10 @@ public class ModelUserManagement {
 
             Request request = new Request.Builder()
                     .url(strings[0])
+                    .addHeader(AppUtils.USERNAME, AppUtils.USERNAME_HEADER)
+                    .addHeader(AppUtils.PASSWORD, AppUtils.PASSWORD_HEADER)
+                    .addHeader(AppUtils.AUTHORIZATION, AppUtils.AUTHORIZATION_HEADER)
+                    .get()
                     .post(requestBody)
                     .build();
 
@@ -124,7 +132,6 @@ public class ModelUserManagement {
 
         @Override
         protected void onPostExecute(String s) {
-
             if(s.equals("successful")){
                 mPresenterImpHandleUserManagement.onUpdateStatusUserSuccessful();
             }

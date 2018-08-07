@@ -7,17 +7,24 @@
     android:background="@color/colorWhite"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <ListView
-        android:overScrollMode="never"
-        tools:listitem="@layout/item_post"
-        android:layout_marginTop="@dimen/_5dp"
-        android:layout_below="@+id/txv_title"
-        android:id="@+id/lsv_posts"
+    <android.support.v4.widget.SwipeRefreshLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scrollbars="none"
-        android:layout_marginLeft="@dimen/_8dp"
-        android:layout_marginRight="@dimen/_8dp"/>
+        android:layout_height="wrap_content"
+        android:id="@+id/srl_posts">
+
+        <ListView
+            android:overScrollMode="never"
+            tools:listitem="@layout/item_post"
+            android:layout_marginTop="@dimen/_5dp"
+            android:layout_below="@+id/txv_title"
+            android:id="@+id/lsv_posts"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scrollbars="none"
+            android:layout_marginLeft="@dimen/_8dp"
+            android:layout_marginRight="@dimen/_8dp"/>
+
+    </android.support.v4.widget.SwipeRefreshLayout>
 
     <Button
         android:id="@+id/btn_more_view"

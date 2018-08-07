@@ -3,7 +3,6 @@ package com.qtctek.aladin.view.post_news.fragment;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -15,11 +14,10 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.qtctek.aladin.R;
 import com.qtctek.aladin.common.AppUtils;
-import com.qtctek.aladin.common.general.Constant;
+import com.qtctek.aladin.common.Constant;
 import com.qtctek.aladin.dto.Product;
 import com.qtctek.aladin.helper.ToastHelper;
 import com.qtctek.aladin.presenter.user_control.saved_post.PresenterSavedPost;
@@ -64,14 +62,14 @@ public class PostFragment extends Fragment implements View.OnClickListener, View
 
         try {
 
-            MapPostNewsFragment mapPostNewsFragment = (MapPostNewsFragment) mActivity.getSupportFragmentManager().getFragments().get(0);
+            MapPostNewsFragment mapPostNewsFragment = (MapPostNewsFragment) mActivity.mainAdapter.getItem(0);
 
             this.mProduct = mapPostNewsFragment.arrProduct.get(MapPostNewsFragment.POSITION);
             initViews();
             setValue();
         }
         catch (Exception e){
-            removeFragment();
+            mActivity.expandableLayoutProduct.collapse();
             mActivity.getToastHelper().toast(R.string.error_handle, ToastHelper.LENGTH_SHORT);
         }
 
@@ -102,14 +100,6 @@ public class PostFragment extends Fragment implements View.OnClickListener, View
 
     }
 
-    private void removeFragment(){
-        try{
-            getFragmentManager().beginTransaction().remove(this).commit();
-        }
-        catch (java.lang.NullPointerException ignored){
-        }
-    }
-
     @SuppressLint("SetTextI18n")
     private void setValue() throws NullPointerException{
 
@@ -122,7 +112,7 @@ public class PostFragment extends Fragment implements View.OnClickListener, View
         this.mTxvArea.setText(mProduct.getArea() + "");
         this.mTxvAddress.setText(this.mProduct.getAddress());
 
-        String urlImage = MainActivity.WEB_SERVER + MainActivity.IMAGE_URL_RELATIVE + mProduct.getThumbnail();
+        String urlImage = MainActivity.IMAGE_URL + mProduct.getThumbnail();
         Picasso.with(getContext()).load(urlImage).into(this.mImvProduct, new Callback() {
             @Override
             public void onSuccess() {
@@ -155,18 +145,13 @@ public class PostFragment extends Fragment implements View.OnClickListener, View
         switch (v.getId()){
             case R.id.imv_cancel:
                 mActivity.expandableLayoutProduct.collapse();
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        removeFragment();
-                    }
-                }, 300);
                 break;
             case R.id.rl_item:
                 Intent intent = new Intent(getContext(), PostDetailActivity.class);
                 intent.putExtra(Product.ID, mProduct.getId());
                 intent.putExtra(Constant.SAVE, mProduct.getIsSaved());
                 intent.putExtra(Constant.POSITION, MapPostNewsFragment.POSITION);
+                intent.putExtra(Constant.ACTIVITY, "");
                 startActivity(intent);
                 break;
             case R.id.imb_save:
@@ -209,7 +194,7 @@ public class PostFragment extends Fragment implements View.OnClickListener, View
     @Override
     public void onHandleUpdateProductIdListSuccessful() {
 
-        MapPostNewsFragment mapPostNewsFragment = (MapPostNewsFragment) mActivity.getSupportFragmentManager().getFragments().get(0);
+        MapPostNewsFragment mapPostNewsFragment = (MapPostNewsFragment) mActivity.mainAdapter.getItem(0);
         if(this.mProduct.getIsSaved()){
             mapPostNewsFragment.arrProduct.get(MapPostNewsFragment.POSITION).setIsSaved(false);
         }
@@ -233,14 +218,5 @@ public class PostFragment extends Fragment implements View.OnClickListener, View
     @Override
     public void onHandleSavedProductListError(String error) {
 
-    }
-
-    @Override
-    public void onDestroyView() {
-
-        Runtime.getRuntime().gc();
-        System.gc();
-
-        super.onDestroyView();
     }
 }

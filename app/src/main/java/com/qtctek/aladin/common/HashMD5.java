@@ -1,4 +1,4 @@
-package com.qtctek.aladin.common.general;
+package com.qtctek.aladin.common;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;

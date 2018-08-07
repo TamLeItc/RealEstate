@@ -43,13 +43,14 @@ import com.google.android.gms.maps.model.VisibleRegion;
 import com.google.maps.android.ui.IconGenerator;
 import com.qtctek.aladin.R;
 import com.qtctek.aladin.common.AppUtils;
-import com.qtctek.aladin.common.general.Constant;
+import com.qtctek.aladin.common.Constant;
 import com.qtctek.aladin.helper.AlertHelper;
 import com.qtctek.aladin.helper.ToastHelper;
 import com.qtctek.aladin.network.NetworkConnection;
 import com.qtctek.aladin.dto.Condition;
 import com.qtctek.aladin.dto.Product;
 import com.qtctek.aladin.presenter.post_news.PresenterPostNews;
+import com.qtctek.aladin.presenter.user_control.save_search.PresenterSavedSearch;
 import com.qtctek.aladin.view.post_news.activity.MainActivity;
 import com.qtctek.aladin.view.post_news.interfaces.ViewHandlePostNews;
 import com.qtctek.aladin.view.post_news.interfaces.OnEventForMapPostNews;
@@ -94,9 +95,9 @@ public class MapPostNewsFragment extends Fragment implements OnMapReadyCallback,
     public Marker lastMarkerClicked = null;
     public Product lastProductClicked = null;
 
-    private int mMinZoom = 10;
-    private int mSecondZoom = 15;
-    private int mZoom = 16;
+    private final int mMinZoom = 10;
+    private final int mSecondZoom = 15;
+    private final int mZoom = 16;
 
 
     @Nullable
@@ -241,6 +242,7 @@ public class MapPostNewsFragment extends Fragment implements OnMapReadyCallback,
     @Override
     public void handlePostListSuccessful(ArrayList<Product> arrPost) {
         arrProduct.clear();
+
         if (arrPost.size() > 0) {
             ListPostNewsFragment.TXV_INFORMATION.setVisibility(View.GONE);
             this.mTxvInformation.setVisibility(View.GONE);
@@ -265,10 +267,10 @@ public class MapPostNewsFragment extends Fragment implements OnMapReadyCallback,
         this.lastProductClicked = null;
     }
 
-
     @Override
     public void handlePostListError(String error) {
         arrProduct.clear();
+        mMap.clear();
 
         ListPostNewsFragment.POST_ADAPTER.notifyDataSetChanged();
 
@@ -280,6 +282,7 @@ public class MapPostNewsFragment extends Fragment implements OnMapReadyCallback,
         this.mTxvInformation.setText(mActivity.getResources().getText(R.string.load_data_error));
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void handleQualityPostSuccessful(int quality) {
 
@@ -314,7 +317,6 @@ public class MapPostNewsFragment extends Fragment implements OnMapReadyCallback,
         this.mTxvInformation.setVisibility(View.VISIBLE);
         this.mTxvInformation.setText(mActivity.getResources().getText(R.string.load_data_error));
     }
-
 
     public void handlePostList(ArrayList<Product> arrPost) {
         ArrayList<Product> arrayList = new ArrayList<>();
@@ -464,7 +466,7 @@ public class MapPostNewsFragment extends Fragment implements OnMapReadyCallback,
         initSupportMapFragment();
 
         mPresenterPostNews.handleGetPostList(option, mActivity.bathroom, mActivity.bedroom, mActivity.minPrice + "",
-                mActivity.maxPrice , mActivity.formality, mActivity.architecture, mActivity.type, farRight, nearRight,
+                mActivity.maxPrice , mActivity.formality, mActivity.architecture, mActivity.type, mActivity.timePost , farRight, nearRight,
                 farLeft, nearLeft);
     }
 
@@ -542,6 +544,14 @@ public class MapPostNewsFragment extends Fragment implements OnMapReadyCallback,
         return arrProduct.size();
     }
 
+    private void saveLastSearch(){
+        MapPostNewsFragment mapPostNewsFragment = (MapPostNewsFragment) mActivity.mainAdapter.getItem(0);
+        Condition condition = new Condition(mActivity.mapLat, mActivity.mapLng, mapPostNewsFragment.mMap.getCameraPosition().zoom,
+                mActivity.minPrice, mActivity.maxPrice, mActivity.formality, mActivity.type, mActivity.architecture, mActivity.bathroom, mActivity.bedroom, Constant.LAST_SEARCH);
+
+        new PresenterSavedSearch(mActivity).handleSaveLastSearch(condition, mActivity);
+    }
+
     @Override
     public void onCameraIdle() {
 
@@ -569,27 +579,34 @@ public class MapPostNewsFragment extends Fragment implements OnMapReadyCallback,
         this.mTxvInformation.setText(text);
 
         if (mMap.getCameraPosition().zoom >= mSecondZoom) {
-            handleGetData("list");
+            handleGetData(Constant.LIST);
         } else {
             mMap.clear();
             arrProduct.clear();
 
-            handleGetData("count");
+            handleGetData(Constant.COUNT);
         }
+
+        saveLastSearch();
     }
 
     @Override
     public void onHandleFilter() {
         if (mMap.getCameraPosition().zoom >= mMinZoom) {
-            handleGetData("list");
+            handleGetData(Constant.LIST);
         } else {
-            handleGetData("count");
+            handleGetData(Constant.COUNT);
         }
     }
 
 
     @Override
     public void onPlaceSelected(String address, LatLngBounds latLngs, Double lat, Double lng) {
+
+        if(latLngs == null){
+            return;
+        }
+
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(lat, lng), mZoom));
 
         mActivity.edtSearch.setText(address);
@@ -654,19 +671,21 @@ public class MapPostNewsFragment extends Fragment implements OnMapReadyCallback,
     @Override
     public void onHandleSearch(Condition condition) {
 
-        MainActivity main = mActivity;
+        if(condition == null){
+            return;
+        }
 
-        assert main != null;
-        main.formality = condition.getFormality();
-        main.type = condition.getType();
-        main.architecture = condition.getArchitecture();
-        main.minPrice = condition.getMinPrice();
-        main.maxPrice = condition.getMaxPrice();
-        main.bedroom = condition.getBedroom();
-        main.bathroom = condition.getBathroom();
+        mActivity.formality = condition.getFormality();
+        mActivity.type = condition.getType();
+        mActivity.architecture = condition.getArchitecture();
+        mActivity.minPrice = condition.getMinPrice();
+        mActivity.maxPrice = condition.getMaxPrice();
+        mActivity.bedroom = condition.getBedroom();
+        mActivity.bathroom = condition.getBathroom();
 
         lastProductClicked = null;
         lastMarkerClicked = null;
+
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(condition.getMapLat(), condition.getMapLng()), condition.getZoom()));
     }
 
@@ -726,6 +745,10 @@ public class MapPostNewsFragment extends Fragment implements OnMapReadyCallback,
             return;
         }
         Location lastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+
+        if(lastLocation == null){
+            return;
+        }
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(lastLocation.getLatitude(), lastLocation.getLongitude()), mZoom));
     }
 

@@ -8,7 +8,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,7 +23,6 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 
 import com.qtctek.aladin.R;
-import com.qtctek.aladin.common.general.Constant;
 import com.qtctek.aladin.dto.Category;
 import com.qtctek.aladin.dto.Place;
 import com.qtctek.aladin.dto.Product;
@@ -38,8 +36,9 @@ import com.qtctek.aladin.view.new_post.product_information.adapter.AmenityAdapte
 import com.qtctek.aladin.view.new_post.product_information.adapter.CategoryAdapter;
 import com.qtctek.aladin.view.new_post.product_information.adapter.PlaceAdapter;
 
-import java.security.Key;
 import java.util.ArrayList;
+
+import static com.qtctek.aladin.view.new_post.activity.NewPostActivity.IS_UPDATE;
 
 public class ProductInformationFragment extends Fragment implements View.OnClickListener, ViewHandleModelGetData,
         ViewHandleModelNewPost, View.OnKeyListener, CompoundButton.OnCheckedChangeListener {
@@ -205,7 +204,15 @@ public class ProductInformationFragment extends Fragment implements View.OnClick
 
     @Override
     public void onGetCityList(boolean status, final ArrayList<Place> mArrCity) {
-        PlaceAdapter placeAdapter = new PlaceAdapter( mActivity, mArrCity, mActivity.product.getCityId());
+
+        PlaceAdapter placeAdapter;
+        if(IS_UPDATE){
+            placeAdapter = new PlaceAdapter( mActivity, mArrCity, mActivity.product.getCityId());
+        }
+        else{
+            placeAdapter = new PlaceAdapter( mActivity, mArrCity, -1);
+        }
+
 
         mDialog.setContentView(R.layout.dialog_list);
 
@@ -239,12 +246,16 @@ public class ProductInformationFragment extends Fragment implements View.OnClick
 
 
         final int itemSelectedIndex = getLocationSelectedPlace(mArrCity, true) + 4;
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                lsv.smoothScrollToPosition(itemSelectedIndex);
-            }
-        }, 250);
+
+        if(IS_UPDATE){
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    lsv.smoothScrollToPosition(itemSelectedIndex);
+                }
+            }, 250);
+        }
+
 
         mDialog.show();
     }
@@ -254,7 +265,13 @@ public class ProductInformationFragment extends Fragment implements View.OnClick
 
         mActivity.getDialogHelper().dismiss();
 
-        PlaceAdapter placeAdapter = new PlaceAdapter( mActivity, mArrDistrict, mActivity.product.getDistrictId());
+        PlaceAdapter placeAdapter;
+        if(IS_UPDATE){
+            placeAdapter = new PlaceAdapter( mActivity, mArrDistrict, mActivity.product.getDistrictId());
+        }
+        else{
+            placeAdapter = new PlaceAdapter( mActivity, mArrDistrict, -1);
+        }
 
         mDialog.setContentView(R.layout.dialog_list);
 
@@ -283,13 +300,15 @@ public class ProductInformationFragment extends Fragment implements View.OnClick
         });
 
         final int itemSelectedIndex = getLocationSelectedPlace(mArrDistrict, false) + 4;
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                lsv.smoothScrollToPosition(itemSelectedIndex);
-            }
-        }, 250);
 
+        if(IS_UPDATE){
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    lsv.smoothScrollToPosition(itemSelectedIndex);
+                }
+            }, 250);
+        }
 
         mDialog.show();
     }
@@ -440,19 +459,40 @@ public class ProductInformationFragment extends Fragment implements View.OnClick
         TextView txvTitle = mDialog.findViewById(R.id.txv_title);
         if(this.mCategory.equals(Product.TYPE)){
             txvTitle.setText(getResources().getString(R.string.select_type));
-            categoriesProductAdapter = new CategoryAdapter(
-                    mActivity, mArrCategory, mActivity.product.getTypeId());
+
+            if(IS_UPDATE){
+                categoriesProductAdapter = new CategoryAdapter(
+                        mActivity, mArrCategory, mActivity.product.getTypeId());
+            }
+            else{
+                categoriesProductAdapter = new CategoryAdapter(
+                        mActivity, mArrCategory, -1);
+            }
         }
         else if(this.mCategory.equals(Product.ARCHITECTURE)){
             txvTitle.setText(getResources().getString(R.string.select_architecture));
-            categoriesProductAdapter = new CategoryAdapter(
-                    mActivity, mArrCategory, mActivity.product.getArchitectureId());
+
+            if(IS_UPDATE){
+                categoriesProductAdapter = new CategoryAdapter(
+                        mActivity, mArrCategory, mActivity.product.getArchitectureId());
+            }
+            else{
+                categoriesProductAdapter = new CategoryAdapter(
+                        mActivity, mArrCategory, -1);
+            }
         }
 
-        ListView lsv = mDialog.findViewById(R.id.lsv_item);
+        final ListView lsv = mDialog.findViewById(R.id.lsv_item);
         lsv.setAdapter(categoriesProductAdapter);
 
-        lsv.smoothScrollToPosition(getLocationSelectedCategoryProduct(mArrCategory));
+        if(IS_UPDATE){
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    lsv.smoothScrollToPosition(getLocationSelectedCategoryProduct(mArrCategory));
+                }
+            }, 250);
+        }
 
         Button btnCancel = mDialog.findViewById(R.id.btn_cancel);
         btnCancel.setOnClickListener(new View.OnClickListener() {

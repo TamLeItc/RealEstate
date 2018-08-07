@@ -17,7 +17,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.qtctek.aladin.R;
-import com.qtctek.aladin.common.general.Constant;
+import com.qtctek.aladin.common.Constant;
 import com.qtctek.aladin.helper.AlertHelper;
 import com.qtctek.aladin.helper.DialogHelper;
 import com.qtctek.aladin.helper.KeyboardHelper;
@@ -87,7 +87,7 @@ public class UserActionActivity extends AppCompatActivity implements View.OnTouc
 
     @SuppressLint("ClickableViewAccessibility")
     private void initViews(){
-        mViewPager = (ViewPager) findViewById(R.id.view_pager);
+        mViewPager = findViewById(R.id.view_pager);
         this.mToolbar = findViewById(R.id.toolbar);
         this.mImvBack = findViewById(R.id.imv_back);
         this.mTxvToolbarTitle = findViewById(R.id.txv_toolbar_title);

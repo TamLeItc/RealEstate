@@ -3,10 +3,9 @@ package com.qtctek.aladin.model.user_action;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
-import android.util.Log;
 
 import com.qtctek.aladin.common.AppUtils;
-import com.qtctek.aladin.common.general.Constant;
+import com.qtctek.aladin.common.Constant;
 import com.qtctek.aladin.presenter.user_action.login.PresenterImpHandleLogin;
 import com.qtctek.aladin.view.post_news.activity.MainActivity;
 
@@ -21,7 +20,7 @@ import okhttp3.Response;
 
 public class ModelLogin {
 
-    private String mUrl = MainActivity.WEB_SERVER + "user_login.php";
+    private String mUrl = MainActivity.WEB_SERVER + "?detect=13&";
     private PresenterImpHandleLogin mPresenterImpHandleUserManager;
 
     public ModelLogin(PresenterImpHandleLogin mPresenterImpHandleUserManager){
@@ -77,6 +76,10 @@ public class ModelLogin {
 
             Request request = new Request.Builder()
                     .url(strings[0])
+                    .addHeader(AppUtils.USERNAME, AppUtils.USERNAME_HEADER)
+                    .addHeader(AppUtils.PASSWORD, AppUtils.PASSWORD_HEADER)
+                    .addHeader(AppUtils.AUTHORIZATION, AppUtils.AUTHORIZATION_HEADER)
+                    .get()
                     .post(requestBody)
                     .build();
 

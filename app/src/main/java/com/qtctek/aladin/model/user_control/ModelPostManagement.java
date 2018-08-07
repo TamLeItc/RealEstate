@@ -3,6 +3,7 @@ package com.qtctek.aladin.model.user_control;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.qtctek.aladin.common.AppUtils;
 import com.qtctek.aladin.presenter.user_control.post_management.PresenterImpHandlePostManagement;
 import com.qtctek.aladin.view.post_news.activity.MainActivity;
 
@@ -17,10 +18,9 @@ import okhttp3.Response;
 
 public class ModelPostManagement {
 
-    String mUrlGetListProduct = MainActivity.WEB_SERVER + "get_list_product.php";
-    String mUrlUpdateAcceptPost = MainActivity.WEB_SERVER + "update_accept_post.php";
-
-    String mUrlDeletePost = MainActivity.WEB_SERVER + "delete_product.php";
+    String mUrlGetListProduct = MainActivity.WEB_SERVER + "?detect=17&";
+    String mUrlUpdateAcceptPost = MainActivity.WEB_SERVER + "?detect=11&";
+    String mUrlDeletePost = MainActivity.WEB_SERVER + "?detect=18&";
 
     private PresenterImpHandlePostManagement mPresenterImpHandlePostManagement;
 
@@ -63,11 +63,14 @@ public class ModelPostManagement {
         @Override
         protected String doInBackground(String... strings) {
 
-            String url = strings[0] + "?email=" + "&formality=" + formality + "&status=" + status
+            String url = strings[0] + "email=" + "&formality=" + formality + "&status=" + status
                     + "&start=" + start + "&limit=" + limit + "&option=management";
 
             Request request = new Request.Builder()
                     .url(url)
+                    .addHeader(AppUtils.USERNAME, AppUtils.USERNAME_HEADER)
+                    .addHeader(AppUtils.PASSWORD, AppUtils.PASSWORD_HEADER)
+                    .addHeader(AppUtils.AUTHORIZATION, AppUtils.AUTHORIZATION_HEADER)
                     .get()
                     .build();
 
@@ -119,6 +122,10 @@ public class ModelPostManagement {
 
             Request request = new Request.Builder()
                     .url(strings[0])
+                    .addHeader(AppUtils.USERNAME, AppUtils.USERNAME_HEADER)
+                    .addHeader(AppUtils.PASSWORD, AppUtils.PASSWORD_HEADER)
+                    .addHeader(AppUtils.AUTHORIZATION, AppUtils.AUTHORIZATION_HEADER)
+                    .get()
                     .post(requestBody)
                     .build();
 
@@ -169,6 +176,10 @@ public class ModelPostManagement {
 
             Request request = new Request.Builder()
                     .url(strings[0])
+                    .addHeader(AppUtils.USERNAME, AppUtils.USERNAME_HEADER)
+                    .addHeader(AppUtils.PASSWORD, AppUtils.PASSWORD_HEADER)
+                    .addHeader(AppUtils.AUTHORIZATION, AppUtils.AUTHORIZATION_HEADER)
+                    .get()
                     .post(requestBody)
                     .build();
 

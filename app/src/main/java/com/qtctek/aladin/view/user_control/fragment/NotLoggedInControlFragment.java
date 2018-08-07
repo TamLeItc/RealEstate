@@ -41,8 +41,8 @@ public class NotLoggedInControlFragment extends Fragment implements View.OnClick
     }
 
     private void initViews(){
-        mViewPager = (ViewPager) mView.findViewById(R.id.view_pager);
-        mTabLayout = (TabLayout) mView.findViewById(R.id.tab_layout);
+        mViewPager = mView.findViewById(R.id.view_pager);
+        mTabLayout = mView.findViewById(R.id.tab_layout);
         this.mImvBack = mActivity.findViewById(R.id.imv_back);
 
         this.mToolbar = mActivity.findViewById(R.id.toolbar);

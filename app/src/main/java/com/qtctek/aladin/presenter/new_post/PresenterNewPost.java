@@ -45,9 +45,6 @@ public class PresenterNewPost  implements PresenterImpHandleModelNewPost{
         this.mModelNewPost.requireDeleteFile(linkImage, productId);
     }
 
-    public void handleExecutePost(int id){
-        this.mModelNewPost.requireExecutePost(id);
-    }
 
     @Override
     public void onInsertBlankPost(boolean status, int productId) {

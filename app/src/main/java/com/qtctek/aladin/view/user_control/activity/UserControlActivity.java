@@ -23,7 +23,7 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import com.qtctek.aladin.R;
-import com.qtctek.aladin.common.general.Constant;
+import com.qtctek.aladin.common.Constant;
 import com.qtctek.aladin.dto.User;
 import com.qtctek.aladin.helper.AlertHelper;
 import com.qtctek.aladin.helper.DialogHelper;
@@ -70,6 +70,8 @@ public class UserControlActivity extends AppCompatActivity implements AlertHelpe
     public static final int POST = 101;
     public static final int USER = 103;
     public static final int OTHER = 100;
+
+    public static final String ACTIVITY = "user_control";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -130,7 +132,7 @@ public class UserControlActivity extends AppCompatActivity implements AlertHelpe
             positionFragment = intent.getIntExtra(Constant.FRAGMENT, 0);
 
             if(positionFragment == 0){
-                this.isRequireAccountManagement = true;
+                    this.isRequireAccountManagement = true;
             }
             else{
                 this.isRequireAccountManagement = false;
@@ -197,6 +199,13 @@ public class UserControlActivity extends AppCompatActivity implements AlertHelpe
         }
         else{
             menuItemLogin.setVisible(false);
+        }
+
+        if(!isRequireAccountManagement){
+            menuItemUpdateUser.setVisible(false);
+        }
+        else{
+            menuItemUpdateUser.setVisible(true);
         }
 
         alertHelper.setCallback(this);

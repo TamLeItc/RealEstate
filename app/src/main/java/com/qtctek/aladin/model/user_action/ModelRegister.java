@@ -2,6 +2,7 @@ package com.qtctek.aladin.model.user_action;
 
 import android.os.AsyncTask;
 
+import com.qtctek.aladin.common.AppUtils;
 import com.qtctek.aladin.dto.User;
 import com.qtctek.aladin.presenter.user_action.register.PresenterImpHandleRegister;
 import com.qtctek.aladin.view.post_news.activity.MainActivity;
@@ -17,7 +18,7 @@ import okhttp3.Response;
 
 public class ModelRegister {
 
-    private String mUrl = MainActivity.WEB_SERVER + "user_register.php";
+    private String mUrl = MainActivity.WEB_SERVER + "?detect=14&";
 
     private PresenterImpHandleRegister mPresenterImpHandleRegister;
 
@@ -62,6 +63,10 @@ public class ModelRegister {
 
             Request request = new Request.Builder()
                     .url(strings[0])
+                    .addHeader(AppUtils.USERNAME, AppUtils.USERNAME_HEADER)
+                    .addHeader(AppUtils.PASSWORD, AppUtils.PASSWORD_HEADER)
+                    .addHeader(AppUtils.AUTHORIZATION, AppUtils.AUTHORIZATION_HEADER)
+                    .get()
                     .post(requestBody)
                     .build();
 
@@ -123,6 +128,10 @@ public class ModelRegister {
 
             Request request = new Request.Builder()
                     .url(strings[0])
+                    .addHeader(AppUtils.USERNAME, AppUtils.USERNAME_HEADER)
+                    .addHeader(AppUtils.PASSWORD, AppUtils.PASSWORD_HEADER)
+                    .addHeader(AppUtils.AUTHORIZATION, AppUtils.AUTHORIZATION_HEADER)
+                    .get()
                     .post(requestBody)
                     .build();
 

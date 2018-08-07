@@ -1,9 +1,7 @@
 package com.qtctek.aladin.view.new_post.images_information;
 
 import android.content.Context;
-import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,7 +44,7 @@ public class ImageAdapter extends  RecyclerView.Adapter<ImageAdapter.ViewHolder>
 
         Photo photo = mArrPhoto.get(position);
         if (!photo.getIsUpload()) {
-            String url = MainActivity.WEB_SERVER + MainActivity.IMAGE_URL_RELATIVE + this.mArrPhoto.get(position).getPhotoLink();
+            String url = MainActivity.IMAGE_URL + this.mArrPhoto.get(position).getPhotoLink();
             Picasso.with(mContext).load(url).into(holder.imvImage);
 
             holder.btnDelete.setOnClickListener(new View.OnClickListener() {
@@ -61,7 +59,12 @@ public class ImageAdapter extends  RecyclerView.Adapter<ImageAdapter.ViewHolder>
                 @Override
                 public void onClick(View v) {
                     mArrPhoto.remove(position);
-                    ImagesInformationFragment.IMAGE_ADAPTER.notifyDataSetChanged();
+
+                    NewPostActivity newPostActivity = (NewPostActivity)mContext;
+
+                    ImagesInformationFragment imagesInformationFragment = (ImagesInformationFragment) newPostActivity.newPostAdapter.getItem(0);
+
+                    imagesInformationFragment.imageAdapter.notifyDataSetChanged();
                 }
             });
         }
@@ -71,17 +74,11 @@ public class ImageAdapter extends  RecyclerView.Adapter<ImageAdapter.ViewHolder>
             public void onClick(View v) {
                 NewPostActivity newPostActivity = (NewPostActivity)mContext;
 
-                ImagesInformationFragment imagesInformationFragment;
-                try {
-                    imagesInformationFragment = (ImagesInformationFragment) newPostActivity.getSupportFragmentManager()
-                            .getFragments().get(0);
-                }
-                catch (Exception e){
-                    imagesInformationFragment = (ImagesInformationFragment) newPostActivity.getSupportFragmentManager()
-                            .getFragments().get(1);
-                }
+                ImagesInformationFragment imagesInformationFragment = (ImagesInformationFragment) newPostActivity.newPostAdapter.getItem(0);
 
                 imagesInformationFragment.imvViewLarge.setImageDrawable(holder.imvImage.getDrawable());
+
+                newPostActivity.toolbar.setVisibility(View.GONE);
 
                 Animation animationUtils = AnimationUtils.loadAnimation(mContext, R.anim.zoom_0_to_100);
                 imagesInformationFragment.rlViewLarge.startAnimation(animationUtils);

@@ -18,6 +18,7 @@
         android:textColor="@color/colorGrayDark"/>
 
     <EditText
+        android:textCursorDrawable="@drawable/custom_text_cursor_dialog"
         android:textColor="@color/colorGrayDark"
         android:inputType="textNoSuggestions"
         android:singleLine="true"

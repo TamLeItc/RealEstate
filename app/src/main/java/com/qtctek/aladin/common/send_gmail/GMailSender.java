@@ -1,4 +1,4 @@
-package com.qtctek.aladin.common.general.send_gmail;
+package com.qtctek.aladin.common.send_gmail;
 
 import android.os.StrictMode;
 
@@ -20,20 +20,21 @@ import javax.mail.internet.MimeMessage;
 
 public class GMailSender extends javax.mail.Authenticator  {
 
-    private String mailhost = "smtp.gmail.com";
-    private String email = "talk.lettalk@gmail.com";
-    private String password = "dangerous183461";
-    private Session session;
+    public static final String EMAIL_SUPPORT_USER = "talk.lettalk@gmail.com";
+    public static final String PASSWORD_SUPPORT_USER = "dangerous183461";
+
+    private String mMailHost = "smtp.gmail.com";
+    private Session mSession;
 
     static {
-        Security.addProvider(new com.qtctek.aladin.common.general.send_gmail.JSSEProvider());
+        Security.addProvider(new com.qtctek.aladin.common.send_gmail.JSSEProvider());
     }
 
     public GMailSender() {
 
         Properties props = new Properties();
         props.setProperty("mail.transport.protocol", "smtp");
-        props.setProperty("mail.host", mailhost);
+        props.setProperty("mail.host", mMailHost);
         props.put("mail.smtp.auth", "true");
         props.put("mail.smtp.port", "465");
         props.put("mail.smtp.socketFactory.port", "465");
@@ -42,7 +43,7 @@ public class GMailSender extends javax.mail.Authenticator  {
         props.put("mail.smtp.socketFactory.fallback", "false");
         props.setProperty("mail.smtp.quitwait", "false");
 
-        session = Session.getDefaultInstance(props, this);
+        mSession = Session.getDefaultInstance(props, this);
 
 //        IIf no this code code program will be failed "android.os.NetworkOnMainThreadException"
 //        This exception is thrown when application attempts to perform a networking operation in
@@ -61,14 +62,14 @@ public class GMailSender extends javax.mail.Authenticator  {
     }
 
     protected PasswordAuthentication getPasswordAuthentication() {
-        return new PasswordAuthentication(email, password);
+        return new PasswordAuthentication(EMAIL_SUPPORT_USER, PASSWORD_SUPPORT_USER);
     }
 
     public synchronized void sendMail(String subject, String body, String recipients) throws Exception {
         try{
-            MimeMessage message = new MimeMessage(session);
+            MimeMessage message = new MimeMessage(mSession);
             DataHandler handler = new DataHandler(new ByteArrayDataSource(body.getBytes(), "text/plain"));
-            message.setSender(new InternetAddress(email));
+            message.setSender(new InternetAddress(EMAIL_SUPPORT_USER));
             message.setSubject(subject);
             message.setDataHandler(handler);
             if (recipients.indexOf(',') > 0)
@@ -118,5 +119,4 @@ public class GMailSender extends javax.mail.Authenticator  {
             throw new IOException("Not Supported");
         }
     }
-
 }

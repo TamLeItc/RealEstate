@@ -22,7 +22,6 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
@@ -35,7 +34,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.qtctek.aladin.R;
 import com.qtctek.aladin.common.AppUtils;
-import com.qtctek.aladin.common.general.Constant;
+import com.qtctek.aladin.common.Constant;
 import com.qtctek.aladin.dto.Photo;
 import com.qtctek.aladin.dto.Product;
 import com.qtctek.aladin.helper.AlertHelper;
@@ -48,6 +47,7 @@ import com.qtctek.aladin.view.post_news.activity.MainActivity;
 import com.qtctek.aladin.view.post_news.fragment.ListPostNewsFragment;
 import com.qtctek.aladin.view.post_news.fragment.MapPostNewsFragment;
 import com.qtctek.aladin.view.post_news.fragment.PostFragment;
+import com.qtctek.aladin.view.user_control.activity.UserControlActivity;
 import com.qtctek.aladin.view.user_control.saved_post.ViewHandleSavedPost;
 
 import net.cachapa.expandablelayout.ExpandableLayout;
@@ -104,6 +104,7 @@ public class PostDetailActivity extends AppCompatActivity implements ViewHandleP
     private Product mProduct;
 
     private int mPosition;
+    private String mActivity;
     private int mScrollY;
 
     private boolean mDoubleBackToExitPressedOnce = false;
@@ -131,6 +132,7 @@ public class PostDetailActivity extends AppCompatActivity implements ViewHandleP
         Intent intent = getIntent();
         int idPost = intent.getIntExtra(Product.ID, 0);
         this.mPosition = intent.getIntExtra(Constant.POSITION, -1);
+        this.mActivity = intent.getStringExtra(Constant.ACTIVITY);
 
         this.mPresenterPostDetail = new PresenterPostDetail(this);
         this.mPresenterPostDetail.handleGetDataProductDetail(idPost);
@@ -158,7 +160,8 @@ public class PostDetailActivity extends AppCompatActivity implements ViewHandleP
         this.mTxvAmenities = findViewById(R.id.txv_amenities);
         this.mImvBack = findViewById(R.id.imv_back);
         this.mImvMore = findViewById(R.id.imv_more);
-        this.mImbCall = findViewById(R.id.imb_call);
+        this.mImbCall =
+                findViewById(R.id.imb_call);
         this.mImbSave = findViewById(R.id.imb_save);
         this.mLlMore = findViewById(R.id.ll_more);
         this.mTxvTitle = findViewById(R.id.txv_title);
@@ -167,6 +170,13 @@ public class PostDetailActivity extends AppCompatActivity implements ViewHandleP
         this.mRlOption = findViewById(R.id.rl_option);
         this.mRlSlide = findViewById(R.id.rl_slide);
         this.mImbMail = findViewById(R.id.imb_mail);
+
+        if(this.mActivity.equals(UserControlActivity.ACTIVITY)){
+            this.mImbSave.setVisibility(View.GONE);
+        }
+        else{
+            this.mImbSave.setVisibility(View.VISIBLE);
+        }
 
         this.mBtnMapView.setOnClickListener(this);
         this.mBtnImageView.setOnClickListener(this);
@@ -266,7 +276,7 @@ public class PostDetailActivity extends AppCompatActivity implements ViewHandleP
         if(!mProduct.getThumbnail().equals("")){
             TextSliderView textSliderView = new TextSliderView(this);
 
-            String url = MainActivity.WEB_SERVER + MainActivity.IMAGE_URL_RELATIVE + mProduct.getThumbnail();
+            String url = MainActivity.IMAGE_URL + mProduct.getThumbnail();
             textSliderView.image(url)
                     .setScaleType(BaseSliderView.ScaleType.CenterCrop);
             mSliderLayout.addSlider(textSliderView);
@@ -283,7 +293,7 @@ public class PostDetailActivity extends AppCompatActivity implements ViewHandleP
         for(int i = 0; i < arrPhoto.size(); i++){
             TextSliderView textSliderView = new TextSliderView(this);
 
-            String url = MainActivity.WEB_SERVER + MainActivity.IMAGE_URL_RELATIVE + arrPhoto.get(i).getPhotoLink();
+            String url = MainActivity.IMAGE_URL + arrPhoto.get(i).getPhotoLink();
             textSliderView.image(url)
                     .setScaleType(BaseSliderView.ScaleType.CenterCrop);
 

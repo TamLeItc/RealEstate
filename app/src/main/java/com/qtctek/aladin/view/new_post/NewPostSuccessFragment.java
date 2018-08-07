@@ -11,11 +11,11 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.qtctek.aladin.R;
-import com.qtctek.aladin.common.general.Constant;
+import com.qtctek.aladin.common.Constant;
 import com.qtctek.aladin.view.new_post.activity.NewPostActivity;
 import com.qtctek.aladin.view.user_control.activity.UserControlActivity;
 
-public class NewPostSuccess extends Fragment implements View.OnClickListener {
+public class NewPostSuccessFragment extends Fragment implements View.OnClickListener {
 
     private NewPostActivity mActivity;
 

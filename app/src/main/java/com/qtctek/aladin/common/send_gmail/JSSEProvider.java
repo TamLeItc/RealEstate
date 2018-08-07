@@ -1,4 +1,4 @@
-package com.qtctek.aladin.common.general.send_gmail;
+package com.qtctek.aladin.common.send_gmail;
 
 import java.security.AccessController;
 import java.security.Provider;

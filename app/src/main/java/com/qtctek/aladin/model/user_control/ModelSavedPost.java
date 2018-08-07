@@ -3,28 +3,23 @@ package com.qtctek.aladin.model.user_control;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
-import android.util.Log;
 
-import com.google.gson.Gson;
-import com.qtctek.aladin.common.general.Constant;
+import com.qtctek.aladin.common.AppUtils;
+import com.qtctek.aladin.common.Constant;
 import com.qtctek.aladin.presenter.user_control.saved_post.PresenterImpIHandleSavedPost;
 import com.qtctek.aladin.view.post_news.activity.MainActivity;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.concurrent.TimeUnit;
 
-import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
-import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class ModelSavedPost {
 
     private PresenterImpIHandleSavedPost mPresenterImPHandleSavedPost;
 
-    String mUrlGetListProduct = MainActivity.WEB_SERVER + "get_list_product.php";
+    String mUrlGetListProduct = MainActivity.WEB_SERVER + "?detect=17&";
 
     public ModelSavedPost(PresenterImpIHandleSavedPost mPresenterImPHandleSavedPost){
         this.mPresenterImPHandleSavedPost = mPresenterImPHandleSavedPost;
@@ -73,10 +68,13 @@ public class ModelSavedPost {
 
         @Override
         protected String doInBackground(String... strings) {
-            String mUrl = strings[0] + "?email=%" + "&start=" + start + "&limit=" + limit + "&option=saved_product"
+            String mUrl = strings[0] + "email=%" + "&start=" + start + "&limit=" + limit + "&option=saved_product"
                     + "&list_id=" + listId;
             Request request = new Request.Builder()
                     .url(mUrl)
+                    .addHeader(AppUtils.USERNAME, AppUtils.USERNAME_HEADER)
+                    .addHeader(AppUtils.PASSWORD, AppUtils.PASSWORD_HEADER)
+                    .addHeader(AppUtils.AUTHORIZATION, AppUtils.AUTHORIZATION_HEADER)
                     .get()
                     .build();
 

@@ -33,8 +33,6 @@ import static com.qtctek.aladin.view.post_news.fragment.SearchPlaceFragment.PROG
 public class PlaceAutocompleteAdapter extends RecyclerView.Adapter<PlaceAutocompleteAdapter.PlaceViewHolder>
     implements Filterable{
 
-
-
     public interface PlaceAutoCompleteInterface{
         void onPlaceClick(ArrayList<PlaceAutocomplete> mResultList, int position);
     }

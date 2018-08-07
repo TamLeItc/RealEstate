@@ -25,10 +25,12 @@ public class PresenterPostNews implements PresenterImpHandlePostNews {
         this.mModelPostNews = new ModelPostNews(this);
     }
 
-    public void handleGetPostList(String option, int bathroom, int bedroom, String minPrice, String maxPrice, String formality, String architecture, String type,
+    public void handleGetPostList(String option, int bathroom, int bedroom, String minPrice, String maxPrice,
+                                  String formality, String architecture, String type, int timePost,
                                   LatLng farRight, LatLng nearRight, LatLng farLeft, LatLng nearLeft){
 
-        this.mModelPostNews.requireGetPostList(option, bathroom, bedroom, minPrice, maxPrice, formality, architecture, type, farRight, nearRight, farLeft, nearLeft);
+        this.mModelPostNews.requireGetPostList(option, bathroom, bedroom, minPrice, maxPrice, formality,
+                architecture, type, timePost, farRight, nearRight, farLeft, nearLeft);
 
     }
 

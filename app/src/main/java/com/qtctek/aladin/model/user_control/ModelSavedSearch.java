@@ -2,9 +2,8 @@ package com.qtctek.aladin.model.user_control;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.util.Log;
 
-import com.qtctek.aladin.common.general.Constant;
+import com.qtctek.aladin.common.Constant;
 import com.qtctek.aladin.presenter.user_control.save_search.PresenterImpHandleSavedSearch;
 
 public class ModelSavedSearch {

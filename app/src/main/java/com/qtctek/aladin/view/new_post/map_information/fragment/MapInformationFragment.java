@@ -31,7 +31,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.qtctek.aladin.R;
 import com.qtctek.aladin.common.AppUtils;
-import com.qtctek.aladin.common.general.Constant;
+import com.qtctek.aladin.common.Constant;
 import com.qtctek.aladin.helper.AlertHelper;
 import com.qtctek.aladin.helper.ToastHelper;
 import com.qtctek.aladin.presenter.new_post.PresenterNewPost;

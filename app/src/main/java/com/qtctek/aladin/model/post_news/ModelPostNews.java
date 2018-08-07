@@ -19,18 +19,18 @@ import okhttp3.Response;
 
 public class ModelPostNews {
 
-    private String mUrlGetPostList = MainActivity.WEB_SERVER + "get_list_product_with_location.php";
+    private String mUrlGetPostList = MainActivity.WEB_SERVER + "?detect=11&";
     private PresenterImpHandlePostNews mPresenterImpHandlePostNews;
-
-
 
     public ModelPostNews( PresenterImpHandlePostNews mPresenterImpHandlePostNews){
         this.mPresenterImpHandlePostNews = mPresenterImpHandlePostNews;
     }
 
-    public void requireGetPostList(String option, int bedroom, int bathroom, String minPrice, String maxPrice, String formality, String architecture, String type,
+    public void requireGetPostList(String option, int bedroom, int bathroom, String minPrice, String maxPrice,
+                                   String formality, String architecture, String type, int timePost,
                                    LatLng farRight, LatLng nearRight, LatLng farLeft, LatLng nearLeft){
-        new GetPostListWithAddress(option, bedroom, bathroom, minPrice, maxPrice, formality, architecture, type,  farRight, nearRight, farLeft, nearLeft)
+        new GetPostListWithAddress(option, bedroom, bathroom, minPrice, maxPrice, formality, architecture, type, timePost,
+                farRight, nearRight, farLeft, nearLeft)
             .execute(mUrlGetPostList);
     }
 
@@ -42,14 +42,16 @@ public class ModelPostNews {
         String option;
         int bedroom, bathroom;
         String minPrice, maxPrice, formality, architecture, type;
+        String timePost;
         LatLng farRight;
         LatLng nearRight;
         LatLng farLeft;
         LatLng nearLeft;
 
 
-        public GetPostListWithAddress(String option, int bathroom, int bedroom, String minPrice, String maxPrice, String formality, String architecture,
-                                      String type, LatLng farRight, LatLng nearRight, LatLng farLeft, LatLng nearLeft){
+        public GetPostListWithAddress(String option, int bathroom, int bedroom, String minPrice, String maxPrice,
+                                      String formality, String architecture, String type, int timePost,
+                                      LatLng farRight, LatLng nearRight, LatLng farLeft, LatLng nearLeft){
             okHttpClient = new OkHttpClient.Builder()
                     .connectTimeout(15, TimeUnit.SECONDS)
                     .readTimeout(10, TimeUnit.SECONDS)
@@ -68,6 +70,14 @@ public class ModelPostNews {
             this.bedroom = bedroom;
             this.bathroom = bathroom;
             this.option = option;
+
+            if(timePost == -1){
+                this.timePost = "-90 day";
+            }
+            else{
+                this.timePost = "-" + timePost;
+            }
+
         }
 
         @Override
@@ -84,6 +94,7 @@ public class ModelPostNews {
                     .addFormDataPart("architecture", architecture)
                     .addFormDataPart("formality", formality)
                     .addFormDataPart("type", type)
+                    .addFormDataPart("time_post", timePost)
                     .addFormDataPart(AppUtils.QUALITY_BATHROOM, bathroom + "")
                     .addFormDataPart(AppUtils.QUALITY_BEDROOM, bedroom + "")
                     .addFormDataPart("option", option)
@@ -92,6 +103,9 @@ public class ModelPostNews {
 
             Request request = new Request.Builder()
                     .url(strings[0])
+                    .addHeader(AppUtils.USERNAME, AppUtils.USERNAME_HEADER)
+                    .addHeader(AppUtils.PASSWORD, AppUtils.PASSWORD_HEADER)
+                    .addHeader(AppUtils.AUTHORIZATION, AppUtils.AUTHORIZATION_HEADER)
                     .post(requestBody)
                     .build();
 
@@ -106,6 +120,7 @@ public class ModelPostNews {
 
         @Override
         protected void onPostExecute(String s) {
+
             if(!s.equals("error")){
                 if(option.equals("count")){
                     mPresenterImpHandlePostNews.getQualityPostSuccessful(s);

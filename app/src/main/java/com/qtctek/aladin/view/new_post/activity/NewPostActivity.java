@@ -17,7 +17,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.qtctek.aladin.R;
-import com.qtctek.aladin.common.general.Constant;
+import com.qtctek.aladin.common.Constant;
 import com.qtctek.aladin.helper.AlertHelper;
 import com.qtctek.aladin.dto.Photo;
 import com.qtctek.aladin.dto.Product;
@@ -45,7 +45,7 @@ public class NewPostActivity extends AppCompatActivity implements ViewHandleMode
         View.OnTouchListener, View.OnClickListener, AlertHelper.AlertHelperCallback, ViewPager.OnPageChangeListener {
 
     public ViewPager viewPaper;
-    private Toolbar mToolbar;
+    public Toolbar toolbar;
     private Fragment mCurrentFragment;
     private TextView mTxvToolbarTitle;
     private Menu mMenu;
@@ -64,7 +64,7 @@ public class NewPostActivity extends AppCompatActivity implements ViewHandleMode
     private ImageView mImvNext;
     private MenuItem mMenuItem;
 
-    private NewPostAdapter mNewPostAdapter;
+    public NewPostAdapter newPostAdapter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -102,7 +102,7 @@ public class NewPostActivity extends AppCompatActivity implements ViewHandleMode
         viewPaper = findViewById(R.id.view_pager);
         this.mImvBack = findViewById(R.id.imv_back);
         this.mImvNext = findViewById(R.id.imv_next);
-        this.mToolbar = findViewById(R.id.toolbar);
+        this.toolbar = findViewById(R.id.toolbar);
         this.mTxvToolbarTitle = findViewById(R.id.txv_toolbar_title);
 
         viewPaper.setOnTouchListener(this);
@@ -113,15 +113,15 @@ public class NewPostActivity extends AppCompatActivity implements ViewHandleMode
 
     private void addControl() {
         FragmentManager fragmentManager = getSupportFragmentManager();
-        mNewPostAdapter = new NewPostAdapter(fragmentManager);
-        viewPaper.setAdapter(mNewPostAdapter);
+        newPostAdapter = new NewPostAdapter(fragmentManager);
+        viewPaper.setAdapter(newPostAdapter);
 
         this.mCurrentFragment = getSupportFragmentManager().getFragments().get(0);
         this.mCurrentPositionFragment = 0;
     }
 
     private void addToolbar(){
-        setSupportActionBar(this.mToolbar);
+        setSupportActionBar(this.toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
     }
 
@@ -292,14 +292,16 @@ public class NewPostActivity extends AppCompatActivity implements ViewHandleMode
 
         addControl();
 
-        setAvartar();
-        ImagesInformationFragment.ARR_PHOTO.clear();
-        ImagesInformationFragment.ARR_PHOTO.addAll(arrPhoto);
+        ImagesInformationFragment imagesInformationFragment = (ImagesInformationFragment) newPostAdapter.getItem(0);
 
-        ImagesInformationFragment.IMAGE_ADAPTER.notifyDataSetChanged();
+        setAvartar();
+        imagesInformationFragment.arrPhoto.clear();
+        imagesInformationFragment.arrPhoto.addAll(arrPhoto);
+
+        imagesInformationFragment.imageAdapter.notifyDataSetChanged();
 
         if(!IS_UPDATE || arrPhoto.size() <= 1){
-            ImagesInformationFragment.FILE_NAME = 1;
+            imagesInformationFragment.fileName = 1;
         }
         else{
             int maxFile = 1;
@@ -316,7 +318,7 @@ public class NewPostActivity extends AppCompatActivity implements ViewHandleMode
                 catch (Exception ignored){
                 }
             }
-            ImagesInformationFragment.FILE_NAME = maxFile + 1;
+            imagesInformationFragment.fileName = maxFile + 1;
 
         }
 
@@ -324,26 +326,28 @@ public class NewPostActivity extends AppCompatActivity implements ViewHandleMode
 
     private void setAvartar(){
 
-        ImagesInformationFragment.PROGRESSBAR.setVisibility(View.VISIBLE);
+        final ImagesInformationFragment imagesInformationFragment = (ImagesInformationFragment) newPostAdapter.getItem(0);
 
-        String url = MainActivity.WEB_SERVER + MainActivity.IMAGE_URL_RELATIVE + product.getThumbnail();
+        imagesInformationFragment.progressBarLoading.setVisibility(View.VISIBLE);
+
+        String url = MainActivity.IMAGE_URL + product.getThumbnail();
 
         if(url.equals("")){
-            ImagesInformationFragment.PROGRESSBAR.setVisibility(View.GONE);
-            ImagesInformationFragment.IMV_AVARTAR.setImageResource(R.drawable.icon_product);
+            imagesInformationFragment.progressBarLoading.setVisibility(View.GONE);
+            imagesInformationFragment.imvAvartar.setImageResource(R.drawable.icon_product);
             return;
         }
 
-        Picasso.with(this).load(url).into(ImagesInformationFragment.IMV_AVARTAR, new Callback() {
+        Picasso.with(this).load(url).into(imagesInformationFragment.imvAvartar, new Callback() {
             @Override
             public void onSuccess() {
-                ImagesInformationFragment.PROGRESSBAR.setVisibility(View.GONE);
+                imagesInformationFragment.progressBarLoading.setVisibility(View.GONE);
             }
 
             @Override
             public void onError() {
-                ImagesInformationFragment.PROGRESSBAR.setVisibility(View.GONE);
-                ImagesInformationFragment.IMV_AVARTAR.setImageResource(R.drawable.icon_product);
+                imagesInformationFragment.progressBarLoading.setVisibility(View.GONE);
+                imagesInformationFragment.imvAvartar.setImageResource(R.drawable.icon_product);
             }
         });
     }
@@ -436,7 +440,7 @@ public class NewPostActivity extends AppCompatActivity implements ViewHandleMode
 
     @Override
     public void onPageSelected(int position) {
-        this.mCurrentFragment = mNewPostAdapter.getItem(position);
+        this.mCurrentFragment = newPostAdapter.getItem(position);
 
         mCurrentPositionFragment = position;
 

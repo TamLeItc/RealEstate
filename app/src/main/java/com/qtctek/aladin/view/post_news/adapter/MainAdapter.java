@@ -9,8 +9,8 @@ import com.qtctek.aladin.view.post_news.fragment.MapPostNewsFragment;
 
 public class MainAdapter extends FragmentStatePagerAdapter {
 
-    MapPostNewsFragment mapPostNewsFragment = new MapPostNewsFragment();
-    ListPostNewsFragment listPostNewsFragment = new ListPostNewsFragment();
+    private MapPostNewsFragment mMapPostNewsFragment = new MapPostNewsFragment();
+    private ListPostNewsFragment mListPostNewsFragment = new ListPostNewsFragment();
 
     public MainAdapter(FragmentManager fm) {
         super(fm);
@@ -22,10 +22,10 @@ public class MainAdapter extends FragmentStatePagerAdapter {
         switch (position){
 
             case 0:
-                frg = mapPostNewsFragment;
+                frg = mMapPostNewsFragment;
                 break;
             case 1:
-                frg = listPostNewsFragment;
+                frg = mListPostNewsFragment;
                 break;
         }
         return frg;

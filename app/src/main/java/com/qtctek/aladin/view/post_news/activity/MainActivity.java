@@ -6,6 +6,7 @@ import android.app.Dialog;
 import android.app.Fragment;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.NavigationView;
@@ -36,7 +37,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.qtctek.aladin.Environments;
 import com.qtctek.aladin.R;
 import com.qtctek.aladin.common.AppUtils;
-import com.qtctek.aladin.common.general.Constant;
+import com.qtctek.aladin.common.Constant;
 import com.qtctek.aladin.dto.Condition;
 import com.qtctek.aladin.dto.Product;
 import com.qtctek.aladin.dto.User;
@@ -68,10 +69,10 @@ import java.util.Comparator;
 import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,
-        View.OnTouchListener, View.OnClickListener, OnUserLogin, ViewHandleSavedSearch, AlertHelper.AlertHelperCallback {
+        View.OnTouchListener, View.OnClickListener, OnUserLogin, ViewHandleSavedSearch, AlertHelper.AlertHelperCallback, ViewPager.OnPageChangeListener {
 
     public static String WEB_SERVER;
-    public static String IMAGE_URL_RELATIVE;
+    public static String IMAGE_URL;
 
     public static User USER = new User();
 
@@ -115,6 +116,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean isFirstOpenApp;
     public boolean isEditSaved = false;
     public MainAdapter mainAdapter;
+    public int timePost = 60;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -122,7 +124,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setContentView(R.layout.activity_main);
 
         WEB_SERVER = Environments.DOMAIN;
-        IMAGE_URL_RELATIVE = Environments.IMAGE_URL_RELATIVE;
+        IMAGE_URL = Environments.IMAGE_FOLDER_URL;
 
         toastHelper = new ToastHelper(this);
         alertHelper = new AlertHelper(this);
@@ -201,6 +203,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         this.mLlProfile.setOnClickListener(this);
         this.mLlViewMode.setOnClickListener(this);
         this.edtSearch.setOnClickListener(this);
+        viewPaper.addOnPageChangeListener(this);
     }
 
     private void addNavigationView(){
@@ -310,26 +313,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (id == R.id.action_view) {
 
             if(item.getTitle().equals("List")){
-
                 viewPaper.setCurrentItem(1);
                 item.setTitle("Map");
-
-                this.mLlViewMode.setVisibility(View.GONE);
-                this.mLlSort.setVisibility(View.VISIBLE);
-
             }
             else{
-                if(isEditSaved){
-                    MapPostNewsFragment mapPostNewsFragment = (MapPostNewsFragment) mainAdapter.getItem(0);
-                    mapPostNewsFragment.loadMarker();
-
-                    isEditSaved = false;
-                }
-
                 viewPaper.setCurrentItem(0);
                 item.setTitle("List");
-                this.mLlViewMode.setVisibility(View.VISIBLE);
-                this.mLlSort.setVisibility(View.GONE);
             }
 
         }
@@ -393,7 +382,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if(id == R.id.nav_new_post){
             if(USER.getLevel() == User.USER_NULL){
                 alertHelper.setCallback(this);
-                alertHelper.alert(R.string.error, R.string.login_to_continue, false, R.string.ok, R.string.cancel, Constant.LOGIN);
+                alertHelper.alert(R.string.require, R.string.login_to_continue, false, R.string.ok, R.string.cancel, Constant.LOGIN);
             }
             else{
                 Intent intent = new Intent(MainActivity.this, NewPostActivity.class);
@@ -467,7 +456,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             toastHelper.toast("Chức năng đang được phát triển, vui lòng quay lại sau. Xin cảm ơn!!!", ToastHelper.LENGTH_SHORT);
         }
         else if (id == R.id.nav_feedback) {
-            toastHelper.toast("Chức năng đang được phát triển, vui lòng quay lại sau. Xin cảm ơn!!!", ToastHelper.LENGTH_SHORT);
+            feedback();
         }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -475,6 +464,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         dialogHelper.dismiss();
         return true;
+    }
+
+    private void feedback(){
+        Intent intent = new Intent();
+        intent.setAction(Intent.ACTION_VIEW);
+        intent.setData(Uri.parse("mailto:" + Constant.EMAIL_FEEDBACK));
+        intent.putExtra(Intent.EXTRA_SUBJECT, getResources().getString(R.string.feedback_subject));
+
+        startActivity(Intent.createChooser(intent, getResources().getString(R.string.send_a_mail)));
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -538,6 +536,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Button mBtnCancel = dialog.findViewById(R.id.btn_cancel);
 
         dialog.show();
+
         mBtnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -769,14 +768,31 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     @Override
-    protected void onStop() {
-        MapPostNewsFragment mapPostNewsFragment = (MapPostNewsFragment)mainAdapter.getItem(0);
-        Condition condition = new Condition(mapLat, mapLng, mapPostNewsFragment.mMap.getCameraPosition().zoom,
-                minPrice, maxPrice, formality, type, architecture, bathroom, bedroom, Constant.LAST_SEARCH);
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
-        new PresenterSavedSearch(this).handleSaveLastSearch(condition, this);
+    }
 
-        super.onStop();
+    @Override
+    public void onPageSelected(int position) {
+        if(position == 0){
+            if(isEditSaved){
+                MapPostNewsFragment mapPostNewsFragment = (MapPostNewsFragment) mainAdapter.getItem(0);
+                mapPostNewsFragment.loadMarker();
+
+                isEditSaved = false;
+            }
+            this.mLlViewMode.setVisibility(View.VISIBLE);
+            this.mLlSort.setVisibility(View.GONE);
+        }
+        else{
+            this.mLlViewMode.setVisibility(View.GONE);
+            this.mLlSort.setVisibility(View.VISIBLE);
+        }
+    }
+
+    @Override
+    public void onPageScrollStateChanged(int state) {
+
     }
 
     class ProductDateSort implements Comparator<Product>{

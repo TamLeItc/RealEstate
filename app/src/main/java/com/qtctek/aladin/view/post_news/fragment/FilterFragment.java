@@ -14,13 +14,15 @@ import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.RadioButton;
 import android.widget.TextView;
 
 import com.qtctek.aladin.R;
 import com.qtctek.aladin.common.AppUtils;
-import com.qtctek.aladin.common.general.Constant;
+import com.qtctek.aladin.common.Constant;
 import com.qtctek.aladin.dto.Category;
 import com.qtctek.aladin.dto.Place;
 import com.qtctek.aladin.dto.Product;
@@ -35,7 +37,7 @@ import com.qtctek.aladin.view.post_news.interfaces.OnFromAdapter;
 import java.util.ArrayList;
 
 public class FilterFragment extends Fragment implements View.OnClickListener, View.OnKeyListener, ViewHandleModelGetData,
-        OnFromAdapter{
+        OnFromAdapter, CompoundButton.OnCheckedChangeListener {
 
     private MainActivity mActivity;
     private View mView;
@@ -51,6 +53,10 @@ public class FilterFragment extends Fragment implements View.OnClickListener, Vi
     private Button mBtnResetType;
     private CheckBox mChkForSale;
     private CheckBox mChkRent;
+    private RadioButton mRdoToday;
+    private RadioButton mRdoOneWeek;
+    private RadioButton mRdoOneMonth;
+    private RadioButton mRdoAll;
     private RecyclerView mRecyclerViewBathroom;
     private RecyclerView mRecyclerViewBedroom;
 
@@ -64,6 +70,8 @@ public class FilterFragment extends Fragment implements View.OnClickListener, Vi
     private ArrayList<Room> mArrListQualityBedroom;
 
     private String mCategory = "";
+
+    private RadioButton mRdoTimePost;
 
 
     @Nullable
@@ -97,6 +105,10 @@ public class FilterFragment extends Fragment implements View.OnClickListener, Vi
         this.mChkRent = mView.findViewById(R.id.chk_rent);
         this.mRecyclerViewBathroom = mView.findViewById(R.id.recycler_view_bathroom);
         this.mRecyclerViewBedroom = mView.findViewById(R.id.recycler_view_bedroom);
+        this.mRdoToday = mView.findViewById(R.id.rdo_today);
+        this.mRdoOneWeek = mView.findViewById(R.id.rdo_one_week);
+        this.mRdoOneMonth = mView.findViewById(R.id.rdo_one_month);
+        this.mRdoAll = mView.findViewById(R.id.rdo_all);
 
         this.mBtnSearch.setOnClickListener(this);
         this.mBtnCancel.setOnClickListener(this);
@@ -106,6 +118,10 @@ public class FilterFragment extends Fragment implements View.OnClickListener, Vi
         this.mTxvType.setOnClickListener(this);
         this.mEdtMinPrice.setOnKeyListener(this);
         this.mEdtMaxPrice.setOnKeyListener(this);
+        this.mRdoToday.setOnCheckedChangeListener(this);
+        this.mRdoOneWeek.setOnCheckedChangeListener(this);
+        this.mRdoOneMonth.setOnCheckedChangeListener(this);
+        this.mRdoAll.setOnCheckedChangeListener(this);
 
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(mActivity);
@@ -169,7 +185,7 @@ public class FilterFragment extends Fragment implements View.OnClickListener, Vi
             longMinPrice = Long.valueOf(stringBuilderMinPrice.toString());
         }
         catch (NumberFormatException e){
-            longMinPrice = Long.valueOf(0);
+            longMinPrice = 0L;
         }
 
         Long longMaxPrice;
@@ -177,10 +193,23 @@ public class FilterFragment extends Fragment implements View.OnClickListener, Vi
             longMaxPrice = Long.valueOf(stringBuilderMaxPrice.toString());
         }
         catch (NumberFormatException e){
-            longMaxPrice = Long.valueOf(0);
+            longMaxPrice = 0L;
         }
 
         handleDisplayPrice(longMinPrice, longMaxPrice);
+
+        if(mActivity.timePost == 0){
+            this.mRdoToday.setChecked(true);
+        }
+        else if(mActivity.timePost == 7){
+            this.mRdoOneWeek.setChecked(true);
+        }
+        else if(mActivity.timePost == 30){
+            this.mRdoOneMonth.setChecked(true);
+        }
+        else{
+            this.mRdoAll.setChecked(true);
+        }
 
         this.mTxvArchitecture.setText(architecture);
         this.mTxvType.setText(type);
@@ -227,15 +256,29 @@ public class FilterFragment extends Fragment implements View.OnClickListener, Vi
             minPrice = Long.valueOf(this.mEdtMinPrice.getText().toString());
         }
         catch (NumberFormatException e){
-            minPrice = Long.valueOf(0);
+            minPrice = 0L;
         }
+
         mActivity.minPrice = minPrice + "000000";
 
         try {
-            mActivity.maxPrice = this.mEdtMaxPrice.getText().toString() + "000000";
+            mActivity.maxPrice = Long.valueOf(this.mEdtMaxPrice.getText().toString()) + "000000";
         }
         catch (NumberFormatException e){
-            mActivity.maxPrice = "999000000000";
+            mActivity.maxPrice = "999999000000";
+        }
+
+        if(mRdoToday.isChecked()){
+            mActivity.timePost = 0;
+        }
+        else if(mRdoOneWeek.isChecked()){
+            mActivity.timePost = 7;
+        }
+        else if(mRdoOneMonth.isChecked()){
+            mActivity.timePost = 30;
+        }
+        else{
+            mActivity.timePost = 60;
         }
 
          mActivity.handleFilter();
@@ -246,6 +289,7 @@ public class FilterFragment extends Fragment implements View.OnClickListener, Vi
         switch (v.getId()){
             case R.id.btn_cancel:
                 mActivity.cancelFilter();
+                mActivity.getKeyboardHelper().hideKeyboard(mActivity);
                 break;
             case R.id.btn_search:
                 setGetValueFilter();
@@ -261,12 +305,12 @@ public class FilterFragment extends Fragment implements View.OnClickListener, Vi
             case R.id.txv_architecture:
                 this.mLoadingDialog.show();
                 mCategory = Product.ARCHITECTURE;
-                new PresenterGetData(this).handleGetCategoriesProduct("tbl_architecture", "architecture");
+                new PresenterGetData(this).handleGetCategoriesProduct(Product.TABLE_ARCHITECTURE, Product.ARCHITECTURE);
                 break;
             case R.id.txv_type:
                 this.mLoadingDialog.show();
                 mCategory = Product.TYPE;
-                new PresenterGetData(this).handleGetCategoriesProduct("tbl_type", "type");
+                new PresenterGetData(this).handleGetCategoriesProduct(Product.TABLE_TYPE, Product.TYPE);
                 break;
             case R.id.txv_city:
                 this.mLoadingDialog.show();
@@ -277,8 +321,8 @@ public class FilterFragment extends Fragment implements View.OnClickListener, Vi
 
     @Override
     public boolean onKey(View v, int keyCode, KeyEvent event) {
-        Long minPrice = Long.valueOf(0);
-        Long maxPrice = Long.valueOf(0);
+        Long minPrice = 0L;
+        Long maxPrice = 0L;
 
         boolean status = false;
         switch (v.getId()){
@@ -302,12 +346,12 @@ public class FilterFragment extends Fragment implements View.OnClickListener, Vi
     private void handleDisplayPrice(Long minPrice, Long maxPrice){
         try{
             minPrice = Long.parseLong(this.mEdtMinPrice.getText().toString());
-        }catch (NumberFormatException e){
+        }catch (NumberFormatException ignored){
         }
 
         try{
             maxPrice = Long.parseLong(this.mEdtMaxPrice.getText().toString());
-        }catch (NumberFormatException e){
+        }catch (NumberFormatException ignored){
         }
 
         if(minPrice == 0 && maxPrice > 0){
@@ -430,6 +474,15 @@ public class FilterFragment extends Fragment implements View.OnClickListener, Vi
 
 
         mActivity.bedroom = position;
+    }
+
+    @Override
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        if(mRdoTimePost != null){
+            mRdoTimePost.setChecked(false);
+
+        }
+        mRdoTimePost = (RadioButton) buttonView;
     }
 }
 

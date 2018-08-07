@@ -11,14 +11,22 @@
     android:paddingTop="@dimen/_5dp"
     android:paddingBottom="@dimen/_5dp">
 
-
-    <ListView
-        android:overScrollMode="never"
-        tools:listitem="@layout/item_post"
-        android:id="@+id/lsv_posts"
+    <android.support.v4.widget.SwipeRefreshLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scrollbars="none"/>
+        android:layout_height="wrap_content"
+        android:id="@+id/srl_posts">
+
+        <ListView
+            android:overScrollMode="never"
+            tools:listitem="@layout/item_post"
+            android:id="@+id/lsv_posts"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scrollbars="none"/>
+
+
+    </android.support.v4.widget.SwipeRefreshLayout>
+
 
     <TextView
         android:layout_width="wrap_content"

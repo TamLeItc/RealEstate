@@ -18,11 +18,13 @@ import java.util.ArrayList;
 import java.util.Calendar;
 
 public class AppUtils {
+    public static String USERNAME_HEADER = "tam.le";
+    public static String PASSWORD_HEADER = "tamle@123";
+    public static String AUTHORIZATION_HEADER = "Basic dGFtLmxlOnRhbWxlQDEyMw==";
 
-    public static int NOTIFICATION = 1;
-
-    public static String USERNAME = "user_name";
-    public static String PASSWORD = "password";
+    public static String USERNAME = "Username";
+    public static String PASSWORD = "Password";
+    public static String AUTHORIZATION = "Authorization";
 
     public static String LONG_NEGOTIATE = "Thương lượng";
     public static String SHORT_NEGOTIATE = "TL";

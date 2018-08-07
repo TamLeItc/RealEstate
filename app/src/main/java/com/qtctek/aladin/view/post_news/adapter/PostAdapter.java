@@ -1,5 +1,6 @@
 package com.qtctek.aladin.view.post_news.adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -14,7 +15,7 @@ import android.widget.TextView;
 
 import com.qtctek.aladin.R;
 import com.qtctek.aladin.common.AppUtils;
-import com.qtctek.aladin.common.general.Constant;
+import com.qtctek.aladin.common.Constant;
 import com.qtctek.aladin.dto.Product;
 import com.qtctek.aladin.presenter.user_control.saved_post.PresenterSavedPost;
 import com.qtctek.aladin.view.post_detail.activity.PostDetailActivity;
@@ -96,6 +97,7 @@ public class PostAdapter extends BaseAdapter implements ViewHandleSavedPost {
                 intent.putExtra(Product.ID, mArrListProduct.get(position).getId());
                 intent.putExtra(Constant.SAVE, mArrListProduct.get(position).getIsSaved());
                 intent.putExtra(Constant.POSITION, position);
+                intent.putExtra(Constant.ACTIVITY, "");
                 mContext.startActivity(intent);
             }
         });
@@ -115,6 +117,7 @@ public class PostAdapter extends BaseAdapter implements ViewHandleSavedPost {
 
     }
 
+    @SuppressLint("SetTextI18n")
     private void setValue(ViewHolder viewHolder, Product product, final int position){
         viewHolder.txvTitle.setText(product.getTitle());
         viewHolder.txvArea.setText(product.getArea() + "");
@@ -125,7 +128,7 @@ public class PostAdapter extends BaseAdapter implements ViewHandleSavedPost {
         String districtProvinceCity =product.getDistrict() + ", " + product.getCity();
         viewHolder.txvDistrictProvinceCity.setText(districtProvinceCity);
 
-        String urlImage = MainActivity.WEB_SERVER + MainActivity.IMAGE_URL_RELATIVE + product.getThumbnail();
+        String urlImage = MainActivity.IMAGE_URL + product.getThumbnail();
         final ViewHolder finalViewHolder = viewHolder;
         Picasso.with(mContext).load(urlImage).into(viewHolder.imvProductAvartar, new Callback() {
             @Override

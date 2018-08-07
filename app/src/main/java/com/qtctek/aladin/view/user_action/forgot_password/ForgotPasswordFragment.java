@@ -13,19 +13,17 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.qtctek.aladin.R;
-import com.qtctek.aladin.common.general.Constant;
+import com.qtctek.aladin.common.Constant;
 import com.qtctek.aladin.helper.AlertHelper;
 import com.qtctek.aladin.helper.ToastHelper;
 import com.qtctek.aladin.presenter.user_action.forgot_password.PresenterForgotPassword;
-import com.qtctek.aladin.common.general.FormatPattern;
-import com.qtctek.aladin.common.general.HashMD5;
-import com.qtctek.aladin.common.general.RandomString;
-import com.qtctek.aladin.common.general.send_gmail.GMailSender;
+import com.qtctek.aladin.common.FormatPattern;
+import com.qtctek.aladin.common.HashMD5;
+import com.qtctek.aladin.common.RandomString;
+import com.qtctek.aladin.common.send_gmail.GMailSender;
 import com.qtctek.aladin.presenter.user_action.register.PresenterRegister;
 import com.qtctek.aladin.view.user_action.activity.UserActionActivity;
 import com.qtctek.aladin.view.user_action.register.ViewHandleRegister;
-
-import java.util.Objects;
 
 public class ForgotPasswordFragment extends Fragment implements View.OnClickListener, ViewHandleForgotPassword ,
         ViewHandleRegister, AlertHelper.AlertHelperCallback {

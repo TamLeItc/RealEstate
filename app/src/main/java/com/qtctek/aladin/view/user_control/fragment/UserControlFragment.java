@@ -2,6 +2,7 @@ package com.qtctek.aladin.view.user_control.fragment;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -14,7 +15,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.qtctek.aladin.R;
-import com.qtctek.aladin.common.general.Constant;
+import com.qtctek.aladin.common.Constant;
 import com.qtctek.aladin.helper.AlertHelper;
 import com.qtctek.aladin.helper.ToastHelper;
 import com.qtctek.aladin.view.new_post.activity.NewPostActivity;
@@ -109,13 +110,13 @@ public class UserControlFragment extends Fragment implements View.OnClickListene
 
     @Override
     public void onClick(View v) {
-        ViewPager viewPager = getActivity().findViewById(R.id.view_pager);
+        ViewPager viewPager = mActivity.findViewById(R.id.view_pager);
         switch (v.getId()){
             case R.id.txv_new_post:
-                Intent intent = new Intent(getActivity(), NewPostActivity.class);
+                Intent intent = new Intent(mActivity, NewPostActivity.class);
                 intent.putExtra("post_id", -1);
                 startActivity(intent);
-                getActivity().finish();
+                mActivity.finish();
                 break;
             case R.id.txv_posted_post:
                 viewPager.setCurrentItem(1);
@@ -143,9 +144,11 @@ public class UserControlFragment extends Fragment implements View.OnClickListene
                 }
                 break;
             case R.id.txv_introduction:
-            case R.id.txv_feedback:
                 mActivity.getToastHelper().toast("Chức năng đang được phát triển." +
                         " Vui lòng quay lại sau", ToastHelper.LENGTH_SHORT);
+                break;
+            case R.id.txv_feedback:
+                feedback();
                 break;
             case R.id.txv_update_information:
                 Intent intent1 = new Intent(mActivity, UserActionActivity.class);
@@ -165,7 +168,7 @@ public class UserControlFragment extends Fragment implements View.OnClickListene
     public void onPositiveButtonClick(int option) {
         if(option == Constant.LOGOUT){
             MainActivity.USER.clearData();
-            Intent intent = new Intent(getActivity(), UserActionActivity.class);
+            Intent intent = new Intent(mActivity, UserActionActivity.class);
             startActivity(intent);
             mActivity.finish();
         }
@@ -174,5 +177,14 @@ public class UserControlFragment extends Fragment implements View.OnClickListene
     @Override
     public void onNegativeButtonClick(int option) {
 
+    }
+
+    private void feedback(){
+        Intent intent = new Intent();
+        intent.setAction(Intent.ACTION_VIEW);
+        intent.setData(Uri.parse("mailto:" + Constant.EMAIL_FEEDBACK));
+        intent.putExtra(Intent.EXTRA_SUBJECT, getResources().getString(R.string.feedback_subject));
+
+        startActivity(Intent.createChooser(intent, getResources().getString(R.string.send_a_mail)));
     }
 }

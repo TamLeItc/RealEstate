@@ -50,7 +50,7 @@
             android:layout_height="match_parent"
             android:id="@+id/expandable_layout_start"
             app:el_duration="500"
-            app:el_parallax="0"
+            app:el_parallax="1"
             app:el_expanded="true">
 
             <FrameLayout
@@ -87,7 +87,7 @@
         android:id="@+id/expandable_layout_filter"
         app:el_duration="300"
         app:el_expanded="false"
-        app:el_parallax="0">
+        app:el_parallax="1">
 
         <fragment
             android:id="@+id/frg_filter"

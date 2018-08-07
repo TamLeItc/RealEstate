@@ -65,7 +65,6 @@
                 android:textColor="@color/colorPrimaryDark" />
 
             <TextView
-                android:textColor="@color/colorGrayDark"
                 android:id="@+id/txv_from"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -74,6 +73,7 @@
                 android:layout_marginTop="@dimen/_15dp"
                 android:layout_toRightOf="@id/txv_name_price"
                 android:text="@string/from"
+                android:textColor="@color/colorGrayDark"
                 android:textSize="@dimen/_11sp" />
 
             <EditText
@@ -90,11 +90,9 @@
                 android:paddingLeft="@dimen/_5dp"
                 android:paddingTop="@dimen/_2dp"
                 android:textColor="@color/colorPrimaryDark"
-                android:textSize="@dimen/_12sp"
-                android:textCursorDrawable="@drawable/custom_text_cursor_dialog"/>
+                android:textSize="@dimen/_12sp" />
 
             <TextView
-                android:textColor="@color/colorGrayDark"
                 android:id="@+id/txv_to"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -103,6 +101,7 @@
                 android:layout_marginTop="@dimen/_38dp"
                 android:layout_toRightOf="@id/txv_name_price"
                 android:text="@string/to"
+                android:textColor="@color/colorGrayDark"
                 android:textSize="@dimen/_11sp" />
 
             <EditText
@@ -116,11 +115,11 @@
                 android:background="@color/colorEdtCreateAccount"
                 android:inputType="number"
                 android:paddingBottom="@dimen/_2dp"
-                android:paddingLeft="@dimen/_5dp"
+                android:paddingLeft="@dimen/_8dp"
+                android:paddingRight="@dimen/_8dp"
                 android:paddingTop="@dimen/_2dp"
                 android:textColor="@color/colorPrimaryDark"
-                android:textSize="@dimen/_12sp"
-                android:textCursorDrawable="@drawable/custom_text_cursor_dialog"/>
+                android:textSize="@dimen/_12sp" />
 
             <View
                 android:id="@+id/view_3"
@@ -238,11 +237,107 @@
                 android:background="@color/colorGrayLight" />
 
             <TextView
-                android:id="@+id/txv_name_bedroom"
+                android:id="@+id/txv_date_upload"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/view_5"
-                android:layout_marginTop="@dimen/_10dp"
+                android:text="@string/posted_within"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="@dimen/_11sp" />
+
+
+            <LinearLayout
+                android:id="@+id/ll_time_post"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="2"
+                android:layout_below="@+id/txv_date_upload">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <RadioButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/today"
+                            android:textColor="@color/colorPrimaryDark"
+                            android:textSize="@dimen/_11sp"
+                            android:id="@+id/rdo_today"/>
+
+                        <RadioButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/one_month"
+                            android:textColor="@color/colorPrimaryDark"
+                            android:textSize="@dimen/_11sp"
+                            android:id="@+id/rdo_one_month"/>
+
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <RadioButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/one_week"
+                            android:textColor="@color/colorPrimaryDark"
+                            android:textSize="@dimen/_11sp"
+                            android:id="@+id/rdo_one_week"/>
+
+                        <RadioButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/all"
+                            android:textColor="@color/colorPrimaryDark"
+                            android:textSize="@dimen/_11sp"
+                            android:id="@+id/rdo_all"/>
+
+
+                    </LinearLayout>
+
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+
+            <View
+                android:id="@+id/view_6"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_1dp"
+                android:layout_below="@+id/ll_time_post"
+                android:layout_marginBottom="@dimen/_15dp"
+                android:layout_marginTop="@dimen/_15dp"
+                android:background="@color/colorGrayLight" />
+
+            <TextView
+                android:id="@+id/txv_name_bedroom"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/view_6"
                 android:text="@string/bathroom"
                 android:textColor="@color/colorPrimaryDark"
                 android:textSize="@dimen/_11sp" />
@@ -252,8 +347,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/txv_name_bedroom"
-                android:layout_marginTop="@dimen/_5dp"
-                android:layout_centerHorizontal="true"/>
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="@dimen/_5dp" />
 
             <TextView
                 android:id="@+id/txv_name_bathroom"
@@ -270,18 +365,18 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/txv_name_bathroom"
-                android:layout_marginTop="@dimen/_5dp"
-                android:layout_centerHorizontal="true"/>
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="@dimen/_5dp" />
 
             <Button
                 android:id="@+id/btn_search"
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/_40dp"
-                android:minHeight="@dimen/_0dp"
                 android:layout_below="@id/recycler_view_bedroom"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="@dimen/_30dp"
                 android:background="@drawable/custom_btn_main_backgroud"
+                android:minHeight="@dimen/_0dp"
                 android:paddingLeft="@dimen/_20dp"
                 android:paddingRight="@dimen/_20dp"
                 android:text="@string/confirm"

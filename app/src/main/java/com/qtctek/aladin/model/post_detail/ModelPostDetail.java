@@ -3,6 +3,7 @@ package com.qtctek.aladin.model.post_detail;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.qtctek.aladin.common.AppUtils;
 import com.qtctek.aladin.presenter.post_detail.PresenterImpHandlePostDetail;
 import com.qtctek.aladin.view.post_news.activity.MainActivity;
 
@@ -15,7 +16,7 @@ import okhttp3.Response;
 
 public class ModelPostDetail {
 
-    private String mUrlProductDetail = MainActivity.WEB_SERVER + "get_product_detail.php";
+    private String mUrlProductDetail = MainActivity.WEB_SERVER + "?detect=10&";
 
     private PresenterImpHandlePostDetail mPresenterImpHandlePostDetail;
 
@@ -40,7 +41,7 @@ public class ModelPostDetail {
                     .writeTimeout(10, TimeUnit.SECONDS)
                     .build();
 
-            url = mUrlProductDetail + "?product_id=" + id;
+            url = mUrlProductDetail + "product_id=" + id;
         }
 
         @Override
@@ -48,6 +49,9 @@ public class ModelPostDetail {
 
             Request request = new Request.Builder()
                     .url(url)
+                    .addHeader(AppUtils.USERNAME, AppUtils.USERNAME_HEADER)
+                    .addHeader(AppUtils.PASSWORD, AppUtils.PASSWORD_HEADER)
+                    .addHeader(AppUtils.AUTHORIZATION, AppUtils.AUTHORIZATION_HEADER)
                     .get()
                     .build();
 

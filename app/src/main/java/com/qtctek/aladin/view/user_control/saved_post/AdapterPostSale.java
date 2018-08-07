@@ -12,7 +12,7 @@ import android.widget.TextView;
 
 import com.qtctek.aladin.R;
 import com.qtctek.aladin.common.AppUtils;
-import com.qtctek.aladin.common.general.Constant;
+import com.qtctek.aladin.common.Constant;
 import com.qtctek.aladin.dto.Product;
 import com.qtctek.aladin.view.post_news.activity.MainActivity;
 import com.squareup.picasso.Callback;
@@ -81,7 +81,7 @@ public class AdapterPostSale extends BaseAdapter {
         viewHolder.txvAddress.setText(product.getDistrict() + ", "
                 + product.getCity());
 
-        String urlImage = MainActivity.WEB_SERVER + MainActivity.IMAGE_URL_RELATIVE + product.getThumbnail();
+        String urlImage = MainActivity.IMAGE_URL + product.getThumbnail();
         final ViewHolder finalViewHolder = viewHolder;
         Picasso.with(mContext).load(urlImage).into(viewHolder.imvProductAvartar, new Callback() {
             @Override

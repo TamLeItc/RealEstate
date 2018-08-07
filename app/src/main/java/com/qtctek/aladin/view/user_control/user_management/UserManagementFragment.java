@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,7 +19,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.qtctek.aladin.R;
-import com.qtctek.aladin.common.general.Constant;
+import com.qtctek.aladin.common.Constant;
 import com.qtctek.aladin.dto.User;
 import com.qtctek.aladin.helper.AlertHelper;
 import com.qtctek.aladin.helper.ToastHelper;
@@ -30,7 +31,7 @@ import com.qtctek.aladin.view.user_control.interfaces.ManagementFilterCallback;
 import java.util.ArrayList;
 
 public class UserManagementFragment extends Fragment implements ViewHandleUserManagement, AbsListView.OnScrollListener, AdapterView.OnItemClickListener,
-        AlertHelper.AlertHelperCallback, ManagementFilterCallback, View.OnClickListener {
+        AlertHelper.AlertHelperCallback, ManagementFilterCallback, View.OnClickListener, SwipeRefreshLayout.OnRefreshListener {
 
     private UserControlActivity mActivity;
 
@@ -43,11 +44,12 @@ public class UserManagementFragment extends Fragment implements ViewHandleUserMa
     private TextView mTxvInformation;
     private RelativeLayout mRlItemUser;
     private ImageView mImvUp;
+    private SwipeRefreshLayout mSRLUser;
 
     private PresenterUserManagement mPresenterUserManagement;
-    private int mPositionClick = 0;
 
-    private boolean isFistLoad = true;
+    private int mPositionClick = 0;
+    private boolean mIsFirstLoadList = true;
 
     @Nullable
     @Override
@@ -73,10 +75,12 @@ public class UserManagementFragment extends Fragment implements ViewHandleUserMa
         this.mLsvUsers = mView.findViewById(R.id.lsv_user);
         this.mTxvInformation = mView.findViewById(R.id.txv_information);
         this.mImvUp = mView.findViewById(R.id.imv_up);
+        this.mSRLUser = mView.findViewById(R.id.srl_user);
 
         this.mLsvUsers.setOnScrollListener(this);
         this.mLsvUsers.setOnItemClickListener(this);
         this.mImvUp.setOnClickListener(this);
+        this.mSRLUser.setOnRefreshListener(this);
     }
 
     private void handleStart(){
@@ -91,13 +95,18 @@ public class UserManagementFragment extends Fragment implements ViewHandleUserMa
     @Override
     public void onHandleUserListSuccessful(ArrayList<User> arrayListUser) {
 
-        if(isFistLoad){
-            this.mArrUser.clear();
-            isFistLoad = false;
+        mActivity.getDialogHelper().dismiss();
+        mSRLUser.setRefreshing(false);
+
+        if(mIsFirstLoadList){
+            mArrUser.clear();
+            mIsFirstLoadList = false;
+        }
+        else if(arrayListUser.size() == 0){
+            return;
         }
 
-        mActivity.getDialogHelper().dismiss();
-        this.mArrUser.addAll(arrayListUser);
+        addList(arrayListUser);
         this.mUserAdapter.notifyDataSetChanged();
 
         if(mArrUser.size() > 0){
@@ -113,6 +122,28 @@ public class UserManagementFragment extends Fragment implements ViewHandleUserMa
             this.mTxvInformation.setText(getResources().getString(R.string.no_data));
         }
 
+    }
+
+    /*
+     * Dữ liệu trên server có thể thay đổi khiến limit và start có thể sẽ lấy về dữ liệu đã có trong danh sách
+     * Phương thức này đảm bảo không có 2 đối tượng giống nhau nào trong danh sách
+     */
+    private void addList(ArrayList<User> arrProduct){
+        int size = this.mArrUser.size();
+        for(int i = 0; i < arrProduct.size(); i++){
+            boolean isExisted = false;
+            for(int j = 0; j < size; j++){
+                if(arrProduct.get(i).getId() == this.mArrUser.get(j).getId()){
+                    isExisted = true;
+                    break;
+                }
+            }
+            if(!isExisted){
+                this.mArrUser.add(arrProduct.get(i));
+                arrProduct.remove(i);
+                i--;
+            }
+        }
     }
 
     @Override
@@ -245,7 +276,7 @@ public class UserManagementFragment extends Fragment implements ViewHandleUserMa
     @Override
     public void onFilter() {
 
-        isFistLoad = true;
+        mIsFirstLoadList = true;
 
         mActivity.getDialogHelper().show();
         this.mPresenterUserManagement.handleGetUserList(0, 20, mActivity.userStatus);
@@ -254,5 +285,15 @@ public class UserManagementFragment extends Fragment implements ViewHandleUserMa
     @Override
     public void onClick(View v) {
         mLsvUsers.smoothScrollToPosition(0);
+    }
+
+
+    @Override
+    public void onRefresh() {
+
+        mActivity.userStatus = "%";
+        mIsFirstLoadList = true;
+
+        this.mPresenterUserManagement.handleGetUserList(0, 20, mActivity.userStatus);
     }
 }

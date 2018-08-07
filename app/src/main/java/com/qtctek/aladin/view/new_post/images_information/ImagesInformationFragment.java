@@ -19,7 +19,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,7 +31,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.qtctek.aladin.R;
-import com.qtctek.aladin.common.general.Constant;
+import com.qtctek.aladin.common.Constant;
 import com.qtctek.aladin.dto.Photo;
 import com.qtctek.aladin.dto.Product;
 import com.qtctek.aladin.helper.ToastHelper;
@@ -63,13 +62,13 @@ public class ImagesInformationFragment extends Fragment implements ViewHandleMod
     private TextView mTxvSelectImage;
     private TextView mTxvSelectAvartar;
     private Button mBtnNext;
-    public static ProgressBar PROGRESSBAR;
+    public ProgressBar progressBarLoading;
     private RecyclerView mRecyclerView;
-    public static ImageView IMV_AVARTAR;
+    public ImageView imvAvartar;
 
-    public static ImageAdapter IMAGE_ADAPTER;
-    public static ArrayList<Photo> ARR_PHOTO = new ArrayList<>();
-    public static int FILE_NAME = 1;
+    public ImageAdapter imageAdapter;
+    public ArrayList<Photo> arrPhoto = new ArrayList<>();
+    public int fileName = 1;
 
     public boolean isSaveTemp;
     private int mPosition = 0;
@@ -85,7 +84,7 @@ public class ImagesInformationFragment extends Fragment implements ViewHandleMod
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         mView = inflater.inflate(R.layout.fragment_images_information, container, false);
 
-        mActivity = (NewPostActivity)getActivity();
+        mActivity = (NewPostActivity) getActivity();
 
         initViews();
         handleStart();
@@ -98,8 +97,8 @@ public class ImagesInformationFragment extends Fragment implements ViewHandleMod
         this.mTxvSelectAvartar = mView.findViewById(R.id.txv_select_avartar);
         this.mBtnNext = mView.findViewById(R.id.btn_next_to);
         this.mRecyclerView = mView.findViewById(R.id.recycler_view);
-        IMV_AVARTAR = mView.findViewById(R.id.imv_avartar);
-        PROGRESSBAR = mView.findViewById(R.id.progress_bar);
+        imvAvartar = mView.findViewById(R.id.imv_avartar);
+        progressBarLoading = mView.findViewById(R.id.progress_bar);
         this.rlViewLarge = mView.findViewById(R.id.rl_view_large);
         this.mImvCancelViewLarge = mView.findViewById(R.id.imv_cancel_view_large);
         this.imvViewLarge = mView.findViewById(R.id.imv_view_large);
@@ -110,32 +109,32 @@ public class ImagesInformationFragment extends Fragment implements ViewHandleMod
         this.mTxvSelectAvartar.setOnClickListener(this);
     }
 
-    private void handleStart(){
-        IMAGE_ADAPTER = new ImageAdapter(mActivity, ARR_PHOTO, this);
+    private void handleStart() {
+        imageAdapter = new ImageAdapter(mActivity, arrPhoto, this);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(mActivity);
         layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         this.mRecyclerView.setLayoutManager(layoutManager);
 
-        this.mRecyclerView.setAdapter(IMAGE_ADAPTER);
+        this.mRecyclerView.setAdapter(imageAdapter);
 
-        try{
-            String url = MainActivity.WEB_SERVER + MainActivity.IMAGE_URL_RELATIVE + mActivity.product.getThumbnail();
-            PROGRESSBAR.setVisibility(View.VISIBLE);
-            Picasso.with(mActivity).load(url).into(IMV_AVARTAR, new Callback() {
+        try {
+            String url = MainActivity.IMAGE_URL + mActivity.product.getThumbnail();
+            progressBarLoading.setVisibility(View.VISIBLE);
+            Picasso.with(mActivity).load(url).into(imvAvartar, new Callback() {
                 @Override
                 public void onSuccess() {
-                    PROGRESSBAR.setVisibility(View.GONE);
+                    progressBarLoading.setVisibility(View.GONE);
                 }
 
                 @Override
                 public void onError() {
-                    PROGRESSBAR.setVisibility(View.GONE);
-                    IMV_AVARTAR.setImageResource(R.drawable.icon_product);
+                    progressBarLoading.setVisibility(View.GONE);
+                    imvAvartar.setImageResource(R.drawable.icon_product);
                 }
             });
+        } catch (java.lang.NullPointerException ignored) {
         }
-        catch (java.lang.NullPointerException ignored){}
     }
 
     private String getRealPathFromURI(Context context, Uri contentUri) {
@@ -145,14 +144,14 @@ public class ImagesInformationFragment extends Fragment implements ViewHandleMod
         }
         cursor.moveToFirst();
         String document_id = cursor.getString(0);
-        document_id = document_id.substring(document_id.lastIndexOf(":")+1);
+        document_id = document_id.substring(document_id.lastIndexOf(":") + 1);
         cursor.close();
 
         cursor = context.getContentResolver().query(
                 android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
                 null, MediaStore.Images.Media._ID + " = ? ", new String[]{document_id}, null);
 
-        if(cursor == null){
+        if (cursor == null) {
             return "";
         }
 
@@ -163,16 +162,15 @@ public class ImagesInformationFragment extends Fragment implements ViewHandleMod
         return path;
     }
 
-    private void handleResultAvartar(){
+    private void handleResultAvartar() {
         try {
             InputStream inputStream = mActivity.getContentResolver().openInputStream(mUri);
             Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
-            IMV_AVARTAR.setImageBitmap(bitmap);
+            imvAvartar.setImageBitmap(bitmap);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
     }
-
 
 
     private void handleResultImage(Intent data) {
@@ -181,12 +179,12 @@ public class ImagesInformationFragment extends Fragment implements ViewHandleMod
 
             ClipData.Item item = mClipData.getItemAt(i);
             Uri uri = item.getUri();
-            ARR_PHOTO.add(new Photo(uri));
+            arrPhoto.add(new Photo(uri));
         }
-        IMAGE_ADAPTER.notifyDataSetChanged();
+        imageAdapter.notifyDataSetChanged();
     }
 
-    private void uploadAvartar(){
+    private void uploadAvartar() {
         mActivity.getDialogHelper().show();
 
         mPath = getRealPathFromURI(mActivity, mUri);
@@ -197,18 +195,18 @@ public class ImagesInformationFragment extends Fragment implements ViewHandleMod
     }
 
     private void uploadImages() {
-        while(!ARR_PHOTO.get(mQualityImageUploaded).getIsUpload()){
+        while (!arrPhoto.get(mQualityImageUploaded).getIsUpload()) {
             mQualityImageUploaded++;
-            if(mQualityImageUploaded > ARR_PHOTO.size() - 1){
+            if (mQualityImageUploaded > arrPhoto.size() - 1) {
                 return;
             }
         }
-        Uri uri = ARR_PHOTO.get(mQualityImageUploaded).getUri();
+        Uri uri = arrPhoto.get(mQualityImageUploaded).getUri();
         String path = getRealPathFromURI(mActivity, uri);
 
-        String fileName = mActivity.product.getId() + "_" + (FILE_NAME++) + Constant.IMAGE_EXTENSION;
+        String fileNameImage = mActivity.product.getId() + "_" + (this.fileName++) + Constant.IMAGE_EXTENSION;
         new PresenterNewPost(this).handlePostImage(mActivity.product.getId(),
-                fileName, path, Product.IMAGE_DETAIL);
+                fileNameImage, path, Product.IMAGE_DETAIL);
     }
 
     @Override
@@ -217,13 +215,12 @@ public class ImagesInformationFragment extends Fragment implements ViewHandleMod
             mIsPickImage = true;
             if (data.getData() != null) {
                 Uri uri = data.getData();
-                ARR_PHOTO.add(new Photo(uri));
-                this.IMAGE_ADAPTER.notifyDataSetChanged();
+                arrPhoto.add(new Photo(uri));
+                this.imageAdapter.notifyDataSetChanged();
             } else if (data.getClipData() != null) {
                 handleResultImage(data);
             }
-        }
-        else if(requestCode == 102 && resultCode == RESULT_OK && data != null){
+        } else if (requestCode == 102 && resultCode == RESULT_OK && data != null) {
             this.mUri = data.getData();
             this.mIsPickAvartar = true;
 
@@ -232,33 +229,34 @@ public class ImagesInformationFragment extends Fragment implements ViewHandleMod
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-    private void handleSelectImages(){
+    private void handleSelectImages() {
         int check = checkPermission();
-        if(check == 1){
+        if (check == 1) {
             Intent intent = new Intent();
             intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
             intent.setAction(Intent.ACTION_GET_CONTENT);
             intent.setType("image/*");
             startActivityForResult(Intent.createChooser(intent, getResources().getString(R.string.select_picture)), 101);
-        }
-        else if(check == 0){
+        } else if (check == 0) {
             requestPermissions(101);
         }
     }
 
-    private void handleSelectAvartar(){
+    private void handleSelectAvartar() {
         int check = checkPermission();
-        if(check == 1){
+        if (check == 1) {
             Intent intent1 = new Intent(Intent.ACTION_PICK);
             intent1.setType("image/*");
             startActivityForResult(intent1, 102);
-        }
-        else if(check == 0){
+        } else if (check == 0) {
             requestPermissions(102);
         }
     }
 
-    private void handelCancelViewLarge(){
+    private void handelCancelViewLarge() {
+
+        mActivity.toolbar.setVisibility(View.VISIBLE);
+
         Animation animation = AnimationUtils.loadAnimation(mActivity, R.anim.zoom_100_to_0);
         this.rlViewLarge.startAnimation(animation);
 
@@ -283,31 +281,28 @@ public class ImagesInformationFragment extends Fragment implements ViewHandleMod
         }
     }
 
-    public void handleSaveImageInformation(){
+    public void handleSaveImageInformation() {
         mQualityImageUploaded = 0;
-        if(mIsPickImage && !mIsPickAvartar){
+        if (mIsPickImage && !mIsPickAvartar) {
             if (mIsPickImage) {
                 mActivity.getDialogHelper().show();
                 uploadImages();
             }
-        }
-        else if(mIsPickAvartar){
+        } else if (mIsPickAvartar) {
             mActivity.getDialogHelper().show();
             uploadAvartar();
-        }
-        else{
-            if(!isSaveTemp){
+        } else {
+            if (!isSaveTemp) {
                 ViewPager viewPager = mActivity.findViewById(R.id.view_pager);
                 viewPager.setCurrentItem(1);
             }
         }
     }
 
-    public boolean checkSavedInformation(){
-        if(mIsPickImage || mIsPickAvartar){
+    public boolean checkSavedInformation() {
+        if (mIsPickImage || mIsPickAvartar) {
             return false;
-        }
-        else{
+        } else {
             return true;
         }
     }
@@ -319,49 +314,53 @@ public class ImagesInformationFragment extends Fragment implements ViewHandleMod
 
     @Override
     public void onUploadImages(boolean status) {
-        if(mIsPickAvartar){
+
+        if (!status) {
             mActivity.getDialogHelper().dismiss();
-            if (!status) {
-                mActivity.getToastHelper().toast(R.string.error_save_data, ToastHelper.LENGTH_SHORT);
-            } else {
+            mActivity.getToastHelper().toast(R.string.error_save_data, ToastHelper.LENGTH_SHORT);
+        }
+        else {
+            mActivity.getDialogHelper().dismiss();
+
+            if (mIsPickAvartar) {
+
+
                 mIsPickAvartar = false;
 
-                if(mIsPickImage) {
+                if (mIsPickImage) {
                     uploadImages();
-                }
-                else{
-                    if(!isSaveTemp){
+                } else {
+                    if (!isSaveTemp) {
                         ViewPager viewPager = mActivity.findViewById(R.id.view_pager);
                         viewPager.setCurrentItem(1);
-                    }
-                    else{
+                    } else {
                         mActivity.getToastHelper().toast(R.string.save_data_successful, ToastHelper.LENGTH_SHORT);
                     }
 
                 }
-            }
-        }
-        else{
-            mQualityImageUploaded += 1;
-            if(ARR_PHOTO.size() == mQualityImageUploaded){
-                mActivity.getDialogHelper().dismiss();
-                if (!status) {
-                    mActivity.getToastHelper().toast(R.string.error_save_data, ToastHelper.LENGTH_SHORT);
+
+            } else {
+                mQualityImageUploaded += 1;
+                if (arrPhoto.size() == mQualityImageUploaded) {
+                    mActivity.getDialogHelper().dismiss();
+                    if (!status) {
+                        mActivity.getToastHelper().toast(R.string.error_save_data, ToastHelper.LENGTH_SHORT);
+                    } else {
+                        if (!isSaveTemp) {
+                            ViewPager viewPager = mActivity.findViewById(R.id.view_pager);
+                            viewPager.setCurrentItem(1);
+                        } else {
+                            mActivity.getToastHelper().toast(R.string.save_data_successful, ToastHelper.LENGTH_SHORT);
+                        }
+                    }
+                    mIsPickImage = false;
                 } else {
-                    if(!isSaveTemp){
-                        ViewPager viewPager = mActivity.findViewById(R.id.view_pager);
-                        viewPager.setCurrentItem(1);
-                    }
-                    else{
-                        mActivity.getToastHelper().toast(R.string.save_data_successful, ToastHelper.LENGTH_SHORT);
-                    }
+                    uploadImages();
                 }
-                mIsPickImage = false;
             }
-            else{
-                uploadImages();
-            }
+
         }
+
 
     }
 
@@ -383,12 +382,11 @@ public class ImagesInformationFragment extends Fragment implements ViewHandleMod
     @Override
     public void onDeleteFile(boolean status) {
         mActivity.getDialogHelper().dismiss();
-        if(!status){
+        if (!status) {
             mActivity.getToastHelper().toast(R.string.delete_failed, ToastHelper.LENGTH_SHORT);
-        }
-        else{
-            ARR_PHOTO.remove(mPosition);
-            IMAGE_ADAPTER.notifyDataSetChanged();
+        } else {
+            arrPhoto.remove(mPosition);
+            imageAdapter.notifyDataSetChanged();
             mActivity.getDialogHelper().dismiss();
         }
     }
@@ -401,48 +399,44 @@ public class ImagesInformationFragment extends Fragment implements ViewHandleMod
     @Override
     public void onRequireDeleteFile(int position) {
         mActivity.getDialogHelper().show();
-        new PresenterNewPost(this).handleDeleteFile(ARR_PHOTO.get(position).getPhotoLink(), mActivity.product.getId());
+        new PresenterNewPost(this).handleDeleteFile(arrPhoto.get(position).getPhotoLink(), mActivity.product.getId());
         mPosition = position;
     }
 
-    private int checkPermission(){
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
-            if(ContextCompat.checkSelfPermission(mActivity, Manifest.permission.READ_EXTERNAL_STORAGE) !=
-                    PackageManager.PERMISSION_GRANTED){
-                return  0;
+    private int checkPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (ContextCompat.checkSelfPermission(mActivity, Manifest.permission.READ_EXTERNAL_STORAGE) !=
+                    PackageManager.PERMISSION_GRANTED) {
+                return 0;
+            } else {
+                return 1;
             }
-            else{
-                return  1;
-            }
-        }
-        else{
+        } else {
             return 1;
         }
     }
 
-    private void requestPermissions(int requestCode){
+    private void requestPermissions(int requestCode) {
         requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, requestCode);
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if(requestCode == 101){
-            if(grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+        if (requestCode == 101) {
+            if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 Intent intent = new Intent();
                 intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
                 intent.setAction(Intent.ACTION_GET_CONTENT);
                 intent.setType("image/*");
                 startActivityForResult(Intent.createChooser(intent, getResources().getString(R.string.select_picture)), 1001);
             }
-        }
-        else if(requestCode == 102){
-            if(grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+        } else if (requestCode == 102) {
+            if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 Intent intent1 = new Intent(Intent.ACTION_PICK);
                 intent1.setType("image/*");
                 startActivityForResult(intent1, 101);
             }
-        }
-        else{
+        } else {
             super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         }
     }

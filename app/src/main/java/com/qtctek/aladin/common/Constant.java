@@ -1,6 +1,8 @@
-package com.qtctek.aladin.common.general;
+package com.qtctek.aladin.common;
 
 public class Constant {
+
+    public static final String EMAIL_FEEDBACK = "talk.lettalk@gmail.com";
 
     public static final String FRAGMENT = "fragment";
     public static final String IMAGE_EXTENSION = ".jpg";
@@ -22,7 +24,9 @@ public class Constant {
     public static final String EMAIL_EXISTED = "email_existed";
     public static final String USERNAME_EXISTED = "username_existed";
     public static final String NOW_PASSWORD_INCORRECT = "old_password_not_true";
-
+    public static final String LIST = "list";
+    public static final String COUNT = "count";
+    public static final String ACTIVITY = "activity";
 
     public static final int UPDATE = 1000;
     public static final int OPTION_MENU_SELECTED = 1001;
@@ -43,4 +47,5 @@ public class Constant {
     public static final int LOGIN = 1016;
     public static final int CALL_PHONE = 1017;
     public static final int SEND_MAIL = 1018;
+
 }

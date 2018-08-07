@@ -7,17 +7,26 @@
     android:orientation="vertical"
     android:background="@color/colorDefaultBackground">
 
-    <ListView
-        android:overScrollMode="never"
-        tools:listitem="@layout/item_user"
-        android:layout_marginTop="@dimen/_5dp"
-        android:layout_below="@+id/txv_title"
-        android:id="@+id/lsv_user"
+    <android.support.v4.widget.SwipeRefreshLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scrollbars="none"
-        android:layout_marginLeft="@dimen/_8dp"
-        android:layout_marginRight="@dimen/_8dp"/>
+        android:id="@+id/srl_user">
+
+        <ListView
+            android:overScrollMode="never"
+            tools:listitem="@layout/item_user"
+            android:layout_marginTop="@dimen/_5dp"
+            android:layout_below="@+id/txv_title"
+            android:id="@+id/lsv_user"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scrollbars="none"
+            android:layout_marginLeft="@dimen/_8dp"
+            android:layout_marginRight="@dimen/_8dp"/>
+
+    </android.support.v4.widget.SwipeRefreshLayout>
+
+
 
     <Button
         android:id="@+id/btn_more_view"

@@ -1,4 +1,4 @@
-package com.qtctek.aladin.common.general;
+package com.qtctek.aladin.common;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -26,6 +26,17 @@ public class FormatPattern {
             if(number.length() != 10 && number.length() != 11){
                 return false;
             }
+            return true;
+        }
+    }
+
+    public  static boolean checkUserName(String username) {
+        Pattern pattern = Pattern.compile("\\b[a-zA-Z][a-zA-Z0-9]{3,}\\b");
+        Matcher matcher = pattern.matcher(username);
+        if (!matcher.matches()) {
+            return false;
+        }
+        else{
             return true;
         }
     }

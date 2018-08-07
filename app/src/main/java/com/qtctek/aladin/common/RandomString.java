@@ -1,4 +1,4 @@
-package com.qtctek.aladin.common.general;
+package com.qtctek.aladin.common;
 
 import java.util.Random;
 
@@ -16,5 +16,7 @@ public class RandomString {
         return saltStr;
 
     }
+
+
 
 }

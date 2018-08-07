@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,6 +18,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.qtctek.aladin.R;
+import com.qtctek.aladin.common.Constant;
 import com.qtctek.aladin.dto.Product;
 import com.qtctek.aladin.helper.ToastHelper;
 import com.qtctek.aladin.presenter.user_control.saved_post.PresenterSavedPost;
@@ -28,7 +30,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class SavedPostFragment extends Fragment implements ViewHandleSavedPost,
-        AbsListView.OnScrollListener, AdapterView.OnItemClickListener, View.OnClickListener {
+        AbsListView.OnScrollListener, AdapterView.OnItemClickListener, View.OnClickListener, SwipeRefreshLayout.OnRefreshListener {
 
     private UserControlActivity mActivity;
 
@@ -38,14 +40,15 @@ public class SavedPostFragment extends Fragment implements ViewHandleSavedPost,
     private TextView mTxvInformation;
     private RelativeLayout mRlPostItem;
     private ImageView mImvUp;
+    private SwipeRefreshLayout mSRLPost;
 
     private AdapterPostSale mAdapterListPost;
     private ArrayList<Product> mArrListProduct = new ArrayList<>();
 
-    private int mPositionClick;
-
     private PresenterSavedPost mPresenterSavedPost;
 
+    private int mPositionClick;
+    private boolean mIsFirstLoadList = true;
 
     @Nullable
     @Override
@@ -63,10 +66,12 @@ public class SavedPostFragment extends Fragment implements ViewHandleSavedPost,
         this.mLsvSavedPost = mView.findViewById(R.id.lsv_posts);
         this.mTxvInformation = mView.findViewById(R.id.txv_information);
         this.mImvUp = mView.findViewById(R.id.imv_up);
+        this.mSRLPost = mView.findViewById(R.id.srl_posts);
 
         this.mLsvSavedPost.setOnScrollListener(this);
         this.mLsvSavedPost.setOnItemClickListener(this);
         this.mImvUp.setOnClickListener(this);
+        this.mSRLPost.setOnRefreshListener(this);
     }
 
     private void handleStart(){
@@ -119,6 +124,7 @@ public class SavedPostFragment extends Fragment implements ViewHandleSavedPost,
                     case R.id.action_view_detail:
                         Intent intent = new Intent(mActivity, PostDetailActivity.class);
                         intent.putExtra(Product.ID, mArrListProduct.get(mPositionClick).getId());
+                        intent.putExtra(Constant.ACTIVITY, UserControlActivity.ACTIVITY);
                         startActivity(intent);
                         break;
                     case R.id.action_un_save:
@@ -167,8 +173,10 @@ public class SavedPostFragment extends Fragment implements ViewHandleSavedPost,
 
     @Override
     public void onHandleUpdateProductIdListSuccessful() {
+
         mActivity.getDialogHelper().dismiss();
         this.mArrListProduct.remove(mPositionClick);
+
         mAdapterListPost.notifyDataSetChanged();
 
         mActivity.getToastHelper().toast(R.string.unsave_successful, ToastHelper.LENGTH_SHORT);
@@ -191,7 +199,18 @@ public class SavedPostFragment extends Fragment implements ViewHandleSavedPost,
 
     @Override
     public void onHandleSavedProductListSuccessful(ArrayList<Product> arrListProduct) {
+
         mActivity.getDialogHelper().dismiss();
+        mSRLPost.setRefreshing(false);
+
+        if(mIsFirstLoadList){
+            mArrListProduct.clear();
+            mIsFirstLoadList = false;
+        }
+        else if(arrListProduct.size() == 0){
+            return;
+        }
+
         this.mArrListProduct.addAll(arrListProduct);
         this.mAdapterListPost.notifyDataSetChanged();
 
@@ -216,5 +235,13 @@ public class SavedPostFragment extends Fragment implements ViewHandleSavedPost,
     @Override
     public void onClick(View v) {
         this.mLsvSavedPost.smoothScrollToPosition(0);
+    }
+
+    @Override
+    public void onRefresh() {
+
+        mIsFirstLoadList = true;
+        this.mPresenterSavedPost.handleGetSavedProductList(0, 20, getStrProductIdList(ListPostNewsFragment.LIST_SAVED_PRODUCT_ID));
+
     }
 }

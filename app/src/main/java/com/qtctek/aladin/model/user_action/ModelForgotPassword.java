@@ -2,6 +2,7 @@ package com.qtctek.aladin.model.user_action;
 
 import android.os.AsyncTask;
 
+import com.qtctek.aladin.common.AppUtils;
 import com.qtctek.aladin.presenter.user_action.forgot_password.PresenterForgotPassword;
 import com.qtctek.aladin.view.post_news.activity.MainActivity;
 
@@ -16,7 +17,7 @@ import okhttp3.Response;
 
 public class ModelForgotPassword {
 
-    String mUrl = MainActivity.WEB_SERVER + "reset_password.php";
+    String mUrl = MainActivity.WEB_SERVER + "?detect=12&";
 
     private PresenterForgotPassword mPresenterForgotPassword;
 
@@ -56,6 +57,10 @@ public class ModelForgotPassword {
 
             Request request = new Request.Builder()
                     .url(strings[0])
+                    .addHeader(AppUtils.USERNAME, AppUtils.USERNAME_HEADER)
+                    .addHeader(AppUtils.PASSWORD, AppUtils.PASSWORD_HEADER)
+                    .addHeader(AppUtils.AUTHORIZATION, AppUtils.AUTHORIZATION_HEADER)
+                    .get()
                     .post(requestBody)
                     .build();
 

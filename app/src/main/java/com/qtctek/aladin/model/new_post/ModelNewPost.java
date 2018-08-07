@@ -4,6 +4,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 import android.webkit.MimeTypeMap;
 
+import com.qtctek.aladin.common.AppUtils;
 import com.qtctek.aladin.dto.Product;
 import com.qtctek.aladin.presenter.new_post.PresenterImpHandleModelNewPost;
 import com.qtctek.aladin.view.post_news.activity.MainActivity;
@@ -23,13 +24,12 @@ public class ModelNewPost {
 
     private PresenterImpHandleModelNewPost mPresenterImpHandleModelNewPost;
 
-    private String mUrlInsertBlankPost = MainActivity.WEB_SERVER + "new_post/insert_blank_product.php";
-    private String mUrlPostFile = MainActivity.WEB_SERVER + "new_post/post_file.php";
-    private String mUrlUpdateProductInformation = MainActivity.WEB_SERVER + "new_post/update_product_information.php";
-    private String mUrlUpdateDescriptionInformation = MainActivity.WEB_SERVER + "new_post/update_description_information.php";
-    private String mUrlUpdateLocationProduct = MainActivity.WEB_SERVER + "new_post/update_location_product.php";
-    private String mDeleteImage = MainActivity.WEB_SERVER + "new_post/delete_file.php";
-    private String mHandlePost = MainActivity.WEB_SERVER + "new_post/update_handle_post.php";
+    private String mUrlInsertBlankPost = MainActivity.WEB_SERVER + "?detect=4&";
+    private String mUrlPostFile = MainActivity.WEB_SERVER + "?detect=5&";
+    private String mUrlUpdateProductInformation = MainActivity.WEB_SERVER + "?detect=6&";
+    private String mUrlUpdateDescriptionInformation = MainActivity.WEB_SERVER + "?detect=7&";
+    private String mUrlUpdateLocationProduct = MainActivity.WEB_SERVER + "?detect=8&";
+    private String mDeleteImage = MainActivity.WEB_SERVER + "?detect=9&";
 
     public ModelNewPost(PresenterImpHandleModelNewPost presenterImpHandleModelNewPost){
         this.mPresenterImpHandleModelNewPost = presenterImpHandleModelNewPost;
@@ -59,9 +59,6 @@ public class ModelNewPost {
         new DeleteFile(linkImage, productId).execute(mDeleteImage);
     }
 
-    public void requireExecutePost(int id){
-        new UpdateHandlePost(id).execute(mHandlePost);
-    }
 
     class InsertBlankPost extends AsyncTask<String, Void, String>{
 
@@ -90,6 +87,10 @@ public class ModelNewPost {
 
             Request request = new Request.Builder()
                     .url(strings[0])
+                    .addHeader(AppUtils.USERNAME, AppUtils.USERNAME_HEADER)
+                    .addHeader(AppUtils.PASSWORD, AppUtils.PASSWORD_HEADER)
+                    .addHeader(AppUtils.AUTHORIZATION, AppUtils.AUTHORIZATION_HEADER)
+                    .get()
                     .post(requestBody)
                     .build();
 
@@ -161,6 +162,10 @@ public class ModelNewPost {
 
             Request request = new Request.Builder()
                     .url(strings[0])
+                    .addHeader(AppUtils.USERNAME, AppUtils.USERNAME_HEADER)
+                    .addHeader(AppUtils.PASSWORD, AppUtils.PASSWORD_HEADER)
+                    .addHeader(AppUtils.AUTHORIZATION, AppUtils.AUTHORIZATION_HEADER)
+                    .get()
                     .post(requestBody)
                     .build();
 
@@ -223,6 +228,10 @@ public class ModelNewPost {
 
             Request request = new Request.Builder()
                     .url(strings[0])
+                    .addHeader(AppUtils.USERNAME, AppUtils.USERNAME_HEADER)
+                    .addHeader(AppUtils.PASSWORD, AppUtils.PASSWORD_HEADER)
+                    .addHeader(AppUtils.AUTHORIZATION, AppUtils.AUTHORIZATION_HEADER)
+                    .get()
                     .post(requestBody)
                     .build();
 
@@ -281,6 +290,10 @@ public class ModelNewPost {
 
             Request request = new Request.Builder()
                     .url(strings[0])
+                    .addHeader(AppUtils.USERNAME, AppUtils.USERNAME_HEADER)
+                    .addHeader(AppUtils.PASSWORD, AppUtils.PASSWORD_HEADER)
+                    .addHeader(AppUtils.AUTHORIZATION, AppUtils.AUTHORIZATION_HEADER)
+                    .get()
                     .post(requestBody)
                     .build();
 
@@ -337,6 +350,10 @@ public class ModelNewPost {
 
             Request request = new Request.Builder()
                     .url(strings[0])
+                    .addHeader(AppUtils.USERNAME, AppUtils.USERNAME_HEADER)
+                    .addHeader(AppUtils.PASSWORD, AppUtils.PASSWORD_HEADER)
+                    .addHeader(AppUtils.AUTHORIZATION, AppUtils.AUTHORIZATION_HEADER)
+                    .get()
                     .post(requestBody)
                     .build();
 
@@ -387,6 +404,10 @@ public class ModelNewPost {
 
             Request request = new Request.Builder()
                     .url(strings[0])
+                    .addHeader(AppUtils.USERNAME, AppUtils.USERNAME_HEADER)
+                    .addHeader(AppUtils.PASSWORD, AppUtils.PASSWORD_HEADER)
+                    .addHeader(AppUtils.AUTHORIZATION, AppUtils.AUTHORIZATION_HEADER)
+                    .get()
                     .post(requestBody)
                     .build();
 
@@ -439,6 +460,10 @@ public class ModelNewPost {
 
             Request request = new Request.Builder()
                     .url(strings[0])
+                    .addHeader(AppUtils.USERNAME, AppUtils.USERNAME_HEADER)
+                    .addHeader(AppUtils.PASSWORD, AppUtils.PASSWORD_HEADER)
+                    .addHeader(AppUtils.AUTHORIZATION, AppUtils.AUTHORIZATION_HEADER)
+                    .get()
                     .post(requestBody)
                     .build();
 
@@ -453,7 +478,6 @@ public class ModelNewPost {
 
         @Override
         protected void onPostExecute(String s) {
-            Log.d("ttt", s);
             if(s.equals("successful")){
                 mPresenterImpHandleModelNewPost.onDeleteFile(true);
             }

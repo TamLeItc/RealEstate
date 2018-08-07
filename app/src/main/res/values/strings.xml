@@ -155,11 +155,11 @@
     <string name="baths">Baths</string>
     <string name="bathroom">Phòng tắm</string>
     <string name="bedroom">Phòng ngủ</string>
-    <string name="square">Sq.m²</string>
+    <string name="square">Sq. m²</string>
     <string name="for_one_month">/tháng</string>
     <string name="sort">Sắp xếp</string>
     <string name="save_search">Lưu t.kiếm</string>
-    <string name="search_suggestion">"Địa điểm, quận/huyện, tỉnh/thành phố,..."</string>
+    <string name="search_suggestion">"Địa điểm, quận/huyện, tỉnh/thành phố,…"</string>
     <string name="save_login">Lưu đăng nhập</string>
     <string name="map_information_text">Vui lòng chọn một vị trí trên map</string>
     <string name="confirm_edit_product">Chú ý! Nếu bạn chỉnh sửa bất kì thông tin nào của sản phẩm nó sẽ
@@ -220,15 +220,17 @@
     <string name="please_enter_email">Vui lòng nhập email!</string>
     <string name="please_enter_username_or_email">Vui lòng nhập email/tên đăng nhập!</string>
     <string name="email_incorrect">Email không chính xác!</string>
+    <string name="minimum_length_username">Username phải chứa ít nhất 4 kí tự!</string>
+    <string name="username_incorrect">Username không được chứa kí tự đặc biệt và không bắt đầu bằng số!</string>
     <string name="reset_password_failed">Reset mật khẩu không thành công!</string>
-    <string name="account_not_exist">Tài khoản không tồn tại!</string>
+    <string name="account_not_exist">Email tài khoản không tồn tại!</string>
     <string name="reset_password_successful">Mật khẩu của bạn đã được reset. Vui lòng truy cập mail của bạn để xem mật khẩu mới</string>
     <string name="please_enter_password">Vui lòng nhập mật khẩu!</string>
     <string name="information_login_incorrect">Email/tên đăng nhập hoặc mật khẩu không chính xác!</string>
     <string name="account_disable">Tài khoản của bạn bị tạm khóa. Vui lòng liên hệ với admin để được hỗ trợ!</string>
     <string name="login_failed">Đăng nhập không thành công. Vui lòng thử lại sau!</string>
-    <string name="please_enter_username">Vui lòng nhập email!</string>
-    <string name="minimum_length_password">Mật khẩu phải có độ dài dài ít nhất 6 kí tự!</string>
+    <string name="please_enter_username">Vui lòng nhập username!</string>
+    <string name="minimum_length_password">Mật khẩu phải có độ dài ít nhất 6 kí tự!</string>
     <string name="maximum_length_password">Mật khẩu tối đa 20 kí tự!</string>
     <string name="please_enter_confirm_password">Vui lòng nhập xác nhận mật khẩu!</string>
     <string name="password_confirm_password_incorrect">Mật khẩu và xác nhận mật khẩu không giống nhau!</string>
@@ -255,7 +257,7 @@
     <string name="delete_successful">Xóa thành công</string>
     <string name="delete_failed">Xóa không thành công</string>
     <string name="delete_post">Xóa tin</string>
-    <string name="delete_post_notificaton">Bạn chắc chắc muốn xóa tin này</string>
+    <string name="delete_post_notificaton">Bạn chắc chắn muốn xóa tin này</string>
     <string name="accept_post">Duyệt tin</string>
     <string name="accept_post_notification">Bạn có chắc muốn duyệt tin này</string>
     <string name="name">Tên</string>
@@ -264,6 +266,12 @@
     <string name="update_status_user_error">Cập nhật trạng thái user thất bại</string>
     <string name="permission_denied">Quyền user bị từ tối</string>
     <string name="email">Email</string>
+    <string name="require">Yêu cầu</string>
+    <string name="feedback_subject">Phản hồi phần mềm Aladin</string>
+    <string name="posted_within">Được đăng trong vòng</string>
+    <string name="today">"Hôm nay"</string>
+    <string name="one_week">"1 tuần "</string>
+    <string name="one_month">"1 tháng"</string>
 
 
 </resources>

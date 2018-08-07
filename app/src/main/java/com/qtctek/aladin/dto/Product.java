@@ -1,7 +1,6 @@
 package com.qtctek.aladin.dto;
 
-import com.qtctek.aladin.common.general.Constant;
-import com.qtctek.aladin.presenter.user_action.update_user.PresenterUpdateUser;
+import com.qtctek.aladin.common.Constant;
 
 public class Product {
 

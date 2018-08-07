@@ -3,23 +3,26 @@ package com.qtctek.aladin.model.new_post;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.qtctek.aladin.common.AppUtils;
 import com.qtctek.aladin.presenter.new_post.GetData.PresenterImpHandleModelGetData;
 import com.qtctek.aladin.view.post_news.activity.MainActivity;
 
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
+import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class ModelGetData {
 
     private PresenterImpHandleModelGetData mPresenterImpHandleModelGetData;
 
-    String mUrlCity = MainActivity.WEB_SERVER + "get_city.php";
-    String mUrlDistrict = MainActivity.WEB_SERVER + "get_district.php";
-    String mUrlCategoriesProduct = MainActivity.WEB_SERVER + "get_category_product.php";
+    String mUrlCity = MainActivity.WEB_SERVER + "?detect=1&";
+    String mUrlDistrict = MainActivity.WEB_SERVER + "?detect=2&";
+    String mUrlCategoriesProduct = MainActivity.WEB_SERVER + "?detect=3&";
 
     public ModelGetData(PresenterImpHandleModelGetData presenterImpHandleModelGetData){
         this.mPresenterImpHandleModelGetData = presenterImpHandleModelGetData;
@@ -54,6 +57,10 @@ public class ModelGetData {
 
             Request request = new Request.Builder()
                     .url(strings[0])
+                    .addHeader(AppUtils.USERNAME, AppUtils.USERNAME_HEADER)
+                    .addHeader(AppUtils.PASSWORD, AppUtils.PASSWORD_HEADER)
+                    .addHeader(AppUtils.AUTHORIZATION, AppUtils.AUTHORIZATION_HEADER)
+                    .get()
                     .build();
 
             try {
@@ -98,9 +105,12 @@ public class ModelGetData {
         @Override
         protected String doInBackground(String... strings) {
 
-            String url = strings[0] + "?city_id=" + cityId;
+            String url = strings[0] + "city_id=" + cityId;
             Request request = new Request.Builder()
                     .url(url)
+                    .addHeader(AppUtils.USERNAME, AppUtils.USERNAME_HEADER)
+                    .addHeader(AppUtils.PASSWORD, AppUtils.PASSWORD_HEADER)
+                    .addHeader(AppUtils.AUTHORIZATION, AppUtils.AUTHORIZATION_HEADER)
                     .get()
                     .build();
 
@@ -148,9 +158,12 @@ public class ModelGetData {
         @Override
         protected String doInBackground(String... strings) {
 
-            String url = mUrlCategoriesProduct + "?table=" + table + "&column_name=" + columnName;
+            String url = mUrlCategoriesProduct + "table=" + table + "&column_name=" + columnName;
             Request request = new Request.Builder()
                     .url(url)
+                    .addHeader(AppUtils.USERNAME, AppUtils.USERNAME_HEADER)
+                    .addHeader(AppUtils.PASSWORD, AppUtils.PASSWORD_HEADER)
+                    .addHeader(AppUtils.AUTHORIZATION, AppUtils.AUTHORIZATION_HEADER)
                     .get()
                     .build();
 

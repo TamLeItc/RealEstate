@@ -1,13 +1,12 @@
 package com.qtctek.aladin.view.user_control.posted_post;
 
 ;
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.text.TextUtils;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,7 +20,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.qtctek.aladin.R;
-import com.qtctek.aladin.common.general.Constant;
+import com.qtctek.aladin.common.Constant;
 import com.qtctek.aladin.dto.Product;
 import com.qtctek.aladin.helper.AlertHelper;
 import com.qtctek.aladin.helper.ToastHelper;
@@ -36,7 +35,7 @@ import java.util.ArrayList;
 
 public class PostedPostFragment extends Fragment implements ViewHandlePostedPost ,
         AbsListView.OnScrollListener, AdapterView.OnItemClickListener, AlertHelper.AlertHelperCallback,
-        ManagementFilterCallback, View.OnClickListener {
+        ManagementFilterCallback, View.OnClickListener, SwipeRefreshLayout.OnRefreshListener {
 
     private UserControlActivity mActivity;
 
@@ -46,6 +45,7 @@ public class PostedPostFragment extends Fragment implements ViewHandlePostedPost
     private TextView mTxvInformation;
     private RelativeLayout mRlPostItem;
     private ImageView mImvUp;
+    private SwipeRefreshLayout mSWLPosts;
 
     private AdapterPostSale mAdapterListPost;
     private ArrayList<Product> mArrProduct = new ArrayList<>();
@@ -53,7 +53,7 @@ public class PostedPostFragment extends Fragment implements ViewHandlePostedPost
     private PresenterPostedPost mPresenterPostedPost;
 
     private int mPositionClick;
-    private boolean mIsFirstLoad = true;
+    private boolean mIsFirstLoadList = true;
 
     @Nullable
     @Override
@@ -73,10 +73,12 @@ public class PostedPostFragment extends Fragment implements ViewHandlePostedPost
         this.mLsvPostedPost = mView.findViewById(R.id.lsv_posts);
         this.mTxvInformation = mView.findViewById(R.id.txv_information);
         this.mImvUp = mView.findViewById(R.id.imv_up);
+        this.mSWLPosts = mView.findViewById(R.id.srl_posts);
 
         this.mLsvPostedPost.setOnScrollListener(this);
         this.mLsvPostedPost.setOnItemClickListener(this);
         this.mImvUp.setOnClickListener(this);
+        this.mSWLPosts.setOnRefreshListener(this);
     }
 
     private void handleStart(){
@@ -97,13 +99,19 @@ public class PostedPostFragment extends Fragment implements ViewHandlePostedPost
     public void onHandlePostListSuccessful(ArrayList<Product> arrListPost) {
 
         mActivity.getDialogHelper().dismiss();
+        mSWLPosts.setRefreshing(false);
 
-        if(mIsFirstLoad){
-            this.mArrProduct.clear();
-            mIsFirstLoad = false;
+        if(mIsFirstLoadList){
+            mArrProduct.clear();
+            mIsFirstLoadList = false;
+        }
+        else{
+            if(arrListPost.size() == 0){
+                return;
+            }
         }
 
-        this.mArrProduct.addAll(arrListPost);
+        addList(arrListPost);
         this.mAdapterListPost.notifyDataSetChanged();
 
         if(mArrProduct.size() > 0){
@@ -117,6 +125,28 @@ public class PostedPostFragment extends Fragment implements ViewHandlePostedPost
         else{
             this.mTxvInformation.setText(getResources().getString(R.string.no_data));
             this.mTxvInformation.setVisibility(View.VISIBLE);
+        }
+    }
+
+    /*
+     * Dữ liệu trên server có thể thay đổi khiến limit và start có thể sẽ lấy về dữ liệu đã có trong danh sách
+     * Phương thức này đảm bảo không có 2 đối tượng giống nhau nào trong danh sách
+     */
+    private void addList(ArrayList<Product> arrProduct){
+        int size = this.mArrProduct.size();
+        for(int i = 0; i < arrProduct.size(); i++){
+            boolean isExisted = false;
+            for(int j = 0; j < size; j++){
+                if(arrProduct.get(i).getId() == this.mArrProduct.get(j).getId()){
+                    isExisted = true;
+                    break;
+                }
+            }
+            if(!isExisted){
+                this.mArrProduct.add(arrProduct.get(i));
+                arrProduct.remove(i);
+                i--;
+            }
         }
     }
 
@@ -202,6 +232,7 @@ public class PostedPostFragment extends Fragment implements ViewHandlePostedPost
                     case R.id.action_view_detail:
                         Intent intent = new Intent(getActivity(), PostDetailActivity.class);
                         intent.putExtra(Product.ID, mArrProduct.get(mPositionClick).getId());
+                        intent.putExtra(Constant.ACTIVITY, UserControlActivity.ACTIVITY);
                         startActivity(intent);
                         break;
                     case R.id.action_edit_post:
@@ -252,7 +283,7 @@ public class PostedPostFragment extends Fragment implements ViewHandlePostedPost
     @Override
     public void onFilter() {
 
-        mIsFirstLoad = true;
+        mIsFirstLoadList = true;
 
         mActivity.getDialogHelper().show();
         this.mPresenterPostedPost.handleGetListPostedPost(0, 20, MainActivity.USER.getEmail(),
@@ -262,5 +293,16 @@ public class PostedPostFragment extends Fragment implements ViewHandlePostedPost
     @Override
     public void onClick(View v) {
         mLsvPostedPost.smoothScrollToPosition(0);
+    }
+
+    @Override
+    public void onRefresh() {
+
+        mIsFirstLoadList = true;
+        mActivity.productFormality = "%";
+        mActivity.productStatus = "%";
+
+        this.mPresenterPostedPost.handleGetListPostedPost(0, 20, MainActivity.USER.getEmail(),
+                mActivity.productFormality, mActivity.productStatus);
     }
 }

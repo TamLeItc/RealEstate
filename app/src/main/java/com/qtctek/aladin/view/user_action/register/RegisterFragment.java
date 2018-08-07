@@ -22,20 +22,18 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.qtctek.aladin.R;
-import com.qtctek.aladin.common.general.Constant;
+import com.qtctek.aladin.common.Constant;
 import com.qtctek.aladin.dto.User;
-import com.qtctek.aladin.common.general.FormatPattern;
-import com.qtctek.aladin.common.general.HashMD5;
-import com.qtctek.aladin.common.general.RandomString;
-import com.qtctek.aladin.common.general.send_gmail.GMailSender;
+import com.qtctek.aladin.common.FormatPattern;
+import com.qtctek.aladin.common.HashMD5;
+import com.qtctek.aladin.common.RandomString;
+import com.qtctek.aladin.common.send_gmail.GMailSender;
 import com.qtctek.aladin.helper.AlertHelper;
 import com.qtctek.aladin.helper.ToastHelper;
 import com.qtctek.aladin.presenter.user_action.register.PresenterRegister;
 import com.qtctek.aladin.view.user_action.activity.UserActionActivity;
 
-import java.time.ZonedDateTime;
 import java.util.Calendar;
-import java.util.Date;
 
 public class RegisterFragment extends Fragment implements View.OnClickListener, ViewHandleRegister,
         AlertHelper.AlertHelperCallback, View.OnKeyListener {
@@ -156,6 +154,22 @@ public class RegisterFragment extends Fragment implements View.OnClickListener, 
         }
         else if(TextUtils.isEmpty(username)){
             mActivity.getToastHelper().toast(R.string.please_enter_username, ToastHelper.LENGTH_SHORT);
+            this.mEdtUsername.requestFocus();
+            mEdtConfirmPassword.setText("");
+            mEdtPassword.setText("");
+
+            this.mEdtUsername.setBackground(getResources().getDrawable(R.drawable.custom_border_red_backgroud_gray));
+        }
+        else if(username.length() < 4){
+            mActivity.getToastHelper().toast(R.string.minimum_length_username, ToastHelper.LENGTH_SHORT);
+            this.mEdtUsername.requestFocus();
+            mEdtConfirmPassword.setText("");
+            mEdtPassword.setText("");
+
+            this.mEdtUsername.setBackground(getResources().getDrawable(R.drawable.custom_border_red_backgroud_gray));
+        }
+        else if(!FormatPattern.checkUserName(username)){
+            mActivity.getToastHelper().toast(R.string.username_incorrect, ToastHelper.LENGTH_LONG);
             this.mEdtUsername.requestFocus();
             mEdtConfirmPassword.setText("");
             mEdtPassword.setText("");
@@ -464,42 +478,62 @@ public class RegisterFragment extends Fragment implements View.OnClickListener, 
 
         switch (v.getId()){
             case R.id.edt_username:
-                if(this.mEdtUsername.getText().toString().trim().equals("")){
+                if(!FormatPattern.checkUserName(this.mEdtUsername.getText().toString().trim())){
                     this.mEdtUsername.setBackground(getResources().getDrawable(R.drawable.custom_border_red_backgroud_gray));
+                    if(this.mEdtUsername.getText().toString().trim().length() >= 4){
+                        this.mEdtUsername.setError(getResources().getString(R.string.username_incorrect));
+                    }
+                    else{
+                        this.mEdtUsername.setError(getResources().getString(R.string.minimum_length_username));
+                    }
                 }
                 else{
+                    this.mEdtUsername.setError(null);
                     this.mEdtUsername.setBackground(getResources().getDrawable(R.drawable.custom_border_gray_backgroud_default));
                 }
                 break;
             case R.id.edt_email_address:
                 if(!FormatPattern.checkEmail(this.mEdtEmail.getText().toString().trim())){
                     this.mEdtEmail.setBackground(getResources().getDrawable(R.drawable.custom_border_red_backgroud_gray));
+                    this.mEdtEmail.setError(getResources().getString(R.string.email_incorrect));
                 }
                 else{
+                    this.mEdtEmail.setError(null);
                     this.mEdtEmail.setBackground(getResources().getDrawable(R.drawable.custom_border_gray_backgroud_default));
                 }
                 break;
             case R.id.edt_password:
                 if(this.mEdtPassword.getText().toString().trim().length() < 6 || this.mEdtPassword.getText().toString().trim().length() > 20){
                     this.mRlPassword.setBackground(getResources().getDrawable(R.drawable.custom_border_red_backgroud_gray));
+                    if(this.mEdtPassword.getText().toString().trim().length() < 6){
+                        this.mEdtPassword.setError(getResources().getString(R.string.minimum_length_password));
+                    }
+                    else if(this.mEdtPassword.getText().toString().trim().length() > 20){
+                        this.mEdtPassword.setError(getResources().getString(R.string.maximum_length_password));
+                    }
                 }
                 else{
+                    this.mEdtPassword.setError(null);
                     this.mRlPassword.setBackground(getResources().getDrawable(R.drawable.custom_border_gray_backgroud_default));
                 }
                 break;
             case R.id.edt_confirm_password:
                 if(!this.mEdtPassword.getText().toString().trim().equals(this.mEdtConfirmPassword.getText().toString().trim())){
                     this.mRlConfirmPassword.setBackground(getResources().getDrawable(R.drawable.custom_border_red_backgroud_gray));
+                    this.mEdtConfirmPassword.setError(getResources().getString(R.string.password_confirm_password_incorrect));
                 }
                 else{
+                    this.mEdtConfirmPassword.setError(null);
                     this.mRlConfirmPassword.setBackground(getResources().getDrawable(R.drawable.custom_border_gray_backgroud_default));
                 }
                 break;
             case R.id.edt_phone_number:
                 if(!FormatPattern.checkNumberPhone(this.mEdtPhoneNumber.getText().toString().trim())){
                     this.mEdtPhoneNumber.setBackground(getResources().getDrawable(R.drawable.custom_border_red_backgroud_gray));
+                    this.mEdtPhoneNumber.setError(getResources().getString(R.string.number_phone_incorrect));
                 }
                 else{
+                    this.mEdtPhoneNumber.setError(null);
                     this.mEdtPhoneNumber.setBackground(getResources().getDrawable(R.drawable.custom_border_gray_backgroud_default));
                 }
                 break;
